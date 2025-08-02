@@ -62,7 +62,7 @@ const WorldMap = () => {
       center={[20, 151]}
       zoom={2}
       minZoom={2}
-      style={{ height: "500px", width: "100vw" }}
+      style={{ height: "500px", width: "95vw" }}
       maxBounds={[
         [-90, -180],
         [90, 180],
@@ -70,8 +70,8 @@ const WorldMap = () => {
       worldCopyJump={true}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         noWrap={true}
       />
       {filteredFlights.map((flight, idx) => {
