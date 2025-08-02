@@ -27,11 +27,14 @@ const StatsSummary = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to start of day for comparison
 
+  /** @type {import('../types').Flight[]} */
+  const allFlights = flightsData;
+
   // Filter out future flights
-  const pastFlights = flightsData.filter(
+  const pastFlights = allFlights.filter(
     (flight) => new Date(flight.Date) <= today,
   );
-  const upcomingFlights = flightsData.filter(
+  const upcomingFlights = allFlights.filter(
     (flight) => new Date(flight.Date) > today,
   );
 

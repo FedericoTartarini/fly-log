@@ -5,6 +5,18 @@ import flightsData from "../../python/flights_with_coordinates.json";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store";
 
+/**
+ * @typedef {object} Flight
+ * @property {string} Date
+ * @property {[number, number]} departure_coordinates
+ * @property {[number, number]} arrival_coordinates
+ * @property {number} [distance_km]
+ * @property {number} [flight_time]
+ * @property {string} [From]
+ * @property {string} [To]
+ * @property {string} [Airline]
+ */
+
 // Helper to generate points along the great-circle path
 function getGreatCirclePath(from, to, numPoints = 300) {
   const start = new LatLon(from[0], from[1]);
@@ -45,10 +57,13 @@ const WorldMap = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const pastFlights = flightsData.filter(
+  /** @type {Flight[]} */
+  const allFlights = flightsData;
+
+  const pastFlights = allFlights.filter(
     (flight) => new Date(flight.Date) <= today,
   );
-  const upcomingFlights = flightsData.filter(
+  const upcomingFlights = allFlights.filter(
     (flight) => new Date(flight.Date) > today,
   );
 
