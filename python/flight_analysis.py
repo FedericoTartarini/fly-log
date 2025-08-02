@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 import json
+import os
 
 
 def haversine(coord1, coord2):
@@ -56,19 +57,20 @@ df_coords = pd.read_csv("./python/airports_coordinates.csv")
 
 # Merge IATA/ICAO codes with coordinates
 df_airports = pd.merge(
-    df_iata[["IATA", "ICAO"]],
-    df_coords,
-    left_on="ICAO",
-    right_on="ident"
+    df_iata[["IATA", "ICAO"]], df_coords, left_on="ICAO", right_on="ident"
 )
-df_airports = df_airports.rename(columns={"latitude_deg": "Lat", "longitude_deg": "Lon"})
+df_airports = df_airports.rename(
+    columns={"latitude_deg": "Lat", "longitude_deg": "Lon"}
+)
 df_airports = df_airports[["IATA", "Lat", "Lon"]]
 
-df_more_airports = pd.read_csv('python/airports_info.csv')
+df_more_airports = pd.read_csv("python/airports_info.csv")
 df_more_airports = df_more_airports[["IATA", "Lat", "Lon"]]
-df_airports = pd.concat([df_airports, df_more_airports], ignore_index=True).drop_duplicates()
+df_airports = pd.concat(
+    [df_airports, df_more_airports], ignore_index=True
+).drop_duplicates()
 
-custom_data = {'IATA': 'TFU', 'Lat': 30.31, 'Lon': 104.44}
+custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44}
 df_airports = pd.concat([df_airports, pd.DataFrame([custom_data])], ignore_index=True)
 
 
@@ -94,6 +96,13 @@ df_flights = pd.read_csv("./python/flights_export.csv")
 df_flights = df_flights.fillna("null")
 flight_records = df_flights.to_dict("records")
 
+# Load airlines.json
+with open("./python/airlines.json", "r") as f:
+    airlines = json.load(f)
+
+# Build lookup by ICAO code
+airline_lookup = {a["icao"]: a for a in airlines}
+
 # Enrich flights with coordinates, distance, and estimated time
 enriched_flights = []
 for flight in flight_records:
@@ -101,15 +110,32 @@ for flight in flight_records:
     arr_coords = get_airport_coordinates(flight["To"])
     distance = haversine(dep_coords, arr_coords)
     flight_time = estimate_flight_time(distance)
+    icao = flight["Airline"]
+    airline_info = airline_lookup.get(icao)
 
     if dep_coords is None or arr_coords is None:
-        print(f"Warning: Coordinates not found for flight {flight['Flight']}, form {flight['From']} to {flight['To']}. Skipping this flight.")
+        print(
+            f"Warning: Coordinates not found for flight {flight['Flight']}, form {flight['From']} to {flight['To']}. Skipping this flight."
+        )
         continue
 
     flight["departure_coordinates"] = dep_coords
     flight["arrival_coordinates"] = arr_coords
     flight["distance_km"] = distance
     flight["flight_time"] = flight_time
+
+    if airline_info:
+        airline_name = airline_info["name"]
+        flight["airline_name"] = airline_name
+        flight["airline_primary_color"] = airline_info["branding"]["primary_color"]
+        # Compose icon path (e.g., src/assets/airlines_logos/JST/icon.png)
+        icon_name = airline_name.replace(" ", "-").lower()
+        icon_path = os.path.join("src/assets/airlines_logos", f"{icon_name}.svg")
+        flight["airline_icon_path"] = icon_path
+    else:
+        flight["airline_name"] = None
+        flight["airline_primary_color"] = None
+        flight["airline_icon_path"] = None
 
     enriched_flights.append(flight)
 
