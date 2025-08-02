@@ -81,16 +81,21 @@ def get_airport_coordinates(iata_code):
 
 
 # Load flights data
-df_flights = pd.read_csv("./python/flights.csv")
+df_flights = pd.read_csv("./python/flights_export.csv")
+df_flights = df_flights.fillna("null")
 flight_records = df_flights.to_dict("records")
 
 # Enrich flights with coordinates, distance, and estimated time
 enriched_flights = []
 for flight in flight_records:
-    dep_coords = get_airport_coordinates(flight["departure"])
-    arr_coords = get_airport_coordinates(flight["arrival"])
+    dep_coords = get_airport_coordinates(flight["From"])
+    arr_coords = get_airport_coordinates(flight["To"])
     distance = haversine(dep_coords, arr_coords)
     flight_time = estimate_flight_time(distance)
+
+    if dep_coords is None or arr_coords is None:
+        print(f"Warning: Coordinates not found for flight {flight['Flight']}")
+        continue
 
     flight["departure_coordinates"] = dep_coords
     flight["arrival_coordinates"] = arr_coords
