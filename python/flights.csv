@@ -1,0 +1,3 @@
+departure,arrival,flight_number,airline,departure_date,arrival_date,price
+SYD,SIN,QF1,Singapore Airlines,2023-10-01,2023-10-02,1200
+SYD,LAX,QF11,Qantas,2023-10-01,2023-10-02,1500

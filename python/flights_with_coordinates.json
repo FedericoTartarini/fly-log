@@ -1,0 +1,40 @@
+[
+  {
+    "departure": "SYD",
+    "arrival": "SIN",
+    "flight_number": "QF1",
+    "airline": "Singapore Airlines",
+    "departure_date": "2023-10-01",
+    "arrival_date": "2023-10-02",
+    "price": 1200,
+    "departure_coordinates": [
+      -33.9460983276367,
+      151.177001953125
+    ],
+    "arrival_coordinates": [
+      1.35019,
+      103.994003
+    ],
+    "distance_km": 6293.442607920952,
+    "flight_time": 6.992714008801057
+  },
+  {
+    "departure": "SYD",
+    "arrival": "LAX",
+    "flight_number": "QF11",
+    "airline": "Qantas",
+    "departure_date": "2023-10-01",
+    "arrival_date": "2023-10-02",
+    "price": 1500,
+    "departure_coordinates": [
+      -33.9460983276367,
+      151.177001953125
+    ],
+    "arrival_coordinates": [
+      33.942501,
+      -118.407997
+    ],
+    "distance_km": 12061.127849804216,
+    "flight_time": 13.401253166449129
+  }
+]
