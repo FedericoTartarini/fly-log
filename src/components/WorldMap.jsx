@@ -1,5 +1,5 @@
 import React from "react";
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, CircleMarker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import flightsData from "../../python/flights_with_coordinates.json";
 import LatLon from "geodesy/latlon-spherical.js";
@@ -57,14 +57,6 @@ const WorldMap = () => {
             new Date(flight.Date).getFullYear().toString() === selectedYear,
         );
 
-  const flightPaths = filteredFlights.flatMap((flight) => {
-    const greatCirclePath = getGreatCirclePath(
-      flight.departure_coordinates,
-      flight.arrival_coordinates,
-    );
-    return splitPathAtAntimeridian(greatCirclePath);
-  });
-
   return (
     <MapContainer
       center={[20, 151]}
@@ -82,23 +74,39 @@ const WorldMap = () => {
         attribution="&copy; OpenStreetMap contributors"
         noWrap={true}
       />
-      {flightPaths.map((path, idx) => {
-        const crossesAntimeridian =
-          Math.abs(path[0][1] - path[path.length - 1][1]) > 180;
+      {filteredFlights.map((flight, idx) => {
+        const greatCirclePath = getGreatCirclePath(
+          flight.departure_coordinates,
+          flight.arrival_coordinates,
+        );
+        const pathSegments = splitPathAtAntimeridian(greatCirclePath);
 
-        if (crossesAntimeridian) {
-          const shift = path[0][1] > 0 ? -360 : 360;
-          const shiftedPath = path.map(([lat, lon]) => [lat, lon + shift]);
-
-          return (
-            <React.Fragment key={idx}>
-              <Polyline positions={path} color="blue" />
-              <Polyline positions={shiftedPath} color="blue" />
-            </React.Fragment>
-          );
-        }
-
-        return <Polyline key={idx} positions={path} color="blue" />;
+        return (
+          <React.Fragment key={idx}>
+            {pathSegments.map((segment, segmentIdx) => (
+              <Polyline
+                key={segmentIdx}
+                positions={segment}
+                color="blue"
+                weight={2}
+              />
+            ))}
+            <CircleMarker
+              center={flight.departure_coordinates}
+              radius={3}
+              color="blue"
+              fillColor="blue"
+              fillOpacity={1}
+            />
+            <CircleMarker
+              center={flight.arrival_coordinates}
+              radius={3}
+              color="blue"
+              fillColor="blue"
+              fillOpacity={1}
+            />
+          </React.Fragment>
+        );
       })}
     </MapContainer>
   );
