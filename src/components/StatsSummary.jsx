@@ -1,6 +1,7 @@
 import React from "react";
 import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
+import { NativeSelect } from "@mantine/core";
 
 const StatsSummary = () => {
   const { selectedYear, setSelectedYear } = useFlightStore();
@@ -78,20 +79,11 @@ const StatsSummary = () => {
     color: "#555",
   };
 
-  const dropdownStyle = {
-    width: "100%",
-    padding: "0.5rem",
-    marginBottom: "1rem",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-  };
-
   return (
     <div style={cardStyle}>
-      <select
+      <NativeSelect
         value={selectedYear}
         onChange={(e) => setSelectedYear(e.target.value)}
-        style={dropdownStyle}
       >
         <option value="all">All Stats</option>
         {years.map((year) => (
@@ -99,7 +91,7 @@ const StatsSummary = () => {
             {year}
           </option>
         ))}
-      </select>
+      </NativeSelect>
       <div style={summaryStyle}>
         <div style={statItemStyle}>
           <div style={statValueStyle}>{filteredFlights.length}</div>

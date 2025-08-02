@@ -8,8 +8,7 @@ import {
 } from "@mantine/core";
 
 import "./App.css";
-import WorldMap from "./components/WorldMap.jsx";
-import StatsSummary from "./components/StatsSummary.jsx";
+import { ApplicationShell } from "./pages/ApplicationShell.jsx";
 
 const theme = createTheme({
   headings: {
@@ -22,9 +21,7 @@ function App() {
     <>
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Title>Flight Tracker</Title>
-        <StatsSummary />
-        <WorldMap />
+        <ApplicationShell />
       </MantineProvider>
     </>
   );
