@@ -10,6 +10,7 @@ import {
   Stack,
   Title,
 } from "@mantine/core";
+import flightImg from "../assets/flight.jpg";
 
 const DisplayStatistics = ({ label, value }) => (
   <Stack align="center" justify="center" gap="0px">
@@ -30,6 +31,9 @@ const StatsSummary = () => {
   const pastFlights = flightsData.filter(
     (flight) => new Date(flight.Date) <= today,
   );
+  const upcomingFlights = flightsData.filter(
+    (flight) => new Date(flight.Date) > today,
+  );
 
   // Get unique years from past flights for the dropdown
   const years = [
@@ -39,13 +43,17 @@ const StatsSummary = () => {
   ].sort((a, b) => b - a); // Sort years in descending order
 
   // Filter flights based on the selected year
-  const filteredFlights =
-    selectedYear === "all"
-      ? pastFlights
-      : pastFlights.filter(
-          (flight) =>
-            new Date(flight.Date).getFullYear().toString() === selectedYear,
-        );
+  let filteredFlights;
+  if (selectedYear === "all") {
+    filteredFlights = pastFlights;
+  } else if (selectedYear === "upcoming") {
+    filteredFlights = upcomingFlights;
+  } else {
+    filteredFlights = pastFlights.filter(
+      (flight) =>
+        new Date(flight.Date).getFullYear().toString() === selectedYear,
+    );
+  }
 
   // Calculate total distance and flight time
   const { totalDistance, totalFlightTime } = filteredFlights.reduce(
@@ -70,7 +78,7 @@ const StatsSummary = () => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
-        <Image src="src/assets/flight.jpg" height={120} alt="plane wing" />
+        <Image src={flightImg} height={120} alt="plane wing" />
       </Card.Section>
 
       <NativeSelect
@@ -78,14 +86,15 @@ const StatsSummary = () => {
         onChange={(e) => setSelectedYear(e.target.value)}
         mt="md"
         mb="xs"
-      >
-        <option value="all">All Stats</option>
-        {years.map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </NativeSelect>
+        data={[
+          { value: "all", label: "All Stats" },
+          { value: "upcoming", label: "Upcoming Flights" },
+          ...years.map((year) => ({
+            value: String(year),
+            label: String(year),
+          })),
+        ]}
+      />
 
       <Grid>
         <Grid.Col span={4}>

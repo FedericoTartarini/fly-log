@@ -48,14 +48,23 @@ const WorldMap = () => {
   const pastFlights = flightsData.filter(
     (flight) => new Date(flight.Date) <= today,
   );
+  const upcomingFlights = flightsData.filter(
+    (flight) => new Date(flight.Date) > today,
+  );
 
-  const filteredFlights =
-    selectedYear === "all"
-      ? pastFlights
-      : pastFlights.filter(
-          (flight) =>
-            new Date(flight.Date).getFullYear().toString() === selectedYear,
-        );
+  let filteredFlights;
+  if (selectedYear === "all") {
+    filteredFlights = pastFlights;
+  } else if (selectedYear === "upcoming") {
+    filteredFlights = upcomingFlights;
+  } else {
+    filteredFlights = pastFlights.filter(
+      (flight) =>
+        new Date(flight.Date).getFullYear().toString() === selectedYear,
+    );
+  }
+
+  const flightColor = selectedYear === "upcoming" ? "red" : "blue";
 
   return (
     <MapContainer
@@ -82,27 +91,27 @@ const WorldMap = () => {
         const pathSegments = splitPathAtAntimeridian(greatCirclePath);
 
         return (
-          <React.Fragment key={idx}>
+          <React.Fragment key={`${idx}-${flightColor}`}>
             {pathSegments.map((segment, segmentIdx) => (
               <Polyline
                 key={segmentIdx}
                 positions={segment}
-                color="blue"
+                color={flightColor}
                 weight={2}
               />
             ))}
             <CircleMarker
               center={flight.departure_coordinates}
               radius={3}
-              color="blue"
-              fillColor="blue"
+              color={flightColor}
+              fillColor={flightColor}
               fillOpacity={1}
             />
             <CircleMarker
               center={flight.arrival_coordinates}
               radius={3}
-              color="blue"
-              fillColor="blue"
+              color={flightColor}
+              fillColor={flightColor}
               fillOpacity={1}
             />
           </React.Fragment>
