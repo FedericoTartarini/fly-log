@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import flightsData from "../../python/flights_with_coordinates.json";
 import LatLon from "geodesy/latlon-spherical.js";
+import useFlightStore from "../store";
 
 // Helper to generate points along the great-circle path
 function getGreatCirclePath(from, to, numPoints = 300) {
@@ -39,35 +40,68 @@ function splitPathAtAntimeridian(path) {
   return segments;
 }
 
-const flightPaths = flightsData.flatMap((flight) => {
-  const greatCirclePath = getGreatCirclePath(
-    flight.departure_coordinates,
-    flight.arrival_coordinates,
-  );
-  return splitPathAtAntimeridian(greatCirclePath);
-});
+const WorldMap = () => {
+  const { selectedYear } = useFlightStore();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-const WorldMap = () => (
-  <MapContainer
-    center={[0, 151]}
-    zoom={2}
-    minZoom={2}
-    style={{ height: "600px", width: "100vw" }}
-    maxBounds={[
-      [-90, -180],
-      [90, 180],
-    ]}
-    worldCopyJump={true}
-  >
-    <TileLayer
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      attribution="&copy; OpenStreetMap contributors"
-      noWrap={false}
-    />
-    {flightPaths.map((path, idx) => (
-      <Polyline key={idx} positions={path} color="blue" />
-    ))}
-  </MapContainer>
-);
+  const pastFlights = flightsData.filter(
+    (flight) => new Date(flight.Date) <= today,
+  );
+
+  const filteredFlights =
+    selectedYear === "all"
+      ? pastFlights
+      : pastFlights.filter(
+          (flight) =>
+            new Date(flight.Date).getFullYear().toString() === selectedYear,
+        );
+
+  const flightPaths = filteredFlights.flatMap((flight) => {
+    const greatCirclePath = getGreatCirclePath(
+      flight.departure_coordinates,
+      flight.arrival_coordinates,
+    );
+    return splitPathAtAntimeridian(greatCirclePath);
+  });
+
+  return (
+    <MapContainer
+      center={[20, 151]}
+      zoom={2}
+      minZoom={2}
+      style={{ height: "500px", width: "100vw" }}
+      maxBounds={[
+        [-90, -180],
+        [90, 180],
+      ]}
+      worldCopyJump={true}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="&copy; OpenStreetMap contributors"
+        noWrap={true}
+      />
+      {flightPaths.map((path, idx) => {
+        const crossesAntimeridian =
+          Math.abs(path[0][1] - path[path.length - 1][1]) > 180;
+
+        if (crossesAntimeridian) {
+          const shift = path[0][1] > 0 ? -360 : 360;
+          const shiftedPath = path.map(([lat, lon]) => [lat, lon + shift]);
+
+          return (
+            <React.Fragment key={idx}>
+              <Polyline positions={path} color="blue" />
+              <Polyline positions={shiftedPath} color="blue" />
+            </React.Fragment>
+          );
+        }
+
+        return <Polyline key={idx} positions={path} color="blue" />;
+      })}
+    </MapContainer>
+  );
+};
 
 export default WorldMap;

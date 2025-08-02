@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import flightsData from "../../python/flights_with_coordinates.json";
+import useFlightStore from "../store";
 
 const StatsSummary = () => {
+  const { selectedYear, setSelectedYear } = useFlightStore();
+
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to start of day for comparison
 
@@ -17,8 +20,6 @@ const StatsSummary = () => {
     ),
   ].sort((a, b) => b - a); // Sort years in descending order
 
-  const [selectedYear, setSelectedYear] = useState("all");
-
   // Filter flights based on the selected year
   const filteredFlights =
     selectedYear === "all"
@@ -27,9 +28,6 @@ const StatsSummary = () => {
           (flight) =>
             new Date(flight.Date).getFullYear().toString() === selectedYear,
         );
-
-  // Calculate total number of flights
-  const totalFlights = filteredFlights.length;
 
   // Calculate total distance and flight time
   const { totalDistance, totalFlightTime } = filteredFlights.reduce(
@@ -104,7 +102,7 @@ const StatsSummary = () => {
       </select>
       <div style={summaryStyle}>
         <div style={statItemStyle}>
-          <div style={statValueStyle}>{totalFlights}</div>
+          <div style={statValueStyle}>{filteredFlights.length}</div>
           <div style={statLabelStyle}>Total Flights</div>
         </div>
         <div style={statItemStyle}>
