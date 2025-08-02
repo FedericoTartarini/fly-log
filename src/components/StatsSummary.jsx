@@ -6,15 +6,19 @@ import {
   Card,
   Image,
   Text,
-  Badge,
-  Space,
-  Button,
   Grid,
-  Group,
   Stack,
   Title,
-  Center,
 } from "@mantine/core";
+
+const DisplayStatistics = ({ label, value }) => (
+  <Stack align="center" justify="center" gap="0px">
+    <Title order={1}>{value}</Title>
+    <Text size="sm" c="dimmed">
+      {label}
+    </Text>
+  </Stack>
+);
 
 const StatsSummary = () => {
   const { selectedYear, setSelectedYear } = useFlightStore();
@@ -64,69 +68,52 @@ const StatsSummary = () => {
   });
 
   return (
-    <>
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Card.Section>
-          <Image src="src/assets/flight.jpg" height={120} alt="plane wing" />
-        </Card.Section>
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card.Section>
+        <Image src="src/assets/flight.jpg" height={120} alt="plane wing" />
+      </Card.Section>
 
-        <NativeSelect
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          mt="md"
-          mb="xs"
-        >
-          <option value="all">All Stats</option>
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </NativeSelect>
+      <NativeSelect
+        value={selectedYear}
+        onChange={(e) => setSelectedYear(e.target.value)}
+        mt="md"
+        mb="xs"
+      >
+        <option value="all">All Stats</option>
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </NativeSelect>
 
-        <Grid>
-          <Grid.Col span={4}>
-            <Stack align="center" justify="center" gap="xs">
-              <Title>{filteredFlights.length}</Title>
-              <Text>Total Flights</Text>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={4}>2</Grid.Col>
-          <Grid.Col span={4}>3</Grid.Col>
-        </Grid>
-
-        <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>Total Flights: {filteredFlights.length}</Text>
-        </Group>
-      </Card>
-    </>
-    // <div style={cardStyle}>
-
-    //   <div style={summaryStyle}>
-    //     <div style={statItemStyle}>
-    //       <div style={statValueStyle}>{filteredFlights.length}</div>
-    //       <div style={statLabelStyle}>Total Flights</div>
-    //     </div>
-    //     <div style={statItemStyle}>
-    //       <div style={statValueStyle}>
-    //         {Math.round(totalDistance).toLocaleString()}
-    //       </div>
-    //       <div style={statLabelStyle}>Total Distance (km)</div>
-    //     </div>
-    //     <div style={statItemStyle}>
-    //       <div style={statValueStyle}>{(totalFlightTime / 24).toFixed(1)}</div>
-    //       <div style={statLabelStyle}>Total Flight Time (days)</div>
-    //     </div>
-    //     <div style={statItemStyle}>
-    //       <div style={statValueStyle}>{airports.size}</div>
-    //       <div style={statLabelStyle}>Airports Visited</div>
-    //     </div>
-    //     <div style={statItemStyle}>
-    //       <div style={statValueStyle}>{airlines.size}</div>
-    //       <div style={statLabelStyle}>Airlines Flown</div>
-    //     </div>
-    //   </div>
-    // </div>
+      <Grid>
+        <Grid.Col span={4}>
+          <DisplayStatistics
+            value={filteredFlights.length}
+            label="Total Flights"
+          />
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <DisplayStatistics
+            value={Math.round(totalDistance).toLocaleString()}
+            label="Distance (km)"
+          />
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <DisplayStatistics
+            value={(totalFlightTime / 24).toFixed(1)}
+            label="Time (days)"
+          />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <DisplayStatistics value={airports.size} label="Airports Visited" />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <DisplayStatistics value={airlines.size} label="Airlines Flown" />
+        </Grid.Col>
+      </Grid>
+    </Card>
   );
 };
 
