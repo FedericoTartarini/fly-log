@@ -14,21 +14,23 @@ const Home = () => {
 
   return (
     <>
+      <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
+        <WorldMap />
+      </div>
+
+      {/* This Stack will scroll over the map */}
       <Stack
         bg="var(--mantine-color-body)"
-        align="stretch"
+        align="center"
         justify="center"
         gap="md"
+        px="md"
+        style={{ position: "relative", zIndex: 1 }}
       >
-        <div style={{ position: "relative", zIndex: 0 }}>
-          <WorldMap />
-        </div>
-        <Stack align="center" justify="center" gap="md" px="md">
-          <Title order={4} align="center">
-            {userName ? `Welcome ${userName}` : "Welcome to My Flight Tracker"}
-          </Title>
-          <StatsSummary />
-        </Stack>
+        <Title order={4} align="center" mt="md">
+          {userName ? `Welcome ${userName}` : "Welcome to My Flight Tracker"}
+        </Title>
+        <StatsSummary />
       </Stack>
     </>
   );
