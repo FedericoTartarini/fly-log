@@ -1,7 +1,20 @@
 import React from "react";
 import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
-import { NativeSelect } from "@mantine/core";
+import {
+  NativeSelect,
+  Card,
+  Image,
+  Text,
+  Badge,
+  Space,
+  Button,
+  Grid,
+  Group,
+  Stack,
+  Title,
+  Center,
+} from "@mantine/core";
 
 const StatsSummary = () => {
   const { selectedYear, setSelectedYear } = useFlightStore();
@@ -50,73 +63,70 @@ const StatsSummary = () => {
     if (flight.Airline) airlines.add(flight.Airline);
   });
 
-  const cardStyle = {
-    padding: "1rem",
-    margin: "1rem",
-    backgroundColor: "#f0f0f0",
-    borderRadius: "8px",
-  };
-
-  const summaryStyle = {
-    display: "flex",
-    justifyContent: "space-around",
-    flexWrap: "wrap",
-    marginTop: "1rem",
-  };
-
-  const statItemStyle = {
-    textAlign: "center",
-    margin: "0.5rem 1rem",
-  };
-
-  const statValueStyle = {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-  };
-
-  const statLabelStyle = {
-    fontSize: "0.9rem",
-    color: "#555",
-  };
-
   return (
-    <div style={cardStyle}>
-      <NativeSelect
-        value={selectedYear}
-        onChange={(e) => setSelectedYear(e.target.value)}
-      >
-        <option value="all">All Stats</option>
-        {years.map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </NativeSelect>
-      <div style={summaryStyle}>
-        <div style={statItemStyle}>
-          <div style={statValueStyle}>{filteredFlights.length}</div>
-          <div style={statLabelStyle}>Total Flights</div>
-        </div>
-        <div style={statItemStyle}>
-          <div style={statValueStyle}>
-            {Math.round(totalDistance).toLocaleString()}
-          </div>
-          <div style={statLabelStyle}>Total Distance (km)</div>
-        </div>
-        <div style={statItemStyle}>
-          <div style={statValueStyle}>{(totalFlightTime / 24).toFixed(1)}</div>
-          <div style={statLabelStyle}>Total Flight Time (days)</div>
-        </div>
-        <div style={statItemStyle}>
-          <div style={statValueStyle}>{airports.size}</div>
-          <div style={statLabelStyle}>Airports Visited</div>
-        </div>
-        <div style={statItemStyle}>
-          <div style={statValueStyle}>{airlines.size}</div>
-          <div style={statLabelStyle}>Airlines Flown</div>
-        </div>
-      </div>
-    </div>
+    <>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card.Section>
+          <Image src="src/assets/flight.jpg" height={120} alt="plane wing" />
+        </Card.Section>
+
+        <NativeSelect
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          mt="md"
+          mb="xs"
+        >
+          <option value="all">All Stats</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </NativeSelect>
+
+        <Grid>
+          <Grid.Col span={4}>
+            <Stack align="center" justify="center" gap="xs">
+              <Title>{filteredFlights.length}</Title>
+              <Text>Total Flights</Text>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span={4}>2</Grid.Col>
+          <Grid.Col span={4}>3</Grid.Col>
+        </Grid>
+
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text fw={500}>Total Flights: {filteredFlights.length}</Text>
+        </Group>
+      </Card>
+    </>
+    // <div style={cardStyle}>
+
+    //   <div style={summaryStyle}>
+    //     <div style={statItemStyle}>
+    //       <div style={statValueStyle}>{filteredFlights.length}</div>
+    //       <div style={statLabelStyle}>Total Flights</div>
+    //     </div>
+    //     <div style={statItemStyle}>
+    //       <div style={statValueStyle}>
+    //         {Math.round(totalDistance).toLocaleString()}
+    //       </div>
+    //       <div style={statLabelStyle}>Total Distance (km)</div>
+    //     </div>
+    //     <div style={statItemStyle}>
+    //       <div style={statValueStyle}>{(totalFlightTime / 24).toFixed(1)}</div>
+    //       <div style={statLabelStyle}>Total Flight Time (days)</div>
+    //     </div>
+    //     <div style={statItemStyle}>
+    //       <div style={statValueStyle}>{airports.size}</div>
+    //       <div style={statLabelStyle}>Airports Visited</div>
+    //     </div>
+    //     <div style={statItemStyle}>
+    //       <div style={statValueStyle}>{airlines.size}</div>
+    //       <div style={statLabelStyle}>Airlines Flown</div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 
