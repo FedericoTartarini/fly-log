@@ -86,7 +86,7 @@ const WorldMap = () => {
       center={[20, 151]}
       zoom={2}
       minZoom={2}
-      style={{ height: "500px", width: "95vw" }}
+      style={{ height: "500px", width: "100vw" }}
       maxBounds={[
         [-90, -180],
         [90, 180],

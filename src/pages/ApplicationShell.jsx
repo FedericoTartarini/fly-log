@@ -14,7 +14,6 @@ export function ApplicationShell() {
         breakpoint: "sm",
         collapsed: { desktop: true, mobile: !opened },
       }}
-      padding="md"
       transitionDuration={500}
       transitionTimingFunction="ease"
     >
