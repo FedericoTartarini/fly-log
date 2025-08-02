@@ -61,6 +61,15 @@ df_airports = pd.merge(
     left_on="ICAO",
     right_on="ident"
 )
+df_airports = df_airports.rename(columns={"latitude_deg": "Lat", "longitude_deg": "Lon"})
+df_airports = df_airports[["IATA", "Lat", "Lon"]]
+
+df_more_airports = pd.read_csv('python/airports_info.csv')
+df_more_airports = df_more_airports[["IATA", "Lat", "Lon"]]
+df_airports = pd.concat([df_airports, df_more_airports], ignore_index=True).drop_duplicates()
+
+custom_data = {'IATA': 'TFU', 'Lat': 30.31, 'Lon': 104.44}
+df_airports = pd.concat([df_airports, pd.DataFrame([custom_data])], ignore_index=True)
 
 
 def get_airport_coordinates(iata_code):
@@ -75,7 +84,7 @@ def get_airport_coordinates(iata_code):
     """
     try:
         airport = df_airports[df_airports["IATA"] == iata_code].iloc[0]
-        return airport["latitude_deg"], airport["longitude_deg"]
+        return airport["Lat"], airport["Lon"]
     except IndexError:
         return None
 
@@ -94,7 +103,7 @@ for flight in flight_records:
     flight_time = estimate_flight_time(distance)
 
     if dep_coords is None or arr_coords is None:
-        print(f"Warning: Coordinates not found for flight {flight['Flight']}")
+        print(f"Warning: Coordinates not found for flight {flight['Flight']}, form {flight['From']} to {flight['To']}. Skipping this flight.")
         continue
 
     flight["departure_coordinates"] = dep_coords
