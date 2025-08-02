@@ -4,18 +4,7 @@ import "leaflet/dist/leaflet.css";
 import flightsData from "../../python/flights_with_coordinates.json";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store";
-
-/**
- * @typedef {object} Flight
- * @property {string} Date
- * @property {[number, number]} departure_coordinates
- * @property {[number, number]} arrival_coordinates
- * @property {number} [distance_km]
- * @property {number} [flight_time]
- * @property {string} [From]
- * @property {string} [To]
- * @property {string} [Airline]
- */
+import { getFilteredFlights } from "../utils/flightUtils.js";
 
 // Helper to generate points along the great-circle path
 function getGreatCirclePath(from, to, numPoints = 300) {
@@ -54,30 +43,10 @@ function splitPathAtAntimeridian(path) {
 
 const WorldMap = () => {
   const { selectedYear } = useFlightStore();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
-  /** @type {Flight[]} */
+  /** @type {import('../types').Flight[]} */
   const allFlights = flightsData;
-
-  const pastFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) <= today,
-  );
-  const upcomingFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) > today,
-  );
-
-  let filteredFlights;
-  if (selectedYear === "all") {
-    filteredFlights = pastFlights;
-  } else if (selectedYear === "upcoming") {
-    filteredFlights = upcomingFlights;
-  } else {
-    filteredFlights = pastFlights.filter(
-      (flight) =>
-        new Date(flight.Date).getFullYear().toString() === selectedYear,
-    );
-  }
+  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
 
   const flightColor = selectedYear === "upcoming" ? "red" : "blue";
 

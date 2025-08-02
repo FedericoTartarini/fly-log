@@ -11,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import flightImg from "../assets/flight.jpg";
+import { getFilteredFlights } from "../utils/flightUtils.js";
 
 const DisplayStatistics = ({ label, value }) => (
   <Stack align="center" justify="center" gap="0px">
@@ -34,9 +35,6 @@ const StatsSummary = () => {
   const pastFlights = allFlights.filter(
     (flight) => new Date(flight.Date) <= today,
   );
-  const upcomingFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) > today,
-  );
 
   // Get unique years from past flights for the dropdown
   const years = [
@@ -45,18 +43,7 @@ const StatsSummary = () => {
     ),
   ].sort((a, b) => b - a); // Sort years in descending order
 
-  // Filter flights based on the selected year
-  let filteredFlights;
-  if (selectedYear === "all") {
-    filteredFlights = pastFlights;
-  } else if (selectedYear === "upcoming") {
-    filteredFlights = upcomingFlights;
-  } else {
-    filteredFlights = pastFlights.filter(
-      (flight) =>
-        new Date(flight.Date).getFullYear().toString() === selectedYear,
-    );
-  }
+  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
 
   // Calculate total distance and flight time
   const { totalDistance, totalFlightTime } = filteredFlights.reduce(
