@@ -8,6 +8,7 @@ import {
   Text,
   Image,
   Group,
+  SegmentedControl,
 } from "@mantine/core";
 import { BarChart } from "@mantine/charts";
 import useFlightStore from "../store";
@@ -30,6 +31,7 @@ const StatDisplay = ({ label, value, id }) => (
 
 function FlightStats() {
   const { selectedYear } = useFlightStore();
+  const [timeGrouping, setTimeGrouping] = React.useState("dayOfWeek");
 
   /** @type {import('../types').Flight[]} */
   const allFlights = flightsData;
@@ -86,6 +88,77 @@ function FlightStats() {
       departures: count,
     }))
     .sort((a, b) => b.departures - a.departures);
+
+  // Calculate flights by time grouping
+  const getFlightsByTimeGrouping = () => {
+    const grouping = {};
+
+    filteredFlights.forEach((flight) => {
+      if (!flight.Date) return;
+
+      const date = new Date(flight.Date);
+      let key;
+
+      switch (timeGrouping) {
+        case "dayOfWeek":
+          key = date.toLocaleDateString("en-US", { weekday: "long" });
+          break;
+        case "year":
+          key = date.getFullYear().toString();
+          break;
+        case "month":
+          key = date.toLocaleDateString("en-US", { month: "long" });
+          break;
+        default:
+          key = "Unknown";
+      }
+
+      grouping[key] = (grouping[key] || 0) + 1;
+    });
+
+    // Define order for consistent display
+    let order;
+    switch (timeGrouping) {
+      case "dayOfWeek":
+        order = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ];
+        break;
+      case "month":
+        order = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        break;
+      default:
+        order = Object.keys(grouping).sort();
+    }
+
+    return order
+      .filter((key) => grouping[key])
+      .map((key) => ({
+        period: key,
+        flights: grouping[key] || 0,
+      }));
+  };
+
+  const timeChartData = getFlightsByTimeGrouping();
 
   return (
     <Container size="lg" mt="md">
@@ -183,6 +256,38 @@ function FlightStats() {
             yAxisProps={{ width: 60 }}
             barProps={{ radius: 8 }}
             series={[{ name: "departures", color: "blue.6" }]}
+          />
+        </Card>
+
+        <Card shadow="sm" radius="md" withBorder>
+          <Stack mb="md">
+            <Title order={3}>
+              Flights by{" "}
+              {timeGrouping === "dayOfWeek"
+                ? "Day of Week"
+                : timeGrouping === "year"
+                  ? "Year"
+                  : "Month"}
+            </Title>
+            <SegmentedControl
+              value={timeGrouping}
+              onChange={setTimeGrouping}
+              data={[
+                { label: "Day of Week", value: "dayOfWeek" },
+                { label: "Year", value: "year" },
+                { label: "Month", value: "month" },
+              ]}
+            />
+          </Stack>
+          <BarChart
+            h={(timeChartData.length + 1) * 27}
+            data={timeChartData}
+            dataKey="period"
+            orientation={"vertical"}
+            // orientation={timeGrouping === "year" ? "horizontal" : "vertical"}
+            yAxisProps={{ width: 80 }}
+            barProps={{ radius: 8 }}
+            series={[{ name: "flights", color: "green.6" }]}
           />
         </Card>
       </Stack>
