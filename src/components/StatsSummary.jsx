@@ -5,11 +5,14 @@ import { Card, Image, Text, Grid, Stack, Title } from "@mantine/core";
 import flightImg from "../assets/flight.jpg";
 import { getFilteredFlights } from "../utils/flightUtils.js";
 import FlightYearFilter from "./FlightYearFilter";
+import { Ids } from "../constants/Ids.js";
 
-const DisplayStatistics = ({ label, value }) => (
+const DisplayStatistics = ({ label, value, id }) => (
   <Stack align="center" justify="center" gap="0px">
-    <Title order={1}>{value}</Title>
-    <Text size="sm" c="dimmed">
+    <Title order={1} id={id}>
+      {value}
+    </Title>
+    <Text size="sm" c="dimmed" id={id}>
       {label}
     </Text>
   </Stack>
@@ -62,28 +65,43 @@ const StatsSummary = () => {
           <DisplayStatistics
             value={filteredFlights.length}
             label="Total Flights"
+            id={Ids.STATS.TOTAL_FLIGHTS}
           />
         </Grid.Col>
         <Grid.Col span={4}>
           <DisplayStatistics
             value={Math.round(totalDistance).toLocaleString()}
             label="Distance (km)"
+            id={Ids.STATS.TOTAL_DISTANCE}
           />
         </Grid.Col>
         <Grid.Col span={4}>
           <DisplayStatistics
             value={(totalFlightTime / 24).toFixed(1)}
             label="Time (days)"
+            id={Ids.STATS.TOTAL_TIME}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics value={airports.size} label="Airports Visited" />
+          <DisplayStatistics
+            value={airports.size}
+            label="Airports Visited"
+            id={Ids.STATS.AIRPORTS_VISITED}
+          />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics value={airlines.size} label="Airlines Flown" />
+          <DisplayStatistics
+            value={airlines.size}
+            label="Airlines Flown"
+            id={Ids.STATS.AIRLINES_FLOWN}
+          />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics value={countries.size} label="Countries" />
+          <DisplayStatistics
+            value={countries.size}
+            label="Countries"
+            id={Ids.STATS.COUNTRIES_VISITED}
+          />
         </Grid.Col>
       </Grid>
     </Card>

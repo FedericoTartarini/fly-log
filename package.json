@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest",
+    "vitest": "vitest run",
+    "vitest:watch": "vitest",
     "test:e2e": "cypress open",
     "test:e2e:headless": "cypress run"
   },
@@ -26,7 +27,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",

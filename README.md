@@ -2,6 +2,26 @@
 
 This project analyzes personal flight history using Python and visualizes the data on an interactive map using a React and Vite-powered frontend.
 
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation & Setup](#installation--setup)
+- [Testing](#testing)
+    - [Unit Testing with Vitest](#unit-testing-with-vitest)
+    - [End-to-End Testing with Cypress](#end-to-end-testing-with-cypress)
+    - [Test Structure](#test-structure)
+    - [Writing Tests](#writing-tests)
+- [Current Features](#current-features)
+- [To-Do / Future Improvements](#to-do--future-improvements)
+    - [Visualization Enhancements](#visualization-enhancements)
+    - [User Experience Improvements](#user-experience-improvements)
+    - [Accessibility](#accessibility)
+    - [Maintenance and DevOps](#maintenance-and-devops)
+    - [Data & Backend](#data--backend)
+
 ## Project Overview
 
 The application has two main parts:
@@ -53,6 +73,95 @@ Follow these instructions to get a local copy up and running.
     ```bash
     npm run build
     ```
+
+
+
+## Testing
+
+This project uses two testing frameworks:
+
+### Unit Testing with Vitest
+
+Vitest is used for unit and integration testing of React components and utility functions.
+
+**Run all unit tests:**
+```bash
+npm run test
+```
+
+**Run tests in watch mode (automatically re-runs when files change):**
+```bash
+npm run test:watch
+```
+
+**Run tests with coverage report:**
+```bash
+npm run test:coverage
+```
+
+**Run tests in UI mode (interactive test runner):**
+```bash
+npm run test:ui
+```
+
+### End-to-End Testing with Cypress
+
+Cypress is used for end-to-end testing of the complete application workflow.
+
+**Run Cypress tests in headless mode:**
+```bash
+npm run cypress:run
+```
+
+**Open Cypress Test Runner (interactive mode):**
+```bash
+npm run cypress:open
+```
+
+**Run Cypress tests against production build:**
+```bash
+npm run build
+npm run preview
+npm run cypress:run
+```
+
+### Test Structure
+
+- **Unit tests:** Located in `src/` alongside components (e.g., `Component.test.jsx`)
+- **Test utilities:** Shared testing utilities in `test-utils/`
+- **Cypress tests:** End-to-end tests in `cypress/e2e/`
+- **Test constants:** Centralized test IDs in `src/constants/testIds.js`
+
+### Writing Tests
+
+**Example unit test:**
+```javascript
+import { describe, it, expect } from "vitest";
+import { render } from "../test-utils/render";
+import { screen } from "@testing-library/react";
+import { TEST_IDS } from "../constants/testIds";
+import MyComponent from "./MyComponent";
+
+describe("MyComponent", () => {
+  it("renders correctly", () => {
+    render(<MyComponent />);
+    expect(screen.getByText("Expected text")).toBeInTheDocument();
+  });
+});
+```
+
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  }
+}
+```
 
 ## Current Features
 
