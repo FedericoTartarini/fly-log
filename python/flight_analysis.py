@@ -94,6 +94,19 @@ def get_airport_coordinates(iata_code):
 # Load flights data
 df_flights = pd.read_csv("./python/flights_export.csv")
 df_flights = df_flights.fillna("null")
+
+# drop columns that are not needed
+columns_to_drop = ['Dep Terminal', 'Dep Gate',
+       'Arr Terminal', 'Arr Gate', 'Canceled', 'Diverted To',
+       'Gate Departure (Scheduled)', 'Gate Departure (Actual)',
+       'Take off (Scheduled)', 'Take off (Actual)', 'Landing (Scheduled)',
+       'Landing (Actual)', 'Gate Arrival (Scheduled)', 'Gate Arrival (Actual)',
+       'Tail Number', 'PNR', 'Seat', 'Seat Type',
+       'Cabin Class', 'Flight Reason', 'Notes', 'Flight Flighty ID',
+       'Airline Flighty ID', 'Departure Airport Flighty ID',
+       'Arrival Airport Flighty ID', 'Diverted To Airport Flighty ID',
+       'Aircraft Type Flighty ID']
+df_flights = df_flights.drop(columns=columns_to_drop)
 flight_records = df_flights.to_dict("records")
 
 # Load airlines.json
