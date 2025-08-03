@@ -20,7 +20,7 @@ const DistanceStatsCard = ({ totalDistance, totalFlights }) => {
       destination: "🌍 Earth",
       percentage: Math.min((earthMultiples % 1) * 100, 100),
       actual: earthMultiples,
-      label: `${(moonProgress * 100).toFixed(1)}x around Earth`,
+      label: `${earthMultiples.toFixed(1)}x around Earth`,
     },
     {
       destination: "🌙 Moon",

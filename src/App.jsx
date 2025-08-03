@@ -42,7 +42,7 @@ export function App() {
           Home
         </NavLink>
         <NavLink to={Paths.STATS} className={classes.control}>
-          Flight Stats
+          Flights
         </NavLink>
         <NavLink to={Paths.ABOUT} className={classes.control}>
           About

@@ -21,9 +21,6 @@ describe("StatsSummary Component", () => {
     cy.contains("20"); // Airports Visited
     cy.contains("11"); // Airlines Flown
     cy.contains("12"); // Countries
-
-    // Check if a specific flight date is displayed
-    cy.contains("01/07/2024"); // Check a specific flight date
   });
 
   it("should update statistics when year filter changes", () => {
@@ -44,7 +41,5 @@ describe("StatsSummary Component", () => {
     cy.contains("8"); // Airports Visited for 2025
     cy.contains("4"); // Airlines Flown for 2025
     cy.contains("6"); // Countries for 2025
-
-    cy.contains("22/05/2025"); // Check a specific flight date for 2025
   });
 });

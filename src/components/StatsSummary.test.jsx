@@ -1,16 +1,21 @@
 import { describe, it, expect, vi } from "vitest";
 import { render } from "../../test-utils/render";
+import { MemoryRouter } from "react-router-dom";
 import StatsSummary from "./StatsSummary";
 import useFlightStore from "../store";
 import { Ids } from "../constants/MyClasses.js";
 
 vi.mock("../store");
 
+const renderWithRouter = (component) => {
+  return render(<MemoryRouter>{component}</MemoryRouter>);
+};
+
 describe("StatsSummary", () => {
   it("should display correct total valuea", () => {
     useFlightStore.mockReturnValue({ selectedYear: "all" });
 
-    render(<StatsSummary />);
+    renderWithRouter(<StatsSummary />);
 
     // Find element by ID and check its text content
     const totalFlightsElement = document.getElementById(
@@ -40,7 +45,7 @@ describe("StatsSummary", () => {
   it("should display correct total values for 2024", () => {
     useFlightStore.mockReturnValue({ selectedYear: "2024" });
 
-    render(<StatsSummary />);
+    renderWithRouter(<StatsSummary />);
 
     // Find element by ID and check its text content
     const totalFlightsElement = document.getElementById(
