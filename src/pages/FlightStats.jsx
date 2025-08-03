@@ -9,6 +9,7 @@ import {
   Image,
   Group,
 } from "@mantine/core";
+import { BarChart } from "@mantine/charts";
 import useFlightStore from "../store";
 import flightsData from "../../python/flights_with_coordinates.json";
 import FlightYearFilter from "../components/FlightYearFilter";
@@ -69,8 +70,25 @@ function FlightStats() {
     if (flight.arrival_country) countries.add(flight.arrival_country);
   });
 
+  // Calculate departures by country for the bar chart
+  const departuresByCountry = filteredFlights.reduce((acc, flight) => {
+    const country = flight.departure_country;
+    if (country) {
+      acc[country] = (acc[country] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  // Convert to array format for BarChart and sort by count
+  const chartData = Object.entries(departuresByCountry)
+    .map(([country, count]) => ({
+      country,
+      departures: count,
+    }))
+    .sort((a, b) => b.departures - a.departures);
+
   return (
-    <Container size="sm" mt="md">
+    <Container size="lg" mt="md">
       <Stack spacing="xl">
         <Title order={2} ta="center">
           Detailed Flight Statistics
@@ -135,7 +153,7 @@ function FlightStats() {
             <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
               <StatDisplay
                 value={domesticFlights.length}
-                label="International Flights"
+                label="Domestic Flights"
               />
             </Grid.Col>
             <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
@@ -151,6 +169,21 @@ function FlightStats() {
               />
             </Grid.Col>
           </Grid>
+        </Card>
+
+        <Card shadow="sm" radius="md" withBorder>
+          <Title order={3} mb="md">
+            Departures by Country
+          </Title>
+          <BarChart
+            h={(chartData.length + 1) * 27}
+            data={chartData}
+            dataKey="country"
+            orientation="vertical"
+            yAxisProps={{ width: 60 }}
+            barProps={{ radius: 8 }}
+            series={[{ name: "departures", color: "blue.6" }]}
+          />
         </Card>
       </Stack>
     </Container>
