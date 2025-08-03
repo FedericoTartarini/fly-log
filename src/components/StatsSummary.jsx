@@ -1,111 +1,87 @@
 import React from "react";
-import flightsData from "../../python/flights_with_coordinates.json";
-import useFlightStore from "../store";
-import { Card, Image, Text, Grid, Stack, Title } from "@mantine/core";
-import flightImg from "../assets/flight.jpg";
+import { Card, Grid, Group, Image, Title, Text, Stack } from "@mantine/core";
 import { getFilteredFlights } from "../utils/flightUtils.js";
+import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
+import useFlightStore from "../store";
+import flightsData from "../../python/flights_with_coordinates.json";
+import flightImg from "../assets/flight.jpg";
 import { Ids } from "../constants/Ids.js";
 
-const DisplayStatistics = ({ label, value, id }) => (
-  <Stack align="center" justify="center" gap="0px">
-    <Title order={1} id={id}>
+const StatDisplay = ({ label, value, id }) => (
+  <Stack align="center" justify="center" gap="xs">
+    <Title order={2} id={id} ta="center">
       {value}
     </Title>
-    <Text size="sm" c="dimmed" id={id}>
+    <Text size="md" c="dimmed" ta="center">
       {label}
     </Text>
   </Stack>
 );
 
-const StatsSummary = () => {
+function StatsSummary() {
   const { selectedYear } = useFlightStore();
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set to start of day for comparison
 
   /** @type {import('../types').Flight[]} */
   const allFlights = flightsData;
-
   const filteredFlights = getFilteredFlights(allFlights, selectedYear);
 
-  // Calculate total distance and flight time
-  const { totalDistance, totalFlightTime } = filteredFlights.reduce(
-    (acc, flight) => {
-      acc.totalDistance += flight.distance_km || 0;
-      acc.totalFlightTime += flight.flight_time || 0;
-      return acc;
-    },
-    { totalDistance: 0, totalFlightTime: 0 },
-  );
-
-  // Calculate unique airports and airlines
-  const airports = new Set();
-  const airlines = new Set();
-  const countries = new Set();
-
-  filteredFlights.forEach((flight) => {
-    if (flight.from) airports.add(flight.from);
-    if (flight.to) airports.add(flight.to);
-    if (flight.airline) airlines.add(flight.airline);
-    if (flight.departure_country) countries.add(flight.departure_country);
-    if (flight.arrival_country) countries.add(flight.arrival_country);
-  });
+  const stats = useFlightStats(filteredFlights);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" radius="md" withBorder>
       <Card.Section>
-        <Image src={flightImg} height={120} alt="plane wing" />
+        <Image src={flightImg} height={160} alt="plane wing" />
       </Card.Section>
 
       <FlightYearFilter />
 
       <Grid>
         <Grid.Col span={4}>
-          <DisplayStatistics
+          <StatDisplay
             value={filteredFlights.length}
             label="Total Flights"
             id={Ids.STATS.TOTAL_FLIGHTS}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics
-            value={Math.round(totalDistance).toLocaleString()}
+          <StatDisplay
+            value={Math.round(stats.totalDistance).toLocaleString()}
             label="Distance (km)"
             id={Ids.STATS.TOTAL_DISTANCE}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics
-            value={(totalFlightTime / 24).toFixed(1)}
-            label="Time (days)"
+          <StatDisplay
+            value={(stats.totalFlightTime / 24).toFixed(1)}
+            label="Flight Time (days)"
             id={Ids.STATS.TOTAL_TIME}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics
-            value={airports.size}
+          <StatDisplay
+            value={stats.airports}
             label="Airports Visited"
             id={Ids.STATS.AIRPORTS_VISITED}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics
-            value={airlines.size}
+          <StatDisplay
+            value={stats.airlines}
             label="Airlines Flown"
             id={Ids.STATS.AIRLINES_FLOWN}
           />
         </Grid.Col>
         <Grid.Col span={4}>
-          <DisplayStatistics
-            value={countries.size}
-            label="Countries"
+          <StatDisplay
+            value={stats.countries}
+            label="Countries Visited"
             id={Ids.STATS.COUNTRIES_VISITED}
           />
         </Grid.Col>
       </Grid>
     </Card>
   );
-};
+}
 
 export default StatsSummary;
