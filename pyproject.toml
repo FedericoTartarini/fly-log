@@ -1,5 +1,5 @@
 [project]
-name = "test-react-flight-tracker"
+name = "flights-tracker"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
