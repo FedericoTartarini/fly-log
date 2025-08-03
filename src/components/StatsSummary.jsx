@@ -58,11 +58,14 @@ const StatsSummary = () => {
   // Calculate unique airports and airlines
   const airports = new Set();
   const airlines = new Set();
+  const countries = new Set();
 
   filteredFlights.forEach((flight) => {
     if (flight.From) airports.add(flight.From);
     if (flight.To) airports.add(flight.To);
     if (flight.Airline) airlines.add(flight.Airline);
+    if (flight.departure_country) countries.add(flight.departure_country);
+    if (flight.arrival_country) countries.add(flight.arrival_country);
   });
 
   return (
@@ -105,11 +108,14 @@ const StatsSummary = () => {
             label="Time (days)"
           />
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col span={4}>
           <DisplayStatistics value={airports.size} label="Airports Visited" />
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col span={4}>
           <DisplayStatistics value={airlines.size} label="Airlines Flown" />
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <DisplayStatistics value={countries.size} label="Countries" />
         </Grid.Col>
       </Grid>
     </Card>

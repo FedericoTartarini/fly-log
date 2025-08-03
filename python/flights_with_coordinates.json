@@ -16,6 +16,9 @@
     ],
     "distance_km": 8170.533959234814,
     "flight_time": 9.07837106581646,
+    "departure_country": "AU",
+    "arrival_country": "US",
+    "international": true,
     "airline_name": "Jetstar",
     "airline_primary_color": "#FF5111",
     "airline_icon_path": "jetstar.svg"
@@ -37,6 +40,9 @@
     ],
     "distance_km": 163.37225695274853,
     "flight_time": 0.18152472994749835,
+    "departure_country": "US",
+    "arrival_country": "US",
+    "international": false,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -58,6 +64,9 @@
     ],
     "distance_km": 163.37225695274853,
     "flight_time": 0.18152472994749835,
+    "departure_country": "US",
+    "arrival_country": "US",
+    "international": false,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -79,6 +88,9 @@
     ],
     "distance_km": 8170.533959234814,
     "flight_time": 9.07837106581646,
+    "departure_country": "US",
+    "arrival_country": "AU",
+    "international": true,
     "airline_name": "Jetstar",
     "airline_primary_color": "#FF5111",
     "airline_icon_path": "jetstar.svg"
@@ -100,6 +112,9 @@
     ],
     "distance_km": 705.4017258143438,
     "flight_time": 0.7837796953492708,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -121,6 +136,9 @@
     ],
     "distance_km": 456.28907201453455,
     "flight_time": 0.5069878577939273,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -142,6 +160,9 @@
     ],
     "distance_km": 456.28907201453455,
     "flight_time": 0.5069878577939273,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -163,6 +184,9 @@
     ],
     "distance_km": 705.4017258143438,
     "flight_time": 0.7837796953492708,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -184,6 +208,9 @@
     ],
     "distance_km": 7865.400595107335,
     "flight_time": 8.739333994563706,
+    "departure_country": "AU",
+    "arrival_country": "CN",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -205,6 +232,9 @@
     ],
     "distance_km": 1795.5248194647281,
     "flight_time": 1.9950275771830313,
+    "departure_country": "CN",
+    "arrival_country": "JP",
+    "international": true,
     "airline_name": "Air China",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -226,6 +256,9 @@
     ],
     "distance_km": 2092.2002244742116,
     "flight_time": 2.324666916082457,
+    "departure_country": "JP",
+    "arrival_country": "CN",
+    "international": true,
     "airline_name": "Air China",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -247,6 +280,9 @@
     ],
     "distance_km": 9205.340828831926,
     "flight_time": 10.228156476479917,
+    "departure_country": "CN",
+    "arrival_country": "ES",
+    "international": true,
     "airline_name": "Air China",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -268,6 +304,9 @@
     ],
     "distance_km": 394.84733565029114,
     "flight_time": 0.43871926183365684,
+    "departure_country": "ES",
+    "arrival_country": "ES",
+    "international": false,
     "airline_name": "Iberia",
     "airline_primary_color": "",
     "airline_icon_path": "iberia.svg"
@@ -289,6 +328,9 @@
     ],
     "distance_km": 1296.2986705349451,
     "flight_time": 1.440331856149939,
+    "departure_country": "ES",
+    "arrival_country": "IT",
+    "international": true,
     "airline_name": "Iberia",
     "airline_primary_color": "",
     "airline_icon_path": "iberia.svg"
@@ -310,6 +352,9 @@
     ],
     "distance_km": 644.6910952420396,
     "flight_time": 0.7163234391578218,
+    "departure_country": "IT",
+    "arrival_country": "DE",
+    "international": true,
     "airline_name": "Lufthansa",
     "airline_primary_color": "#05164D",
     "airline_icon_path": "lufthansa.svg"
@@ -331,6 +376,9 @@
     ],
     "distance_km": 8999.467855827306,
     "flight_time": 9.999408728697007,
+    "departure_country": "DE",
+    "arrival_country": "TH",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -352,6 +400,9 @@
     ],
     "distance_km": 7514.638226417646,
     "flight_time": 8.34959802935294,
+    "departure_country": "TH",
+    "arrival_country": "AU",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -373,6 +424,9 @@
     ],
     "distance_km": 6293.442607920952,
     "flight_time": 6.992714008801057,
+    "departure_country": "AU",
+    "arrival_country": "SG",
+    "international": true,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -394,6 +448,9 @@
     ],
     "distance_km": 8680.13606445294,
     "flight_time": 9.644595627169933,
+    "departure_country": "SG",
+    "arrival_country": "TR",
+    "international": true,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
     "airline_icon_path": "turkish-airlines.svg"
@@ -415,6 +472,9 @@
     ],
     "distance_km": 1464.4156088005006,
     "flight_time": 1.6271284542227784,
+    "departure_country": "TR",
+    "arrival_country": "IT",
+    "international": true,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
     "airline_icon_path": "turkish-airlines.svg"
@@ -436,6 +496,9 @@
     ],
     "distance_km": 2808.5808344800494,
     "flight_time": 3.1206453716444993,
+    "departure_country": "IT",
+    "arrival_country": "IS",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -457,6 +520,9 @@
     ],
     "distance_km": 2037.6616631906572,
     "flight_time": 2.264068514656286,
+    "departure_country": "IS",
+    "arrival_country": "NL",
+    "international": true,
     "airline_name": "Transavia",
     "airline_primary_color": "#00D66C",
     "airline_icon_path": "transavia.svg"
@@ -478,6 +544,9 @@
     ],
     "distance_km": 885.2472740376736,
     "flight_time": 0.9836080822640818,
+    "departure_country": "NL",
+    "arrival_country": "IT",
+    "international": true,
     "airline_name": "Transavia",
     "airline_primary_color": "#00D66C",
     "airline_icon_path": "transavia.svg"
@@ -499,6 +568,9 @@
     ],
     "distance_km": 1464.4156088005006,
     "flight_time": 1.6271284542227784,
+    "departure_country": "IT",
+    "arrival_country": "TR",
+    "international": true,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
     "airline_icon_path": "turkish-airlines.svg"
@@ -520,6 +592,9 @@
     ],
     "distance_km": 8680.13606445294,
     "flight_time": 9.644595627169933,
+    "departure_country": "TR",
+    "arrival_country": "SG",
+    "international": true,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
     "airline_icon_path": "turkish-airlines.svg"
@@ -541,6 +616,9 @@
     ],
     "distance_km": 6293.442607920952,
     "flight_time": 6.992714008801057,
+    "departure_country": "SG",
+    "arrival_country": "AU",
+    "international": true,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -562,6 +640,9 @@
     ],
     "distance_km": 752.8217807125056,
     "flight_time": 0.8364686452361174,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -583,6 +664,9 @@
     ],
     "distance_km": 752.8217807125056,
     "flight_time": 0.8364686452361174,
+    "departure_country": "AU",
+    "arrival_country": "AU",
+    "international": false,
     "airline_name": "Qantas",
     "airline_primary_color": "",
     "airline_icon_path": "qantas_mono.svg"
@@ -604,6 +688,9 @@
     ],
     "distance_km": 8666.077206257864,
     "flight_time": 9.62897467361985,
+    "departure_country": "AU",
+    "arrival_country": "CN",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -625,6 +712,9 @@
     ],
     "distance_km": 653.341354735804,
     "flight_time": 0.7259348385953377,
+    "departure_country": "CN",
+    "arrival_country": "CN",
+    "international": false,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null
@@ -646,6 +736,9 @@
     ],
     "distance_km": 8666.077206257864,
     "flight_time": 9.62897467361985,
+    "departure_country": "CN",
+    "arrival_country": "AU",
+    "international": true,
     "airline_name": null,
     "airline_primary_color": null,
     "airline_icon_path": null

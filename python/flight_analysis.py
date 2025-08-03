@@ -62,15 +62,15 @@ df_airports = pd.merge(
 df_airports = df_airports.rename(
     columns={"latitude_deg": "Lat", "longitude_deg": "Lon"}
 )
-df_airports = df_airports[["IATA", "Lat", "Lon"]]
+df_airports = df_airports[["IATA", "Lat", "Lon", "iso_country"]]
 
-df_more_airports = pd.read_csv("python/airports_info.csv")
-df_more_airports = df_more_airports[["IATA", "Lat", "Lon"]]
-df_airports = pd.concat(
-    [df_airports, df_more_airports], ignore_index=True
-).drop_duplicates()
+# df_more_airports = pd.read_csv("python/airports_info.csv")
+# df_more_airports = df_more_airports[["IATA", "Lat", "Lon", "Country"]]
+# df_airports = pd.concat(
+#     [df_airports, df_more_airports], ignore_index=True
+# ).drop_duplicates()
 
-custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44}
+custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44 , "iso_country": "CN"}
 df_airports = pd.concat([df_airports, pd.DataFrame([custom_data])], ignore_index=True)
 
 
@@ -91,21 +91,57 @@ def get_airport_coordinates(iata_code):
         return None
 
 
+def get_iso_country(iata_code):
+    """
+    Retrieve the ISO country code for a given airport IATA code.
+
+    Args:
+        iata_code (str): IATA code of the airport.
+
+    Returns:
+        str: ISO country code if found, else None.
+    """
+    try:
+        airport = df_airports[df_airports["IATA"] == iata_code].iloc[0]
+        return airport["iso_country"]
+    except IndexError:
+        return None
+
+
 # Load flights data
 df_flights = pd.read_csv("./python/flights_export.csv")
 df_flights = df_flights.fillna("null")
 
 # drop columns that are not needed
-columns_to_drop = ['Dep Terminal', 'Dep Gate',
-       'Arr Terminal', 'Arr Gate', 'Canceled', 'Diverted To',
-       'Gate Departure (Scheduled)', 'Gate Departure (Actual)',
-       'Take off (Scheduled)', 'Take off (Actual)', 'Landing (Scheduled)',
-       'Landing (Actual)', 'Gate Arrival (Scheduled)', 'Gate Arrival (Actual)',
-       'Tail Number', 'PNR', 'Seat', 'Seat Type',
-       'Cabin Class', 'Flight Reason', 'Notes', 'Flight Flighty ID',
-       'Airline Flighty ID', 'Departure Airport Flighty ID',
-       'Arrival Airport Flighty ID', 'Diverted To Airport Flighty ID',
-       'Aircraft Type Flighty ID']
+columns_to_drop = [
+    "Dep Terminal",
+    "Dep Gate",
+    "Arr Terminal",
+    "Arr Gate",
+    "Canceled",
+    "Diverted To",
+    "Gate Departure (Scheduled)",
+    "Gate Departure (Actual)",
+    "Take off (Scheduled)",
+    "Take off (Actual)",
+    "Landing (Scheduled)",
+    "Landing (Actual)",
+    "Gate Arrival (Scheduled)",
+    "Gate Arrival (Actual)",
+    "Tail Number",
+    "PNR",
+    "Seat",
+    "Seat Type",
+    "Cabin Class",
+    "Flight Reason",
+    "Notes",
+    "Flight Flighty ID",
+    "Airline Flighty ID",
+    "Departure Airport Flighty ID",
+    "Arrival Airport Flighty ID",
+    "Diverted To Airport Flighty ID",
+    "Aircraft Type Flighty ID",
+]
 df_flights = df_flights.drop(columns=columns_to_drop)
 flight_records = df_flights.to_dict("records")
 
@@ -120,7 +156,9 @@ airline_lookup = {a["icao"]: a for a in airlines}
 enriched_flights = []
 for flight in flight_records:
     dep_coords = get_airport_coordinates(flight["From"])
+    dep_country = get_iso_country(flight["From"])
     arr_coords = get_airport_coordinates(flight["To"])
+    arr_country = get_iso_country(flight["To"])
     distance = haversine(dep_coords, arr_coords)
     flight_time = estimate_flight_time(distance)
     icao = flight["Airline"]
@@ -136,6 +174,12 @@ for flight in flight_records:
     flight["arrival_coordinates"] = arr_coords
     flight["distance_km"] = distance
     flight["flight_time"] = flight_time
+    flight["departure_country"] = dep_country
+    flight["arrival_country"] = arr_country
+    if dep_country != arr_country:
+        flight["international"] = True
+    else:
+        flight["international"] = False
 
     if airline_info:
         airline_name = airline_info["name"]
