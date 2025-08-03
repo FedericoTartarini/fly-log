@@ -8,6 +8,7 @@ import { createTheme, MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { App } from "./App.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
+import FlightStats from "./pages/FlightStats.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,10 @@ const router = createBrowserRouter([
         path: "about",
         element: <About />,
       },
-      // Add other routes here
+      {
+        path: "flights_stats",
+        element: <FlightStats />,
+      },
     ],
   },
 ]);

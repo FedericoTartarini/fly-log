@@ -40,6 +40,9 @@ export function App() {
         <NavLink to="/" className={classes.control}>
           Home
         </NavLink>
+        <NavLink to="/flights_stats" className={classes.control}>
+          Flight Stats
+        </NavLink>
         <NavLink to="/about" className={classes.control}>
           About
         </NavLink>

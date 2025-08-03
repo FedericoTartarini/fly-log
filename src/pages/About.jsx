@@ -1,4 +1,3 @@
-// src/pages/About.jsx
 import { Title, Text, Paper } from "@mantine/core";
 
 function About() {
