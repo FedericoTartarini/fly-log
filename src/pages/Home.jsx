@@ -3,6 +3,7 @@ import WorldMap from "../components/WorldMap.jsx";
 import { Stack, Title } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
+import FlightList from "../components/FlightList.jsx";
 
 const Home = () => {
   const { userName, setUserName } = useFlightStore();
@@ -31,6 +32,7 @@ const Home = () => {
           {userName ? `Welcome ${userName}` : "Welcome to My Flight Tracker"}
         </Title>
         <StatsSummary />
+        <FlightList />
       </Stack>
     </>
   );
