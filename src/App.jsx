@@ -43,9 +43,6 @@ export function App() {
         <NavLink to="/about" className={classes.control}>
           About
         </NavLink>
-        <NavLink to="/support" className={classes.control}>
-          Support
-        </NavLink>
       </AppShell.Navbar>
 
       <AppShell.Main>
