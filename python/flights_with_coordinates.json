@@ -45,7 +45,7 @@
     "flight_time": 9.07837106581646,
     "airline_name": "Jetstar",
     "airline_primary_color": "#FF5111",
-    "airline_icon_path": "src/assets/airlines_logos/jetstar.svg"
+    "airline_icon_path": "jetstar.svg"
   },
   {
     "Date": "2024-07-02",
@@ -189,7 +189,7 @@
     "flight_time": 9.07837106581646,
     "airline_name": "Jetstar",
     "airline_primary_color": "#FF5111",
-    "airline_icon_path": "src/assets/airlines_logos/jetstar.svg"
+    "airline_icon_path": "jetstar.svg"
   },
   {
     "Date": "2024-10-01",
@@ -237,7 +237,7 @@
     "flight_time": 0.7837796953492708,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-10-01",
@@ -285,7 +285,7 @@
     "flight_time": 0.5069878577939273,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-10-02",
@@ -333,7 +333,7 @@
     "flight_time": 0.5069878577939273,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-10-02",
@@ -381,7 +381,7 @@
     "flight_time": 0.7837796953492708,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-10-31",
@@ -477,7 +477,7 @@
     "flight_time": 1.9950275771830313,
     "airline_name": "Air China",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-11-16",
@@ -525,7 +525,7 @@
     "flight_time": 2.324666916082457,
     "airline_name": "Air China",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-11-17",
@@ -573,7 +573,7 @@
     "flight_time": 10.228156476479917,
     "airline_name": "Air China",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2024-11-22",
@@ -621,7 +621,7 @@
     "flight_time": 0.43871926183365684,
     "airline_name": "Iberia",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/iberia.svg"
+    "airline_icon_path": "iberia.svg"
   },
   {
     "Date": "2024-11-22",
@@ -669,7 +669,7 @@
     "flight_time": 1.440331856149939,
     "airline_name": "Iberia",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/iberia.svg"
+    "airline_icon_path": "iberia.svg"
   },
   {
     "Date": "2024-12-02",
@@ -717,7 +717,7 @@
     "flight_time": 0.7163234391578218,
     "airline_name": "Lufthansa",
     "airline_primary_color": "#05164D",
-    "airline_icon_path": "src/assets/airlines_logos/lufthansa.svg"
+    "airline_icon_path": "lufthansa.svg"
   },
   {
     "Date": "2024-12-02",
@@ -861,7 +861,7 @@
     "flight_time": 6.992714008801057,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2025-05-31",
@@ -909,7 +909,7 @@
     "flight_time": 9.644595627169933,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
-    "airline_icon_path": "src/assets/airlines_logos/turkish-airlines.svg"
+    "airline_icon_path": "turkish-airlines.svg"
   },
   {
     "Date": "2025-06-01",
@@ -957,7 +957,7 @@
     "flight_time": 1.6271284542227784,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
-    "airline_icon_path": "src/assets/airlines_logos/turkish-airlines.svg"
+    "airline_icon_path": "turkish-airlines.svg"
   },
   {
     "Date": "2025-06-07",
@@ -1053,7 +1053,7 @@
     "flight_time": 2.264068514656286,
     "airline_name": "Transavia",
     "airline_primary_color": "#00D66C",
-    "airline_icon_path": "src/assets/airlines_logos/transavia.svg"
+    "airline_icon_path": "transavia.svg"
   },
   {
     "Date": "2025-06-22",
@@ -1101,7 +1101,7 @@
     "flight_time": 0.9836080822640818,
     "airline_name": "Transavia",
     "airline_primary_color": "#00D66C",
-    "airline_icon_path": "src/assets/airlines_logos/transavia.svg"
+    "airline_icon_path": "transavia.svg"
   },
   {
     "Date": "2025-07-07",
@@ -1149,7 +1149,7 @@
     "flight_time": 1.6271284542227784,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
-    "airline_icon_path": "src/assets/airlines_logos/turkish-airlines.svg"
+    "airline_icon_path": "turkish-airlines.svg"
   },
   {
     "Date": "2025-07-07",
@@ -1197,7 +1197,7 @@
     "flight_time": 9.644595627169933,
     "airline_name": "Turkish Airlines",
     "airline_primary_color": "#C90019",
-    "airline_icon_path": "src/assets/airlines_logos/turkish-airlines.svg"
+    "airline_icon_path": "turkish-airlines.svg"
   },
   {
     "Date": "2025-07-09",
@@ -1245,7 +1245,7 @@
     "flight_time": 6.992714008801057,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2025-08-13",
@@ -1293,7 +1293,7 @@
     "flight_time": 0.8364686452361174,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2025-08-18",
@@ -1341,7 +1341,7 @@
     "flight_time": 0.8364686452361174,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
+    "airline_icon_path": "qantas_mono.svg"
   },
   {
     "Date": "2025-12-19",

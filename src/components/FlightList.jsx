@@ -34,8 +34,10 @@ const FlightList = () => {
       );
     }
 
-    // Use new URL to resolve asset paths correctly in production builds
-    const imageUrl = new URL(`../${sourcePath}`, import.meta.url).href;
+    const imageUrl = new URL(
+      `../assets/airlines_logos/${sourcePath}`,
+      import.meta.url,
+    ).href;
 
     return <Image src={imageUrl} alt={`${flight.Airline} icon`} height={10} />;
   };
