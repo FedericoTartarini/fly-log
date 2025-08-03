@@ -1,12 +1,94 @@
-# React + Vite
+# Flight Data Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project analyzes personal flight history using Python and visualizes the data on an interactive map using a React and Vite-powered frontend.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The application has two main parts:
 
-## Expanding the ESLint configuration
+1.  **Data Analysis (Python):** A Python script is used to process raw flight data. It cleans the data, distances, and times, and enriches it with airport coordinates and airline information. The final output is a structured JSON file.
+2.  **Frontend (React + Vite):** A single-page application built with React and Vite consumes the JSON data. It displays the flights on an interactive map and in a sortable, filterable table. The frontend is styled using the Mantine component library.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+*   **Frontend:** React, Vite, Mantine UI
+*   **Data Processing:** Python, Pandas
+*   **Deployment:** Configured for static site deployment Netlify
+
+## Getting Started
+
+Follow these instructions to get a local copy up and running.
+
+### Prerequisites
+
+*   Node.js (v18 or newer)
+*   npm
+*   Python 3.x
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd <repository-directory>
+    ```
+
+2.  **Prepare the data:**
+    *   Navigate to the `python` directory.
+    *   Run the data processing script to generate the `flights_with_coordinates.json` file. This file is required by the frontend. You need to install the devependencies using `uv`
+
+3.  **Install frontend dependencies:**
+    ```bash
+    npm install
+    ```
+
+4.  **Run the development server:**
+    *   This will start the app on `http://localhost:5173`. The page will automatically reload if you make changes to the source code.
+    ```bash
+    npm run dev
+    ```
+
+5.  **Build for production:**
+    *   This command bundles the app into the `dist` directory for deployment.
+    ```bash
+    npm run build
+    ```
+
+## Current Features
+
+*   Interactive globe displaying all flight paths.
+*   Detailed flight list in a table format.
+*   Filter flights by year.
+*   Displays airline logos for each flight.
+
+## To-Do / Future Improvements
+
+### Visualization Enhancements
+* [ ] Add filtering by airline, aircraft type, or airport.
+* [ ] Implement search functionality for flights.
+
+### User Experience Improvements
+* [ ] Improve mobile responsiveness.
+* [ ] Improve desktop responsiveness.
+* [ ] Add a page for detailed flight stats and analytics.
+* [ ] Implement a dark mode toggle.
+* [ ] Conduct user testing to gather feedback on usability.
+* [ ] Muli-language support (i18n).
+
+### Accessibility
+* [ ] Conduct a full accessibility audit (WCAG 2.1 compliance).
+* [ ] Ensure components are keyboard navigable and screen reader friendly.
+
+### Maintenance and DevOps
+* [ ] Write unit and integration tests for components and utility functions.
+* [ ] Refactor state management for more complex filtering logic.
+* [ ] Set up continuous integration (CI) for automated builds, tests, and deployments.
+* [ ] Document the codebase with comments and a developer guide.
+* [ ] Optimize performance for large datasets (e.g., lazy loading, pagination).
+* [ ] Integrate code linting and formatting tools (ESLint, Prettier).
+
+### Data & Backend
+* [ ] Implement user authentication for personalized flight history.
+* [ ] Add a feature to upload new flight data.
+* [ ] Connect to a backend service for dynamic data fetching.
+* [ ] Support importing flight data from various formats (CSV, JSON, etc.).
