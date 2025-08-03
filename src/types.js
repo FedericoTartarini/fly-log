@@ -14,6 +14,8 @@
  * @property {string} [airline_primary_color]
  * @property {string} [airline_name]
  * @property {string} [Flight]
+ * @property {string} [departure_country]
+ * @property {string} [arrival_country]
  */
 
 export {}; // This file is only for type definitions.

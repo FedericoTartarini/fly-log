@@ -1,17 +1,10 @@
 import React from "react";
 import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
-import {
-  NativeSelect,
-  Card,
-  Image,
-  Text,
-  Grid,
-  Stack,
-  Title,
-} from "@mantine/core";
+import { Card, Image, Text, Grid, Stack, Title } from "@mantine/core";
 import flightImg from "../assets/flight.jpg";
 import { getFilteredFlights } from "../utils/flightUtils.js";
+import FlightYearFilter from "./FlightYearFilter";
 
 const DisplayStatistics = ({ label, value }) => (
   <Stack align="center" justify="center" gap="0px">
@@ -23,25 +16,13 @@ const DisplayStatistics = ({ label, value }) => (
 );
 
 const StatsSummary = () => {
-  const { selectedYear, setSelectedYear } = useFlightStore();
+  const { selectedYear } = useFlightStore();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to start of day for comparison
 
   /** @type {import('../types').Flight[]} */
   const allFlights = flightsData;
-
-  // Filter out future flights
-  const pastFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) <= today,
-  );
-
-  // Get unique years from past flights for the dropdown
-  const years = [
-    ...new Set(
-      pastFlights.map((flight) => new Date(flight.Date).getFullYear()),
-    ),
-  ].sort((a, b) => b - a); // Sort years in descending order
 
   const filteredFlights = getFilteredFlights(allFlights, selectedYear);
 
@@ -74,20 +55,7 @@ const StatsSummary = () => {
         <Image src={flightImg} height={120} alt="plane wing" />
       </Card.Section>
 
-      <NativeSelect
-        value={selectedYear}
-        onChange={(e) => setSelectedYear(e.target.value)}
-        mt="md"
-        mb="xs"
-        data={[
-          { value: "all", label: "All Stats" },
-          { value: "upcoming", label: "Upcoming Flights" },
-          ...years.map((year) => ({
-            value: String(year),
-            label: String(year),
-          })),
-        ]}
-      />
+      <FlightYearFilter />
 
       <Grid>
         <Grid.Col span={4}>
