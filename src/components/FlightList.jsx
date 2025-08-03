@@ -4,12 +4,7 @@ import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
 import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
 import { getFilteredFlights } from "../utils/flightUtils.js";
-import PlaneIcon from "../assets/plane.png";
-import {
-  IconAdjustments,
-  IconPlaneInflight,
-  IconPlaneTilt,
-} from "@tabler/icons-react";
+import { IconPlaneInflight } from "@tabler/icons-react";
 
 const FlightList = () => {
   /** @type {import('../types').Flight[]} */
@@ -20,15 +15,15 @@ const FlightList = () => {
   if (filteredFlights.length === 0) {
     return (
       <Text mt="md" ta="center">
-        No filteredFlights to display for this selection.
+        No flights to display for this selection.
       </Text>
     );
   }
 
   const getAirlineIcon = (flight) => {
-    let source = flight.airline_icon_path;
+    const sourcePath = flight.airline_icon_path;
 
-    if (!source) {
+    if (!sourcePath) {
       return (
         <ActionIcon aria-label="Settings" color="gray">
           <IconPlaneInflight
@@ -39,7 +34,10 @@ const FlightList = () => {
       );
     }
 
-    return <Image src={source} alt={`${flight.Airline} icon`} height={10} />;
+    // Use new URL to resolve asset paths correctly in production builds
+    const imageUrl = new URL(`../${sourcePath}`, import.meta.url).href;
+
+    return <Image src={imageUrl} alt={`${flight.Airline} icon`} height={10} />;
   };
 
   const rows = filteredFlights.map((flight, index) => (
