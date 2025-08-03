@@ -1,10 +1,17 @@
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./ApplicationShell.module.css";
-import { AppShell, Burger, Group, Title, UnstyledButton } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Group,
+  UnstyledButton,
+  Container,
+} from "@mantine/core";
 import Home from "./Home.jsx";
 
 export function ApplicationShell() {
-  const [opened, { toggle }] = useDisclosure();
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
   return (
     <AppShell
@@ -12,30 +19,28 @@ export function ApplicationShell() {
       navbar={{
         width: 300,
         breakpoint: "sm",
-        collapsed: { desktop: true, mobile: !opened },
+        collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
       transitionDuration={500}
       transitionTimingFunction="ease"
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Group justify="space-between" style={{ flex: 1 }}>
-            My Flight Tracker
-            <Group ml="xl" gap={0} visibleFrom="sm">
-              <UnstyledButton className={classes.control}>Home</UnstyledButton>
-              <UnstyledButton className={classes.control}>Blog</UnstyledButton>
-              <UnstyledButton className={classes.control}>
-                Contacts
-              </UnstyledButton>
-              <UnstyledButton className={classes.control}>
-                Support
-              </UnstyledButton>
-            </Group>
-          </Group>
+          <Burger
+            opened={mobileOpened}
+            onClick={toggleMobile}
+            hiddenFrom="sm"
+            size="sm"
+          />
+          <Burger
+            opened={desktopOpened}
+            onClick={toggleDesktop}
+            visibleFrom="sm"
+            size="sm"
+          />
+          Flight Tracker
         </Group>
       </AppShell.Header>
-
       <AppShell.Navbar py="md" px={4}>
         <UnstyledButton className={classes.control}>Home</UnstyledButton>
         <UnstyledButton className={classes.control}>
@@ -46,7 +51,9 @@ export function ApplicationShell() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Home />
+        <Container size="xs" p={0}>
+          <Home />
+        </Container>
       </AppShell.Main>
     </AppShell>
   );

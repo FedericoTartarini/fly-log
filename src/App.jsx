@@ -1,11 +1,6 @@
 import "@mantine/core/styles.css";
 
-import {
-  createTheme,
-  MantineProvider,
-  Title,
-  ColorSchemeScript,
-} from "@mantine/core";
+import { createTheme, MantineProvider, ColorSchemeScript } from "@mantine/core";
 
 import "./App.css";
 import { ApplicationShell } from "./pages/ApplicationShell.jsx";
