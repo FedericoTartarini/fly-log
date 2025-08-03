@@ -3,6 +3,7 @@ import { useDisclosure } from "@mantine/hooks";
 import classes from "./App.module.css";
 import { AppShell, Burger, Group, Container } from "@mantine/core";
 import { NavLink, Outlet } from "react-router-dom";
+import { Paths } from "./constants/MyClasses.js";
 
 export function App() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -12,7 +13,7 @@ export function App() {
     <AppShell
       header={{ height: 60 }}
       navbar={{
-        width: 300,
+        width: 150,
         breakpoint: "sm",
         collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
@@ -37,13 +38,13 @@ export function App() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar py="md" px={4}>
-        <NavLink to="/" className={classes.control}>
+        <NavLink to={Paths.HOME} className={classes.control}>
           Home
         </NavLink>
-        <NavLink to="/flights_stats" className={classes.control}>
+        <NavLink to={Paths.STATS} className={classes.control}>
           Flight Stats
         </NavLink>
-        <NavLink to="/about" className={classes.control}>
+        <NavLink to={Paths.ABOUT} className={classes.control}>
           About
         </NavLink>
       </AppShell.Navbar>

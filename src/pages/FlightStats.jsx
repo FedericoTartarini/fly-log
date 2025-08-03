@@ -21,7 +21,7 @@ import {
   getFlightsByTimeGrouping,
 } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
-import { Ids } from "../constants/Ids.js";
+import { Ids } from "../constants/MyClasses.js";
 import flightImg from "../assets/flight.jpg";
 
 function FlightStats() {

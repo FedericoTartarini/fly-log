@@ -12,3 +12,14 @@ export const Ids = {
   },
   // Add more sections as needed
 };
+
+export const Paths = {
+  HOME: "/",
+  FLIGHTS: "/flights",
+  STATS: "/stats",
+  ADD_FLIGHT: "/add-flight",
+  EDIT_FLIGHT: "/edit-flight/:id",
+  ABOUT: "/about",
+  NOT_FOUND: "*",
+  // Add more paths as needed
+};

@@ -1,12 +1,22 @@
 import React from "react";
-import { Card, Grid, Group, Image, Title, Text, Stack } from "@mantine/core";
+import {
+  Card,
+  Grid,
+  Group,
+  Image,
+  Title,
+  Text,
+  Stack,
+  Button,
+} from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import { getFilteredFlights } from "../utils/flightUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store";
 import flightsData from "../../python/flights_with_coordinates.json";
 import flightImg from "../assets/flight.jpg";
-import { Ids } from "../constants/Ids.js";
+import { Paths, Ids } from "../constants/MyClasses.js";
 
 const StatDisplay = ({ label, value, id }) => (
   <Stack align="center" justify="center" gap="xs">
@@ -21,6 +31,7 @@ const StatDisplay = ({ label, value, id }) => (
 
 function StatsSummary() {
   const { selectedYear } = useFlightStore();
+  const navigate = useNavigate();
 
   /** @type {import('../types').Flight[]} */
   const allFlights = flightsData;
@@ -80,6 +91,12 @@ function StatsSummary() {
           />
         </Grid.Col>
       </Grid>
+
+      <Group justify="center" mt="md">
+        <Button variant="light" onClick={() => navigate(Paths.STATS)}>
+          View Detailed Stats
+        </Button>
+      </Group>
     </Card>
   );
 }

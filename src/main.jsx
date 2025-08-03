@@ -9,10 +9,11 @@ import { App } from "./App.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import FlightStats from "./pages/FlightStats.jsx";
+import { Paths } from "./constants/MyClasses.js";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: Paths.HOME,
     element: <App />,
     children: [
       {
@@ -20,11 +21,11 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "about",
+        path: Paths.ABOUT,
         element: <About />,
       },
       {
-        path: "flights_stats",
+        path: Paths.STATS,
         element: <FlightStats />,
       },
     ],

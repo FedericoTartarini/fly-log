@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render } from "../../test-utils/render";
 import StatsSummary from "./StatsSummary";
 import useFlightStore from "../store";
-import { Ids } from "../constants/Ids.js";
+import { Ids } from "../constants/MyClasses.js";
 
 vi.mock("../store");
 

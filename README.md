@@ -175,6 +175,7 @@ describe("MyComponent", () => {
 ### Visualization Enhancements
 * [ ] Add filtering by airline, aircraft type, or airport.
 * [ ] Implement search functionality for flights.
+* [x] Add a button in the home page to go to the flight stats page.
 
 ### User Experience Improvements
 * [x] Improve mobile responsiveness.
