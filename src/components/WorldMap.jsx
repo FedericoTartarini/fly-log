@@ -52,10 +52,10 @@ const WorldMap = () => {
 
   return (
     <MapContainer
-      center={[20, 151]}
+      center={[25, 74]}
       zoom={2}
       minZoom={2}
-      style={{ height: "500px", width: "100%" }}
+      style={{ height: "400px", width: "100%" }}
       maxBounds={[
         [-90, -180],
         [90, 180],

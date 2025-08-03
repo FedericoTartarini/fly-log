@@ -14,6 +14,7 @@ import flightsData from "../../python/flights_with_coordinates.json";
 import FlightYearFilter from "../components/FlightYearFilter";
 import StatDisplay from "../components/StatDisplay";
 import FlightCard from "../components/FlightCard";
+import DistanceStatsCard from "../components/DistanceStatsCard";
 import { getFilteredFlights } from "../utils/flightUtils.js";
 import {
   getDeparturesByCountry,
@@ -118,6 +119,11 @@ function FlightStats() {
             </Grid.Col>
           </Grid>
         </Card>
+
+        <DistanceStatsCard
+          totalDistance={stats.totalDistance}
+          totalFlights={filteredFlights.length}
+        />
 
         <Grid>
           <Grid.Col span={{ base: 12, md: 6 }}>
