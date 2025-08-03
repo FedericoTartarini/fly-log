@@ -13,6 +13,7 @@
  * @property {string} [airline_icon_path]
  * @property {string} [airline_primary_color]
  * @property {string} [airline_name]
+ * @property {string} [Flight]
  */
 
 export {}; // This file is only for type definitions.

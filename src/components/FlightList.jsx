@@ -1,10 +1,15 @@
 // src/components/FlightList.jsx
 import React from "react";
-import { Image, Table, Text } from "@mantine/core";
+import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
 import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
 import { getFilteredFlights } from "../utils/flightUtils.js";
-import PlaneIcon from "../assets/airlines_logos/plane.svg";
+import PlaneIcon from "../assets/plane.png";
+import {
+  IconAdjustments,
+  IconPlaneInflight,
+  IconPlaneTilt,
+} from "@tabler/icons-react";
 
 const FlightList = () => {
   /** @type {import('../types').Flight[]} */
@@ -21,28 +26,33 @@ const FlightList = () => {
   }
 
   const getAirlineIcon = (flight) => {
-    const source = flight.airline_icon_path || PlaneIcon;
+    let source = flight.airline_icon_path;
 
-    return (
-      <Image
-        src={source}
-        alt={`${flight.Airline} icon`}
-        width={24}
-        height={24}
-        style={{ marginRight: 8 }}
-      />
-    );
+    if (!source) {
+      return (
+        <ActionIcon aria-label="Settings" color="gray">
+          <IconPlaneInflight
+            style={{ width: "70%", height: "70%" }}
+            stroke={1.5}
+          />
+        </ActionIcon>
+      );
+    }
+
+    return <Image src={source} alt={`${flight.Airline} icon`} height={10} />;
   };
 
   const rows = filteredFlights.map((flight, index) => (
     <Table.Tr key={index}>
-      <Table.Td>{getAirlineIcon(flight)}</Table.Td>
+      <Table.Td>
+        <Center>{getAirlineIcon(flight)}</Center>
+      </Table.Td>
       <Table.Td>
         <Text size="sm">
           {flight.From} → {flight.To}
         </Text>
         <Text size="xs" c="dimmed">
-          {flight.Airline}
+          {flight.airline_name || flight.Airline}: {flight.Flight}
         </Text>
       </Table.Td>
       <Table.Td>
@@ -57,7 +67,7 @@ const FlightList = () => {
   ));
 
   return (
-    <Table mt="lg" striped highlightOnHover withTableBorder>
+    <Table striped highlightOnHover withTableBorder>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Icon</Table.Th>
