@@ -45,9 +45,9 @@ const StatsSummary = () => {
   const countries = new Set();
 
   filteredFlights.forEach((flight) => {
-    if (flight.From) airports.add(flight.From);
-    if (flight.To) airports.add(flight.To);
-    if (flight.Airline) airlines.add(flight.Airline);
+    if (flight.from) airports.add(flight.from);
+    if (flight.to) airports.add(flight.to);
+    if (flight.airline) airlines.add(flight.airline);
     if (flight.departure_country) countries.add(flight.departure_country);
     if (flight.arrival_country) countries.add(flight.arrival_country);
   });

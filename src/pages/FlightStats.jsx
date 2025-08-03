@@ -9,6 +9,8 @@ import {
   Image,
   Group,
   SegmentedControl,
+  Badge,
+  Divider,
 } from "@mantine/core";
 import { BarChart } from "@mantine/charts";
 import useFlightStore from "../store";
@@ -65,9 +67,9 @@ function FlightStats() {
   );
 
   filteredFlights.forEach((flight) => {
-    if (flight.From) airports.add(flight.From);
-    if (flight.To) airports.add(flight.To);
-    if (flight.Airline) airlines.add(flight.Airline);
+    if (flight.from) airports.add(flight.from);
+    if (flight.to) airports.add(flight.to);
+    if (flight.airline) airlines.add(flight.airline);
     if (flight.departure_country) countries.add(flight.departure_country);
     if (flight.arrival_country) countries.add(flight.arrival_country);
   });
@@ -94,9 +96,9 @@ function FlightStats() {
     const grouping = {};
 
     filteredFlights.forEach((flight) => {
-      if (!flight.Date) return;
+      if (!flight.date) return;
 
-      const date = new Date(flight.Date);
+      const date = new Date(flight.date);
       let key;
 
       switch (timeGrouping) {
@@ -159,6 +161,85 @@ function FlightStats() {
   };
 
   const timeChartData = getFlightsByTimeGrouping();
+
+  // Find shortest and longest flights
+  const shortestFlight = filteredFlights.reduce(
+    (shortest, flight) =>
+      !shortest || flight.distance_km < shortest.distance_km
+        ? flight
+        : shortest,
+    null,
+  );
+
+  const longestFlight = filteredFlights.reduce(
+    (longest, flight) =>
+      !longest || flight.distance_km > longest.distance_km ? flight : longest,
+    null,
+  );
+
+  const FlightCard = ({ flight, title, color }) => {
+    if (!flight) return null;
+
+    return (
+      <Card shadow="sm" radius="md" withBorder>
+        <Stack gap="xs">
+          <Group justify="space-between">
+            <Title order={4} c={color}>
+              {title}
+            </Title>
+
+            <Text size="sm">
+              <Text span fw={500}>
+                Airline:
+              </Text>{" "}
+              {flight.airline}
+            </Text>
+          </Group>
+
+          <Group justify="space-between">
+            <Text fw={500} size="lg">
+              {flight.from} → {flight.to}
+            </Text>
+            <Badge color={color} variant="light">
+              {Math.round(flight.distance_km).toLocaleString()} km
+            </Badge>
+          </Group>
+
+          <Group justify="space-between">
+            <Group gap="xs">
+              <Badge size="sm" variant="outline">
+                {flight.departure_country}
+              </Badge>
+              <Text size="xs" c="dimmed">
+                to
+              </Text>
+              <Badge size="sm" variant="outline">
+                {flight.arrival_country}
+              </Badge>
+            </Group>
+
+            <Group gap="xs">
+              <Text size="sm" c="dimmed">
+                {new Date(flight.date).toLocaleDateString()}
+              </Text>
+              <Text size="sm" c="dimmed">
+                {flight.flight_time.toFixed(2)}h flight time
+              </Text>
+            </Group>
+          </Group>
+
+          {flight.aircraft_type_name && (
+            <Text size="sm">
+              <Text span fw={500}>
+                Aircraft:
+              </Text>{" "}
+              {flight.aircraft_type_name}
+            </Text>
+          )}
+        </Stack>
+      </Card>
+    );
+  };
 
   return (
     <Container size="lg" mt="md">
@@ -243,6 +324,23 @@ function FlightStats() {
             </Grid.Col>
           </Grid>
         </Card>
+
+        <Grid>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <FlightCard
+              flight={shortestFlight}
+              title="Shortest Flight"
+              color="orange"
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <FlightCard
+              flight={longestFlight}
+              title="Longest Flight"
+              color="teal"
+            />
+          </Grid.Col>
+        </Grid>
 
         <Card shadow="sm" radius="md" withBorder>
           <Title order={3} mb="md">

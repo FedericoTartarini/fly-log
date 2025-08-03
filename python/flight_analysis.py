@@ -70,7 +70,7 @@ df_airports = df_airports[["IATA", "Lat", "Lon", "iso_country"]]
 #     [df_airports, df_more_airports], ignore_index=True
 # ).drop_duplicates()
 
-custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44 , "iso_country": "CN"}
+custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44, "iso_country": "CN"}
 df_airports = pd.concat([df_airports, pd.DataFrame([custom_data])], ignore_index=True)
 
 
@@ -143,6 +143,12 @@ columns_to_drop = [
     "Aircraft Type Flighty ID",
 ]
 df_flights = df_flights.drop(columns=columns_to_drop)
+columns_names_reformatted = [
+    col.replace(" ", "_").lower() for col in df_flights.columns
+]
+df_flights.columns = columns_names_reformatted
+df_flights = df_flights.rename(columns={"flight": "flight_number"})
+
 flight_records = df_flights.to_dict("records")
 
 # Load airlines.json
@@ -155,18 +161,18 @@ airline_lookup = {a["icao"]: a for a in airlines}
 # Enrich flights with coordinates, distance, and estimated time
 enriched_flights = []
 for flight in flight_records:
-    dep_coords = get_airport_coordinates(flight["From"])
-    dep_country = get_iso_country(flight["From"])
-    arr_coords = get_airport_coordinates(flight["To"])
-    arr_country = get_iso_country(flight["To"])
+    dep_coords = get_airport_coordinates(flight["from"])
+    dep_country = get_iso_country(flight["from"])
+    arr_coords = get_airport_coordinates(flight["to"])
+    arr_country = get_iso_country(flight["to"])
     distance = haversine(dep_coords, arr_coords)
     flight_time = estimate_flight_time(distance)
-    icao = flight["Airline"]
+    icao = flight["airline"]
     airline_info = airline_lookup.get(icao)
 
     if dep_coords is None or arr_coords is None:
         print(
-            f"Warning: Coordinates not found for flight {flight['Flight']}, form {flight['From']} to {flight['To']}. Skipping this flight."
+            f"Warning: Coordinates not found for flight {flight['Flight']}, form {flight['from']} to {flight['to']}. Skipping this flight."
         )
         continue
 

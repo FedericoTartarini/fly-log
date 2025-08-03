@@ -39,7 +39,7 @@ const FlightList = () => {
       import.meta.url,
     ).href;
 
-    return <Image src={imageUrl} alt={`${flight.Airline} icon`} height={10} />;
+    return <Image src={imageUrl} alt={`${flight.airline} icon`} height={10} />;
   };
 
   const rows = filteredFlights.map((flight, index) => (
@@ -49,14 +49,14 @@ const FlightList = () => {
       </Table.Td>
       <Table.Td>
         <Text size="sm">
-          {flight.From} → {flight.To}
+          {flight.from} → {flight.to}
         </Text>
         <Text size="xs" c="dimmed">
-          {flight.airline_name || flight.Airline}: {flight.Flight}
+          {flight.airline_name || flight.airline}: {flight.flight_number}
         </Text>
       </Table.Td>
       <Table.Td>
-        <Text size="sm">{new Date(flight.Date).toLocaleDateString()}</Text>
+        <Text size="sm">{new Date(flight.date).toLocaleDateString()}</Text>
         <Text size="xs" c="dimmed">
           {`${Math.floor(flight.flight_time)}h ${Math.round(
             (flight.flight_time % 1) * 60,

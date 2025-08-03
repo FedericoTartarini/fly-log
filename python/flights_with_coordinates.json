@@ -1,11 +1,11 @@
 [
   {
-    "Date": "2024-07-01",
-    "Airline": "JST",
-    "Flight": 3,
-    "From": "SYD",
-    "To": "HNL",
-    "Aircraft Type Name": "Boeing 787-8",
+    "date": "2024-07-01",
+    "airline": "JST",
+    "flight_number": 3,
+    "from": "SYD",
+    "to": "HNL",
+    "aircraft_type_name": "Boeing 787-8",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -24,12 +24,12 @@
     "airline_icon_path": "jetstar.svg"
   },
   {
-    "Date": "2024-07-02",
-    "Airline": "HAL",
-    "Flight": 183,
-    "From": "HNL",
-    "To": "LIH",
-    "Aircraft Type Name": "Boeing 717-200",
+    "date": "2024-07-02",
+    "airline": "HAL",
+    "flight_number": 183,
+    "from": "HNL",
+    "to": "LIH",
+    "aircraft_type_name": "Boeing 717-200",
     "departure_coordinates": [
       21.32062,
       -157.924228
@@ -48,12 +48,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2024-07-06",
-    "Airline": "HAL",
-    "Flight": 284,
-    "From": "LIH",
-    "To": "HNL",
-    "Aircraft Type Name": "Boeing 717-200",
+    "date": "2024-07-06",
+    "airline": "HAL",
+    "flight_number": 284,
+    "from": "LIH",
+    "to": "HNL",
+    "aircraft_type_name": "Boeing 717-200",
     "departure_coordinates": [
       21.9759998321533,
       -159.339004516602
@@ -72,12 +72,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2024-07-15",
-    "Airline": "JST",
-    "Flight": 4,
-    "From": "HNL",
-    "To": "SYD",
-    "Aircraft Type Name": "Boeing 787-8",
+    "date": "2024-07-15",
+    "airline": "JST",
+    "flight_number": 4,
+    "from": "HNL",
+    "to": "SYD",
+    "aircraft_type_name": "Boeing 787-8",
     "departure_coordinates": [
       21.32062,
       -157.924228
@@ -96,12 +96,12 @@
     "airline_icon_path": "jetstar.svg"
   },
   {
-    "Date": "2024-10-01",
-    "Airline": "QFA",
-    "Flight": 427,
-    "From": "SYD",
-    "To": "MEL",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2024-10-01",
+    "airline": "QFA",
+    "flight_number": 427,
+    "from": "SYD",
+    "to": "MEL",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -120,12 +120,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-10-01",
-    "Airline": "QFA",
-    "Flight": 2080,
-    "From": "MEL",
-    "To": "MQL",
-    "Aircraft Type Name": "DHC-8-300 Dash 8",
+    "date": "2024-10-01",
+    "airline": "QFA",
+    "flight_number": 2080,
+    "from": "MEL",
+    "to": "MQL",
+    "aircraft_type_name": "DHC-8-300 Dash 8",
     "departure_coordinates": [
       -37.673302,
       144.843002
@@ -144,12 +144,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-10-02",
-    "Airline": "QFA",
-    "Flight": 2085,
-    "From": "MQL",
-    "To": "MEL",
-    "Aircraft Type Name": "DHC-8-300 Dash 8",
+    "date": "2024-10-02",
+    "airline": "QFA",
+    "flight_number": 2085,
+    "from": "MQL",
+    "to": "MEL",
+    "aircraft_type_name": "DHC-8-300 Dash 8",
     "departure_coordinates": [
       -34.2291984558,
       142.085998535
@@ -168,12 +168,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-10-02",
-    "Airline": "QFA",
-    "Flight": 492,
-    "From": "MEL",
-    "To": "SYD",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2024-10-02",
+    "airline": "QFA",
+    "flight_number": 492,
+    "from": "MEL",
+    "to": "SYD",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       -37.673302,
       144.843002
@@ -192,12 +192,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-10-31",
-    "Airline": "CES",
-    "Flight": 562,
-    "From": "SYD",
-    "To": "PVG",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2024-10-31",
+    "airline": "CES",
+    "flight_number": 562,
+    "from": "SYD",
+    "to": "PVG",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -216,12 +216,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2024-11-08",
-    "Airline": "CCA",
-    "Flight": 919,
-    "From": "PVG",
-    "To": "NRT",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2024-11-08",
+    "airline": "CCA",
+    "flight_number": 919,
+    "from": "PVG",
+    "to": "NRT",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       31.1434001922607,
       121.805000305176
@@ -240,12 +240,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-11-16",
-    "Airline": "CCA",
-    "Flight": 182,
-    "From": "HND",
-    "To": "PEK",
-    "Aircraft Type Name": "Airbus A330-300",
+    "date": "2024-11-16",
+    "airline": "CCA",
+    "flight_number": 182,
+    "from": "HND",
+    "to": "PEK",
+    "aircraft_type_name": "Airbus A330-300",
     "departure_coordinates": [
       35.552299,
       139.779999
@@ -264,12 +264,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-11-17",
-    "Airline": "CCA",
-    "Flight": 907,
-    "From": "PEK",
-    "To": "MAD",
-    "Aircraft Type Name": "Boeing 787-9",
+    "date": "2024-11-17",
+    "airline": "CCA",
+    "flight_number": 907,
+    "from": "PEK",
+    "to": "MAD",
+    "aircraft_type_name": "Boeing 787-9",
     "departure_coordinates": [
       40.0801010131836,
       116.584999084473
@@ -288,12 +288,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2024-11-22",
-    "Airline": "IBE",
-    "Flight": 1760,
-    "From": "SVQ",
-    "To": "MAD",
-    "Aircraft Type Name": "Airbus A320",
+    "date": "2024-11-22",
+    "airline": "IBE",
+    "flight_number": 1760,
+    "from": "SVQ",
+    "to": "MAD",
+    "aircraft_type_name": "Airbus A320",
     "departure_coordinates": [
       37.4179992675781,
       -5.8931097984314
@@ -312,12 +312,12 @@
     "airline_icon_path": "iberia.svg"
   },
   {
-    "Date": "2024-11-22",
-    "Airline": "IBE",
-    "Flight": 1243,
-    "From": "MAD",
-    "To": "BLQ",
-    "Aircraft Type Name": "Bombardier CRJ1000",
+    "date": "2024-11-22",
+    "airline": "IBE",
+    "flight_number": 1243,
+    "from": "MAD",
+    "to": "BLQ",
+    "aircraft_type_name": "Bombardier CRJ1000",
     "departure_coordinates": [
       40.471926,
       -3.56264
@@ -336,12 +336,12 @@
     "airline_icon_path": "iberia.svg"
   },
   {
-    "Date": "2024-12-02",
-    "Airline": "DLH",
-    "Flight": 283,
-    "From": "BLQ",
-    "To": "FRA",
-    "Aircraft Type Name": "Airbus A320",
+    "date": "2024-12-02",
+    "airline": "DLH",
+    "flight_number": 283,
+    "from": "BLQ",
+    "to": "FRA",
+    "aircraft_type_name": "Airbus A320",
     "departure_coordinates": [
       44.5354,
       11.2887
@@ -360,12 +360,12 @@
     "airline_icon_path": "lufthansa.svg"
   },
   {
-    "Date": "2024-12-02",
-    "Airline": "THA",
-    "Flight": 921,
-    "From": "FRA",
-    "To": "BKK",
-    "Aircraft Type Name": "Boeing 777-300 ER",
+    "date": "2024-12-02",
+    "airline": "THA",
+    "flight_number": 921,
+    "from": "FRA",
+    "to": "BKK",
+    "aircraft_type_name": "Boeing 777-300 ER",
     "departure_coordinates": [
       50.033333,
       8.570556
@@ -384,12 +384,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2024-12-03",
-    "Airline": "THA",
-    "Flight": 475,
-    "From": "BKK",
-    "To": "SYD",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2024-12-03",
+    "airline": "THA",
+    "flight_number": 475,
+    "from": "BKK",
+    "to": "SYD",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       13.6810998916626,
       100.747001647949
@@ -408,12 +408,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2025-05-22",
-    "Airline": "QFA",
-    "Flight": 291,
-    "From": "SYD",
-    "To": "SIN",
-    "Aircraft Type Name": "Airbus A330-300",
+    "date": "2025-05-22",
+    "airline": "QFA",
+    "flight_number": 291,
+    "from": "SYD",
+    "to": "SIN",
+    "aircraft_type_name": "Airbus A330-300",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -432,12 +432,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2025-05-31",
-    "Airline": "THY",
-    "Flight": 55,
-    "From": "SIN",
-    "To": "IST",
-    "Aircraft Type Name": "Boeing 777-300 ER",
+    "date": "2025-05-31",
+    "airline": "THY",
+    "flight_number": 55,
+    "from": "SIN",
+    "to": "IST",
+    "aircraft_type_name": "Boeing 777-300 ER",
     "departure_coordinates": [
       1.35019,
       103.994003
@@ -456,12 +456,12 @@
     "airline_icon_path": "turkish-airlines.svg"
   },
   {
-    "Date": "2025-06-01",
-    "Airline": "THY",
-    "Flight": 1321,
-    "From": "IST",
-    "To": "BLQ",
-    "Aircraft Type Name": "Airbus A321neo",
+    "date": "2025-06-01",
+    "airline": "THY",
+    "flight_number": 1321,
+    "from": "IST",
+    "to": "BLQ",
+    "aircraft_type_name": "Airbus A321neo",
     "departure_coordinates": [
       41.261297,
       28.741951
@@ -480,12 +480,12 @@
     "airline_icon_path": "turkish-airlines.svg"
   },
   {
-    "Date": "2025-06-07",
-    "Airline": "EZY",
-    "Flight": 3967,
-    "From": "MXP",
-    "To": "KEF",
-    "Aircraft Type Name": "Airbus A320neo",
+    "date": "2025-06-07",
+    "airline": "EZY",
+    "flight_number": 3967,
+    "from": "MXP",
+    "to": "KEF",
+    "aircraft_type_name": "Airbus A320neo",
     "departure_coordinates": [
       45.6306,
       8.72811
@@ -504,12 +504,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2025-06-16",
-    "Airline": "TRA",
-    "Flight": 6888,
-    "From": "KEF",
-    "To": "AMS",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2025-06-16",
+    "airline": "TRA",
+    "flight_number": 6888,
+    "from": "KEF",
+    "to": "AMS",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       63.985001,
       -22.6056
@@ -528,12 +528,12 @@
     "airline_icon_path": "transavia.svg"
   },
   {
-    "Date": "2025-06-22",
-    "Airline": "TRA",
-    "Flight": 5309,
-    "From": "EIN",
-    "To": "BLQ",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2025-06-22",
+    "airline": "TRA",
+    "flight_number": 5309,
+    "from": "EIN",
+    "to": "BLQ",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       51.4500999451,
       5.37452983856
@@ -552,12 +552,12 @@
     "airline_icon_path": "transavia.svg"
   },
   {
-    "Date": "2025-07-07",
-    "Airline": "THY",
-    "Flight": 1322,
-    "From": "BLQ",
-    "To": "IST",
-    "Aircraft Type Name": "Airbus A321neo",
+    "date": "2025-07-07",
+    "airline": "THY",
+    "flight_number": 1322,
+    "from": "BLQ",
+    "to": "IST",
+    "aircraft_type_name": "Airbus A321neo",
     "departure_coordinates": [
       44.5354,
       11.2887
@@ -576,12 +576,12 @@
     "airline_icon_path": "turkish-airlines.svg"
   },
   {
-    "Date": "2025-07-07",
-    "Airline": "THY",
-    "Flight": 208,
-    "From": "IST",
-    "To": "SIN",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2025-07-07",
+    "airline": "THY",
+    "flight_number": 208,
+    "from": "IST",
+    "to": "SIN",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       41.261297,
       28.741951
@@ -600,12 +600,12 @@
     "airline_icon_path": "turkish-airlines.svg"
   },
   {
-    "Date": "2025-07-09",
-    "Airline": "QFA",
-    "Flight": 82,
-    "From": "SIN",
-    "To": "SYD",
-    "Aircraft Type Name": "Airbus A380",
+    "date": "2025-07-09",
+    "airline": "QFA",
+    "flight_number": 82,
+    "from": "SIN",
+    "to": "SYD",
+    "aircraft_type_name": "Airbus A380",
     "departure_coordinates": [
       1.35019,
       103.994003
@@ -624,12 +624,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2025-08-13",
-    "Airline": "QFA",
-    "Flight": 512,
-    "From": "SYD",
-    "To": "BNE",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2025-08-13",
+    "airline": "QFA",
+    "flight_number": 512,
+    "from": "SYD",
+    "to": "BNE",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -648,12 +648,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2025-08-18",
-    "Airline": "QFA",
-    "Flight": 513,
-    "From": "BNE",
-    "To": "SYD",
-    "Aircraft Type Name": "Boeing 737-800",
+    "date": "2025-08-18",
+    "airline": "QFA",
+    "flight_number": 513,
+    "from": "BNE",
+    "to": "SYD",
+    "aircraft_type_name": "Boeing 737-800",
     "departure_coordinates": [
       -27.3841991424561,
       153.117004394531
@@ -672,12 +672,12 @@
     "airline_icon_path": "qantas_mono.svg"
   },
   {
-    "Date": "2025-12-19",
-    "Airline": "CSC",
-    "Flight": 3892,
-    "From": "SYD",
-    "To": "TFU",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2025-12-19",
+    "airline": "CSC",
+    "flight_number": 3892,
+    "from": "SYD",
+    "to": "TFU",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       -33.9460983276367,
       151.177001953125
@@ -696,12 +696,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2026-01-10",
-    "Airline": "CSC",
-    "Flight": 8650,
-    "From": "DLU",
-    "To": "CTU",
-    "Aircraft Type Name": "Airbus A319",
+    "date": "2026-01-10",
+    "airline": "CSC",
+    "flight_number": 8650,
+    "from": "DLU",
+    "to": "CTU",
+    "aircraft_type_name": "Airbus A319",
     "departure_coordinates": [
       25.649401,
       100.319
@@ -720,12 +720,12 @@
     "airline_icon_path": null
   },
   {
-    "Date": "2026-01-11",
-    "Airline": "CSC",
-    "Flight": 3891,
-    "From": "TFU",
-    "To": "SYD",
-    "Aircraft Type Name": "Airbus A350-900",
+    "date": "2026-01-11",
+    "airline": "CSC",
+    "flight_number": 3891,
+    "from": "TFU",
+    "to": "SYD",
+    "aircraft_type_name": "Airbus A350-900",
     "departure_coordinates": [
       30.31,
       104.44

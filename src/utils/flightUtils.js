@@ -10,10 +10,10 @@ export function getFilteredFlights(allFlights, selectedYear) {
   today.setHours(0, 0, 0, 0);
 
   const pastFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) <= today,
+    (flight) => new Date(flight.date) <= today,
   );
   const upcomingFlights = allFlights.filter(
-    (flight) => new Date(flight.Date) > today,
+    (flight) => new Date(flight.date) > today,
   );
 
   if (selectedYear === "all") {
@@ -23,6 +23,6 @@ export function getFilteredFlights(allFlights, selectedYear) {
     return upcomingFlights;
   }
   return pastFlights.filter(
-    (flight) => new Date(flight.Date).getFullYear().toString() === selectedYear,
+    (flight) => new Date(flight.date).getFullYear().toString() === selectedYear,
   );
 }
