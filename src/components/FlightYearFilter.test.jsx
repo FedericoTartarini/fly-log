@@ -4,13 +4,13 @@ import { MantineProvider } from "@mantine/core";
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store";
 
-// Mock the flight data
+// Mock the flight data with proper field names matching the updated component
 vi.mock("../../python/flights_with_coordinates.json", () => ({
   default: [
-    { Date: "2023-01-15" },
-    { Date: "2023-05-20" },
-    { Date: "2022-11-10" },
-    { Date: "2024-12-25" }, // Future flight
+    { date: "2023-01-15" },
+    { date: "2023-05-20" },
+    { date: "2022-11-10" },
+    { date: "2024-12-25" }, // Future flight
   ],
 }));
 
