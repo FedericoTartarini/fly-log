@@ -141,7 +141,7 @@ function About() {
             </Button>
             <Button
               component="a"
-              href="https://github.com/FedericoTartarini/flight-tracker"
+              href="https://github.com/FedericoTartarini/flights-tracker"
               target="_blank"
               leftIcon={<IconBrandGithub size={16} />}
               color="dark"

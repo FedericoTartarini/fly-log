@@ -177,8 +177,8 @@ describe("MyComponent", () => {
 * [ ] Implement search functionality for flights.
 
 ### User Experience Improvements
-* [ ] Improve mobile responsiveness.
-* [ ] Improve desktop responsiveness.
+* [x] Improve mobile responsiveness.
+* [x] Improve desktop responsiveness.
 * [ ] Add a page for detailed flight stats and analytics.
 * [ ] Implement a dark mode toggle.
 * [ ] Conduct user testing to gather feedback on usability.
