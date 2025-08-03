@@ -86,6 +86,21 @@
         }
     },
     {
+        "name": "Air China",
+        "iata": "CA",
+        "icao": "CCA",
+        "country": "CN",
+        "flag_carrier": true,
+        "website": "https://www.airchina.com.au",
+        "alliance": "Star Alliance",
+        "branding": {
+            "primary_color": "",
+            "variations": [
+                "icon"
+            ]
+        }
+    },
+    {
         "name": "Air Dolomiti",
         "iata": "EN",
         "icao": "DLA",

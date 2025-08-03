@@ -237,7 +237,7 @@
     "flight_time": 0.7837796953492708,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2024-10-01",
@@ -285,7 +285,7 @@
     "flight_time": 0.5069878577939273,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2024-10-02",
@@ -333,7 +333,7 @@
     "flight_time": 0.5069878577939273,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2024-10-02",
@@ -381,7 +381,7 @@
     "flight_time": 0.7837796953492708,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2024-10-31",
@@ -475,9 +475,9 @@
     ],
     "distance_km": 1795.5248194647281,
     "flight_time": 1.9950275771830313,
-    "airline_name": null,
-    "airline_primary_color": null,
-    "airline_icon_path": null
+    "airline_name": "Air China",
+    "airline_primary_color": "",
+    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
   },
   {
     "Date": "2024-11-16",
@@ -523,9 +523,9 @@
     ],
     "distance_km": 2092.2002244742116,
     "flight_time": 2.324666916082457,
-    "airline_name": null,
-    "airline_primary_color": null,
-    "airline_icon_path": null
+    "airline_name": "Air China",
+    "airline_primary_color": "",
+    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
   },
   {
     "Date": "2024-11-17",
@@ -571,9 +571,9 @@
     ],
     "distance_km": 9205.340828831926,
     "flight_time": 10.228156476479917,
-    "airline_name": null,
-    "airline_primary_color": null,
-    "airline_icon_path": null
+    "airline_name": "Air China",
+    "airline_primary_color": "",
+    "airline_icon_path": "src/assets/airlines_icons/air-china.svg"
   },
   {
     "Date": "2024-11-22",
@@ -861,7 +861,7 @@
     "flight_time": 6.992714008801057,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2025-05-31",
@@ -1245,7 +1245,7 @@
     "flight_time": 6.992714008801057,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2025-08-13",
@@ -1293,7 +1293,7 @@
     "flight_time": 0.8364686452361174,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2025-08-18",
@@ -1341,7 +1341,7 @@
     "flight_time": 0.8364686452361174,
     "airline_name": "Qantas",
     "airline_primary_color": "",
-    "airline_icon_path": "src/assets/airlines_logos/qantas.svg"
+    "airline_icon_path": "src/assets/airlines_logos/qantas_mono.svg"
   },
   {
     "Date": "2025-12-19",

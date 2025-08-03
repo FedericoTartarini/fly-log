@@ -10,6 +10,9 @@
  * @property {string} [From]
  * @property {string} [To]
  * @property {string} [Airline]
+ * @property {string} [airline_icon_path]
+ * @property {string} [airline_primary_color]
+ * @property {string} [airline_name]
  */
 
 export {}; // This file is only for type definitions.

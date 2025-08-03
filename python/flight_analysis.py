@@ -130,7 +130,17 @@ for flight in flight_records:
         flight["airline_primary_color"] = airline_info["branding"]["primary_color"]
         # Compose icon path (e.g., src/assets/airlines_logos/JST/icon.png)
         icon_name = airline_name.replace(" ", "-").lower()
-        icon_path = os.path.join("src/assets/airlines_logos", f"{icon_name}.svg")
+        icon_type = airline_info["branding"]["variations"]
+        if "logo" in icon_type:
+            icon_path = os.path.join("src/assets/airlines_logos", f"{icon_name}.svg")
+        elif "logo_mono" in icon_type:
+            icon_path = os.path.join("src/assets/airlines_logos", f"{icon_name}_mono.svg")
+        elif "icon" in icon_type:
+            icon_path = os.path.join("src/assets/airlines_icons", f"{icon_name}.svg")
+        elif "icon_mono" in icon_type:
+            icon_path = os.path.join("src/assets/airlines_icons", f"{icon_name}_mono.svg")
+        else:
+            icon_name = None
         flight["airline_icon_path"] = icon_path
     else:
         flight["airline_name"] = None
