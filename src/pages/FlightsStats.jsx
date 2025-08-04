@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import WorldMap from "../components/WorldMap.jsx";
 import {
   Title,
@@ -7,6 +7,11 @@ import {
   Grid,
   SegmentedControl,
   Paper,
+  Container,
+  Loader,
+  Text,
+  Button,
+  Modal,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
@@ -17,27 +22,47 @@ import {
   getDeparturesByCountry,
   getFlightsByTimeGrouping,
 } from "../utils/chartUtils.js";
-import { getFilteredFlights } from "../utils/flightUtils.js";
-import flightsData from "../../python/flights_with_coordinates.json";
 import { useFlightStats } from "../hooks/useFlightStats.js";
+import FlightEntryForm from "../components/FlightEntryForm.jsx";
 
 const FlightsStats = () => {
-  const { selectedYear, userName, setUserName } = useFlightStore();
-  const [timeGrouping, setTimeGrouping] = React.useState("dayOfWeek");
+  const { filteredFlights, isLoading, error, fetchFlights } = useFlightStore();
+  const [formOpened, setFormOpened] = useState(false);
+  const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
 
-  /** @type {import('../types').Flight[]} */
-  const allFlights = flightsData;
-  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
-
-  const chartData = getDeparturesByCountry(filteredFlights);
-  const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
-
+  // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);
 
   useEffect(() => {
-    // Set the username from context when the component mounts
-    setUserName("Federico");
-  }, [setUserName]);
+    fetchFlights();
+  }, [fetchFlights]);
+
+  const handleFlightSaved = () => {
+    setFormOpened(false);
+    fetchFlights(); // Refresh data after saving a new flight
+  };
+
+  // Prepare chart data outside of the conditional rendering
+  const chartData = getDeparturesByCountry(filteredFlights);
+  const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
+
+  if (isLoading) {
+    return (
+      <Container size="lg" mt="md">
+        <Loader size="xl" mx="auto" my={100} />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container size="lg" mt="md">
+        <Text color="red" size="lg" ta="center">
+          Error loading flight data: {error}
+        </Text>
+      </Container>
+    );
+  }
 
   return (
     <>
@@ -54,9 +79,24 @@ const FlightsStats = () => {
           style={{ position: "relative", zIndex: 1 }}
         >
           <Title order={4} align="center" mt="md">
-            {userName ? `Welcome ${userName}` : "Welcome to My Flight Tracker"}
+            Welcome to My Flight Tracker
           </Title>
           <StatsSummary />
+
+          {/* Add button to open modal */}
+          <Button onClick={() => setFormOpened(true)} fullWidth>
+            Add New Flight
+          </Button>
+
+          <Modal
+            opened={formOpened}
+            onClose={() => setFormOpened(false)}
+            title="Add New Flight"
+            size="lg"
+          >
+            <FlightEntryForm onSaved={handleFlightSaved} />
+          </Modal>
+
           <DistanceStatsCard
             totalDistance={stats.totalDistance}
             totalFlights={filteredFlights.length}

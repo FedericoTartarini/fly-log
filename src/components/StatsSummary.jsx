@@ -1,23 +1,18 @@
 import React from "react";
 import { Card, Grid, Group, Image, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { getFilteredFlights } from "../utils/flightUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store";
-import flightsData from "../../python/flights_with_coordinates.json";
 import flightImg from "../assets/flight.jpg";
 import { Paths, Ids } from "../constants/MyClasses.js";
 import StatDisplay from "./StatDisplay";
 
 function StatsSummary() {
-  const { selectedYear } = useFlightStore();
+  const { filteredFlights } = useFlightStore();
   const navigate = useNavigate();
 
-  /** @type {import('../types').Flight[]} */
-  const allFlights = flightsData;
-  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
-
+  // Use the enhanced flight stats with our enriched flight data
   const stats = useFlightStats(filteredFlights);
 
   return (

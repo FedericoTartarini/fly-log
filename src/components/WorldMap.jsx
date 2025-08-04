@@ -42,11 +42,7 @@ function splitPathAtAntimeridian(path) {
 }
 
 const WorldMap = () => {
-  const { selectedYear } = useFlightStore();
-
-  /** @type {import('../types').Flight[]} */
-  const allFlights = flightsData;
-  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
+  const { filteredFlights, selectedYear } = useFlightStore();
 
   const flightColor = selectedYear === "upcoming" ? "red" : "blue";
 

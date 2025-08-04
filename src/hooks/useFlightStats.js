@@ -18,9 +18,11 @@ export const useFlightStats = (filteredFlights) => {
     const countries = new Set();
 
     filteredFlights.forEach((flight) => {
-      if (flight.from) airports.add(flight.from);
-      if (flight.to) airports.add(flight.to);
-      if (flight.airline) airlines.add(flight.airline);
+      if (flight.departure_airport_iata)
+        airports.add(flight.departure_airport_iata);
+      if (flight.arrival_airport_iata)
+        airports.add(flight.arrival_airport_iata);
+      if (flight.airline_name) airlines.add(flight.airline_name);
       if (flight.departure_country) countries.add(flight.departure_country);
       if (flight.arrival_country) countries.add(flight.arrival_country);
     });

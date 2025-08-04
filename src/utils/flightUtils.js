@@ -1,4 +1,5 @@
 // src/utils/flightUtils.js
+// todo: delete this file since it should be replaced by flightService.js
 /**
  * Filters flights based on the selected year or category.
  * @param {import('../types').Flight[]} allFlights - The array of all flights.
