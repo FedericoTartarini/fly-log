@@ -40,7 +40,7 @@ describe("FlightYearFilter", () => {
 
     renderWithProvider(<FlightYearFilter />);
 
-    const select = screen.getByDisplayValue("All Flights");
+    const select = screen.getByDisplayValue("All Past Flights");
     expect(select).toBeInTheDocument();
     expect(select).toHaveAttribute("id", "flight-year-filter");
   });
@@ -56,9 +56,9 @@ describe("FlightYearFilter", () => {
     const select = screen.getByRole("combobox");
     const options = select.querySelectorAll("option");
 
-    // Should have: All Flights, Upcoming Flights, 2023, 2022
+    // Should have: All Past Flights, Upcoming Flights, 2023, 2022
     expect(options).toHaveLength(4);
-    expect(options[0]).toHaveTextContent("All Flights");
+    expect(options[0]).toHaveTextContent("All Past Flights");
     expect(options[1]).toHaveTextContent("Upcoming Flights");
     expect(options[2]).toHaveTextContent("2023");
     expect(options[3]).toHaveTextContent("2022");

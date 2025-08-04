@@ -28,7 +28,7 @@ const FlightYearFilter = () => {
       mb="xs"
       id="flight-year-filter"
       data={[
-        { value: "all", label: "All Flights" },
+        { value: "all", label: "All Past Flights" },
         { value: "upcoming", label: "Upcoming Flights" },
         ...years.map((year) => ({
           value: String(year),

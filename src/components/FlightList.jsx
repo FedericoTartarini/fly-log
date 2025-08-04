@@ -1,16 +1,11 @@
 // src/components/FlightList.jsx
 import React from "react";
 import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
-import flightsData from "../../python/flights_with_coordinates.json";
 import useFlightStore from "../store";
-import { getFilteredFlights } from "../utils/flightUtils.js";
 import { IconPlaneInflight } from "@tabler/icons-react";
 
 const FlightList = () => {
-  /** @type {import('../types').Flight[]} */
-  const allFlights = flightsData;
-  const { selectedYear } = useFlightStore();
-  const filteredFlights = getFilteredFlights(allFlights, selectedYear);
+  const { filteredFlights } = useFlightStore();
 
   if (filteredFlights.length === 0) {
     return (
@@ -39,7 +34,9 @@ const FlightList = () => {
       import.meta.url,
     ).href;
 
-    return <Image src={imageUrl} alt={`${flight.airline} icon`} height={10} />;
+    return (
+      <Image src={imageUrl} alt={`${flight.airline_name} icon`} height={10} />
+    );
   };
 
   const rows = filteredFlights.map((flight, index) => (
@@ -49,14 +46,17 @@ const FlightList = () => {
       </Table.Td>
       <Table.Td>
         <Text size="sm">
-          {flight.from} → {flight.to}
+          {flight.departure_airport_iata} → {flight.arrival_airport_iata}
         </Text>
         <Text size="xs" c="dimmed">
-          {flight.airline_name || flight.airline}: {flight.flight_number}
+          {flight.airline_iata || flight.airline_name}{" "}
+          {flight.flight_number ? `: ${flight.flight_number}` : ""}
         </Text>
       </Table.Td>
       <Table.Td>
-        <Text size="sm">{new Date(flight.date).toLocaleDateString()}</Text>
+        <Text size="sm">
+          {new Date(flight.departure_date).toLocaleDateString()}
+        </Text>
         <Text size="xs" c="dimmed">
           {`${Math.floor(flight.flight_time)}h ${Math.round(
             (flight.flight_time % 1) * 60,
