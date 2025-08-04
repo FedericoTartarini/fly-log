@@ -1,7 +1,6 @@
 import pandas as pd
 import math
 import json
-import os
 
 
 def haversine(coord1, coord2):
@@ -57,21 +56,34 @@ df_coords = pd.read_csv("./python/airports_coordinates.csv")
 
 # Merge IATA/ICAO codes with coordinates
 df_airports = pd.merge(
-    df_iata[["IATA", "ICAO"]], df_coords, left_on="ICAO", right_on="ident"
+    df_iata, df_coords, left_on="ICAO", right_on="ident"
 )
 df_airports = df_airports.rename(
-    columns={"latitude_deg": "Lat", "longitude_deg": "Lon"}
+    columns={"latitude_deg": "lat", "longitude_deg": "lon"}
 )
-df_airports = df_airports[["IATA", "Lat", "Lon", "iso_country"]]
 
-# df_more_airports = pd.read_csv("python/airports_info.csv")
-# df_more_airports = df_more_airports[["IATA", "Lat", "Lon", "Country"]]
-# df_airports = pd.concat(
-#     [df_airports, df_more_airports], ignore_index=True
-# ).drop_duplicates()
+df_airports = df_airports[['IATA', 'Airport name', 'Country', 'City',
+       'type', "lat", 'lon',
+       'elevation_ft', 'iso_country', 'iso_region']]
+# remove closed airports
+df_airports = df_airports[df_airports["type"] != "closed"]
+df_airports = df_airports[df_airports["type"] != "heliport"]
 
-custom_data = {"IATA": "TFU", "Lat": 30.31, "Lon": 104.44, "iso_country": "CN"}
+
+custom_data = {"IATA": "TFU", "lat": 30.31, "lon": 104.44, "iso_country": "CN"}
 df_airports = pd.concat([df_airports, pd.DataFrame([custom_data])], ignore_index=True)
+
+df_airports.columns = [
+    col.replace(" ", "_").lower() for col in df_airports.columns
+]
+df_airports["elevation"] = df_airports["elevation_ft"] / 3.28084  # Convert feet to meters
+df_airports = df_airports.drop(columns=["elevation_ft", "type"])
+
+df_airports = df_airports.fillna("null")
+with open("./python/airports_info.json", "w") as f:
+    json.dump(df_airports.to_dict("records"), f, indent=2)
+
+print(f"There are {len(df_airports)} airports in the dataset.")
 
 
 def get_airport_coordinates(iata_code):
@@ -86,7 +98,7 @@ def get_airport_coordinates(iata_code):
     """
     try:
         airport = df_airports[df_airports["IATA"] == iata_code].iloc[0]
-        return airport["Lat"], airport["Lon"]
+        return airport["lat"], airport["lon"]
     except IndexError:
         return None
 
@@ -143,10 +155,9 @@ columns_to_drop = [
     "Aircraft Type Flighty ID",
 ]
 df_flights = df_flights.drop(columns=columns_to_drop)
-columns_names_reformatted = [
+df_flights.columns = [
     col.replace(" ", "_").lower() for col in df_flights.columns
 ]
-df_flights.columns = columns_names_reformatted
 df_flights = df_flights.rename(columns={"flight": "flight_number"})
 
 flight_records = df_flights.to_dict("records")
