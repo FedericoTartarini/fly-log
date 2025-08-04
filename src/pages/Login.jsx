@@ -22,7 +22,7 @@ function Login() {
         <Auth
           supabaseClient={supabaseClient}
           appearance={{ theme: ThemeSupa }}
-          providers={["github", "google"]} // Optional: add social providers
+          providers={[]} // Optional: add social providers
           theme="dark"
         />
       </Paper>
