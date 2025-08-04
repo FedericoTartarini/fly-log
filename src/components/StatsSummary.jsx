@@ -92,7 +92,7 @@ function StatsSummary() {
       </Grid>
 
       <Group justify="center" mt="md">
-        <Button variant="light" onClick={() => navigate(Paths.STATS)}>
+        <Button variant="light" onClick={() => navigate(Paths.FLIGHTS)}>
           View Flights
         </Button>
       </Group>

@@ -6,10 +6,12 @@ import "@mantine/core/styles.css";
 import { createTheme, MantineProvider, ColorSchemeScript } from "@mantine/core";
 
 import { App } from "./App.jsx";
-import Home from "./pages/Home.jsx";
+import FlightsStats from "./pages/FlightsStats.jsx";
 import About from "./pages/About.jsx";
-import FlightStats from "./pages/FlightStats.jsx";
+import Flights from "./pages/Flights.jsx";
 import { Paths } from "./constants/MyClasses.js";
+import Login from "./pages/Login.jsx";
+import Landing from "./pages/Landing.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true, // Default route
-        element: <Home />,
+        element: <Landing />,
       },
       {
         path: Paths.ABOUT,
@@ -26,7 +28,15 @@ const router = createBrowserRouter([
       },
       {
         path: Paths.STATS,
-        element: <FlightStats />,
+        element: <FlightsStats />,
+      },
+      {
+        path: Paths.FLIGHTS,
+        element: <Flights />,
+      },
+      {
+        path: Paths.LOGIN,
+        element: <Login />,
       },
     ],
   },

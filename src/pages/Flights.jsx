@@ -4,7 +4,7 @@ import FlightYearFilter from "../components/FlightYearFilter";
 import flightImg from "../assets/flight.jpg";
 import FlightList from "../components/FlightList.jsx";
 
-function FlightStats() {
+function Flights() {
   return (
     <Container size="lg" mt="md">
       <Stack spacing="xl">
@@ -26,4 +26,4 @@ function FlightStats() {
   );
 }
 
-export default FlightStats;
+export default Flights;

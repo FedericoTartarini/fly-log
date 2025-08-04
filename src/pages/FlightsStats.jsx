@@ -7,7 +7,6 @@ import {
   Grid,
   SegmentedControl,
   Paper,
-  Chip,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
@@ -22,7 +21,7 @@ import { getFilteredFlights } from "../utils/flightUtils.js";
 import flightsData from "../../python/flights_with_coordinates.json";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 
-const Home = () => {
+const FlightsStats = () => {
   const { selectedYear, userName, setUserName } = useFlightStore();
   const [timeGrouping, setTimeGrouping] = React.useState("dayOfWeek");
 
@@ -131,4 +130,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default FlightsStats;

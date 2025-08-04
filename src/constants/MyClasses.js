@@ -21,5 +21,6 @@ export const Paths = {
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",
   NOT_FOUND: "*",
+  LOGIN: "/login",
   // Add more paths as needed
 };
