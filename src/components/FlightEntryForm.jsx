@@ -7,6 +7,7 @@ import {
   Title,
   Paper,
   Stack,
+  Tabs,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -14,6 +15,7 @@ import airportsInfo from "../../python/airports_info.json";
 import airlinesInfo from "../../python/airlines.json";
 import { supabaseClient } from "../supabaseClient";
 import { notifications } from "@mantine/notifications";
+import FlightCsvUpload from "./FlightCsvUpload.jsx";
 
 function FlightEntryForm({ onSaved }) {
   const [airportOptions, setAirportOptions] = useState([]);
@@ -120,68 +122,89 @@ function FlightEntryForm({ onSaved }) {
   };
 
   return (
-    <Paper shadow="sm" p="xl" withBorder radius="md">
-      <Title order={3} mb="md">
-        Add New Flight
-      </Title>
+    <Paper p="md" withBorder>
+      <Tabs defaultValue="manual">
+        <Tabs.List>
+          <Tabs.Tab value="manual">Manual Entry</Tabs.Tab>
+          <Tabs.Tab value="csv">CSV Upload</Tabs.Tab>
+        </Tabs.List>
 
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack spacing="md">
-          <DatePickerInput
-            required
-            label="Departure Date"
-            placeholder="Select date"
-            clearable={false}
-            {...form.getInputProps("departureDate")}
-          />
+        <Tabs.Panel value="manual" pt="xs">
+          <Stack>
+            <Title order={4}>Add New Flight</Title>
 
-          <Select
-            required
-            label="Departure Airport"
-            placeholder="Select departure airport"
-            data={airportOptions}
-            searchable
-            maxDropdownHeight={280}
-            nothingFoundMessage="No airports found"
-            {...form.getInputProps("departureAirport")}
-          />
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <Stack>
+                <Group grow>
+                  <DatePickerInput
+                    label="Departure Date"
+                    placeholder="Select date"
+                    required
+                    clearable={false}
+                    {...form.getInputProps("departureDate")}
+                  />
+                  <TextInput
+                    label="Departure Time"
+                    placeholder="e.g., 14:30"
+                    required
+                    {...form.getInputProps("departureTime")}
+                  />
+                </Group>
 
-          <Select
-            required
-            label="Arrival Airport"
-            placeholder="Select arrival airport"
-            data={airportOptions}
-            searchable
-            maxDropdownHeight={280}
-            nothingFoundMessage="No airports found"
-            {...form.getInputProps("arrivalAirport")}
-          />
+                <Select
+                  label="Departure Airport"
+                  placeholder="Search airports"
+                  searchable
+                  required
+                  data={airportOptions}
+                  maxDropdownHeight={280}
+                  nothingFoundMessage="No matching airports"
+                  {...form.getInputProps("departureAirport")}
+                />
 
-          <Select
-            required
-            label="Airline"
-            placeholder="Select airline"
-            data={airlineOptions}
-            searchable
-            maxDropdownHeight={280}
-            nothingFoundMessage="No airlines found"
-            {...form.getInputProps("airline")}
-          />
+                <Select
+                  label="Arrival Airport"
+                  placeholder="Search airports"
+                  searchable
+                  required
+                  data={airportOptions}
+                  maxDropdownHeight={280}
+                  nothingFoundMessage="No matching airports"
+                  {...form.getInputProps("arrivalAirport")}
+                />
 
-          <TextInput
-            label="Flight Number"
-            placeholder="e.g. BA123"
-            description="Optional: Airline code followed by numbers"
-            {...form.getInputProps("flightNumber")}
-          />
+                <Group grow>
+                  <Select
+                    label="Airline"
+                    placeholder="Search airlines"
+                    searchable
+                    required
+                    data={airlineOptions}
+                    maxDropdownHeight={280}
+                    nothingFoundMessage="No matching airlines"
+                    {...form.getInputProps("airline")}
+                  />
+                  <TextInput
+                    label="Flight Number"
+                    placeholder="e.g., 123"
+                    {...form.getInputProps("flightNumber")}
+                  />
+                </Group>
 
-          <Group position="right" mt="md">
-            <Button type="submit" loading={loading}>
-              Save Flight
-            </Button>
-          </Group>
-        </Stack>
-      </form>
+                <Group justify="flex-end" mt="md">
+                  <Button type="submit" loading={loading}>
+                    Save Flight
+                  </Button>
+                </Group>
+              </Stack>
+            </form>
+          </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="csv" pt="xs">
+          <FlightCsvUpload onComplete={onSaved} />
+        </Tabs.Panel>
+      </Tabs>
     </Paper>
   );
 }

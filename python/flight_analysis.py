@@ -222,3 +222,61 @@ for flight in flight_records:
 # Save enriched flight data to JSON
 with open("./python/flights_with_coordinates.json", "w") as f:
     json.dump(enriched_flights, f, indent=2)
+
+
+def process_flighty_export():
+    """
+    Process the Flighty export data and enrich it with coordinates, distance, and estimated flight time.
+    """
+    # Load the exported Flighty data
+    df = pd.read_csv("./python/flights_export.csv")
+
+    # change the column names to lowercase and replace spaces with underscores
+    df.columns = [col.lower().replace(" ", "_") for col in df.columns]
+
+    # Drop unnecessary columns
+    columns_to_drop = [
+        "dep_terminal",
+        "dep_gate",
+        "arr_terminal",
+        "arr_gate",
+        "canceled",
+        "diverted_to",
+        "gate_departure_(scheduled)",
+        "gate_departure_(actual)",
+        "take_off_(scheduled)",
+        "take_off_(actual)",
+        "landing_(scheduled)",
+        "landing_(actual)",
+        "gate_arrival_(scheduled)",
+        "gate_arrival_(actual)",
+        "tail_number",
+        "pnr",
+        "seat",
+        "seat_type",
+        "cabin_class",
+        "flight_reason",
+        "notes",
+        "flight_flighty_id",
+        "airline_flighty_id",
+        "departure_airport_flighty_id",
+        "arrival_airport_flighty_id",
+        "diverted_to_airport_flighty_id",
+        "aircraft_type_flighty_id",
+        "aircraft_type_name",
+    ]
+    df = df.drop(columns=columns_to_drop)
+    df.columns = ['departure_date', "airline_icao", "flight_number", "departure_airport_iata", "arrival_airport_iata"]
+
+    # Load airlines.json
+    with open("./python/airlines.json", "r") as f:
+        airlines = json.load(f)
+
+    # Build lookup by ICAO code
+    airline_lookup = {a["icao"]: a for a in airlines}
+
+    df["airline_iata"] = df["airline_icao"].apply(lambda x: airline_lookup.get(x, {}).get("iata", None))
+    df.dropna(subset=["airline_iata"], inplace=True)
+    df = df.drop(columns=["airline_icao"])
+
+    df.iloc[0:2].to_csv("./python/flightly_processed_import.csv", index=False)
