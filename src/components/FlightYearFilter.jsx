@@ -10,12 +10,14 @@ const FlightYearFilter = () => {
   today.setHours(0, 0, 0, 0);
 
   const pastFlights = allFlights.filter(
-    (flight) => new Date(flight.date) <= today,
+    (flight) => new Date(flight.departure_date) <= today,
   );
 
   const years = [
     ...new Set(
-      pastFlights.map((flight) => new Date(flight.date).getFullYear()),
+      pastFlights.map((flight) =>
+        new Date(flight.departure_date).getFullYear(),
+      ),
     ),
   ].sort((a, b) => b - a);
 
