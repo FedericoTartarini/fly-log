@@ -7,6 +7,7 @@ import {
 const useFlightStore = create((set, get) => ({
   flights: [],
   filteredFlights: [],
+  allFlights: [],
   selectedYear: "all",
   isLoading: false,
   error: null,
@@ -16,7 +17,12 @@ const useFlightStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const flights = await getUserFlights();
-      set({ flights, filteredFlights: flights, isLoading: false });
+      set({
+        flights,
+        filteredFlights: flights,
+        allFlights: flights,
+        isLoading: false,
+      });
     } catch (error) {
       set({ error: error.message, isLoading: false });
     }

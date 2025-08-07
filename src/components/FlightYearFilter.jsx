@@ -1,16 +1,15 @@
 import React from "react";
 import { NativeSelect } from "@mantine/core";
 import useFlightStore from "../store";
-import flightsData from "../../python/flights_with_coordinates.json";
 
 const FlightYearFilter = () => {
-  const { selectedYear, setSelectedYear } = useFlightStore();
+  const { selectedYear, setSelectedYear, allFlights } = useFlightStore();
 
   // Only consider past flights for year options
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const pastFlights = flightsData.filter(
+  const pastFlights = allFlights.filter(
     (flight) => new Date(flight.date) <= today,
   );
 
