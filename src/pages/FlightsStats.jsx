@@ -12,6 +12,7 @@ import {
   Text,
   Button,
   Modal,
+  Center,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
@@ -49,7 +50,9 @@ const FlightsStats = () => {
   if (isLoading) {
     return (
       <Container size="lg" mt="md">
-        <Loader size="xl" mx="auto" my={100} />
+        <Center>
+          <Loader />
+        </Center>
       </Container>
     );
   }
