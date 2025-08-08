@@ -1,21 +1,6 @@
 // src/types.js
 
 /**
- * @typedef {object} FlightStats
- * @property {number} [airlines]
- * @property {number} [airports]
- * @property {number} [countries]
- * @property {number} [domesticFlights]
- * @property {number} [internationalFlights]
- * @property {number} [longHaulFlights]
- * @property {object} [longestFlight]
- * @property {object} [shortestFlight]
- * @property {number} [totalDistance]
- * @property {number} [totalFlightTime]
- * @property {number} [westBoundFlights]
- */
-
-/**
  * @typedef {object} AirportTableRow
  * @property {Date} departure_date
  * @property {Date} departure_time
