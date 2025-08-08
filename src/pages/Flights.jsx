@@ -6,7 +6,7 @@ import FlightList from "../components/FlightList.jsx";
 
 function Flights() {
   return (
-    <Container size="lg" mt="md">
+    <Container mt="md">
       <Stack spacing="xl">
         <Title order={2} ta="center">
           Detailed Flight Statistics

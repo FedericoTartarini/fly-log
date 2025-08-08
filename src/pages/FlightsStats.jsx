@@ -74,7 +74,7 @@ const FlightsStats = () => {
       </div>
 
       {/* This Stack will scroll over the map */}
-      <Paper radius="lg" p="md" style={{ position: "relative", zIndex: 1 }}>
+      <Paper radius="lg" pt="xs" style={{ position: "relative", zIndex: 1 }}>
         <Stack
           bg="var(--mantine-color-body)"
           gap="md"
