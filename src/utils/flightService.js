@@ -73,7 +73,7 @@ const getIsoCountry = (iataCode) => {
  * @param {Object} flight - Flight data from database
  * @returns {Object} Enriched flight data
  */
-const enrichFlightData = (flight) => {
+export const enrichFlightData = (flight) => {
   // Get coordinates and country info
   const depCoords = getAirportCoordinates(flight.departure_airport_iata);
   const depCountry = getIsoCountry(flight.departure_airport_iata);
