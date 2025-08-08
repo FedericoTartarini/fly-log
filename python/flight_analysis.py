@@ -279,4 +279,4 @@ def process_flighty_export():
     df.dropna(subset=["airline_iata"], inplace=True)
     df = df.drop(columns=["airline_icao"])
 
-    df.iloc[0:2].to_csv("./python/flightly_processed_import.csv", index=False)
+    df.iloc[2:4].to_csv("./python/flightly_processed_import.csv", index=False)

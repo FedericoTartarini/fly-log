@@ -7,7 +7,8 @@ import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function MyAppShell() {
-  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+  const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
+    useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -15,14 +16,20 @@ function MyAppShell() {
   const handleSignOut = async () => {
     await signOut();
     navigate(Paths.LOGIN);
+    closeMobile();
+  };
+
+  // Helper to close mobile navbar on NavLink click
+  const handleNavClick = () => {
+    closeMobile();
   };
 
   return (
     <AppShell
       header={{ height: 60 }}
       navbar={{
-        width: 150,
-        breakpoint: "sm",
+        width: 175, // 75% width on mobile, 150px on sm+
+        breakpoint: "xs",
         collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
       transitionDuration={500}
@@ -48,22 +55,38 @@ function MyAppShell() {
       <AppShell.Navbar py="md" px={4}>
         {!user && (
           <>
-            <NavLink to={Paths.HOME} className={classes.control}>
+            <NavLink
+              to={Paths.HOME}
+              className={classes.control}
+              onClick={handleNavClick}
+            >
               Home
             </NavLink>
           </>
         )}
         {user && (
           <>
-            <NavLink to={Paths.STATS} className={classes.control}>
+            <NavLink
+              to={Paths.STATS}
+              className={classes.control}
+              onClick={handleNavClick}
+            >
               MyStats
             </NavLink>
-            <NavLink to={Paths.FLIGHTS} className={classes.control}>
+            <NavLink
+              to={Paths.FLIGHTS}
+              className={classes.control}
+              onClick={handleNavClick}
+            >
               Flights
             </NavLink>
           </>
         )}
-        <NavLink to={Paths.ABOUT} className={classes.control}>
+        <NavLink
+          to={Paths.ABOUT}
+          className={classes.control}
+          onClick={handleNavClick}
+        >
           About
         </NavLink>
         {user && (
@@ -71,7 +94,10 @@ function MyAppShell() {
             <NavLink
               href="#"
               className={classes.control}
-              onClick={handleSignOut}
+              onClick={async (e) => {
+                e.preventDefault();
+                await handleSignOut();
+              }}
             >
               Sign Out
             </NavLink>
@@ -79,7 +105,11 @@ function MyAppShell() {
         )}
         {!user && (
           <>
-            <NavLink to={Paths.LOGIN} className={classes.control}>
+            <NavLink
+              to={Paths.LOGIN}
+              className={classes.control}
+              onClick={handleNavClick}
+            >
               Sign In
             </NavLink>
           </>
