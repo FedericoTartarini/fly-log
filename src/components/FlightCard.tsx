@@ -1,7 +1,19 @@
+// src/components/FlightCard.tsx
+
 import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
+import type { Flight } from "../types/flight.ts";
 
-const FlightCard = ({ flight, title, color }) => {
+interface FlightCardProps {
+  flight: Flight;
+  title: string;
+  color: string;
+}
+
+/**
+ * Displays flight information in a styled card.
+ */
+const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
   if (!flight) return null;
 
   return (
@@ -11,18 +23,17 @@ const FlightCard = ({ flight, title, color }) => {
           <Title order={4} c={color}>
             {title}
           </Title>
-
           <Text size="sm">
             <Text span fw={500}>
               Airline:
             </Text>{" "}
-            {flight.airline}
+            {flight.airline_name}
           </Text>
         </Group>
 
         <Group justify="space-between">
           <Text fw={500} size="lg">
-            {flight.from} → {flight.to}
+            {flight.departure_airport_iata} → {flight.arrival_airport_iata}
           </Text>
           <Badge color={color} variant="light">
             {Math.round(flight.distance_km).toLocaleString()} km
@@ -44,7 +55,7 @@ const FlightCard = ({ flight, title, color }) => {
 
           <Group gap="xs">
             <Text size="sm" c="dimmed">
-              {new Date(flight.date).toLocaleDateString()}
+              {new Date(flight.departure_date).toLocaleDateString()}
             </Text>
             <Text size="sm" c="dimmed">
               {flight.flight_time.toFixed(2)}h flight time

@@ -19,8 +19,6 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
   const grouping = {};
 
   flights.forEach((flight) => {
-    console.log(flight);
-
     if (!flight.departure_date) return;
 
     const date = new Date(flight.departure_date);

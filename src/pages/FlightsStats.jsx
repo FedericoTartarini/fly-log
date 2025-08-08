@@ -17,7 +17,7 @@ import {
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
 import { BarChart } from "@mantine/charts";
-import FlightCard from "../components/FlightCard";
+import FlightCard from "../components/FlightCard.tsx";
 import DistanceStatsCard from "../components/DistanceStatsCard";
 import {
   getDeparturesByCountry,

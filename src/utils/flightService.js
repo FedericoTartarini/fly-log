@@ -153,7 +153,6 @@ export const getFilteredUserFlights = async (year) => {
   let query = supabaseClient.from("flights").select("*");
 
   const today = new Date().toISOString().split("T")[0];
-  console.log(today);
   if (year === "upcoming") {
     // Filter for upcoming flights
     // Get today's date in YYYY-MM-DD format
