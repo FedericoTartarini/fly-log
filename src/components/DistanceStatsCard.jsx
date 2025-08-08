@@ -42,16 +42,16 @@ const DistanceStatsCard = ({ totalDistance, totalFlights }) => {
         <Title order={3}>Distance Statistics</Title>
 
         <Grid>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Grid.Col span={{ base: 6 }}>
             <StatDisplay
               value={Math.round(totalDistance).toLocaleString()}
               label="Total Distance (km)"
             />
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Grid.Col span={{ base: 6 }}>
             <StatDisplay
               value={Math.round(averageDistance).toLocaleString()}
-              label="Average Distance (km)"
+              label="Mean Distance (km)"
             />
           </Grid.Col>
         </Grid>
