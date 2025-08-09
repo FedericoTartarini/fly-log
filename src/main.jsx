@@ -12,6 +12,7 @@ import Flights from "./pages/Flights.jsx";
 import { Paths } from "./constants/MyClasses.js";
 import Login from "./pages/Login.jsx";
 import Landing from "./pages/Landing.jsx";
+import AuthProvider from "./context/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -50,10 +51,12 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <MantineProvider theme={theme} defaultColorScheme="auto">
-      <ColorSchemeScript defaultColorScheme="auto" />
+    <AuthProvider>
+      <MantineProvider theme={theme} defaultColorScheme="auto">
+        <ColorSchemeScript defaultColorScheme="auto" />
 
-      <RouterProvider router={router} />
-    </MantineProvider>
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </AuthProvider>
   </React.StrictMode>,
 );
