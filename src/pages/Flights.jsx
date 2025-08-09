@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Title, Stack, Card, Grid, Image } from "@mantine/core";
 import FlightYearFilter from "../components/FlightYearFilter";
 import flightImg from "../assets/flight.jpg";
-import FlightList from "../components/FlightList.jsx";
+import FlightList from "../components/FlightList.tsx";
 
 function Flights() {
   return (

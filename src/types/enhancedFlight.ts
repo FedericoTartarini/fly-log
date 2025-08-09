@@ -1,9 +1,7 @@
-// src/types/flight.ts
-
 /**
  * Represents a flight record.
  */
-export interface Flight {
+export interface EnhancedFlight {
   id: string;
   user_id: string;
   departure_date: string; // ISO date string
