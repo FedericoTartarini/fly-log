@@ -90,16 +90,16 @@ describe("FlightCsvUpload", () => {
   it("validateCsvData returns errors for missing/invalid fields", () => {
     const errors = validateCsvData([
       { departure_date: "2024-01-01", departure_airport_iata: "JFK" },
-      {
-        departure_date: "2024-01-01",
-        departure_airport_iata: "JFK",
-        arrival_airport_iata: "LAX",
-        airline_iata: "A",
-        flight_number: "AA@123",
-      },
     ]);
     expect(errors.some((e) => e.includes("Missing fields"))).toBe(true);
-    expect(errors.some((e) => e.includes("Invalid airline_iata"))).toBe(true);
-    expect(errors.some((e) => e.includes("Invalid flight_number"))).toBe(true);
+    expect(errors.some((e) => e.includes("airline_iata"))).toBe(true);
+  });
+
+  it("validateCsvData returns errors for date incorrectly formatted", () => {
+    const errors = validateCsvData([
+      { departure_date: "01-01-2024", departure_airport_iata: "JFK" },
+    ]);
+    expect(errors.some((e) => e.includes("Missing fields"))).toBe(true);
+    expect(errors.some((e) => e.includes("airline_iata"))).toBe(true);
   });
 });

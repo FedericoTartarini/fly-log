@@ -14,7 +14,7 @@ import { supabaseClient } from "../supabaseClient";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 
-const validateCsvData = (data) => {
+export const validateCsvData = (data) => {
   const errors = [];
   const requiredFields = [
     "departure_date",
