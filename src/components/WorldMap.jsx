@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import flightsData from "../../python/flights_with_coordinates.json";
 import LatLon from "geodesy/latlon-spherical.js";
-import useFlightStore from "../store";
+import useFlightStore from "../store.ts";
 import { getFilteredFlights } from "../utils/flightUtils.js";
 
 // Helper to generate points along the great-circle path

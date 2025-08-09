@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
-import type { EnhancedFlight } from "../types/enhancedFlight.ts";
+import type { enhancedFlight } from "../types/enhancedFlight.ts";
 
 interface FlightCardProps {
-  flight: EnhancedFlight;
+  flight: enhancedFlight;
   title: string;
   color: string;
 }

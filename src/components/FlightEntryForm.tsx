@@ -13,7 +13,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { supabaseClient } from "../supabaseClient";
 import { notifications } from "@mantine/notifications";
-import FlightCsvUpload from "./FlightCsvUpload";
+import FlightCsvUpload from "./FlightCsvUpload.jsx";
 import { airlinesInfo } from "../utils/airlinesInfo";
 import { airportsInfo } from "../utils/airportsInfo";
 

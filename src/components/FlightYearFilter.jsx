@@ -1,6 +1,6 @@
 import React from "react";
 import { NativeSelect } from "@mantine/core";
-import useFlightStore from "../store";
+import useFlightStore from "../store.ts";
 
 const FlightYearFilter = () => {
   const { selectedYear, setSelectedYear, allFlights } = useFlightStore();

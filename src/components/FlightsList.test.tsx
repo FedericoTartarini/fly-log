@@ -1,3 +1,10 @@
+// Mock the store
+vi.mock("../store", () => {
+  return {
+    default: vi.fn(),
+  };
+});
+
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach } from "vitest";
@@ -5,14 +12,7 @@ import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
 import { MantineProvider } from "@mantine/core";
 import { MemoryRouter } from "react-router-dom";
-import useFlightStore from "../store";
-
-// Mock the store
-vi.mock("../store", () => {
-  return {
-    default: vi.fn(),
-  };
-});
+import useFlightStore from "../store.ts";
 
 // Create a mock flight
 const mockFlight = {

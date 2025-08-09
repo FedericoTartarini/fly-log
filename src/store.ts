@@ -1,10 +1,27 @@
 import { create } from "zustand";
-import {
-  getUserFlights,
-  getFilteredUserFlights,
-} from "./utils/flightService.ts";
+import { getUserFlights, getFilteredUserFlights } from "./utils/flightService";
 
-const useFlightStore = create((set, get) => ({
+interface Flight {
+  id: number;
+  departure_date: string;
+  departure_airport_iata: string;
+  arrival_airport_iata: string;
+  airline_iata: string;
+  flight_number: number;
+}
+
+interface FlightStoreState {
+  flights: Flight[];
+  filteredFlights: Flight[];
+  allFlights: Flight[];
+  selectedYear: string;
+  isLoading: boolean;
+  error: string | null;
+  fetchFlights: () => Promise<void>;
+  setSelectedYear: (year: string) => Promise<void>;
+}
+
+const useFlightStore = create<FlightStoreState>((set) => ({
   flights: [],
   filteredFlights: [],
   allFlights: [],
@@ -12,7 +29,6 @@ const useFlightStore = create((set, get) => ({
   isLoading: false,
   error: null,
 
-  // Fetch all flights
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -23,18 +39,17 @@ const useFlightStore = create((set, get) => ({
         allFlights: flights,
         isLoading: false,
       });
-    } catch (error) {
+    } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
   },
 
-  // Set selected year and filter flights
-  setSelectedYear: async (year) => {
+  setSelectedYear: async (year: string) => {
     set({ selectedYear: year, isLoading: true, error: null });
     try {
       const filteredFlights = await getFilteredUserFlights(year);
       set({ filteredFlights, isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
   },

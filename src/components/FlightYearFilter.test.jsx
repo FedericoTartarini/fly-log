@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MantineProvider } from "@mantine/core";
 
 import FlightYearFilter from "./FlightYearFilter";
-import useFlightStore from "../store";
+import useFlightStore from "../store.ts";
 
 // Mock the Zustand store BEFORE importing the component
 const mockSetSelectedYear = vi.fn();

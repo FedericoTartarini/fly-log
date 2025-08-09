@@ -15,7 +15,7 @@ import {
   Center,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
-import useFlightStore from "../store.js";
+import useFlightStore from "../store.ts";
 import { BarChart } from "@mantine/charts";
 import FlightCard from "../components/FlightCard.tsx";
 import DistanceStatsCard from "../components/DistanceStatsCard.js";

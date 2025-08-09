@@ -4,7 +4,7 @@ import StatsSummary from "./StatsSummary";
 import { Ids } from "../constants/MyClasses.js";
 
 import { MemoryRouter } from "react-router-dom";
-import useFlightStore from "../store";
+import useFlightStore from "../store.ts";
 import { MantineProvider } from "@mantine/core";
 import { enrichFlightData } from "../utils/flightService.ts";
 

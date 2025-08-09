@@ -3,7 +3,7 @@ import { Card, Grid, Group, Image, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
-import useFlightStore from "../store";
+import useFlightStore from "../store.ts";
 import flightImg from "../assets/flight.jpg";
 import { Paths, Ids } from "../constants/MyClasses.js";
 import StatDisplay from "./StatDisplay";
