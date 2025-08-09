@@ -70,7 +70,7 @@ const getIsoCountry = (iataCode) => {
 /**
  * Enrich flight data with additional information from airports and airlines data
  *
- * @param {Object} flight - Flight data from database
+ * @param {Object} flight - EnhancedFlight data from database
  * @returns {Object} Enriched flight data
  */
 export const enrichFlightData = (flight) => {
@@ -137,11 +137,7 @@ export const getUserFlights = async () => {
   }
 
   // Enrich each flight with additional data
-  const enrichedFlights = (data || []).map((flight) =>
-    enrichFlightData(flight),
-  );
-
-  return enrichedFlights;
+  return (data || []).map((flight) => enrichFlightData(flight));
 };
 
 /**
@@ -186,9 +182,5 @@ export const getFilteredUserFlights = async (year) => {
   }
 
   // Enrich each flight with additional data
-  const enrichedFlights = (data || []).map((flight) =>
-    enrichFlightData(flight),
-  );
-
-  return enrichedFlights;
+  return (data || []).map((flight) => enrichFlightData(flight));
 };

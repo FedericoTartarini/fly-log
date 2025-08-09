@@ -1,11 +1,18 @@
-// src/components/FlightList.jsx
 import React from "react";
 import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
 import useFlightStore from "../store";
 import { IconPlaneInflight } from "@tabler/icons-react";
+import type { enhancedFlight } from "../types/enhancedFlight.ts";
+import type { JSX } from "react";
 
-const FlightList = () => {
-  const { filteredFlights } = useFlightStore();
+/**
+ * Renders a list of flights in a table.
+ * @returns {JSX.Element}
+ */
+const FlightList: React.FC = () => {
+  const { filteredFlights } = useFlightStore() as {
+    filteredFlights: enhancedFlight[];
+  };
 
   if (filteredFlights.length === 0) {
     return (
@@ -15,7 +22,12 @@ const FlightList = () => {
     );
   }
 
-  const getAirlineIcon = (flight) => {
+  /**
+   * Returns the airline icon or a fallback icon.
+   * @param {Flight} flight
+   * @returns {JSX.Element}
+   */
+  const getAirlineIcon = (flight: enhancedFlight): JSX.Element => {
     const sourcePath = flight.airline_icon_path;
 
     if (!sourcePath) {
@@ -29,13 +41,18 @@ const FlightList = () => {
       );
     }
 
-    const imageUrl = new URL(
+    let imageUrl: string;
+    imageUrl = new URL(
       `../assets/airlines_logos/${sourcePath}`,
       import.meta.url,
     ).href;
 
     return (
-      <Image src={imageUrl} alt={`${flight.airline_name} icon`} height={10} />
+      <Image
+        src={imageUrl}
+        alt={`${flight.airline_name ?? ""} icon`}
+        height={10}
+      />
     );
   };
 

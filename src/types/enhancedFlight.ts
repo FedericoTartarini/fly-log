@@ -1,7 +1,8 @@
 /**
  * Represents a flight record.
  */
-export interface EnhancedFlight {
+export interface enhancedFlight {
+  // Basic flight information
   id: string;
   user_id: string;
   departure_date: string; // ISO date string

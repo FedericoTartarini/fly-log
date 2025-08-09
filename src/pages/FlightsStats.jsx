@@ -18,7 +18,7 @@ import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.js";
 import { BarChart } from "@mantine/charts";
 import FlightCard from "../components/FlightCard.tsx";
-import DistanceStatsCard from "../components/DistanceStatsCard";
+import DistanceStatsCard from "../components/DistanceStatsCard.js";
 import {
   getDeparturesByCountry,
   getFlightsByTimeGrouping,
@@ -60,7 +60,7 @@ const FlightsStats = () => {
   if (error) {
     return (
       <Container size="lg" mt="md">
-        <Text color="red" size="lg" ta="center">
+        <Text c="red" size="lg" ta="center">
           Error loading flight data: {error}
         </Text>
       </Container>
