@@ -2,13 +2,14 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-     "rootDir": "./src",
-     "outDir": "./dist",
-    "baseUrl": "src",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./src",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
+    "moduleResolution": "node",
     "target": "esnext",
     "types": [],
     // For nodejs:
