@@ -1,5 +1,5 @@
 [project]
-name = "flights-tracker"
+name = "fly-log"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
