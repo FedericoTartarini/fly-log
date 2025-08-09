@@ -6,7 +6,7 @@ import { Ids } from "../constants/MyClasses.js";
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store";
 import { MantineProvider } from "@mantine/core";
-import { enrichFlightData } from "../utils/flightService.js";
+import { enrichFlightData } from "../utils/flightService.ts";
 
 // Mock realistic flight data for the tests
 const mockSetSelectedYear = vi.fn();

@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Title, Stack, Card, Grid, Image } from "@mantine/core";
 import FlightYearFilter from "../components/FlightYearFilter";
 import flightImg from "../assets/flight.jpg";
-import FlightList from "../components/FlightList.tsx";
+import FlightsList from "../components/FlightsList.tsx";
 
 function Flights() {
   return (
@@ -20,7 +20,7 @@ function Flights() {
           <FlightYearFilter />
         </Card>
 
-        <FlightList />
+        <FlightsList />
       </Stack>
     </Container>
   );

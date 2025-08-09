@@ -24,7 +24,7 @@ import {
   getFlightsByTimeGrouping,
 } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
-import FlightEntryForm from "../components/FlightEntryForm.jsx";
+import FlightEntryForm from "../components/FlightEntryForm.tsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights } = useFlightStore();

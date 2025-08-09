@@ -9,7 +9,7 @@ import type { JSX } from "react";
  * Renders a list of flights in a table.
  * @returns {JSX.Element}
  */
-const FlightList: React.FC = () => {
+const FlightsList: React.FC = () => {
   const { filteredFlights } = useFlightStore() as {
     filteredFlights: enhancedFlight[];
   };
@@ -97,4 +97,4 @@ const FlightList: React.FC = () => {
   );
 };
 
-export default FlightList;
+export default FlightsList;

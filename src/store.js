@@ -2,7 +2,7 @@ import { create } from "zustand";
 import {
   getUserFlights,
   getFilteredUserFlights,
-} from "./utils/flightService.js";
+} from "./utils/flightService.ts";
 
 const useFlightStore = create((set, get) => ({
   flights: [],
