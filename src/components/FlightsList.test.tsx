@@ -12,7 +12,7 @@ import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
 import { MantineProvider } from "@mantine/core";
 import { MemoryRouter } from "react-router-dom";
-import { useFlightStore } from "../store";
+import useFlightStore from "../store";
 
 // Create a mock flight
 const mockFlight = {
