@@ -17,4 +17,5 @@ interface airportInfo {
 // Ensure airportsInfoData is typed
 import airportsInfoData from "../../python/airports_info.json" with { type: "json" };
 
-export const airportsInfo: airportInfo[] = airportsInfoData;
+export let airportsInfo: airportInfo[];
+airportsInfo = airportsInfoData;

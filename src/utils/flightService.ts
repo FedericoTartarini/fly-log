@@ -1,6 +1,6 @@
-import { supabaseClient } from "../supabaseClient.ts";
-import { airlinesInfo } from "../utils/airlinesInfo.ts";
-import { airportsInfo } from "../utils/airportsInfo.ts";
+import { supabaseClient } from "../supabaseClient";
+import { airlinesInfo } from "./airlinesInfo";
+import { airportsInfo } from "./airportsInfo";
 
 /**
  * Calculate the great-circle distance between two points on the Earth surface.
