@@ -1,6 +1,6 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabaseClient } from "../supabaseClient";
+import { supabaseClient } from "../supabaseClient.ts";
 import { Container, Title, Paper } from "@mantine/core";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";

@@ -10,7 +10,7 @@ import {
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
-import { supabaseClient } from "../supabaseClient";
+import { supabaseClient } from "../supabaseClient.ts";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 

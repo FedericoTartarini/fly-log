@@ -41,7 +41,7 @@ vi.mock("papaparse", () => ({
 }));
 
 import FlightCsvUpload, { validateCsvData } from "./FlightCsvUpload";
-import { supabaseClient } from "../supabaseClient";
+import { supabaseClient } from "../supabaseClient.ts";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 

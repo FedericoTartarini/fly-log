@@ -11,12 +11,11 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import airportsInfoData from "../../python/airports_info.json";
-import airlinesInfoData from "../../python/airlines.json";
 import { supabaseClient } from "../supabaseClient";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload";
-import type { airportInfo } from "../types/airportInfo";
+import { airlinesInfo } from "../utils/airlinesInfo";
+import { airportsInfo } from "../utils/airportsInfo";
 
 type SelectOption = {
   value: string;
@@ -26,8 +25,6 @@ type SelectOption = {
 interface FlightEntryFormProps {
   onSaved?: () => void;
 }
-
-const airportsInfo: airportInfo[] = airportsInfoData;
 
 const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
   const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
@@ -67,7 +64,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        const airlines: SelectOption[] = (airlinesInfoData as any[])
+        const airlines: SelectOption[] = (airlinesInfo as any[])
           .map((airline) => ({
             value: airline.iata,
             label: `${airline.iata} - ${airline.name}`,

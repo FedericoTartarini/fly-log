@@ -1,10 +1,6 @@
-import { supabaseClient } from "../supabaseClient.js";
-import airportsInfoData from "../../python/airports_info.json";
-import airlinesInfo from "../../python/airlines.json";
-import type { airportInfo } from "../types/airportInfo";
-
-// Ensure airportsInfoData is typed
-const airportsInfo: airportInfo[] = airportsInfoData;
+import { supabaseClient } from "../supabaseClient.ts";
+import { airlinesInfo } from "../utils/airlinesInfo.ts";
+import { airportsInfo } from "../utils/airportsInfo.ts";
 
 /**
  * Calculate the great-circle distance between two points on the Earth surface.
