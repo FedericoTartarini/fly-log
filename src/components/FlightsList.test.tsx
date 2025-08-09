@@ -1,66 +1,34 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, it, afterEach, vi, expect, beforeEach } from "vitest";
+import { describe, it, vi, expect, beforeEach } from "vitest";
 import FlightsList from "./FlightsList";
-import { enrichFlightData } from "../utils/flightService.ts";
+import { enrichFlightData } from "../utils/flightService";
 import { MantineProvider } from "@mantine/core";
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store";
 
-// Mock window.matchMedia for Mantine
-if (!window.matchMedia) {
-  window.matchMedia = vi.fn().mockImplementation(() => ({
-    matches: false,
-    media: "",
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  }));
-}
+// Mock the store
+vi.mock("../store", () => {
+  return {
+    default: vi.fn(),
+  };
+});
 
-// Mock supabaseClient
-vi.mock("../supabaseClient", () => ({
-  supabaseClient: {
-    from: vi.fn(() => ({
-      insert: vi.fn().mockResolvedValue({ error: null }),
-    })),
-  },
-}));
+// Create a mock flight
+const mockFlight = {
+  id: 1,
+  departure_date: "2024-03-10",
+  departure_airport_iata: "SFO",
+  arrival_airport_iata: "SEA",
+  airline_iata: "DL",
+  flight_number: 3,
+};
 
-// Mock realistic flight data for the tests
-const mockSetSelectedYear = vi.fn();
-const mockFlights = [
-  {
-    id: 1,
-    departure_date: "2024-03-10",
-    departure_airport_iata: "SFO",
-    arrival_airport_iata: "SEA",
-    airline_iata: "DL",
-    flight_number: 3,
-  },
-];
+// Create an enriched version of the flight for testing
+const enrichedFlight = enrichFlightData(mockFlight);
 
-const enrichedFlights = (mockFlights || []).map((flight) =>
-  enrichFlightData(flight),
-);
-
-vi.mock("../store", () => ({
-  __esModule: true,
-  default: vi.fn(() => ({
-    selectedYear: "all",
-    setSelectedYear: mockSetSelectedYear,
-    flights: enrichedFlights,
-    filteredFlights: enrichedFlights,
-    allFlights: enrichedFlights,
-    isLoading: false,
-    error: null,
-  })),
-}));
-
-const renderWithProvider = (component) =>
+// Helper function to render with providers
+const renderWithProvider = (component: React.ReactNode) =>
   render(
     <MemoryRouter>
       <MantineProvider>{component}</MantineProvider>
@@ -69,25 +37,32 @@ const renderWithProvider = (component) =>
 
 describe("FlightsList", () => {
   beforeEach(() => {
-    mockSetSelectedYear.mockClear();
-    useFlightStore.mockImplementation(() => ({
-      selectedYear: "all",
-      setSelectedYear: mockSetSelectedYear,
-      flights: enrichedFlights,
-      filteredFlights: enrichedFlights,
-      allFlights: enrichedFlights,
-      isLoading: false,
-      error: null,
-    }));
-  });
-  afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders table rows for flights", () => {
+  it("renders table rows for flights when flights are available", () => {
+    // Mock the store to return flights
+    useFlightStore.mockReturnValue({
+      filteredFlights: [enrichedFlight],
+    });
+
     renderWithProvider(<FlightsList />);
-    expect(screen.getByText(/SFO → SEA/));
-    expect(screen.getByText(/DL/));
-    expect(screen.getByText(/3\/10\/2024/));
+
+    expect(screen.getByText(/SFO → SEA/)).toBeInTheDocument();
+    expect(screen.getByText(/DL/)).toBeInTheDocument();
+    expect(screen.getByText(/3\/10\/2024/)).toBeInTheDocument();
+  });
+
+  it("renders empty state when no flights are available", () => {
+    // Mock the store to return no flights
+    useFlightStore.mockReturnValue({
+      filteredFlights: [],
+    });
+
+    renderWithProvider(<FlightsList />);
+
+    expect(
+      screen.getByText(/No flights to display for this selection/),
+    ).toBeInTheDocument();
   });
 });
