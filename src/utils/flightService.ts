@@ -1,20 +1,24 @@
 import { supabaseClient } from "../supabaseClient.js";
-import airportsInfo from "../../python/airports_info.json";
+import airportsInfoData from "../../python/airports_info.json";
 import airlinesInfo from "../../python/airlines.json";
+import type { airportInfo } from "../types/airportInfo";
+
+// Ensure airportsInfoData is typed
+const airportsInfo: airportInfo[] = airportsInfoData;
 
 /**
  * Calculate the great-circle distance between two points on the Earth surface.
- *
- * @param {Array<number>} coord1 - [latitude, longitude] of the first point in decimal degrees
- * @param {Array<number>} coord2 - [latitude, longitude] of the second point in decimal degrees
- * @returns {number|null} Distance in kilometers, or null if coordinates are invalid
+ * @param coord1 - [latitude, longitude] of the first point in decimal degrees
+ * @param coord2 - [latitude, longitude] of the second point in decimal degrees
+ * @returns Distance in kilometers, or null if coordinates are invalid
  */
-const haversine = (coord1, coord2) => {
-  if (!coord1 || !coord2) {
-    return null;
-  }
+const haversine = (
+  coord1: [number, number] | null,
+  coord2: [number, number] | null,
+): number | null => {
+  if (!coord1 || !coord2) return null;
 
-  const R = 6371; // Earth radius in kilometers
+  const R = 6371;
   const [lat1, lon1] = coord1;
   const [lat2, lon2] = coord2;
 
@@ -33,69 +37,62 @@ const haversine = (coord1, coord2) => {
 
 /**
  * Estimate flight time based on distance and average speed.
- *
- * @param {number|null} distanceKm - Distance in kilometers
- * @param {number} avgSpeedKmh - Average speed in km/h (default: 900)
- * @returns {number|null} Estimated flight time in hours, or null if distance is null
+ * @param distanceKm - Distance in kilometers
+ * @param avgSpeedKmh - Average speed in km/h (default: 900)
+ * @returns Estimated flight time in hours, or null if distance is null
  */
-const estimateFlightTime = (distanceKm, avgSpeedKmh = 900) => {
-  if (distanceKm === null) {
-    return null;
-  }
+const estimateFlightTime = (
+  distanceKm: number | null,
+  avgSpeedKmh = 900,
+): number | null => {
+  if (distanceKm === null) return null;
   return distanceKm / avgSpeedKmh;
 };
 
 /**
  * Get airport coordinates by IATA code
- *
- * @param {string} iataCode - IATA code of the airport
- * @returns {Array<number>|null} [latitude, longitude] if found, else null
+ * @param iataCode - IATA code of the airport
+ * @returns [latitude, longitude] if found, else null
  */
-const getAirportCoordinates = (iataCode) => {
+const getAirportCoordinates = (iataCode: string): [number, number] | null => {
   const airport = airportsInfo.find((airport) => airport.iata === iataCode);
   return airport ? [airport.lat, airport.lon] : null;
 };
 
 /**
  * Get ISO country code by airport IATA code
- *
- * @param {string} iataCode - IATA code of the airport
- * @returns {string|null} ISO country code if found, else null
+ * @param iataCode - IATA code of the airport
+ * @returns ISO country code if found, else null
  */
-const getIsoCountry = (iataCode) => {
+const getIsoCountry = (iataCode: string): string | null => {
   const airport = airportsInfo.find((airport) => airport.iata === iataCode);
   return airport ? airport.iso_country : null;
 };
 
 /**
  * Enrich flight data with additional information from airports and airlines data
- *
- * @param {Object} flight - EnhancedFlight data from database
- * @returns {Object} Enriched flight data
+ * @param flight - EnhancedFlight data from database
+ * @returns Enriched flight data
  */
-export const enrichFlightData = (flight) => {
-  // Get coordinates and country info
+export const enrichFlightData = (flight: any): any => {
   const depCoords = getAirportCoordinates(flight.departure_airport_iata);
   const depCountry = getIsoCountry(flight.departure_airport_iata);
   const arrCoords = getAirportCoordinates(flight.arrival_airport_iata);
   const arrCountry = getIsoCountry(flight.arrival_airport_iata);
 
-  // Calculate distance and flight time
   const distance = haversine(depCoords, arrCoords);
   const flightTime = estimateFlightTime(distance);
 
-  // Get airline info
-  const airline = airlinesInfo.find((a) => a.iata === flight.airline_iata);
+  const airline = airlinesInfo.find((a: any) => a.iata === flight.airline_iata);
 
-  let airlineName = null;
-  let airlinePrimaryColor = null;
-  let airlineIconPath = null;
+  let airlineName: string | null = null;
+  let airlinePrimaryColor: string | null = null;
+  let airlineIconPath: string | null = null;
 
   if (airline) {
     airlineName = airline.name;
     airlinePrimaryColor = airline.branding?.primary_color || null;
 
-    // Compose icon path similar to Python code
     if (airline.branding?.variations) {
       const iconName = airlineName.replace(/ /g, "-").toLowerCase();
       if (airline.branding.variations.includes("logo")) {
@@ -123,9 +120,9 @@ export const enrichFlightData = (flight) => {
 
 /**
  * Fetches all flights for the current user and enriches them with additional data
- * @returns {Promise<Array>} Array of enriched flight objects
+ * @returns Array of enriched flight objects
  */
-export const getUserFlights = async () => {
+export const getUserFlights = async (): Promise<any[]> => {
   const { data, error } = await supabaseClient
     .from("flights")
     .select("*")
@@ -136,34 +133,31 @@ export const getUserFlights = async () => {
     throw error;
   }
 
-  // Enrich each flight with additional data
-  return (data || []).map((flight) => enrichFlightData(flight));
+  return (data || []).map((flight: any) => enrichFlightData(flight));
 };
 
 /**
  * Fetches flights filtered by year for the current user and enriches them with additional data
- * @param {number|string} year - Year to filter by, or "all"
- * @returns {Promise<Array>} Array of filtered enriched flight objects
+ * @param year - Year to filter by, or "all"
+ * @returns Array of filtered enriched flight objects
  */
-export const getFilteredUserFlights = async (year) => {
+export const getFilteredUserFlights = async (
+  year: number | string,
+): Promise<any[]> => {
   let query = supabaseClient.from("flights").select("*");
 
-  const today = new Date().toISOString().split("T")[0];
+  const today: string = new Date().toISOString().split("T")[0];
   if (year === "upcoming") {
-    // Filter for upcoming flights
-    // Get today's date in YYYY-MM-DD format
     query = query.gt("departure_date", today);
   } else if (year === "all") {
     query = query.lte("departure_date", today);
   } else {
-    // Ensure year is a number
     const startDate = `${year}-01-01`;
     let endDate = `${year}-12-31`;
 
     const thisYear = today.split("-")[0];
 
     if (year === thisYear) {
-      // If the year is the current year, filter for flights before today
       endDate = today;
     }
 
@@ -181,6 +175,5 @@ export const getFilteredUserFlights = async (year) => {
     throw error;
   }
 
-  // Enrich each flight with additional data
-  return (data || []).map((flight) => enrichFlightData(flight));
+  return (data || []).map((flight: any) => enrichFlightData(flight));
 };
