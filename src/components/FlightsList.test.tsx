@@ -48,9 +48,9 @@ describe("FlightsList", () => {
 
     renderWithProvider(<FlightsList />);
 
-    expect(screen.getByText(/SFO → SEA/)).toBeInTheDocument();
-    expect(screen.getByText(/DL/)).toBeInTheDocument();
-    expect(screen.getByText(/3\/10\/2024/)).toBeInTheDocument();
+    expect(screen.getByText(/SFO → SEA/));
+    expect(screen.getByText(/DL/));
+    expect(screen.getByText(/3\/10\/2024/));
   });
 
   it("renders empty state when no flights are available", () => {
@@ -61,8 +61,6 @@ describe("FlightsList", () => {
 
     renderWithProvider(<FlightsList />);
 
-    expect(
-      screen.getByText(/No flights to display for this selection/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/No flights to display for this selection/));
   });
 });

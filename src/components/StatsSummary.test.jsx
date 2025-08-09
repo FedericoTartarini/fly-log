@@ -8,8 +8,14 @@ import useFlightStore from "../store";
 import { MantineProvider } from "@mantine/core";
 import { enrichFlightData } from "../utils/flightService.ts";
 
+// Mock the store
+vi.mock("../store", () => {
+  return {
+    default: vi.fn(),
+  };
+});
+
 // Mock realistic flight data for the tests
-const mockSetSelectedYear = vi.fn();
 const mockFlights = [
   {
     id: 1,
@@ -49,19 +55,6 @@ const enrichedFlights = (mockFlights || []).map((flight) =>
   enrichFlightData(flight),
 );
 
-vi.mock("../store", () => ({
-  __esModule: true,
-  default: vi.fn(() => ({
-    selectedYear: "all",
-    setSelectedYear: mockSetSelectedYear,
-    flights: enrichedFlights,
-    filteredFlights: enrichedFlights,
-    allFlights: enrichedFlights,
-    isLoading: false,
-    error: null,
-  })),
-}));
-
 const renderWithProvider = (component) =>
   render(
     <MemoryRouter>
@@ -71,19 +64,14 @@ const renderWithProvider = (component) =>
 
 describe("StatsSummary", () => {
   beforeEach(() => {
-    mockSetSelectedYear.mockClear();
-    useFlightStore.mockImplementation(() => ({
-      selectedYear: "all",
-      setSelectedYear: mockSetSelectedYear,
-      flights: enrichedFlights,
-      filteredFlights: enrichedFlights,
-      allFlights: enrichedFlights,
-      isLoading: false,
-      error: null,
-    }));
+    vi.clearAllMocks();
   });
 
   it("should display correct total values for all years", () => {
+    useFlightStore.mockReturnValue({
+      filteredFlights: enrichedFlights,
+      allFlights: enrichedFlights,
+    });
     renderWithProvider(<StatsSummary />);
 
     // Find element by ID and check its text content
