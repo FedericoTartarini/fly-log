@@ -13,7 +13,7 @@ export function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path={Paths.HOME} element={<MyAppShell />}>
+        <Route path="/" element={<MyAppShell />}>
           <Route path={Paths.LOGIN} element={<Login />} />
           <Route path={Paths.ABOUT} element={<About />} />
           <Route path={Paths.HOME} element={<Landing />} />

@@ -123,7 +123,7 @@ function About() {
               component="a"
               href="buymeacoffee.com/federicot"
               target="_blank"
-              leftIcon={<IconCoffee size={16} />}
+              lefticon={<IconCoffee size={16} />}
               color="orange"
               variant="filled"
             >
@@ -133,7 +133,7 @@ function About() {
               component="a"
               href="https://www.patreon.com/federicotartarini"
               target="_blank"
-              leftIcon={<IconHeart size={16} />}
+              lefticon={<IconHeart size={16} />}
               color="red"
               variant="filled"
             >
@@ -143,7 +143,7 @@ function About() {
               component="a"
               href="https://github.com/FedericoTartarini/flights-tracker"
               target="_blank"
-              leftIcon={<IconBrandGithub size={16} />}
+              lefticon={<IconBrandGithub size={16} />}
               color="dark"
               variant="outline"
             >
