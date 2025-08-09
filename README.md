@@ -176,6 +176,8 @@ describe("MyComponent", () => {
 * [ ] Add filtering by airline, aircraft type, or airport.
 * [ ] Implement search functionality for flights.
 * [x] Add a button in the home page to go to the flight stats page.
+* [ ] Add footer with links to GitHub, documentation, and contact info.
+* [ ] If a user is already logged in go straight to the flight stats page.
 
 ### User Experience Improvements
 * [x] Improve mobile responsiveness.

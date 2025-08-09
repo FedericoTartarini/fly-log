@@ -96,7 +96,15 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         .from("flights")
         .insert([flightData]);
 
-      if (error) throw error;
+      if (error) {
+        notifications.show({
+          title: "Error",
+          message: `Could not save flight: ${error.message}`,
+          color: "red",
+        });
+        setLoading(false);
+        return;
+      }
 
       notifications.show({
         title: "Success",
