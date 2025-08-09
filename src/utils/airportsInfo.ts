@@ -1,7 +1,7 @@
 /**
- * Represents a airportInfo record.
+ * Represents a airlineInfo record.
  */
-export interface airportInfo {
+interface airportInfo {
   // Basic airport information
   iata: string; // IATA code
   airport_name: string; // Full airport name
@@ -13,3 +13,8 @@ export interface airportInfo {
   iso_region: string; // ISO region code
   elevation: number; // Elevation in feet
 }
+
+// Ensure airportsInfoData is typed
+import airportsInfoData from "../../python/airports_info.json" with { type: "json" };
+
+export const airportsInfo: airportInfo[] = airportsInfoData;
