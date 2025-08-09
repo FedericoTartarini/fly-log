@@ -11,21 +11,33 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import airportsInfo from "../../python/airports_info.json";
-import airlinesInfo from "../../python/airlines.json";
+import airportsInfoData from "../../python/airports_info.json";
+import airlinesInfoData from "../../python/airlines.json";
 import { supabaseClient } from "../supabaseClient";
 import { notifications } from "@mantine/notifications";
-import FlightCsvUpload from "./FlightCsvUpload.jsx";
+import FlightCsvUpload from "./FlightCsvUpload";
+import type { airportInfo } from "../types/airportInfo";
 
-function FlightEntryForm({ onSaved }) {
-  const [airportOptions, setAirportOptions] = useState([]);
-  const [airlineOptions, setAirlineOptions] = useState([]);
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
+interface FlightEntryFormProps {
+  onSaved?: () => void;
+}
+
+const airportsInfo: airportInfo[] = airportsInfoData;
+
+const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
+  const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
+  const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Initialize form with validation
   const form = useForm({
     initialValues: {
-      departureDate: null,
+      departureDate: null as Date | null,
+      departureTime: "",
       departureAirport: "",
       arrivalAirport: "",
       airline: "",
@@ -35,9 +47,9 @@ function FlightEntryForm({ onSaved }) {
       departureDate: (value) => (value ? null : "Departure date is required"),
       departureAirport: (value) =>
         value ? null : "Departure airport is required",
-      arrivalAirport: (value) => {
+      arrivalAirport: (value, values) => {
         if (!value) return "Arrival airport is required";
-        if (value === form.values.departureAirport)
+        if (value === values.departureAirport)
           return "Arrival and departure airports must be different";
         return null;
       },
@@ -45,22 +57,17 @@ function FlightEntryForm({ onSaved }) {
     },
   });
 
-  // Process airports and airlines data
   useEffect(() => {
     const fetchAirportsInfo = async () => {
       try {
-        // Format airports for select dropdown
-        /** @type {import('../types').Airport[]} */
-        const airports = airportsInfo
+        const airports: SelectOption[] = airportsInfo
           .map((airport) => ({
             value: airport.iata,
             label: `${airport.iata} - ${airport.airport_name}, ${airport.city}, ${airport.country}`,
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        // Format airlines for select dropdown
-        /** @type {import('../types').Airline[]} */
-        const airlines = airlinesInfo
+        const airlines: SelectOption[] = (airlinesInfoData as any[])
           .map((airline) => ({
             value: airline.iata,
             label: `${airline.iata} - ${airline.name}`,
@@ -76,12 +83,10 @@ function FlightEntryForm({ onSaved }) {
     fetchAirportsInfo();
   }, []);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
 
     try {
-      // Prepare data for submission to Supabase
-      /** @type {import('../types').AirportTableRow} */
       const flightData = {
         departure_date: values.departureDate,
         departure_airport_iata: values.departureAirport,
@@ -90,26 +95,22 @@ function FlightEntryForm({ onSaved }) {
         flight_number: values.flightNumber,
       };
 
-      // Save to Supabase
       const { error } = await supabaseClient
         .from("flights")
         .insert([flightData]);
 
       if (error) throw error;
 
-      // Success notification
       notifications.show({
         title: "Success",
         message: "Flight saved successfully",
         color: "green",
       });
 
-      // Reset form
       form.reset();
 
-      // Trigger callback to refresh data
       if (onSaved) onSaved();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving flight:", error);
       notifications.show({
         title: "Error",
@@ -207,6 +208,6 @@ function FlightEntryForm({ onSaved }) {
       </Tabs>
     </Paper>
   );
-}
+};
 
 export default FlightEntryForm;

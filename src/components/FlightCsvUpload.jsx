@@ -223,7 +223,6 @@ const FlightCsvUpload = ({ onComplete }) => {
         {parsing && (
           <Progress
             value={uploadProgress}
-            animate
             size="sm"
             label={`${uploadProgress}%`}
             color={uploadProgress === 100 ? "green" : "blue"}

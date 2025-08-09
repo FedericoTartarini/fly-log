@@ -1,25 +1,5 @@
 import { useMemo } from "react";
 
-/**
- * @typedef {Object} FlightStats
- * @property {number} airlines
- * @property {number} airports
- * @property {number} countries
- * @property {number} domesticFlights
- * @property {number} internationalFlights
- * @property {number} longHaulFlights
- * @property {Object|null} longestFlight
- * @property {Object|null} shortestFlight
- * @property {number} totalDistance
- * @property {number} totalFlightTime
- * @property {number} westBoundFlights
- */
-
-/**
- * Calculate statistics from filtered flights.
- * @param {Array<Object>} filteredFlights
- * @returns {FlightStats}
- */
 export const useFlightStats = (filteredFlights) => {
   return useMemo(() => {
     // Calculate total distance and flight time
