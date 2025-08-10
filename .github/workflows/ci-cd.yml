@@ -38,8 +38,8 @@ jobs:
           wait-on: 'http://localhost:5173'
         env:
           CI: true
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           CY_TEST_EMAIL: ${{ secrets.CY_TEST_EMAIL }}
           CY_TEST_PASSWORD: ${{ secrets.CY_TEST_PASSWORD }}
           CY_WRONG_EMAIL: ${{ secrets.CY_WRONG_EMAIL }}
