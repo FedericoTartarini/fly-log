@@ -16,6 +16,7 @@ jobs:
       - name: Run unit
         run: |
           npm run vitest
+          npm run build
 
   # Optional: auto-create PR to main if tests pass
   create-pr:
@@ -27,7 +28,6 @@ jobs:
       - name: Create Pull Request to main
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Automated PR after test success"
           base: main # The branch to create the PR against
           branch: development # The branch to create the PR from
