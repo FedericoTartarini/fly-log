@@ -34,7 +34,7 @@ jobs:
         with:
           install: true
           build: npm run build
-          start: npm run preview
+          start: npm run preview -- --port 5173
           wait-on: 'http://localhost:5173'
         env:
           CI: true
