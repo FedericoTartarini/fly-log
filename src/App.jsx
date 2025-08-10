@@ -5,23 +5,23 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyAppShell from "./pages/MyAppShell.jsx";
-import { Paths } from "./constants/MyClasses.js";
+import { PATHS } from "./constants/MyClasses.ts";
 import Landing from "./pages/Landing.jsx";
 
 export function App() {
   return (
     <Routes>
       <Route path="/" element={<MyAppShell />}>
-        <Route path={Paths.LOGIN} element={<Login />} />
-        <Route path={Paths.ABOUT} element={<About />} />
-        <Route path={Paths.HOME} element={<Landing />} />
+        <Route path={PATHS.LOGIN} element={<Login />} />
+        <Route path={PATHS.ABOUT} element={<About />} />
+        <Route path={PATHS.HOME} element={<Landing />} />
         <Route
           path="*"
           element={
             <ProtectedRoute>
               <Routes>
-                <Route path={Paths.STATS} element={<FlightsStats />} />
-                <Route path={Paths.FLIGHTS} element={<Flights />} />
+                <Route path={PATHS.STATS} element={<FlightsStats />} />
+                <Route path={PATHS.FLIGHTS} element={<Flights />} />
               </Routes>
             </ProtectedRoute>
           }

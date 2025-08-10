@@ -130,7 +130,7 @@ npm run cypress:run
 - **Unit tests:** Located in `src/` alongside components (e.g., `Component.test.jsx`)
 - **Test utilities:** Shared testing utilities in `test-utils/`
 - **Cypress tests:** End-to-end tests in `cypress/e2e/`
-- **Test constants:** Centralized test IDs in `src/constants/testIds.js`
+- **Test constants:** Centralized test IDS in `src/constants/testIds.js`
 
 ### Writing Tests
 

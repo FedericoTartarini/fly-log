@@ -1,7 +1,7 @@
 import React from "react";
 import { AppShell, Burger, Container, Group } from "@mantine/core";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Paths } from "../constants/MyClasses.js";
+import { PATHS } from "../constants/MyClasses.ts";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -15,7 +15,7 @@ function MyAppShell() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate(Paths.LOGIN);
+    navigate(PATHS.LOGIN);
     closeMobile();
   };
 
@@ -56,7 +56,7 @@ function MyAppShell() {
         {!user && (
           <>
             <NavLink
-              to={Paths.HOME}
+              to={PATHS.HOME}
               className={classes.control}
               onClick={handleNavClick}
             >
@@ -67,14 +67,14 @@ function MyAppShell() {
         {user && (
           <>
             <NavLink
-              to={Paths.STATS}
+              to={PATHS.STATS}
               className={classes.control}
               onClick={handleNavClick}
             >
               MyStats
             </NavLink>
             <NavLink
-              to={Paths.FLIGHTS}
+              to={PATHS.FLIGHTS}
               className={classes.control}
               onClick={handleNavClick}
             >
@@ -83,7 +83,7 @@ function MyAppShell() {
           </>
         )}
         <NavLink
-          to={Paths.ABOUT}
+          to={PATHS.ABOUT}
           className={classes.control}
           onClick={handleNavClick}
         >
@@ -106,7 +106,7 @@ function MyAppShell() {
         {!user && (
           <>
             <NavLink
-              to={Paths.LOGIN}
+              to={PATHS.LOGIN}
               className={classes.control}
               onClick={handleNavClick}
             >

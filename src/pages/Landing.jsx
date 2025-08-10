@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import flightImg from "../assets/flight.jpg";
-import { Paths } from "../constants/MyClasses.js";
+import { PATHS } from "../constants/MyClasses.ts";
 
 function Landing() {
   return (
@@ -35,14 +35,14 @@ function Landing() {
         <Group>
           <Button
             component={Link}
-            to={Paths.LOGIN}
+            to={PATHS.LOGIN}
             size="lg"
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
           >
             Get Started
           </Button>
-          <Button component={Link} to={Paths.ABOUT} size="lg" variant="default">
+          <Button component={Link} to={PATHS.ABOUT} size="lg" variant="default">
             Learn More
           </Button>
         </Group>

@@ -9,14 +9,14 @@ import { App } from "./App.jsx";
 import FlightsStats from "./pages/FlightsStats.jsx";
 import About from "./pages/About.jsx";
 import Flights from "./pages/Flights.jsx";
-import { Paths } from "./constants/MyClasses.js";
+import { PATHS } from "./constants/MyClasses.ts";
 import Login from "./pages/Login.jsx";
 import Landing from "./pages/Landing.jsx";
 import AuthProvider from "./context/AuthContext";
 
 const router = createBrowserRouter([
   {
-    path: Paths.HOME,
+    path: PATHS.HOME,
     element: <App />,
     children: [
       {
@@ -24,19 +24,19 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: Paths.ABOUT,
+        path: PATHS.ABOUT,
         element: <About />,
       },
       {
-        path: Paths.STATS,
+        path: PATHS.STATS,
         element: <FlightsStats />,
       },
       {
-        path: Paths.FLIGHTS,
+        path: PATHS.FLIGHTS,
         element: <Flights />,
       },
       {
-        path: Paths.LOGIN,
+        path: PATHS.LOGIN,
         element: <Login />,
       },
     ],

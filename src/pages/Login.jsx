@@ -4,13 +4,13 @@ import { supabaseClient } from "../supabaseClient.ts";
 import { Container, Title, Paper } from "@mantine/core";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import { Paths } from "../constants/MyClasses.js";
+import { PATHS } from "../constants/MyClasses.ts";
 
 function Login() {
   const { session } = useAuth();
 
   if (session) {
-    return <Navigate to={Paths.STATS} />;
+    return <Navigate to={PATHS.STATS} />;
   }
 
   return (

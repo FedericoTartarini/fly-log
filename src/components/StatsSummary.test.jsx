@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "../../test-utils/render";
 import StatsSummary from "./StatsSummary";
-import { Ids } from "../constants/MyClasses.js";
+import { IDS } from "../constants/MyClasses.ts";
 
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store.ts";
@@ -76,25 +76,25 @@ describe("StatsSummary", () => {
 
     // Find element by ID and check its text content
     const totalFlightsElement = document.getElementById(
-      Ids.STATS.TOTAL_FLIGHTS,
+      IDS.STATS.TOTAL_FLIGHTS,
     );
     expect(totalFlightsElement).toHaveTextContent("4");
 
     const totalDistanceElement = document.getElementById(
-      Ids.STATS.TOTAL_DISTANCE,
+      IDS.STATS.TOTAL_DISTANCE,
     );
     expect(totalDistanceElement).toHaveTextContent("10,671");
 
-    const totalTimeElement = document.getElementById(Ids.STATS.TOTAL_TIME);
+    const totalTimeElement = document.getElementById(IDS.STATS.TOTAL_TIME);
     expect(totalTimeElement).toHaveTextContent(".5");
 
     const airportsVisitedElement = document.getElementById(
-      Ids.STATS.AIRPORTS_VISITED,
+      IDS.STATS.AIRPORTS_VISITED,
     );
     expect(airportsVisitedElement).toHaveTextContent("5");
 
     const airlinesFlownElement = document.getElementById(
-      Ids.STATS.AIRLINES_FLOWN,
+      IDS.STATS.AIRLINES_FLOWN,
     );
     expect(airlinesFlownElement).toHaveTextContent("1");
   });
