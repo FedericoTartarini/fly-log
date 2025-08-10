@@ -4,11 +4,6 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      external: ["**/*.cy.tsx", "cypress/**", ".env.local", "cypress.env.json"], // Excludes all files with .cy.tsx extension
-    },
-  },
   test: {
     globals: true,
     environment: "jsdom",

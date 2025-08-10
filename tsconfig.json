@@ -6,6 +6,8 @@
     "outDir": "./dist",
     "baseUrl": "./src",
 
+    "exclude": ["cypress", "**/*.cy.ts", "**/*.cy.tsx"],
+
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
