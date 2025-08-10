@@ -13,7 +13,9 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npm test
+      - name: Run unit and E2E tests
+        run: |
+          npm run vitest
 
   # Optional: auto-create PR to main if tests pass
   create-pr:
