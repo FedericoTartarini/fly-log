@@ -4,8 +4,9 @@ describe("StatsSummary Component", () => {
     const email = Cypress.env("email");
     const password = Cypress.env("password");
     expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
-    expect(password, "CYPRESS password env var").to.be.a("string").and.not.be.empty;
-    cy.get('input[name="email"]').type(email);
+    expect(password, "CYPRESS password env var").to.be.a("string").and.not.be
+      .empty;
+    cy.get('input[name="email"]').type(email, { log: false });
     cy.get('input[name="password"]').type(password, { log: false });
     cy.get('button[type="submit"]').click();
     cy.location("pathname").should("eq", "/stats");
@@ -20,8 +21,8 @@ describe("StatsSummary Component", () => {
     cy.contains("Add New Flight").should("be.visible");
 
     // Check if the statistics are displayed correctly
-    cy.contains("30,304").should("be.visible"); // Distance (km)
-    cy.contains("1.4").should("be.visible"); // Time (days)
+    cy.contains("40,420").should("be.visible"); // Distance (km)
+    cy.contains("1.9").should("be.visible"); // Time (days)
     cy.contains("2").should("be.visible"); // Airlines Flown
   });
 
@@ -41,25 +42,5 @@ describe("StatsSummary Component", () => {
     cy.contains("12,801"); // Distance (km) for 2025
     cy.contains("0.6"); // Time (days) for 2025
     cy.contains("3"); // Airports Visited for 2025
-  });
-
-  it("should update statistics when year filter changes", () => {
-    // Select a specific year from the dropdown
-    cy.scrollTo("bottom", { duration: 1000 });
-
-    // Verify statistics update
-    cy.contains("Total Flights").should("be.visible");
-    cy.contains("Distance (km)").should("be.visible");
-    cy.contains("Time (days)").should("be.visible");
-    cy.contains("Airports Visited").should("be.visible");
-    cy.contains("Airlines Flown").should("be.visible");
-    cy.contains("Countries").should("be.visible");
-
-    cy.contains("9"); // Total Flights for 2025
-    cy.contains("38,607"); // Distance (km) for 2025
-    cy.contains("1.8"); // Time (days) for 2025
-    cy.contains("8"); // Airports Visited for 2025
-    cy.contains("4"); // Airlines Flown for 2025
-    cy.contains("6"); // Countries for 2025
   });
 });

@@ -1,8 +1,8 @@
-describe("StatsSummary Component", () => {
+describe("Login Failure Scenario", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:5173/login");
-    cy.get('input[name="email"]').type("testuser@example.com");
-    cy.get('input[name="password"]').type("yourPassword123");
+    cy.visit("/login");
+    cy.get('input[name="email"]').type(Cypress.env("TEST_USER_EMAIL"));
+    cy.get('input[name="password"]').type(Cypress.env("TEST_USER_PASSWORD"));
     cy.get('button[type="submit"]').click();
   });
 

@@ -1,4 +1,3 @@
-// src/components/FeatureSection.jsx
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Text, Card, Group, Image, ActionIcon } from "@mantine/core";
@@ -10,7 +9,7 @@ import {
   IconPlane,
   IconRuler2,
 } from "@tabler/icons-react";
-import { IDS } from "../constants/MyClasses.js";
+import { IDS } from "../constants/MyClasses";
 
 const FeatureCard = ({ icon, title, description, image, id }) => {
   const ref = useRef(null);
