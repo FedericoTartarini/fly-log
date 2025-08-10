@@ -49,12 +49,14 @@ function MyAppShell() {
             onClick={toggleMobile}
             hiddenFrom="sm"
             size="sm"
+            aria-label="Open navigation menu"
           />
           <Burger
             opened={desktopOpened}
             onClick={toggleDesktop}
             visibleFrom="sm"
             size="sm"
+            aria-label="Toggle sidebar menu"
           />
           Fly Log
         </Group>

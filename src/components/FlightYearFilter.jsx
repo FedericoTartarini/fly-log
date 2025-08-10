@@ -28,6 +28,7 @@ const FlightYearFilter = () => {
       mt="md"
       mb="xs"
       id="flight-year-filter"
+      label="Fliter flights"
       data={[
         { value: "all", label: "All Past Flights" },
         { value: "upcoming", label: "Upcoming Flights" },

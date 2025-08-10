@@ -172,6 +172,9 @@ describe("MyComponent", () => {
 
 ## To-Do / Future Improvements
 
+### Issues
+* [ ] When the user logs in all the flights are displayed, past and future. This is okay but I need to change the text in the dropdown to say "All Flights" instead of "Past Flights".
+
 ### Visualization Enhancements
 * [ ] Add filtering by airline, aircraft type, or airport.
 * [ ] Implement search functionality for flights.
