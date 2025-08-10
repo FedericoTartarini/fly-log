@@ -1,8 +1,8 @@
 import React from "react";
-import { AppShell, Burger, Container, Group } from "@mantine/core";
+import { AppShell, Burger, Container, Group, rem } from "@mantine/core";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -24,9 +24,11 @@ function MyAppShell() {
     closeMobile();
   };
 
+  const pinned = useHeadroom({ fixedAt: 120 });
+
   return (
     <AppShell
-      header={{ height: 60 }}
+      header={{ height: 60, collapsed: !pinned, offset: false }}
       navbar={{
         width: 175, // 75% width on mobile, 150px on sm+
         breakpoint: "xs",
@@ -34,8 +36,13 @@ function MyAppShell() {
       }}
       transitionDuration={500}
       transitionTimingFunction="ease"
+      footer={{
+        height: 60,
+        withBorder: true,
+        position: "bottom",
+      }}
     >
-      <AppShell.Header>
+      <AppShell.Header zIndex={400}>
         <Group h="100%" px="md">
           <Burger
             opened={mobileOpened}
@@ -49,10 +56,14 @@ function MyAppShell() {
             visibleFrom="sm"
             size="sm"
           />
-          Flight Tracker
+          Fly Log
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar py="md" px={4}>
+      <AppShell.Navbar
+        py="md"
+        px={4}
+        pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
+      >
         {!user && (
           <>
             <NavLink
@@ -116,11 +127,12 @@ function MyAppShell() {
         )}
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}>
         <Container size="xs" p={0}>
           <Outlet />
         </Container>
       </AppShell.Main>
+      {/*<AppFooter />*/}
     </AppShell>
   );
 }
