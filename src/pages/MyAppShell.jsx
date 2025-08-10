@@ -1,6 +1,13 @@
 import React from "react";
-import { AppShell, Burger, Container, Group, rem } from "@mantine/core";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import {
+  AppShell,
+  Burger,
+  Container,
+  Group,
+  rem,
+  NavLink,
+} from "@mantine/core";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
@@ -49,12 +56,14 @@ function MyAppShell() {
             onClick={toggleMobile}
             hiddenFrom="sm"
             size="sm"
+            aria-label="Open navigation menu"
           />
           <Burger
             opened={desktopOpened}
             onClick={toggleDesktop}
             visibleFrom="sm"
             size="sm"
+            aria-label="Toggle sidebar menu"
           />
           Fly Log
         </Group>
@@ -67,62 +76,61 @@ function MyAppShell() {
         {!user && (
           <>
             <NavLink
+              component={Link}
               to={PATHS.HOME}
+              label="Home"
               className={classes.control}
               onClick={handleNavClick}
-            >
-              Home
-            </NavLink>
+            />
           </>
         )}
         {user && (
           <>
             <NavLink
+              component={Link}
               to={PATHS.STATS}
+              label="Stats"
               className={classes.control}
               onClick={handleNavClick}
-            >
-              MyStats
-            </NavLink>
+            />
             <NavLink
+              component={Link}
               to={PATHS.FLIGHTS}
+              label="Flights"
               className={classes.control}
               onClick={handleNavClick}
-            >
-              Flights
-            </NavLink>
+            />
           </>
         )}
         <NavLink
+          component={Link}
           to={PATHS.ABOUT}
+          label="About"
           className={classes.control}
           onClick={handleNavClick}
-        >
-          About
-        </NavLink>
+        />
         {user && (
           <>
             <NavLink
               href="#"
+              label="Sign Out"
               className={classes.control}
               onClick={async (e) => {
                 e.preventDefault();
                 await handleSignOut();
               }}
-            >
-              Sign Out
-            </NavLink>
+            />
           </>
         )}
         {!user && (
           <>
             <NavLink
+              component={Link}
               to={PATHS.LOGIN}
+              label="Login"
               className={classes.control}
               onClick={handleNavClick}
-            >
-              Sign In
-            </NavLink>
+            />
           </>
         )}
       </AppShell.Navbar>

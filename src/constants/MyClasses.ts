@@ -15,6 +15,16 @@ export const IDS = {
   FILTERS: {
     YEAR_FILTER: "flight-year-filter",
   },
+  LANDING: {
+    FEATURES: {
+      WHERE: "id-feat-where",
+      WHAT: "id-feat-what",
+      WHICH: "id-feat-which",
+      HOW: "id-feat-how",
+      WHEN: "id-feat-when",
+      DETAIL: "id-feat-details",
+    },
+  },
   // Add more sections as needed
 } as const;
 
