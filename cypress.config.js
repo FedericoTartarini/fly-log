@@ -6,8 +6,9 @@ dotenv.config();
 
 export default defineConfig({
   e2e: {
-    setupNodeEvents() {
+    setupNodeEvents(on, config) {
       // implement node event listeners here
+      return config;
     },
     // Expose environment variables to Cypress
     env: {
