@@ -10,8 +10,9 @@ import {
   IconPlane,
   IconRuler2,
 } from "@tabler/icons-react";
+import { IDS } from "../constants/MyClasses.js";
 
-const FeatureCard = ({ icon, title, description, image }) => {
+const FeatureCard = ({ icon, title, description, image, id }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -24,7 +25,7 @@ const FeatureCard = ({ icon, title, description, image }) => {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder id={id}>
         <Card.Section component="a" href="https://mantine.dev/">
           <Image src={imageUrl} />
         </Card.Section>
@@ -58,6 +59,7 @@ const FeatureSection = () => {
       title: "Where did you fly?",
       description: "Visualize all your flights on a world map.",
       image: "map.png",
+      id: IDS.LANDING.FEATURES.WHERE,
     },
     {
       icon: (
@@ -70,6 +72,7 @@ const FeatureSection = () => {
       title: "What are your stats?",
       description: "Get insights into your flight history and statistics.",
       image: "overall_stats.png",
+      id: IDS.LANDING.FEATURES.WHAT,
     },
     {
       title: "Which countries did you visit?",
@@ -82,6 +85,7 @@ const FeatureSection = () => {
         />
       ),
       image: "countries_stats.png",
+      id: IDS.LANDING.FEATURES.WHICH,
     },
     {
       title: "How far did you fly?",
@@ -95,6 +99,7 @@ const FeatureSection = () => {
         />
       ),
       image: "distance_stats.png",
+      id: IDS.LANDING.FEATURES.HOW,
     },
     {
       title: "When did you fly?",
@@ -108,6 +113,7 @@ const FeatureSection = () => {
         />
       ),
       image: "when_stats.png",
+      id: IDS.LANDING.FEATURES.WHEN,
     },
     {
       title: "Flight Details",
@@ -121,6 +127,7 @@ const FeatureSection = () => {
         />
       ),
       image: "flight_stats.png",
+      id: IDS.LANDING.FEATURES.DETAIL,
     },
   ];
 
