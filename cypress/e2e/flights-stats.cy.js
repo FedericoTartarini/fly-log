@@ -1,10 +1,14 @@
 describe("StatsSummary Component", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:5173/login");
-    cy.get('input[name="email"]').type(Cypress.env("email"));
-    cy.get('input[name="password"]').type(Cypress.env("password"));
+    cy.visit("/login");
+    const email = Cypress.env("email");
+    const password = Cypress.env("password");
+    expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
+    expect(password, "CYPRESS password env var").to.be.a("string").and.not.be.empty;
+    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="password"]').type(password, { log: false });
     cy.get('button[type="submit"]').click();
-    cy.url().should("include", "/stats");
+    cy.location("pathname").should("eq", "/stats");
     cy.contains("Welcome to My Flight Tracker").should("be.visible");
   });
 
