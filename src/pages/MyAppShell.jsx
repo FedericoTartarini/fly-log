@@ -7,7 +7,7 @@ import {
   rem,
   NavLink,
 } from "@mantine/core";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
@@ -76,7 +76,8 @@ function MyAppShell() {
         {!user && (
           <>
             <NavLink
-              href={PATHS.HOME}
+              component={Link}
+              to={PATHS.HOME}
               label="Home"
               className={classes.control}
               onClick={handleNavClick}
@@ -86,13 +87,15 @@ function MyAppShell() {
         {user && (
           <>
             <NavLink
-              href={PATHS.STATS}
+              component={Link}
+              to={PATHS.STATS}
               label="Stats"
               className={classes.control}
               onClick={handleNavClick}
             />
             <NavLink
-              href={PATHS.FLIGHTS}
+              component={Link}
+              to={PATHS.FLIGHTS}
               label="Flights"
               className={classes.control}
               onClick={handleNavClick}
@@ -100,7 +103,8 @@ function MyAppShell() {
           </>
         )}
         <NavLink
-          href={PATHS.ABOUT}
+          component={Link}
+          to={PATHS.ABOUT}
           label="About"
           className={classes.control}
           onClick={handleNavClick}
@@ -121,7 +125,8 @@ function MyAppShell() {
         {!user && (
           <>
             <NavLink
-              href={PATHS.LOGIN}
+              component={Link}
+              to={PATHS.LOGIN}
               label="Login"
               className={classes.control}
               onClick={handleNavClick}
