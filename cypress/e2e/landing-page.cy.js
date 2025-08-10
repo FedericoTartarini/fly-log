@@ -1,6 +1,6 @@
-describe("StatsSummary Component", () => {
+describe("Landing Page", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:5173"); // Your dev server URL
+    cy.visit("/");
   });
 
   it("should display flight statistics", () => {
