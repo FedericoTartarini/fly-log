@@ -18,18 +18,18 @@ jobs:
           npm run vitest
           npm run build
 
-  # Optional: auto-create PR to main if tests pass
-  create-pr:
-    needs: test
-    runs-on: ubuntu-latest
-    if: success()
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create Pull Request to main
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "Automated PR after test success"
-          base: main # The branch to create the PR against
-          branch: development # The branch to create the PR from
-          title: 'Promote development to main'
-          body: 'Automated PR to promote development to main after tests pass.'
+#  # Optional: auto-create PR to main if tests pass
+#  create-pr:
+#    needs: test
+#    runs-on: ubuntu-latest
+#    if: success()
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Create Pull Request to main
+#        uses: peter-evans/create-pull-request@v7
+#        with:
+#          commit-message: "Automated PR after test success"
+#          base: main # The branch to create the PR against
+#          branch: development # The branch to create the PR from
+#          title: 'Promote development to main'
+#          body: 'Automated PR to promote development to main after tests pass.'
