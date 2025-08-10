@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import flightImg from "../assets/flight.jpg";
 import { PATHS } from "../constants/MyClasses.ts";
+import FeatureSection from "../components/FeatureSection.jsx";
 
 function Landing() {
   return (
@@ -32,7 +33,7 @@ function Landing() {
           statistics, and visualize your journeys on a world map. Sign in to get
           started.
         </Text>
-        <Group>
+        <Group justify="center" gap="md" mt="xl">
           <Button
             component={Link}
             to={PATHS.LOGIN}
@@ -45,6 +46,9 @@ function Landing() {
           <Button component={Link} to={PATHS.ABOUT} size="lg" variant="default">
             Learn More
           </Button>
+        </Group>
+        <Group justify="center" gap="md" mt="xl">
+          <FeatureSection />
         </Group>
       </Stack>
     </Container>
