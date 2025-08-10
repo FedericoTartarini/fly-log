@@ -1,0 +1,31 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [development]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  # Optional: auto-create PR to main if tests pass
+  create-pr:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Pull Request to main
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: main
+          branch: development
+          title: 'Promote development to main'
+          body: 'Automated PR to promote development to main after tests pass.'
