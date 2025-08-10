@@ -40,6 +40,10 @@ jobs:
           CI: true
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          CY_TEST_EMAIL: ${{ secrets.CY_TEST_EMAIL }}
+          CY_TEST_PASSWORD: ${{ secrets.CY_TEST_PASSWORD }}
+          CY_WRONG_EMAIL: ${{ secrets.CY_WRONG_EMAIL }}
+          CY_WRONG_PASSWORD: ${{ secrets.CY_WRONG_PASSWORD }}
 
           # Add other secrets as needed
 
