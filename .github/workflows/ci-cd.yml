@@ -35,7 +35,7 @@ jobs:
           install: true
           build: npm run build
           start: npm run preview
-          wait-on: 'http://localhost:4173'
+          wait-on: 'http://localhost:5173'
         env:
           CI: true
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
