@@ -74,7 +74,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         setAirportOptions(airports);
         setAirlineOptions(airlines);
       } catch (error) {
-        console.error("Error processing airports data:", error);
+        console.error("Error processing airports or airport data:", error);
       }
     };
     fetchAirportsInfo();

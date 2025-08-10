@@ -25,9 +25,11 @@ import {
 } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightEntryForm from "../components/FlightEntryForm.tsx";
+import NoFlightsCard from "../components/NoFlightsCard.jsx";
 
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, fetchFlights } = useFlightStore();
+  const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
+    useFlightStore();
   const [formOpened, setFormOpened] = useState(false);
   const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
 
@@ -67,6 +69,25 @@ const FlightsStats = () => {
     );
   }
 
+  if (allFlights.length === 0) {
+    return (
+      <>
+        <Modal
+          opened={formOpened}
+          onClose={() => setFormOpened(false)}
+          title="Add New Flight"
+          size="lg"
+        >
+          <FlightEntryForm onSaved={handleFlightSaved} />
+        </Modal>
+
+        {allFlights.length === 0 && (
+          <NoFlightsCard setFormOpened={setFormOpened} />
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
@@ -81,9 +102,6 @@ const FlightsStats = () => {
           px="md"
           style={{ position: "relative", zIndex: 1 }}
         >
-          <Title order={4} align="center" mt="md">
-            Welcome to My Flight Tracker
-          </Title>
           <StatsSummary />
 
           {/* Add button to open modal */}
