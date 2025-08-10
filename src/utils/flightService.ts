@@ -82,7 +82,6 @@ export const enrichFlightData = (flight: any): any => {
   const airline = airlinesInfo.find((a: any) => a.iata === flight.airline_iata);
 
   let airlineName: string | null = null;
-  let airlinePrimaryColor: string | null = null;
   let airlineIcao: string | null = null;
   let airlineIconPath: string | null = null;
 
@@ -90,7 +89,6 @@ export const enrichFlightData = (flight: any): any => {
     airlineIcao = airline.icao;
     airlineIconPath = `${airline.icao}.png`;
     airlineName = airline.name;
-    airlinePrimaryColor = airline.branding?.primary_color || null;
   }
 
   return {
@@ -103,7 +101,6 @@ export const enrichFlightData = (flight: any): any => {
     arrival_country: arrCountry,
     international: depCountry !== arrCountry,
     airline_name: airlineName,
-    airline_primary_color: airlinePrimaryColor,
     airline_icon_path: airlineIconPath,
     airline_icao: airlineIcao,
   };

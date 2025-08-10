@@ -23,7 +23,6 @@ const mockFlight: EnhancedFlight = {
   arrival_country: "IT",
   international: true,
   airline_name: "Qantas",
-  airline_primary_color: null,
   airline_icon_path: "qantas_mono.svg",
 };
 

@@ -21,7 +21,6 @@ export interface enhancedFlight {
   arrival_country: string;
   international: boolean;
   airline_name: string;
-  airline_primary_color: string | null;
   airline_icon_path: string;
   aircraft_type_name?: string; // Optional, as seen in the card
 }
