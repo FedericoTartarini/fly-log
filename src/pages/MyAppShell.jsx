@@ -12,7 +12,6 @@ import { PATHS } from "../constants/MyClasses.ts";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
-import { IconChartBar, IconHome } from "@tabler/icons-react";
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
