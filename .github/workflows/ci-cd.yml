@@ -19,6 +19,29 @@ jobs:
         run: npm run vitest
       - name: Build
         run: npm run build
+  e2e:
+    name: Cypress E2E
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Run Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          install: true
+          build: npm run build
+          start: npm run preview
+          wait-on: 'http://localhost:4173'
+        env:
+          CI: true
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+          # Add other secrets as needed
 
 #  # Optional: auto-create PR to main if tests pass
 #  create-pr:

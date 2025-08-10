@@ -1,8 +1,8 @@
 describe("Login Failure Scenario", () => {
   beforeEach(() => {
     cy.visit("/login");
-    cy.get('input[name="email"]').type(Cypress.env("TEST_USER_EMAIL"));
-    cy.get('input[name="password"]').type(Cypress.env("TEST_USER_PASSWORD"));
+    cy.get('input[name="email"]').type(Cypress.env("CY_WRONG_EMAIL"));
+    cy.get('input[name="password"]').type(Cypress.env("CY_WRONG_PASSWORD"));
     cy.get('button[type="submit"]').click();
   });
 

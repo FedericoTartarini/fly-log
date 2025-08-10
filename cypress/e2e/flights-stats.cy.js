@@ -1,8 +1,8 @@
 describe("StatsSummary Component", () => {
   beforeEach(() => {
     cy.visit("/login");
-    const email = Cypress.env("email");
-    const password = Cypress.env("password");
+    const email = Cypress.env("CY_TEST_EMAIL");
+    const password = Cypress.env("CY_TEST_PASSWORD");
     expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
     expect(password, "CYPRESS password env var").to.be.a("string").and.not.be
       .empty;
