@@ -1,3 +1,5 @@
+/* global describe, it, beforeEach, cy, Cypress */
+
 describe("Login Failure Scenario", () => {
   beforeEach(() => {
     cy.visit("/login");
