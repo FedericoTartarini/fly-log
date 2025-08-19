@@ -2,7 +2,7 @@
 
 import { defineConfig } from "cypress";
 import dotenv from "dotenv";
-import fs from "fs";
+import { existsSync } from "node:fs";
 
 // List only Cypress-related variables to expose
 const CYPRESS_ENV_VARS = [
@@ -13,10 +13,9 @@ const CYPRESS_ENV_VARS = [
 ];
 
 // Load .env.local if present, otherwise fallback to .env
-if (fs.existsSync(".env.local")) {
+dotenv.config();
+if (existsSync(".env.local")) {
   dotenv.config({ path: ".env.local" });
-} else {
-  dotenv.config();
 }
 
 // Build Cypress env object with only the relevant variables
