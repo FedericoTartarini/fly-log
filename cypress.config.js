@@ -1,8 +1,28 @@
+/* global process */
+
 import { defineConfig } from "cypress";
 import dotenv from "dotenv";
+import { existsSync } from "node:fs";
 
-// Load environment variables from .env file
+// List only Cypress-related variables to expose
+const CYPRESS_ENV_VARS = [
+  "CY_TEST_EMAIL",
+  "CY_TEST_PASSWORD",
+  "CY_WRONG_EMAIL",
+  "CY_WRONG_PASSWORD",
+];
+
+// Load .env.local if present, otherwise fallback to .env
 dotenv.config();
+if (existsSync(".env.local")) {
+  dotenv.config({ path: ".env.local" });
+}
+
+// Build Cypress env object with only the relevant variables
+const env = {};
+CYPRESS_ENV_VARS.forEach((key) => {
+  if (process.env[key]) env[key] = process.env[key];
+});
 
 export default defineConfig({
   e2e: {
@@ -10,12 +30,7 @@ export default defineConfig({
       // implement node event listeners here
       return config;
     },
-    // Expose environment variables to Cypress
-    env: {
-      ...process.env, // This exposes all process.env variables
-      // You can also explicitly define specific variables if needed
-      // MY_CUSTOM_VAR: process.env.MY_CUSTOM_VAR,
-    },
+    env,
     baseUrl: "http://localhost:5173",
     supportFile: false,
   },

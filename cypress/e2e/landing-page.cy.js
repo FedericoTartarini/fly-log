@@ -1,3 +1,5 @@
+/* global describe, it, beforeEach, cy */
+
 describe("Landing Page", () => {
   beforeEach(() => {
     cy.visit("/");

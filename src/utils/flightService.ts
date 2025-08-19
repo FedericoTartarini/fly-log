@@ -82,21 +82,13 @@ export const enrichFlightData = (flight: any): any => {
   const airline = airlinesInfo.find((a: any) => a.iata === flight.airline_iata);
 
   let airlineName: string | null = null;
-  let airlinePrimaryColor: string | null = null;
+  let airlineIcao: string | null = null;
   let airlineIconPath: string | null = null;
 
   if (airline) {
+    airlineIcao = airline.icao;
+    airlineIconPath = `${airline.icao}.png`;
     airlineName = airline.name;
-    airlinePrimaryColor = airline.branding?.primary_color || null;
-
-    if (airline.branding?.variations) {
-      const iconName = airlineName.replace(/ /g, "-").toLowerCase();
-      if (airline.branding.variations.includes("logo")) {
-        airlineIconPath = `${iconName}.svg`;
-      } else if (airline.branding.variations.includes("logo_mono")) {
-        airlineIconPath = `${iconName}_mono.svg`;
-      }
-    }
   }
 
   return {
@@ -109,8 +101,8 @@ export const enrichFlightData = (flight: any): any => {
     arrival_country: arrCountry,
     international: depCountry !== arrCountry,
     airline_name: airlineName,
-    airline_primary_color: airlinePrimaryColor,
     airline_icon_path: airlineIconPath,
+    airline_icao: airlineIcao,
   };
 };
 

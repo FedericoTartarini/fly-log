@@ -21,8 +21,8 @@ function Landing() {
           radius="md"
           src={flightImg}
           alt="Airplane wing in the sky"
-          h={250}
-          w="auto"
+          h="auto"
+          w="100%"
           fit="contain"
         />
         <Title order={1} ta="center">

@@ -9,6 +9,7 @@ export interface enhancedFlight {
   departure_time: string | null;
   departure_airport_iata: string;
   arrival_airport_iata: string;
+  airline_icao: string | null; // Optional, as seen in the card
   airline_iata: string;
   flight_number: string;
   created_at: string; // ISO datetime string
@@ -20,7 +21,6 @@ export interface enhancedFlight {
   arrival_country: string;
   international: boolean;
   airline_name: string;
-  airline_primary_color: string | null;
   airline_icon_path: string;
   aircraft_type_name?: string; // Optional, as seen in the card
 }

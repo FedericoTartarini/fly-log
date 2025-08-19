@@ -25,9 +25,11 @@ import {
 } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightEntryForm from "../components/FlightEntryForm.tsx";
+import NoFlightsCard from "../components/NoFlightsCard.jsx";
 
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, fetchFlights } = useFlightStore();
+  const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
+    useFlightStore();
   const [formOpened, setFormOpened] = useState(false);
   const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
 
@@ -67,6 +69,25 @@ const FlightsStats = () => {
     );
   }
 
+  if (allFlights.length === 0) {
+    return (
+      <>
+        <Modal
+          opened={formOpened}
+          onClose={() => setFormOpened(false)}
+          title="Add New Flight"
+          size="lg"
+        >
+          <FlightEntryForm onSaved={handleFlightSaved} />
+        </Modal>
+
+        {allFlights.length === 0 && (
+          <NoFlightsCard setFormOpened={setFormOpened} />
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
@@ -81,9 +102,6 @@ const FlightsStats = () => {
           px="md"
           style={{ position: "relative", zIndex: 1 }}
         >
-          <Title order={4} align="center" mt="md">
-            Welcome to My Flight Tracker
-          </Title>
           <StatsSummary />
 
           {/* Add button to open modal */}
@@ -127,11 +145,16 @@ const FlightsStats = () => {
               Departures by Country
             </Title>
             <BarChart
-              h={(chartData.length + 1) * 27}
+              h={(chartData.length + 1) * 28}
               data={chartData}
               dataKey="country"
               orientation="vertical"
-              yAxisProps={{ width: 60 }}
+              yAxisProps={{
+                width: 60,
+              }}
+              xAxisProps={{
+                tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
+              }}
               barProps={{ radius: 8 }}
               series={[{ name: "departures", color: "blue.6" }]}
             />
@@ -158,11 +181,16 @@ const FlightsStats = () => {
               />
             </Stack>
             <BarChart
-              h={(timeChartData.length + 1) * 27}
+              h={(timeChartData.length + 1) * 28}
               data={timeChartData}
               dataKey="period"
               orientation="vertical"
-              yAxisProps={{ width: 80 }}
+              yAxisProps={{
+                width: 84,
+              }}
+              xAxisProps={{
+                tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
+              }}
               barProps={{ radius: 8 }}
               series={[{ name: "flights", color: "green.6" }]}
             />

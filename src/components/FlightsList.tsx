@@ -42,23 +42,21 @@ const FlightsList: React.FC = () => {
     }
 
     let imageUrl: string;
-    imageUrl = new URL(
-      `../assets/airlines_logos/${sourcePath}`,
-      import.meta.url,
-    ).href;
+    imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
 
     return (
       <Image
         src={imageUrl}
         alt={`${flight.airline_name ?? ""} icon`}
-        height={10}
+        h={50}
+        w="auto"
       />
     );
   };
 
   const rows = filteredFlights.map((flight, index) => (
     <Table.Tr key={index}>
-      <Table.Td>
+      <Table.Td p={"0"}>
         <Center>{getAirlineIcon(flight)}</Center>
       </Table.Td>
       <Table.Td>

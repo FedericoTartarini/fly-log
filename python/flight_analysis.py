@@ -219,9 +219,25 @@ for flight in flight_records:
 
     enriched_flights.append(flight)
 
-# Save enriched flight data to JSON
-with open("./python/flights_with_coordinates.json", "w") as f:
-    json.dump(enriched_flights, f, indent=2)
+
+def reduce_info_airlines():
+    """
+    Reduce the airlines information to only the necessary fields.
+    """
+    with open("./python/airlines.json", "r") as f:
+        airlines = json.load(f)
+
+    reduced_airlines = []
+    for airline in airlines:
+        reduced_airline = {
+            "name": airline["name"],
+            "icao": airline["icao"],
+            "iata": airline.get("iata", None),
+        }
+        reduced_airlines.append(reduced_airline)
+
+    with open("./python/reduced_airlines.json", "w") as f:
+        json.dump(reduced_airlines, f, indent=2)
 
 
 def process_flighty_export():
@@ -279,4 +295,7 @@ def process_flighty_export():
     df.dropna(subset=["airline_iata"], inplace=True)
     df = df.drop(columns=["airline_icao"])
 
-    df.iloc[2:4].to_csv("./python/flightly_processed_import.csv", index=False)
+    df.iloc[0:2].to_csv("./python/flightly_processed_import.csv", index=False)
+
+
+# more data https://github.com/tugraz-isds/datasets/blob/master/airports_airlines/Routes.csv

@@ -8,6 +8,7 @@ import {
   Paper,
   Stack,
   Tabs,
+  Switch,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -30,6 +31,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
   const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
   const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);
+  const [addReturn, setAddReturn] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -39,6 +41,10 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
       arrivalAirport: "",
       airline: "",
       flightNumber: "",
+      // Return flight fields
+      returnDate: null as Date | null,
+      returnTime: "",
+      returnFlightNumber: "",
     },
     validate: {
       departureDate: (value) => (value ? null : "Departure date is required"),
@@ -51,6 +57,10 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         return null;
       },
       airline: (value) => (value ? null : "Airline is required"),
+      // Only validate return fields if addReturn is true
+      ...(addReturn && {
+        returnDate: (value) => (value ? null : "Return date is required"),
+      }),
     },
   });
 
@@ -74,7 +84,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         setAirportOptions(airports);
         setAirlineOptions(airlines);
       } catch (error) {
-        console.error("Error processing airports data:", error);
+        console.error("Error processing airports or airport data:", error);
       }
     };
     fetchAirportsInfo();
@@ -84,22 +94,34 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
     setLoading(true);
 
     try {
-      const flightData = {
-        departure_date: values.departureDate,
-        departure_airport_iata: values.departureAirport,
-        arrival_airport_iata: values.arrivalAirport,
-        airline_iata: values.airline,
-        flight_number: values.flightNumber,
-      };
+      const flightsToInsert = [
+        {
+          departure_date: values.departureDate,
+          departure_airport_iata: values.departureAirport,
+          arrival_airport_iata: values.arrivalAirport,
+          airline_iata: values.airline,
+          flight_number: values.flightNumber,
+        },
+      ];
+
+      if (addReturn) {
+        flightsToInsert.push({
+          departure_date: values.returnDate,
+          departure_airport_iata: values.arrivalAirport,
+          arrival_airport_iata: values.departureAirport,
+          airline_iata: values.airline,
+          flight_number: values.returnFlightNumber,
+        });
+      }
 
       const { error } = await supabaseClient
         .from("flights")
-        .insert([flightData]);
+        .insert(flightsToInsert);
 
       if (error) {
         notifications.show({
           title: "Error",
-          message: `Could not save flight: ${error.message}`,
+          message: `Could not save flight(s): ${error.message}`,
           color: "red",
         });
         setLoading(false);
@@ -108,18 +130,21 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
 
       notifications.show({
         title: "Success",
-        message: "Flight saved successfully",
+        message: addReturn
+          ? "Flights saved successfully"
+          : "Flight saved successfully",
         color: "green",
       });
 
       form.reset();
+      setAddReturn(false);
 
       if (onSaved) onSaved();
     } catch (error: any) {
       console.error("Error saving flight:", error);
       notifications.show({
         title: "Error",
-        message: `Could not save flight: ${error.message}`,
+        message: `Could not save flight(s): ${error.message}`,
         color: "red",
       });
     } finally {
@@ -138,7 +163,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         <Tabs.Panel value="manual" pt="xs">
           <Stack>
             <Title order={4}>Add New Flight</Title>
-
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Stack>
                 <Group grow>
@@ -152,7 +176,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   <TextInput
                     label="Departure Time"
                     placeholder="e.g., 14:30"
-                    required
                     {...form.getInputProps("departureTime")}
                   />
                 </Group>
@@ -197,9 +220,66 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   />
                 </Group>
 
+                <Switch
+                  label="Add return flight"
+                  checked={addReturn}
+                  onChange={(event) =>
+                    setAddReturn(event.currentTarget.checked)
+                  }
+                  mt="md"
+                />
+
+                {addReturn && (
+                  <Stack mt="xs" p="xs" style={{ borderRadius: 8 }}>
+                    <Title order={5}>Return Flight</Title>
+                    <Group grow>
+                      <DatePickerInput
+                        label="Return Date"
+                        placeholder="Select date"
+                        required
+                        clearable={false}
+                        {...form.getInputProps("returnDate")}
+                      />
+                      <TextInput
+                        label="Return Time"
+                        placeholder="e.g., 18:45"
+                        {...form.getInputProps("returnTime")}
+                      />
+                    </Group>
+                    <Group grow>
+                      <Select
+                        label="Airline"
+                        placeholder="Search airlines"
+                        searchable
+                        required
+                        data={airlineOptions}
+                        maxDropdownHeight={280}
+                        nothingFoundMessage="No matching airlines"
+                        {...form.getInputProps("airline")}
+                        disabled
+                      />
+                      <TextInput
+                        label="Flight Number"
+                        placeholder="e.g., 456"
+                        {...form.getInputProps("returnFlightNumber")}
+                      />
+                    </Group>
+                    <TextInput
+                      label="Departure Airport"
+                      value={form.values.arrivalAirport}
+                      disabled
+                    />
+                    <TextInput
+                      label="Arrival Airport"
+                      value={form.values.departureAirport}
+                      disabled
+                    />
+                  </Stack>
+                )}
+
                 <Group justify="flex-end" mt="md">
                   <Button type="submit" loading={loading}>
-                    Save Flight
+                    Save Flight{addReturn ? "s" : ""}
                   </Button>
                 </Group>
               </Stack>

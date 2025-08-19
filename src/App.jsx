@@ -8,6 +8,10 @@ import MyAppShell from "./pages/MyAppShell.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
 import Landing from "./pages/Landing.jsx";
 
+import "@mantine/core/styles.css";
+// ‼️ import dates styles after core package styles
+import "@mantine/dates/styles.css";
+
 export function App() {
   return (
     <Routes>
