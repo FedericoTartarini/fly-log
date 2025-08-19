@@ -1,5 +1,11 @@
-import React from "react";
-import { MapContainer, TileLayer, Polyline, CircleMarker } from "react-leaflet";
+import React, { useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Polyline,
+  CircleMarker,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
@@ -39,14 +45,66 @@ function splitPathAtAntimeridian(path) {
   return segments;
 }
 
+/**
+ * Calculate the centroid of all coordinates.
+ * @param {Array} flights - Array of flight objects
+ * @returns {[number, number]} [lat, lon]
+ */
+const getFlightsCentroid = (flights) => {
+  const coords = flights.flatMap((f) => [
+    f.departure_coordinates,
+    f.arrival_coordinates,
+  ]);
+  const latSum = coords.reduce((sum, c) => sum + c[0], 0);
+  const lonSum = coords.reduce((sum, c) => sum + c[1], 0);
+  return coords.length
+    ? [latSum / coords.length, lonSum / coords.length]
+    : [25, 74]; // fallback default
+};
+
+/**
+ * Calculate bounds for all coordinates.
+ * @param {Array} flights - Array of flight objects
+ * @returns {[[number, number], [number, number]]} [[southWest], [northEast]]
+ */
+const getFlightsBounds = (flights) => {
+  const coords = flights.flatMap((f) => [
+    f.departure_coordinates,
+    f.arrival_coordinates,
+  ]);
+  if (!coords.length)
+    return [
+      [-90, -180],
+      [90, 180],
+    ];
+  const lats = coords.map((c) => c[0]);
+  const lons = coords.map((c) => c[1]);
+  return [
+    [Math.min(...lats), Math.min(...lons)],
+    [Math.max(...lats), Math.max(...lons)],
+  ];
+};
+
+/**
+ * Component to fit map to bounds after render.
+ */
+const FitMapToBounds = ({ bounds }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (bounds) map.fitBounds(bounds, { padding: [40, 40] });
+  }, [bounds, map]);
+  return null;
+};
+
 const WorldMap = () => {
   const { filteredFlights, selectedYear } = useFlightStore();
-
+  const center = getFlightsCentroid(filteredFlights);
+  const bounds = getFlightsBounds(filteredFlights);
   const flightColor = selectedYear === "upcoming" ? "red" : "blue";
 
   return (
     <MapContainer
-      center={[25, 74]}
+      center={center}
       zoom={2}
       minZoom={2}
       style={{ height: "400px", width: "100%" }}
@@ -56,6 +114,7 @@ const WorldMap = () => {
       ]}
       worldCopyJump={true}
     >
+      <FitMapToBounds bounds={bounds} />
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'

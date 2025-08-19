@@ -50,6 +50,7 @@ const FlightsList: React.FC = () => {
         alt={`${flight.airline_name ?? ""} icon`}
         h={50}
         w="auto"
+        p={4}
       />
     );
   };
