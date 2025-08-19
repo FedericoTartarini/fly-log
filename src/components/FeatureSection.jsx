@@ -11,7 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { IDS } from "../constants/MyClasses";
 
-const FeatureCard = ({ icon, title, description, image, id }) => {
+const FeatureCard = ({ icon, title, description, image, id, alt }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -26,7 +26,7 @@ const FeatureCard = ({ icon, title, description, image, id }) => {
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder id={id}>
         <Card.Section component="a" href="https://mantine.dev/">
-          <Image src={imageUrl} />
+          <Image src={imageUrl} alt={alt} />
         </Card.Section>
 
         <Group justify="space-between" mt="md" mb="xs">
@@ -59,6 +59,7 @@ const FeatureSection = () => {
       description: "Visualize all your flights on a world map.",
       image: "map.png",
       id: IDS.LANDING.FEATURES.WHERE,
+      alt: "World map showing flight paths",
     },
     {
       icon: (
@@ -72,6 +73,7 @@ const FeatureSection = () => {
       description: "Get insights into your flight history and statistics.",
       image: "overall_stats.png",
       id: IDS.LANDING.FEATURES.WHAT,
+      alt: "Flight statistics overview",
     },
     {
       title: "Which countries did you visit?",
@@ -85,6 +87,7 @@ const FeatureSection = () => {
       ),
       image: "countries_stats.png",
       id: IDS.LANDING.FEATURES.WHICH,
+      alt: "Countries visited chart",
     },
     {
       title: "How far did you fly?",
@@ -99,6 +102,7 @@ const FeatureSection = () => {
       ),
       image: "distance_stats.png",
       id: IDS.LANDING.FEATURES.HOW,
+      alt: "Distance traveled statistics",
     },
     {
       title: "When did you fly?",
@@ -113,6 +117,7 @@ const FeatureSection = () => {
       ),
       image: "when_stats.png",
       id: IDS.LANDING.FEATURES.WHEN,
+      alt: "Flight history timeline",
     },
     {
       title: "Flight Details",
@@ -127,6 +132,7 @@ const FeatureSection = () => {
       ),
       image: "flight_stats.png",
       id: IDS.LANDING.FEATURES.DETAIL,
+      alt: "Flight details overview",
     },
   ];
 
