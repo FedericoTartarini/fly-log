@@ -145,11 +145,16 @@ const FlightsStats = () => {
               Departures by Country
             </Title>
             <BarChart
-              h={(chartData.length + 1) * 27}
+              h={(chartData.length + 1) * 28}
               data={chartData}
               dataKey="country"
               orientation="vertical"
-              yAxisProps={{ width: 60 }}
+              yAxisProps={{
+                width: 60,
+              }}
+              xAxisProps={{
+                tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
+              }}
               barProps={{ radius: 8 }}
               series={[{ name: "departures", color: "blue.6" }]}
             />
@@ -176,11 +181,16 @@ const FlightsStats = () => {
               />
             </Stack>
             <BarChart
-              h={(timeChartData.length + 1) * 27}
+              h={(timeChartData.length + 1) * 28}
               data={timeChartData}
               dataKey="period"
               orientation="vertical"
-              yAxisProps={{ width: 80 }}
+              yAxisProps={{
+                width: 84,
+              }}
+              xAxisProps={{
+                tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
+              }}
               barProps={{ radius: 8 }}
               series={[{ name: "flights", color: "green.6" }]}
             />
