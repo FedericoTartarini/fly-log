@@ -3,8 +3,13 @@
 describe("Login Failure Scenario", () => {
   beforeEach(() => {
     cy.visit("/login");
-    cy.get('input[name="email"]').type(Cypress.env("CY_WRONG_EMAIL"));
-    cy.get('input[name="password"]').type(Cypress.env("CY_WRONG_PASSWORD"));
+    const email = Cypress.env("CY_WRONG_EMAIL");
+    const password = Cypress.env("CY_WRONG_PASSWORD");
+    expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
+    expect(password, "CYPRESS password env var").to.be.a("string").and.not.be
+      .empty;
+    cy.get('input[name="email"]').type(email, { log: false });
+    cy.get('input[name="password"]').type(password, { log: false });
     cy.get('button[type="submit"]').click();
   });
 
