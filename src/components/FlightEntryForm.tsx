@@ -152,7 +152,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   <TextInput
                     label="Departure Time"
                     placeholder="e.g., 14:30"
-                    required
                     {...form.getInputProps("departureTime")}
                   />
                 </Group>
