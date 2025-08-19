@@ -26,7 +26,7 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder id={id}>
         <Card.Section component="a" href="https://mantine.dev/">
-          <Image src={imageUrl} alt={alt} />
+          <Image src={imageUrl} alt={alt} loading="lazy" />
         </Card.Section>
 
         <Group justify="space-between" mt="md" mb="xs">
@@ -138,8 +138,8 @@ const FeatureSection = () => {
 
   return (
     <>
-      {features.map((f, i) => (
-        <FeatureCard key={i} {...f} />
+      {features.map((f) => (
+        <FeatureCard key={f.id} {...f} />
       ))}
     </>
   );
