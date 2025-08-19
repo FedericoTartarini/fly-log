@@ -32,7 +32,10 @@ const FlightsList: React.FC = () => {
 
     if (!sourcePath) {
       return (
-        <ActionIcon aria-label="Settings" color="gray">
+        <ActionIcon
+          aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
+          color="gray"
+        >
           <IconPlaneInflight
             style={{ width: "70%", height: "70%" }}
             stroke={1.5}
@@ -50,6 +53,8 @@ const FlightsList: React.FC = () => {
         alt={`${flight.airline_name ?? ""} icon`}
         h={50}
         w="auto"
+        fit="contain"
+        loading="lazy"
         p={4}
       />
     );
