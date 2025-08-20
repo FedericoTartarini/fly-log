@@ -165,7 +165,7 @@ const WorldMap = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         noWrap={true}
       />
-      {filteredFlights.map((flight, idx) => {
+      {filteredFlights.map((flight) => {
         const greatCirclePath = getGreatCirclePath(
           flight.departure_coordinates,
           flight.arrival_coordinates,
@@ -173,7 +173,7 @@ const WorldMap = () => {
         const pathSegments = splitPathAtAntimeridian(greatCirclePath);
 
         return (
-          <React.Fragment key={`${idx}-${flightColor}`}>
+          <React.Fragment key={`${flight.id}`}>
             {pathSegments.map((segment, segmentIdx) => (
               <Polyline
                 key={segmentIdx}
