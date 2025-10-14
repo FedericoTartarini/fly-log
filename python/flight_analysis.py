@@ -239,6 +239,8 @@ def reduce_info_airlines():
     with open("./python/reduced_airlines.json", "w") as f:
         json.dump(reduced_airlines, f, indent=2)
 
+    df_a = pd.read_csv("./python/all_airlines.csv")
+
 
 def process_flighty_export():
     """
@@ -285,17 +287,18 @@ def process_flighty_export():
     df.columns = ['departure_date', "airline_icao", "flight_number", "departure_airport_iata", "arrival_airport_iata"]
 
     # Load airlines.json
-    with open("./python/airlines.json", "r") as f:
+    with open("./python/reduced_airlines.json", "r") as f:
         airlines = json.load(f)
 
     # Build lookup by ICAO code
     airline_lookup = {a["icao"]: a for a in airlines}
 
     df["airline_iata"] = df["airline_icao"].apply(lambda x: airline_lookup.get(x, {}).get("iata", None))
-    df.dropna(subset=["airline_iata"], inplace=True)
-    df = df.drop(columns=["airline_icao"])
+    # df.dropna(subset=["airline_iata"], inplace=True)
+    # df = df.drop(columns=["airline_icao"])
 
-    df.iloc[0:2].to_csv("./python/flightly_processed_import.csv", index=False)
+    df.to_csv("./python/flightly_processed_import.csv", index=False)
 
 
 # more data https://github.com/tugraz-isds/datasets/blob/master/airports_airlines/Routes.csv
+# airlines logo https://github.com/Jxck-S/airline-logos
