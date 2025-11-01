@@ -59,9 +59,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
               {formatDate(flight.departure_date) || ""}
             </Text>
             <Text size="sm" c="dimmed">
-              {typeof flight.flight_time === "number"
-                ? `${flight.flight_time.toFixed(2)}h flight time`
-                : ""}
+              {`${flight.flight_time.toFixed(2)}h flight time`}
             </Text>
           </Group>
         </Group>

@@ -18,12 +18,12 @@
  */
 export function formatDate(
   value: any,
-  format?: string = "DD MMM YY",
+  format: string = "DD MMM YY",
   locale = "en-AU",
 ): string {
   if (value === null || value === undefined || value === "") return "";
   try {
-    let d: Date | null = null;
+    let d: Date | null;
     if (value instanceof Date) {
       d = value;
     } else if (value && typeof value.toDate === "function") {

@@ -110,6 +110,7 @@ export const enrichFlightData = (flight: any): any => {
 
 /**
  * Fetches flights filtered by year for the current user and enriches them with additional data
+ * @param uid - User ID
  * @param year - Year to filter by, or "all"
  * @returns Array of filtered enriched flight objects
  */
