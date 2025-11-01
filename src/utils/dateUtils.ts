@@ -65,3 +65,35 @@ export function formatDate(
     return "";
   }
 }
+
+/**
+ * Parse a date-like value into a JS Date object, or return null if invalid.
+ */
+export function parseToDate(value: any): Date | null {
+  if (value === null || value === undefined || value === "") return null;
+  try {
+    if (value instanceof Date) {
+      return Number.isNaN(value.getTime()) ? null : value;
+    }
+    if (value && typeof value.toDate === "function") {
+      const d = value.toDate();
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    if (value && typeof value.seconds === "number") {
+      const d = new Date(value.seconds * 1000);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    const d = new Date(String(value));
+    return Number.isNaN(d.getTime()) ? null : d;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Return the full year (e.g., 2024) for a date-like value, or null if unparsable
+ */
+export function getYear(value: any): number | null {
+  const d = parseToDate(value);
+  return d ? d.getFullYear() : null;
+}

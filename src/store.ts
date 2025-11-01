@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { getFilteredUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
+import { getYear, parseToDate } from "./utils/dateUtils";
 
 let currentUid: string | null = null;
 onAuthStateChanged((user) => {
@@ -29,13 +30,28 @@ interface FlightStoreState {
 
 const filterByYear = (flights: Flight[], year: string) => {
   if (!year || year === "all") return flights;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (year === "upcoming") {
+    return flights.filter((f) => {
+      const dt = parseToDate((f as any).departure_date);
+      return dt !== null && dt > today;
+    });
+  }
+
+  if (year === "past") {
+    return flights.filter((f) => {
+      const dt = parseToDate((f as any).departure_date);
+      return dt !== null && dt < today;
+    });
+  }
+
+  // Numeric year
   return flights.filter((f) => {
-    try {
-      const d = new Date(f.departure_date);
-      return d.getFullYear().toString() === year;
-    } catch {
-      return false;
-    }
+    const y = getYear((f as any).departure_date);
+    return y !== null && String(y) === year;
   });
 };
 
