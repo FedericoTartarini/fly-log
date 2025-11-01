@@ -9,6 +9,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
+import { parseToDate } from "../utils/dateUtils";
 
 // Helper to generate points along the great-circle path
 function getGreatCirclePath(from, to, numPoints = 300) {
@@ -136,7 +137,7 @@ const FitMapToBounds = ({ bounds }) => {
 };
 
 const WorldMap = () => {
-  const { filteredFlights, selectedYear } = useFlightStore();
+  const { filteredFlights } = useFlightStore();
   const center = useMemo(
     () => getFlightsCentroid(filteredFlights),
     [filteredFlights],
@@ -145,7 +146,6 @@ const WorldMap = () => {
     () => getFlightsBounds(filteredFlights),
     [filteredFlights],
   );
-  const flightColor = selectedYear === "upcoming" ? "red" : "blue";
 
   return (
     <MapContainer
@@ -171,6 +171,13 @@ const WorldMap = () => {
           flight.arrival_coordinates,
         );
         const pathSegments = splitPathAtAntimeridian(greatCirclePath);
+        let flightColor = "#0077cc"; // default blue
+        // if departure date is in the future, use green
+        const departureDate = parseToDate(flight.departure_date);
+        const now = new Date();
+        if (departureDate && departureDate > now) {
+          flightColor = "#28a745"; // green for future flights
+        }
 
         return (
           <React.Fragment key={`${flight.id}`}>
