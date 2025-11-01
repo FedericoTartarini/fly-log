@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from "react";
 import {
   Button,
@@ -10,7 +11,8 @@ import {
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
-import { supabaseClient } from "../supabaseClient.ts";
+import { useAuth } from "../context/AuthContext.jsx";
+import { addFlightsForUser } from "../firebaseClient";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 
@@ -79,6 +81,7 @@ const FlightCsvUpload = ({ onComplete }) => {
   const [parsing, setParsing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   const handleUpload = async () => {
     if (!file) {
@@ -126,40 +129,35 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           // Upload flights one by one with progress tracking
           let successCount = 0;
-          let errorCount = 0;
+          let errorCount = 0; // addFlightsForUser throws on fatal errors
 
-          for (let i = 0; i < flightData.length; i++) {
-            const flight = flightData[i];
-
-            // Format the data
-            const formattedFlight = {
-              departure_date: flight.departure_date,
-              departure_time: flight.departure_time,
-              departure_airport_iata: flight.departure_airport_iata,
-              arrival_airport_iata: flight.arrival_airport_iata,
-              airline_iata: flight.airline_iata,
-              flight_number: flight.flight_number || null,
-            };
-
-            try {
-              const { error: insertError } = await supabaseClient
-                .from("flights")
-                .insert(formattedFlight);
-
-              if (insertError) {
-                errorCount++;
-                console.error("Error inserting flight:", insertError);
-              } else {
-                successCount++;
-              }
-            } catch (e) {
-              errorCount++;
-              console.error("Exception while inserting flight:", e);
-            }
-
-            // Update progress
-            setUploadProgress(Math.round(((i + 1) / flightData.length) * 100));
+          // Use Firestore batched chunk uploads via addFlightsForUser
+          const uid = user?.uid || null;
+          if (!uid) {
+            setError("You must be signed in to upload flights.");
+            setParsing(false);
+            return;
           }
+
+          const formattedFlights = flightData.map((flight) => ({
+            departure_date: flight.departure_date,
+            departure_time: flight.departure_time,
+            departure_airport_iata: flight.departure_airport_iata,
+            arrival_airport_iata: flight.arrival_airport_iata,
+            airline_iata: flight.airline_iata,
+            flight_number: flight.flight_number || null,
+          }));
+
+          let lastProgress = 0;
+          await addFlightsForUser(uid, formattedFlights, (p) => {
+            if (p !== lastProgress) {
+              lastProgress = p;
+              setUploadProgress(p);
+            }
+          });
+
+          successCount = formattedFlights.length;
+          errorCount = 0; // addFlightsForUser throws on fatal errors
 
           // Show completion notification
           notifications.show({

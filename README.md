@@ -73,8 +73,50 @@ Follow these instructions to get a local copy up and running.
     ```bash
     npm run build
     ```
+    
+## Firebase Deployment
+1.  **Install Firebase CLI:**
+    ```bash
+    npm install -g firebase-tools
+    ```
+2.  **Login to Firebase:**
+    ```bash
+    firebase login:list  # to see logged in accounts
+    firebase login  # if not already logged in
+    firebase login:add  # to add another account
+    firebase login:use XX@gmail.com  # to select the project to use
+    ```
+3.  **Initialize Firebase in your project:**
+    ```bash
+    firebase init
+    ```
+    *   Select "Hosting" and follow the prompts to set up your project.
+4.  **Deploy to Firebase:**
+    ```bash
+    firebase deploy
+    ```
+    
+## Firebase Firestore Security Rules Setup
 
+```bash
+firebase deploy --only firestore:rules
+```
+    
 
+### Firestore Security Rules
+
+This repo includes a sample Firestore rules file at `firestore.rules` that enforces per-user access to flight documents stored under `/flights/{userId}/records/{docId}`. Rules ensure that:
+
+- Only authenticated users can read/write their own flight records.
+- Created documents must include `departure_date`, `departure_airport_iata`, `arrival_airport_iata`, and `airline_iata` and `departure_date` must be a Firestore timestamp.
+
+To deploy those rules to your Firebase project use:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+Or, during `firebase init`, point the Firestore rules location to `firestore.rules` so rules are deployed together with hosting.
 
 ## Testing
 
@@ -208,3 +250,20 @@ describe("MyComponent", () => {
 * [ ] Add a feature to upload new flight data.
 * [ ] Connect to a backend service for dynamic data fetching.
 * [ ] Support importing flight data from various formats (CSV, JSON, etc.).
+
+Notes & small follow-ups I can do next (pick what you want)
+Add Firestore security rules sample to enforce that users can only read/write their own flight docs.
+Wire user id metadata (e.g., store user email or displayName) when first writing flight docs.
+Implement batched writes using writeBatch and doc() to atomically write up to 500 docs per batch (I used addDoc sequentially to keep it straightforward; I can change to batch+set if you prefer).
+Add offline UI indication (e.g., show that writes are pending and sync status).
+Add stricter TypeScript types for Firebase client and flight documents.
+Implement the Python migration script to move old Supabase data to Firestore (you asked you'll request it later — I can prepare a migration plan and script when you’re ready).
+If you'd like, I can:
+Add Firestore security rules + example rules file and instructions.
+Convert getUserFlights to accept a uid parameter (I already changed getFilteredUserFlights to accept uid; I can add a convenience wrapper).
+Improve CSV upload to use write batches for better atomicity.
+Would you like me to:
+Add Firestore security rules (recommended next step), or
+Implement batched writes with writeBatch (instead of sequential addDoc), or
+Start the Python migration script (you said you'll ask later), or
+Anything else now?

@@ -1,5 +1,12 @@
 import { create } from "zustand";
-import { getUserFlights, getFilteredUserFlights } from "./utils/flightService";
+import { getFilteredUserFlights } from "./utils/flightService";
+import { onAuthStateChanged } from "./firebaseClient";
+
+// Track current authenticated user's uid for non-react modules (store)
+let currentUid: string | null = null;
+onAuthStateChanged((user) => {
+  currentUid = user?.uid ?? null;
+});
 
 interface Flight {
   id: number;
@@ -32,7 +39,18 @@ const useFlightStore = create<FlightStoreState>((set) => ({
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
-      const flights = await getUserFlights();
+      if (!currentUid) {
+        // Not authenticated yet; set empty results
+        set({
+          flights: [],
+          filteredFlights: [],
+          allFlights: [],
+          isLoading: false,
+        });
+        return;
+      }
+
+      const flights = await getFilteredUserFlights(currentUid, "all");
       set({
         flights,
         filteredFlights: flights,
@@ -47,7 +65,11 @@ const useFlightStore = create<FlightStoreState>((set) => ({
   setSelectedYear: async (year: string) => {
     set({ selectedYear: year, isLoading: true, error: null });
     try {
-      const filteredFlights = await getFilteredUserFlights(year);
+      if (!currentUid) {
+        set({ filteredFlights: [], isLoading: false });
+        return;
+      }
+      const filteredFlights = await getFilteredUserFlights(currentUid, year);
       set({ filteredFlights, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });

@@ -12,9 +12,10 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import { supabaseClient } from "../supabaseClient";
+import { addFlightForUser } from "../firebaseClient";
+import { useAuth } from "../context/AuthContext";
 import { notifications } from "@mantine/notifications";
-import FlightCsvUpload from "./FlightCsvUpload.jsx";
+import FlightCsvUpload from "./FlightCsvUpload";
 import { airlinesInfo } from "../utils/airlinesInfo";
 import { airportsInfo } from "../utils/airportsInfo";
 
@@ -32,6 +33,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
   const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [addReturn, setAddReturn] = useState(false);
+  const { user } = useAuth();
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm({
     initialValues: {
@@ -91,7 +94,14 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
   }, []);
 
   const handleSubmit = async (values: typeof form.values) => {
+    setSubmitError(null);
     setLoading(true);
+    console.log("FlightEntryForm: submit clicked", { values });
+    notifications.show({
+      title: "Saving",
+      message: "Saving flight(s)...",
+      color: "blue",
+    });
 
     try {
       const flightsToInsert = [
@@ -114,18 +124,19 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
         });
       }
 
-      const { error } = await supabaseClient
-        .from("flights")
-        .insert(flightsToInsert);
-
-      if (error) {
-        notifications.show({
-          title: "Error",
-          message: `Could not save flight(s): ${error.message}`,
-          color: "red",
-        });
+      const uid = user?.uid || null;
+      if (!uid) {
+        const msg = "You must be signed in to save flights";
+        setSubmitError(msg);
+        notifications.show({ title: "Error", message: msg, color: "red" });
         setLoading(false);
         return;
+      }
+
+      // Save each flight under the user's Firestore collection
+      for (const [idx, f] of flightsToInsert.entries()) {
+        console.log(`Saving flight ${idx + 1}/${flightsToInsert.length}`, f);
+        await addFlightForUser(uid, f);
       }
 
       notifications.show({
@@ -142,14 +153,43 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
       if (onSaved) onSaved();
     } catch (error: any) {
       console.error("Error saving flight:", error);
+      const msg = error?.message || String(error) || "Unknown error";
+      setSubmitError(msg);
       notifications.show({
         title: "Error",
-        message: `Could not save flight(s): ${error.message}`,
+        message: `Could not save flight(s): ${msg}`,
         color: "red",
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  // Wrapper for the Save button: validate form first and show notification on errors
+  const handleSaveClick = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("FlightEntryForm: save clicked");
+    // Reset previous submit errors
+    setSubmitError(null);
+    // Run validation (mutates form.errors). Mantine's validate may return boolean or object,
+    // so check errors directly for robustness.
+    form.validate();
+    const errorMessages = Object.values(form.errors).filter(
+      Boolean,
+    ) as string[];
+    const hasErrors = errorMessages.length > 0;
+    if (hasErrors) {
+      const msg = errorMessages.join("; ") || "Please check required fields";
+      setSubmitError(msg);
+      notifications.show({
+        title: "Validation error",
+        message: msg,
+        color: "red",
+      });
+      return;
+    }
+
+    await handleSubmit(form.values);
   };
 
   return (
@@ -184,6 +224,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   label="Departure Airport"
                   placeholder="Search airports"
                   searchable
+                  limit={5}
                   required
                   data={airportOptions}
                   maxDropdownHeight={280}
@@ -195,6 +236,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   label="Arrival Airport"
                   placeholder="Search airports"
                   searchable
+                  limit={5}
                   required
                   data={airportOptions}
                   maxDropdownHeight={280}
@@ -207,6 +249,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                     label="Airline"
                     placeholder="Search airlines"
                     searchable
+                    limit={5}
                     required
                     data={airlineOptions}
                     maxDropdownHeight={280}
@@ -251,6 +294,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                         label="Airline"
                         placeholder="Search airlines"
                         searchable
+                        limit={5}
                         required
                         data={airlineOptions}
                         maxDropdownHeight={280}
@@ -277,8 +321,27 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                   </Stack>
                 )}
 
+                {!user && (
+                  <div style={{ marginTop: 8 }}>
+                    <div style={{ color: "orange" }}>
+                      You are not signed in. Please sign in to save flights.
+                    </div>
+                  </div>
+                )}
+
+                {submitError && (
+                  <div style={{ marginTop: 8 }}>
+                    <div style={{ color: "red" }}>{submitError}</div>
+                  </div>
+                )}
+
                 <Group justify="flex-end" mt="md">
-                  <Button type="submit" loading={loading}>
+                  <Button
+                    type="button"
+                    onClick={handleSaveClick}
+                    loading={loading}
+                    disabled={!user}
+                  >
                     Save Flight{addReturn ? "s" : ""}
                   </Button>
                 </Group>

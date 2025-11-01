@@ -1,5 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabaseClient } from "../supabaseClient.ts";
+import { onAuthStateChanged, signOutUser } from "../firebaseClient";
 
 const AuthContext = createContext({});
 
@@ -12,25 +13,20 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    const {
-      data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    const unsubscribe = onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser ?? null);
+      setSession(firebaseUser ?? null);
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
-    return () => {
-      subscription?.unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const value = {
     session,
     user,
     loading, // Expose loading state
-    signOut: () => supabaseClient.auth.signOut(),
+    signOut: () => signOutUser(),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

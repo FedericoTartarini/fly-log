@@ -1,4 +1,6 @@
-import { supabaseClient } from "../supabaseClient";
+import { firestore } from "../firebaseClient";
+import { Timestamp } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { airlinesInfo } from "./airlinesInfo";
 import { airportsInfo } from "./airportsInfo";
 
@@ -107,61 +109,45 @@ export const enrichFlightData = (flight: any): any => {
 };
 
 /**
- * Fetches all flights for the current user and enriches them with additional data
- * @returns Array of enriched flight objects
- */
-export const getUserFlights = async (): Promise<any[]> => {
-  const { data, error } = await supabaseClient
-    .from("flights")
-    .select("*")
-    .order("departure_date", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching flights:", error);
-    throw error;
-  }
-
-  return (data || []).map((flight: any) => enrichFlightData(flight));
-};
-
-/**
  * Fetches flights filtered by year for the current user and enriches them with additional data
  * @param year - Year to filter by, or "all"
  * @returns Array of filtered enriched flight objects
  */
 export const getFilteredUserFlights = async (
+  uid: string,
   year: number | string,
 ): Promise<any[]> => {
-  let query = supabaseClient.from("flights").select("*");
+  if (!uid) throw new Error("User id is required to fetch flights");
 
-  const today: string = new Date().toISOString().split("T")[0];
+  const colRef = collection(firestore, "flights", uid, "records");
+  const todayDate = new Date();
+
+  let q;
   if (year === "upcoming") {
-    query = query.gt("departure_date", today);
+    q = query(
+      colRef,
+      where("departure_date", ">", Timestamp.fromDate(todayDate)),
+      orderBy("departure_date", "desc"),
+    );
   } else if (year === "all") {
-    query = query.lte("departure_date", today);
+    q = query(colRef, orderBy("departure_date", "desc"));
   } else {
-    const startDate = `${year}-01-01`;
-    let endDate = `${year}-12-31`;
-
-    const thisYear = today.split("-")[0];
-
-    if (year === thisYear) {
-      endDate = today;
+    const startDate = new Date(Number(year), 0, 1);
+    let endDate = new Date(Number(year), 11, 31, 23, 59, 59);
+    const thisYear = new Date().getFullYear().toString();
+    if (String(year) === thisYear) {
+      endDate = todayDate;
     }
 
-    query = query
-      .gte("departure_date", startDate)
-      .lte("departure_date", endDate);
+    q = query(
+      colRef,
+      where("departure_date", ">=", Timestamp.fromDate(startDate)),
+      where("departure_date", "<=", Timestamp.fromDate(endDate)),
+      orderBy("departure_date", "desc"),
+    );
   }
 
-  const { data, error } = await query.order("departure_date", {
-    ascending: false,
-  });
-
-  if (error) {
-    console.error("Error fetching filtered flights:", error);
-    throw error;
-  }
-
+  const snap = await getDocs(q);
+  const data = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
   return (data || []).map((flight: any) => enrichFlightData(flight));
 };
