@@ -2,15 +2,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MantineProvider } from "@mantine/core";
 
-import FlightYearFilter from "./FlightYearFilter";
-import useFlightStore from "../store.ts";
-
-// Mock the Zustand store BEFORE importing the component
+// Prepare mocks and mock the store before importing the component
 const mockSetSelectedYear = vi.fn();
 const mockFlights = [
   {
     id: 1,
-    departure_date: "2023-05-01",
+    // use ISO date strings so parsing is deterministic in tests
+    departure_date: "2023-05-01T10:54:31Z",
     departure_time: "10:00",
     departure_airport_iata: "JFK",
     arrival_airport_iata: "LAX",
@@ -18,7 +16,7 @@ const mockFlights = [
   },
   {
     id: 2,
-    departure_date: "2022-08-15",
+    departure_date: "2022-08-15T14:30:00Z",
     departure_time: "14:30",
     departure_airport_iata: "LAX",
     arrival_airport_iata: "ORD",
@@ -26,7 +24,7 @@ const mockFlights = [
   },
 ];
 
-vi.mock("../store", () => ({
+vi.mock("../store.ts", () => ({
   __esModule: true,
   default: vi.fn(() => ({
     selectedYear: "all",
@@ -38,6 +36,9 @@ vi.mock("../store", () => ({
     error: null,
   })),
 }));
+
+import FlightYearFilter from "./FlightYearFilter";
+import useFlightStore from "../store.ts";
 
 const renderWithProvider = (component) =>
   render(<MantineProvider>{component}</MantineProvider>);
@@ -64,17 +65,18 @@ describe("FlightYearFilter", () => {
     expect(select.value).toBe("all");
     // Check that the options exist
     const options = screen.getAllByRole("option");
-    expect(options[0]).toHaveTextContent("All Past Flights");
+    expect(options[0]).toHaveTextContent("All Flights");
     expect(options[1]).toHaveTextContent("Upcoming Flights");
-    expect(options[2]).toHaveTextContent("2023");
-    expect(options[3]).toHaveTextContent("2022");
+    expect(options[2]).toHaveTextContent("Past Flights");
+    expect(options[3]).toHaveTextContent("2023");
+    expect(options[4]).toHaveTextContent("2022");
   });
 
   it("displays years in descending order from past flights only", () => {
     renderWithProvider(<FlightYearFilter />);
     const options = screen.getAllByRole("option");
-    expect(options[2]).toHaveTextContent("2023");
-    expect(options[3]).toHaveTextContent("2022");
+    expect(options[3]).toHaveTextContent("2023");
+    expect(options[4]).toHaveTextContent("2022");
   });
 
   it("calls setSelectedYear when selection changes", () => {
