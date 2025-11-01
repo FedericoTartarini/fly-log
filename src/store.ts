@@ -1,8 +1,8 @@
+// src/store.ts
 import { create } from "zustand";
 import { getFilteredUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
 
-// Track current authenticated user's uid for non-react modules (store)
 let currentUid: string | null = null;
 onAuthStateChanged((user) => {
   currentUid = user?.uid ?? null;
@@ -18,9 +18,8 @@ interface Flight {
 }
 
 interface FlightStoreState {
-  flights: Flight[];
-  filteredFlights: Flight[];
-  allFlights: Flight[];
+  allFlights: Flight[]; // master list from backend
+  filteredFlights: Flight[]; // UI-facing filtered subset
   selectedYear: string;
   isLoading: boolean;
   error: string | null;
@@ -28,10 +27,21 @@ interface FlightStoreState {
   setSelectedYear: (year: string) => Promise<void>;
 }
 
-const useFlightStore = create<FlightStoreState>((set) => ({
-  flights: [],
-  filteredFlights: [],
+const filterByYear = (flights: Flight[], year: string) => {
+  if (!year || year === "all") return flights;
+  return flights.filter((f) => {
+    try {
+      const d = new Date(f.departure_date);
+      return d.getFullYear().toString() === year;
+    } catch {
+      return false;
+    }
+  });
+};
+
+const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
+  filteredFlights: [],
   selectedYear: "all",
   isLoading: false,
   error: null,
@@ -40,21 +50,17 @@ const useFlightStore = create<FlightStoreState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       if (!currentUid) {
-        // Not authenticated yet; set empty results
-        set({
-          flights: [],
-          filteredFlights: [],
-          allFlights: [],
-          isLoading: false,
-        });
+        set({ allFlights: [], filteredFlights: [], isLoading: false });
         return;
       }
 
-      const flights = await getFilteredUserFlights(currentUid, "all");
+      // getFilteredUserFlights(currentUid, "all") should return all user flights
+      const allFlights = await getFilteredUserFlights(currentUid, "all");
+      const filteredFlights = filterByYear(allFlights, get().selectedYear);
+
       set({
-        flights,
-        filteredFlights: flights,
-        allFlights: flights,
+        allFlights,
+        filteredFlights,
         isLoading: false,
       });
     } catch (error: any) {
@@ -65,11 +71,8 @@ const useFlightStore = create<FlightStoreState>((set) => ({
   setSelectedYear: async (year: string) => {
     set({ selectedYear: year, isLoading: true, error: null });
     try {
-      if (!currentUid) {
-        set({ filteredFlights: [], isLoading: false });
-        return;
-      }
-      const filteredFlights = await getFilteredUserFlights(currentUid, year);
+      const allFlights = get().allFlights;
+      const filteredFlights = filterByYear(allFlights, year);
       set({ filteredFlights, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
