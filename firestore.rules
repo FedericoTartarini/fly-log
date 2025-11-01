@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Each user has a flights collection: /flights/{userId}/records/{docId}
+    match /flights/{userId}/records/{docId} {
+
+      // Allow read/list only for authenticated users who own the userId
+      allow read, list: if request.auth != null && request.auth.uid == userId;
+
+      // Allow creating a flight doc only for the authenticated owner and require
+      // certain fields with expected types.
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        // required fields for a flight record
+        && request.resource.data.keys().hasAll([
+          'departure_date',
+          'departure_airport_iata',
+          'arrival_airport_iata',
+          'airline_iata'
+        ])
+        // basic type checks
+        && request.resource.data.departure_date is timestamp
+        && request.resource.data.departure_airport_iata is string
+        && request.resource.data.arrival_airport_iata is string
+        && request.resource.data.airline_iata is string;
+
+      // Allow updates only for the authenticated owner. Ensure departure_date (if present)
+      // remains a timestamp and string fields remain strings.
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && (
+          !('departure_date' in request.resource.data) || request.resource.data.departure_date is timestamp
+        )
+        && (
+          !('departure_airport_iata' in request.resource.data) || request.resource.data.departure_airport_iata is string
+        )
+        && (
+          !('arrival_airport_iata' in request.resource.data) || request.resource.data.arrival_airport_iata is string
+        )
+        && (
+          !('airline_iata' in request.resource.data) || request.resource.data.airline_iata is string
+        );
+
+      // Allow delete only for the authenticated owner
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Deny access to any other document paths by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
