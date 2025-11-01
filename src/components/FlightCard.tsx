@@ -3,6 +3,7 @@
 import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
+import { formatDate } from "../utils/dateUtils";
 
 interface FlightCardProps {
   flight: enhancedFlight;
@@ -55,10 +56,12 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
 
           <Group gap="xs">
             <Text size="sm" c="dimmed">
-              {new Date(flight.departure_date).toLocaleDateString()}
+              {formatDate(flight.departure_date) || ""}
             </Text>
             <Text size="sm" c="dimmed">
-              {flight.flight_time.toFixed(2)}h flight time
+              {typeof flight.flight_time === "number"
+                ? `${flight.flight_time.toFixed(2)}h flight time`
+                : ""}
             </Text>
           </Group>
         </Group>

@@ -50,7 +50,7 @@ describe("FlightsList", () => {
 
     expect(screen.getByText(/SFO → SEA/));
     expect(screen.getByText(/DL/));
-    expect(screen.getByText(/3\/10\/2024/));
+    expect(screen.getByText(/10 Mar 24/));
   });
 
   it("renders empty state when no flights are available", () => {

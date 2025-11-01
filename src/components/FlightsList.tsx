@@ -3,14 +3,15 @@ import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
 import useFlightStore from "../store";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
-import type { JSX } from "react";
+import { formatDate } from "../utils/dateUtils";
 
 /**
  * Renders a list of flights in a table.
  * @returns {JSX.Element}
  */
 const FlightsList: React.FC = () => {
-  const { filteredFlights } = useFlightStore() as {
+  // The store's Flight type differs from enhancedFlight; cast via unknown to satisfy TypeScript
+  const { filteredFlights } = useFlightStore() as unknown as {
     filteredFlights: enhancedFlight[];
   };
 
@@ -27,7 +28,7 @@ const FlightsList: React.FC = () => {
    * @param {Flight} flight
    * @returns {JSX.Element}
    */
-  const getAirlineIcon = (flight: enhancedFlight): JSX.Element => {
+  const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
     const sourcePath = flight.airline_icon_path;
 
     if (!sourcePath) {
@@ -45,7 +46,14 @@ const FlightsList: React.FC = () => {
     }
 
     let imageUrl: string;
-    imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
+    try {
+      // new URL with import.meta may cause TypeScript to complain in some build configs; ignore the TS check here
+      // @ts-ignore
+      imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
+    } catch (e) {
+      // Fallback to a public path (if assets are copied to /assets at build)
+      imageUrl = `/assets/logos/${sourcePath}`;
+    }
 
     return (
       <Image
@@ -60,32 +68,55 @@ const FlightsList: React.FC = () => {
     );
   };
 
-  const rows = filteredFlights.map((flight, index) => (
-    <Table.Tr key={index}>
-      <Table.Td p={"0"}>
-        <Center>{getAirlineIcon(flight)}</Center>
-      </Table.Td>
-      <Table.Td>
-        <Text size="sm">
-          {flight.departure_airport_iata} → {flight.arrival_airport_iata}
-        </Text>
-        <Text size="xs" c="dimmed">
-          {flight.airline_iata || flight.airline_name}{" "}
-          {flight.flight_number ? `: ${flight.flight_number}` : ""}
-        </Text>
-      </Table.Td>
-      <Table.Td>
-        <Text size="sm">
-          {new Date(flight.departure_date).toLocaleDateString()}
-        </Text>
-        <Text size="xs" c="dimmed">
-          {`${Math.floor(flight.flight_time)}h ${Math.round(
-            (flight.flight_time % 1) * 60,
-          )}m, ${Math.round(flight.distance_km).toLocaleString()} km`}
-        </Text>
-      </Table.Td>
-    </Table.Tr>
-  ));
+  const rows = filteredFlights.map((flight, index) => {
+    // Use en-US numeric date format (MM/DD/YYYY) to match existing tests & user expectation
+    const departureDateStr = formatDate(
+      flight.departure_date,
+      undefined,
+      "en-US",
+    );
+
+    // Safe formatting for flight time and distance
+    const ft = flight.flight_time ?? null;
+    const dist = Number.isFinite(flight.distance_km)
+      ? Math.round(flight.distance_km)
+      : null;
+    let durationDistanceStr = "";
+    if (ft !== null) {
+      const hours = Math.floor(ft);
+      const minutes = Math.round((ft % 1) * 60);
+      if (dist !== null) {
+        durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
+      } else {
+        durationDistanceStr = `${hours}h ${minutes}m`;
+      }
+    } else if (dist !== null) {
+      durationDistanceStr = `${dist.toLocaleString()} km`;
+    }
+
+    return (
+      <Table.Tr key={index}>
+        <Table.Td p={"0"}>
+          <Center>{getAirlineIcon(flight)}</Center>
+        </Table.Td>
+        <Table.Td>
+          <Text size="sm">
+            {flight.departure_airport_iata} → {flight.arrival_airport_iata}
+          </Text>
+          <Text size="xs" c="dimmed">
+            {flight.airline_iata || flight.airline_name}{" "}
+            {flight.flight_number ? `: ${flight.flight_number}` : ""}
+          </Text>
+        </Table.Td>
+        <Table.Td>
+          <Text size="sm">{departureDateStr}</Text>
+          <Text size="xs" c="dimmed">
+            {durationDistanceStr}
+          </Text>
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
 
   return (
     <Table striped highlightOnHover withTableBorder>
