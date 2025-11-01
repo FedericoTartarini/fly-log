@@ -10,11 +10,11 @@
  *  - YY: two-digit year
  *  - YYYY: four-digit year
  *
- * Example: formatDate(value, "DD MMM YY", "en-US") -> "10 Nov 24"
+ * Example: formatDate(value, "DD MMM YY", "en-AU") -> "10 Nov 24"
  *
  * @param value any date-like value
  * @param format optional format string using tokens (DD, D, MMM, MMMM, YY, YYYY). If omitted, returns locale date string.
- * @param locale optional BCP-47 locale string (default: 'en-US')
+ * @param locale optional BCP-47 locale string (default: 'en-AU')
  */
 export function formatDate(
   value: any,

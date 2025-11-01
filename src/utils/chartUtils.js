@@ -26,13 +26,13 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
 
     switch (timeGrouping) {
       case "dayOfWeek":
-        key = date.toLocaleDateString("en-US", { weekday: "long" });
+        key = date.toLocaleDateString("en-AU", { weekday: "long" });
         break;
       case "year":
         key = date.getFullYear().toString();
         break;
       case "month":
-        key = date.toLocaleDateString("en-US", { month: "long" });
+        key = date.toLocaleDateString("en-AU", { month: "long" });
         break;
       default:
         key = "Unknown";

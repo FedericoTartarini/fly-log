@@ -69,11 +69,10 @@ const FlightsList: React.FC = () => {
   };
 
   const rows = filteredFlights.map((flight, index) => {
-    // Use en-US numeric date format (MM/DD/YYYY) to match existing tests & user expectation
     const departureDateStr = formatDate(
       flight.departure_date,
       undefined,
-      "en-US",
+      "en-AU",
     );
 
     // Safe formatting for flight time and distance
