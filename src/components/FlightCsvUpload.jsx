@@ -200,9 +200,7 @@ const FlightCsvUpload = ({ onComplete }) => {
         </Text>
 
         <Text size="sm" c="dimmed">
-          {t('csv.validation_error_message')} departure_date, departure_time,
-          departure_airport_iata, arrival_airport_iata, airline_iata. Optional:
-          flight_number.
+          {t('csv.validation_error_message')} {t('csv.required_columns')}. Optional: {t('csv.optional_columns')}.
         </Text>
 
         <FileInput

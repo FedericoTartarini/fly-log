@@ -54,7 +54,8 @@ export function formatDate(
   const date = parseToDate(value);
   if (!date) return '';
 
-  const currentLocale = locale || i18n.language || 'en-AU';
+  // Safely get locale, with fallback if i18n is not initialized
+  const currentLocale = locale || (i18n.isInitialized ? i18n.language : null) || 'en-AU';
 
   // If no format specified, return locale default date
   if (!format) {

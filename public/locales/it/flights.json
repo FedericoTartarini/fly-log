@@ -5,7 +5,8 @@
     "button": "Carica voli",
     "validation_error_title": "Errore di validazione CSV",
     "validation_error_message": "Il tuo CSV deve includere queste colonne:",
-    "required_columns": "Colonne richieste",
+    "required_columns": "departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata",
+    "optional_columns": "flight_number",
     "upload_success": "Voli caricati con successo!",
     "upload_error": "Errore nel caricamento dei voli"
   },

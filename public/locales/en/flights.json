@@ -5,7 +5,8 @@
     "button": "Upload Flights",
     "validation_error_title": "CSV Validation Error",
     "validation_error_message": "Your CSV must include these columns:",
-    "required_columns": "Required columns",
+    "required_columns": "departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata",
+    "optional_columns": "flight_number",
     "upload_success": "Flights uploaded successfully!",
     "upload_error": "Error uploading flights"
   },

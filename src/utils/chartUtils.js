@@ -54,7 +54,8 @@ export const getDeparturesByCountry = (flights) => {
 
 export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
   const grouping = {};
-  const locale = i18n.language || 'en-AU';
+  // Safely get locale with fallback if i18n is not initialized
+  const locale = (i18n.isInitialized ? i18n.language : null) || 'en-AU';
 
   flights.forEach((flight) => {
     if (!flight.departure_date) return;
