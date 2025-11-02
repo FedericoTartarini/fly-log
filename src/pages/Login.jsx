@@ -18,10 +18,12 @@ import {
 } from "../firebaseClient";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
 
 function Login() {
   const { session } = useAuth();
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,11 +44,11 @@ function Login() {
       const msg = parseFirebaseError(e);
       // In dev show the full code too for easier debugging
       const code = e?.code || e?._tokenResponse?.error?.message || "";
-      setError(
-        process.env.NODE_ENV === "development" && code
-          ? `${msg} (${code})`
-          : msg,
-      );
+      const isDev =
+        typeof process !== "undefined"
+          ? process.env?.NODE_ENV === "development"
+          : false;
+      setError(isDev && code ? `${msg} (${code})` : msg);
     } finally {
       setLoading(false);
     }
@@ -66,11 +68,11 @@ function Login() {
       console.error("signUpWithEmail failed:", e);
       const msg = parseFirebaseError(e);
       const code = e?.code || e?._tokenResponse?.error?.message || "";
-      setError(
-        process.env.NODE_ENV === "development" && code
-          ? `${msg} (${code})`
-          : msg,
-      );
+      const isDev2 =
+        typeof process !== "undefined"
+          ? process.env?.NODE_ENV === "development"
+          : false;
+      setError(isDev2 && code ? `${msg} (${code})` : msg);
     } finally {
       setLoading(false);
     }
@@ -116,16 +118,16 @@ function Login() {
     <Container size="xs" mt="xl">
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <Stack>
-          <Title ta="center">Welcome Back</Title>
+          <Title ta="center">{t("login.title")}</Title>
           <TextInput
-            label="Email"
+            label={t("login.email")}
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <PasswordInput
-            label="Password"
+            label={t("login.password")}
             placeholder="Your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -135,7 +137,7 @@ function Login() {
 
           {mode === "signup" && (
             <PasswordInput
-              label="Confirm Password"
+              label={t("login.confirm_password")}
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -150,7 +152,7 @@ function Login() {
               }
               loading={loading}
             >
-              {mode === "signin" ? "Sign in" : "Sign up"}
+              {mode === "signin" ? t("login.sign_in") : t("login.sign_up")}
             </Button>
 
             <Button
@@ -160,8 +162,8 @@ function Login() {
               loading={loading}
             >
               {mode === "signin"
-                ? "Sign in with Google"
-                : "Sign up with Google"}
+                ? t("login.sign_in_google")
+                : t("login.sign_up_google")}
             </Button>
           </Group>
 
@@ -172,7 +174,7 @@ function Login() {
                 size="sm"
                 onClick={() => setMode("signup")}
               >
-                Don't have an account? Sign up
+                {t("login.dont_have_account")}
               </Anchor>
             ) : (
               <Anchor
@@ -180,7 +182,7 @@ function Login() {
                 size="sm"
                 onClick={() => setMode("signin")}
               >
-                Already have an account? Sign in
+                {t("login.already_have_account")}
               </Anchor>
             )}
           </div>

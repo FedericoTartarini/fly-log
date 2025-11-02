@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider, ColorSchemeScript } from "@mantine/core";
+import "./i18n"; // initialize i18n
 
 import { App } from "./App.jsx";
 import FlightsStats from "./pages/FlightsStats.jsx";

@@ -1,0 +1,15 @@
+{
+  "login": {
+    "title": "Bentornato",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Conferma Password",
+    "sign_in": "Accedi",
+    "sign_up": "Registrati",
+    "sign_in_google": "Accedi con Google",
+    "sign_up_google": "Registrati con Google",
+    "dont_have_account": "Non hai un account? Registrati",
+    "already_have_account": "Hai già un account? Accedi",
+    "passwords_mismatch": "Le password non corrispondono"
+  }
+}
