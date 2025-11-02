@@ -9,13 +9,9 @@ import {
   Title,
   Stack,
   Anchor,
+  Center,
 } from "@mantine/core";
-import { IconBrandGoogle } from "@tabler/icons-react";
-import {
-  signInWithEmail,
-  signInWithGoogle,
-  signUpWithEmail,
-} from "../firebaseClient";
+import { signInWithEmail, signUpWithEmail } from "../firebaseClient";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -78,18 +74,6 @@ function Login() {
     }
   };
 
-  const handleGoogle = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await signInWithGoogle();
-    } catch (e) {
-      setError(e.message || String(e));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const parseFirebaseError = (err) => {
     if (!err) return "Unknown error";
     const raw = err.message || String(err);
@@ -145,7 +129,7 @@ function Login() {
             />
           )}
 
-          <Group position="apart">
+          <Center>
             <Button
               onClick={
                 mode === "signin" ? handleEmailSignIn : handleEmailSignUp
@@ -154,18 +138,9 @@ function Login() {
             >
               {mode === "signin" ? t("sign_in") : t("sign_up")}
             </Button>
+          </Center>
 
-            <Button
-              color="gray"
-              leftIcon={<IconBrandGoogle />}
-              onClick={handleGoogle}
-              loading={loading}
-            >
-              {mode === "signin" ? t("sign_in_google") : t("sign_up_google")}
-            </Button>
-          </Group>
-
-          <div style={{ marginTop: 8, textAlign: "center" }}>
+          <div style={{ textAlign: "center" }}>
             {mode === "signin" ? (
               <Anchor
                 component="button"
