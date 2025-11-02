@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Grid, Group, Image, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store.ts";
@@ -9,6 +10,7 @@ import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
 
 function StatsSummary() {
+  const { t } = useTranslation('flights');
   const { filteredFlights } = useFlightStore();
   const navigate = useNavigate();
 
@@ -27,21 +29,21 @@ function StatsSummary() {
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={filteredFlights.length}
-            label="Total Flights"
+            label={t('stats.total_flights')}
             id={IDS.STATS.TOTAL_FLIGHTS}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={Math.round(stats.totalDistance).toLocaleString()}
-            label="Distance (km)"
+            label={t('stats.total_distance')}
             id={IDS.STATS.TOTAL_DISTANCE}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={(stats.totalFlightTime / 24).toFixed(1)}
-            label="Flight Time (days)"
+            label={t('stats.total_time')}
             id={IDS.STATS.TOTAL_TIME}
           />
         </Grid.Col>
@@ -62,7 +64,7 @@ function StatsSummary() {
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.countries}
-            label="Countries Visited"
+            label={t('stats.total_countries')}
             id={IDS.STATS.COUNTRIES_VISITED}
           />
         </Grid.Col>
@@ -88,7 +90,7 @@ function StatsSummary() {
 
       <Group justify="center" mt="md">
         <Button variant="light" onClick={() => navigate(PATHS.FLIGHTS)}>
-          View Flights
+          {t('stats.view_flights')}
         </Button>
       </Group>
     </Card>

@@ -11,7 +11,8 @@
   },
   "filter": {
     "label": "Filter by Year",
-    "all_years": "All Years"
+    "all_years": "All Past Flights",
+    "upcoming": "Upcoming Flights"
   },
   "no_flights_card": {
     "title": "No flights yet",
@@ -30,14 +31,18 @@
   },
   "distance": {
     "title": "Distance Statistics",
-    "total_km": "Total Distance",
-    "average_km": "Average Flight",
+    "total_km": "Total Distance (km)",
+    "average_km": "Mean Distance (km)",
     "longest_km": "Longest Flight",
     "shortest_km": "Shortest Flight",
-    "journey_title": "Longest Journey",
+    "journey_title": "Journey to Space",
     "destinations": {
-      "from": "From",
-      "to": "To"
+      "earth": "🌍 Earth",
+      "moon": "🌙 Moon",
+      "mars": "🚀 Mars",
+      "earth_label": "{{times}}x around Earth",
+      "moon_label": "{{percentage}}% to Moon",
+      "mars_label": "{{percentage}}% to Mars"
     }
   },
   "charts": {

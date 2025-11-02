@@ -10,6 +10,7 @@ import {
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 import { supabaseClient } from "../supabaseClient.ts";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
@@ -75,6 +76,7 @@ export const validateCsvData = (data) => {
 };
 
 const FlightCsvUpload = ({ onComplete }) => {
+  const { t } = useTranslation('flights');
   const [file, setFile] = useState(null);
   const [parsing, setParsing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -163,7 +165,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           // Show completion notification
           notifications.show({
-            title: "CSV Upload Complete",
+            title: t('csv.upload_success'),
             message: `Successfully added ${successCount} flights. Failed: ${errorCount}`,
             color: errorCount > 0 ? "orange" : "green",
             icon:
@@ -194,11 +196,11 @@ const FlightCsvUpload = ({ onComplete }) => {
     <Paper p="md" withBorder>
       <Stack>
         <Text size="lg" fw={500}>
-          Upload Flight Data from CSV
+          {t('csv.title')}
         </Text>
 
         <Text size="sm" c="dimmed">
-          Your CSV must include these columns: departure_date, departure_time,
+          {t('csv.validation_error_message')} departure_date, departure_time,
           departure_airport_iata, arrival_airport_iata, airline_iata. Optional:
           flight_number.
         </Text>
@@ -206,7 +208,7 @@ const FlightCsvUpload = ({ onComplete }) => {
         <FileInput
           accept=".csv"
           placeholder="Select CSV file"
-          label="Flight data CSV"
+          label={t('csv.label')}
           description="Upload your flight data in CSV format"
           icon={<IconUpload size={14} />}
           value={file}
@@ -215,7 +217,7 @@ const FlightCsvUpload = ({ onComplete }) => {
         />
 
         {error && (
-          <Alert color="red" title="Error" icon={<IconAlertCircle size={16} />}>
+          <Alert color="red" title={t('csv.validation_error_title')} icon={<IconAlertCircle size={16} />}>
             {error}
           </Alert>
         )}
@@ -231,7 +233,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
         <Group justify="flex-end">
           <Button onClick={handleUpload} loading={parsing} disabled={!file}>
-            Upload Flights
+            {t('csv.button')}
           </Button>
         </Group>
       </Stack>

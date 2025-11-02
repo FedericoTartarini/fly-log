@@ -11,7 +11,8 @@
   },
   "filter": {
     "label": "Filtra per anno",
-    "all_years": "Tutti gli anni"
+    "all_years": "Tutti i voli passati",
+    "upcoming": "Voli in programma"
   },
   "no_flights_card": {
     "title": "Nessun volo ancora",
@@ -30,14 +31,18 @@
   },
   "distance": {
     "title": "Statistiche distanza",
-    "total_km": "Distanza totale",
-    "average_km": "Volo medio",
+    "total_km": "Distanza totale (km)",
+    "average_km": "Distanza media (km)",
     "longest_km": "Volo più lungo",
     "shortest_km": "Volo più breve",
-    "journey_title": "Viaggio più lungo",
+    "journey_title": "Viaggio nello spazio",
     "destinations": {
-      "from": "Da",
-      "to": "A"
+      "earth": "🌍 Terra",
+      "moon": "🌙 Luna",
+      "mars": "🚀 Marte",
+      "earth_label": "{{times}}x intorno alla Terra",
+      "moon_label": "{{percentage}}% verso la Luna",
+      "mars_label": "{{percentage}}% verso Marte"
     }
   },
   "charts": {

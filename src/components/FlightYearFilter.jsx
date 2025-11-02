@@ -1,8 +1,10 @@
 import React from "react";
 import { NativeSelect } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
 
 const FlightYearFilter = () => {
+  const { t } = useTranslation('flights');
   const { selectedYear, setSelectedYear, allFlights } = useFlightStore();
 
   // Only consider past flights for year options
@@ -28,10 +30,10 @@ const FlightYearFilter = () => {
       mt="md"
       mb="xs"
       id="flight-year-filter"
-      label="Fliter flights"
+      label={t('filter.label')}
       data={[
-        { value: "all", label: "All Past Flights" },
-        { value: "upcoming", label: "Upcoming Flights" },
+        { value: "all", label: t('filter.all_years') },
+        { value: "upcoming", label: t('filter.upcoming') },
         ...years.map((year) => ({
           value: String(year),
           label: String(year),
