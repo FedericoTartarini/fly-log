@@ -1,4 +1,5 @@
 // src/utils/dateUtils.ts
+import i18n from "i18next";
 
 /**
  * Format a date-like value into a string. Supports Firestore Timestamp, objects with `seconds`, Date,
@@ -18,8 +19,8 @@
  */
 export function formatDate(
   value: any,
-  format: string = "DD MMM YY",
-  locale = "en-AU",
+  format?: string = "DD MMM YY",
+  locale?: string,
 ): string {
   if (value === null || value === undefined || value === "") return "";
   try {
@@ -38,19 +39,22 @@ export function formatDate(
 
     if (!d || Number.isNaN(d.getTime())) return "";
 
-    if (!format) return d.toLocaleDateString(locale);
+    // Determine effective locale: explicit param -> i18n.language -> fallback 'en-US'
+    const effectiveLocale = locale || (i18n && i18n.language) || "en-AU";
+
+    if (!format) return d.toLocaleDateString(effectiveLocale);
 
     // Token replacements
     const day = d.getDate();
     const dayP = String(day).padStart(2, "0");
     const year = d.getFullYear();
     const year2 = String(year).slice(-2);
-    const monthShort = new Intl.DateTimeFormat(locale, {
+    const monthShort = new Intl.DateTimeFormat(effectiveLocale, {
       month: "short",
     }).format(d);
-    const monthLong = new Intl.DateTimeFormat(locale, { month: "long" }).format(
-      d,
-    );
+    const monthLong = new Intl.DateTimeFormat(effectiveLocale, {
+      month: "long",
+    }).format(d);
 
     let out = format;
     out = out.replace(/DD/g, dayP);

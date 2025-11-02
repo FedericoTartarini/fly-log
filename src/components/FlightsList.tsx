@@ -72,11 +72,7 @@ const FlightsList: React.FC = () => {
   };
 
   const rows = filteredFlights.map((flight, index) => {
-    const departureDateStr = formatDate(
-      flight.departure_date,
-      undefined,
-      "en-AU",
-    );
+    const departureDateStr = formatDate(flight.departure_date);
 
     // Safe formatting for flight time and distance
     const ft = flight.flight_time ?? null;
