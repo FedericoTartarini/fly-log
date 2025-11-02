@@ -13,11 +13,12 @@ import {
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { addFlightForUser } from "../firebaseClient";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
-import FlightCsvUpload from "./FlightCsvUpload";
+import FlightCsvUpload from "./FlightCsvUpload.jsx";
 import { airlinesInfo } from "../utils/airlinesInfo";
 import { airportsInfo } from "../utils/airportsInfo";
+import { useTranslation } from "react-i18next";
 
 type SelectOption = {
   value: string;
@@ -36,6 +37,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
   const { user } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const { t } = useTranslation("flights");
+
   const form = useForm({
     initialValues: {
       departureDate: null as Date | null,
@@ -50,19 +53,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
       returnFlightNumber: "",
     },
     validate: {
-      departureDate: (value) => (value ? null : "Departure date is required"),
+      departureDate: (value) =>
+        value ? null : t("form.validation.departure_date_required"),
       departureAirport: (value) =>
-        value ? null : "Departure airport is required",
+        value ? null : t("form.validation.departure_airport_required"),
       arrivalAirport: (value, values) => {
-        if (!value) return "Arrival airport is required";
+        if (!value) return t("form.validation.arrival_airport_required");
         if (value === values.departureAirport)
-          return "Arrival and departure airports must be different";
+          return t("form.validation.arrival_differs");
         return null;
       },
-      airline: (value) => (value ? null : "Airline is required"),
+      airline: (value) =>
+        value ? null : t("form.validation.airline_required"),
       // Only validate return fields if addReturn is true
       ...(addReturn && {
-        returnDate: (value) => (value ? null : "Return date is required"),
+        returnDate: (value) =>
+          value ? null : t("form.validation.return_date_required"),
       }),
     },
   });
@@ -98,8 +104,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
     setLoading(true);
     console.log("FlightEntryForm: submit clicked", { values });
     notifications.show({
-      title: "Saving",
-      message: "Saving flight(s)...",
+      title: t("form.notifications.saving_title"),
+      message: t("form.notifications.saving_message"),
       color: "blue",
     });
 
@@ -126,9 +132,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
 
       const uid = user?.uid || null;
       if (!uid) {
-        const msg = "You must be signed in to save flights";
+        const msg = t("form.labels.not_signed_in");
         setSubmitError(msg);
-        notifications.show({ title: "Error", message: msg, color: "red" });
+        notifications.show({
+          title: t("form.notifications.error_title"),
+          message: msg,
+          color: "red",
+        });
         setLoading(false);
         return;
       }
@@ -140,10 +150,12 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
       }
 
       notifications.show({
-        title: "Success",
+        title: t(
+          "form.notifications.saving_title",
+        ) /* re-use saving title for brevity */,
         message: addReturn
-          ? "Flights saved successfully"
-          : "Flight saved successfully",
+          ? t("form.notifications.success_multiple")
+          : t("form.notifications.success_single"),
         color: "green",
       });
 
@@ -156,8 +168,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
       const msg = error?.message || String(error) || "Unknown error";
       setSubmitError(msg);
       notifications.show({
-        title: "Error",
-        message: `Could not save flight(s): ${msg}`,
+        title: t("form.notifications.error_title"),
+        message: t("form.notifications.error_save", { msg }),
         color: "red",
       });
     } finally {
@@ -179,10 +191,12 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
     ) as string[];
     const hasErrors = errorMessages.length > 0;
     if (hasErrors) {
-      const msg = errorMessages.join("; ") || "Please check required fields";
+      const msg =
+        errorMessages.join("; ") ||
+        t("form.notifications.validation_error_generic");
       setSubmitError(msg);
       notifications.show({
-        title: "Validation error",
+        title: t("form.notifications.validation_error_title"),
         message: msg,
         color: "red",
       });
@@ -196,75 +210,81 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
     <Paper p="md" withBorder>
       <Tabs defaultValue="manual">
         <Tabs.List>
-          <Tabs.Tab value="manual">Manual Entry</Tabs.Tab>
-          <Tabs.Tab value="csv">CSV Upload</Tabs.Tab>
+          <Tabs.Tab value="manual">{t("form.tabs.manual")}</Tabs.Tab>
+          <Tabs.Tab value="csv">{t("form.tabs.csv")}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="manual" pt="xs">
           <Stack>
-            <Title order={4}>Add New Flight</Title>
+            <Title order={4}>{t("form.add_new_flight")}</Title>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Stack>
                 <Group grow>
                   <DatePickerInput
-                    label="Departure Date"
-                    placeholder="Select date"
+                    label={t("form.labels.departure_date")}
+                    placeholder={t("form.placeholders.select_date")}
                     required
                     clearable={false}
                     {...form.getInputProps("departureDate")}
                   />
                   <TextInput
-                    label="Departure Time"
-                    placeholder="e.g., 14:30"
+                    label={t("form.labels.departure_time")}
+                    placeholder={t("form.placeholders.time_example")}
                     {...form.getInputProps("departureTime")}
                   />
                 </Group>
 
                 <Select
-                  label="Departure Airport"
-                  placeholder="Search airports"
+                  label={t("form.labels.departure_airport")}
+                  placeholder={t("form.placeholders.search_airports")}
                   searchable
                   limit={5}
                   required
                   data={airportOptions}
                   maxDropdownHeight={280}
-                  nothingFoundMessage="No matching airports"
+                  nothingFoundMessage={t(
+                    "form.placeholders.no_matching_airports",
+                  )}
                   {...form.getInputProps("departureAirport")}
                 />
 
                 <Select
-                  label="Arrival Airport"
-                  placeholder="Search airports"
+                  label={t("form.labels.arrival_airport")}
+                  placeholder={t("form.placeholders.search_airports")}
                   searchable
                   limit={5}
                   required
                   data={airportOptions}
                   maxDropdownHeight={280}
-                  nothingFoundMessage="No matching airports"
+                  nothingFoundMessage={t(
+                    "form.placeholders.no_matching_airports",
+                  )}
                   {...form.getInputProps("arrivalAirport")}
                 />
 
                 <Group grow>
                   <Select
-                    label="Airline"
-                    placeholder="Search airlines"
+                    label={t("form.labels.airline")}
+                    placeholder={t("form.placeholders.search_airlines")}
                     searchable
                     limit={5}
                     required
                     data={airlineOptions}
                     maxDropdownHeight={280}
-                    nothingFoundMessage="No matching airlines"
+                    nothingFoundMessage={t(
+                      "form.placeholders.no_matching_airlines",
+                    )}
                     {...form.getInputProps("airline")}
                   />
                   <TextInput
-                    label="Flight Number"
-                    placeholder="e.g., 123"
+                    label={t("form.labels.flight_number")}
+                    placeholder={t("form.placeholders.time_example")}
                     {...form.getInputProps("flightNumber")}
                   />
                 </Group>
 
                 <Switch
-                  label="Add return flight"
+                  label={t("form.labels.add_return")}
                   checked={addReturn}
                   onChange={(event) =>
                     setAddReturn(event.currentTarget.checked)
@@ -274,47 +294,49 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
 
                 {addReturn && (
                   <Stack mt="xs" p="xs" style={{ borderRadius: 8 }}>
-                    <Title order={5}>Return Flight</Title>
+                    <Title order={5}>{t("form.labels.return_flight")}</Title>
                     <Group grow>
                       <DatePickerInput
-                        label="Return Date"
-                        placeholder="Select date"
+                        label={t("form.labels.return_date")}
+                        placeholder={t("form.placeholders.select_date")}
                         required
                         clearable={false}
                         {...form.getInputProps("returnDate")}
                       />
                       <TextInput
-                        label="Return Time"
-                        placeholder="e.g., 18:45"
+                        label={t("form.labels.return_time")}
+                        placeholder={t("form.placeholders.time_example")}
                         {...form.getInputProps("returnTime")}
                       />
                     </Group>
                     <Group grow>
                       <Select
-                        label="Airline"
-                        placeholder="Search airlines"
+                        label={t("form.labels.airline")}
+                        placeholder={t("form.placeholders.search_airlines")}
                         searchable
                         limit={5}
                         required
                         data={airlineOptions}
                         maxDropdownHeight={280}
-                        nothingFoundMessage="No matching airlines"
+                        nothingFoundMessage={t(
+                          "form.placeholders.no_matching_airlines",
+                        )}
                         {...form.getInputProps("airline")}
                         disabled
                       />
                       <TextInput
-                        label="Flight Number"
-                        placeholder="e.g., 456"
+                        label={t("form.labels.flight_number")}
+                        placeholder={t("form.placeholders.time_example")}
                         {...form.getInputProps("returnFlightNumber")}
                       />
                     </Group>
                     <TextInput
-                      label="Departure Airport"
+                      label={t("form.labels.departure_airport")}
                       value={form.values.arrivalAirport}
                       disabled
                     />
                     <TextInput
-                      label="Arrival Airport"
+                      label={t("form.labels.arrival_airport")}
                       value={form.values.departureAirport}
                       disabled
                     />
@@ -324,7 +346,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                 {!user && (
                   <div style={{ marginTop: 8 }}>
                     <div style={{ color: "orange" }}>
-                      You are not signed in. Please sign in to save flights.
+                      {t("form.labels.not_signed_in")}
                     </div>
                   </div>
                 )}
@@ -342,7 +364,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({ onSaved }) => {
                     loading={loading}
                     disabled={!user}
                   >
-                    Save Flight{addReturn ? "s" : ""}
+                    {addReturn
+                      ? t("form.buttons.save_multiple")
+                      : t("form.buttons.save_single")}
                   </Button>
                 </Group>
               </Stack>

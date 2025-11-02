@@ -15,6 +15,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { addFlightsForUser } from "../firebaseClient";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
+import { useTranslation } from "react-i18next";
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -82,10 +83,11 @@ const FlightCsvUpload = ({ onComplete }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const { t } = useTranslation("flights");
 
   const handleUpload = async () => {
     if (!file) {
-      setError("Please select a CSV file");
+      setError(t("csv.errors.no_file"));
       return;
     }
 
@@ -107,34 +109,9 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           const flightData = results.data;
 
-          // // Validate required fields
-          // const requiredFields = [
-          //   "departure_date",
-          //   "departure_time",
-          //   "departure_airport_iata",
-          //   "arrival_airport_iata",
-          //   "airline_iata",
-          // ];
-          //
-          // const missingFields = requiredFields.filter(
-          //   (field) =>
-          //     !flightData[0] || !Object.keys(flightData[0]).includes(field),
-          // );
-          //
-          // if (missingFields.length > 0) {
-          //   setError(`Missing required fields: ${missingFields.join(", ")}`);
-          //   setParsing(false);
-          //   return;
-          // }
-
-          // Upload flights one by one with progress tracking
-          let successCount = 0;
-          let errorCount = 0; // addFlightsForUser throws on fatal errors
-
-          // Use Firestore batched chunk uploads via addFlightsForUser
           const uid = user?.uid || null;
           if (!uid) {
-            setError("You must be signed in to upload flights.");
+            setError(t("csv.errors.not_signed_in"));
             setParsing(false);
             return;
           }
@@ -156,13 +133,16 @@ const FlightCsvUpload = ({ onComplete }) => {
             }
           });
 
-          successCount = formattedFlights.length;
-          errorCount = 0; // addFlightsForUser throws on fatal errors
+          const successCount = formattedFlights.length;
+          const errorCount = 0;
 
           // Show completion notification
           notifications.show({
-            title: "CSV Upload Complete",
-            message: `Successfully added ${successCount} flights. Failed: ${errorCount}`,
+            title: t("csv.notification.title"),
+            message: t("csv.notification.message", {
+              success: successCount,
+              failed: errorCount,
+            }),
             color: errorCount > 0 ? "orange" : "green",
             icon:
               errorCount > 0 ? (
@@ -178,12 +158,12 @@ const FlightCsvUpload = ({ onComplete }) => {
           }
         },
         error: (error) => {
-          setError(`Failed to parse CSV: ${error}`);
+          setError(`${t("csv.errors.no_file")} - ${error}`);
           setParsing(false);
         },
       });
     } catch (e) {
-      setError(`Error processing file: ${e.message}`);
+      setError(`${t("csv.errors.no_file")} - ${e.message}`);
       setParsing(false);
     }
   };
@@ -192,20 +172,18 @@ const FlightCsvUpload = ({ onComplete }) => {
     <Paper p="md" withBorder>
       <Stack>
         <Text size="lg" fw={500}>
-          Upload Flight Data from CSV
+          {t("csv.title")}
         </Text>
 
         <Text size="sm" c="dimmed">
-          Your CSV must include these columns: departure_date, departure_time,
-          departure_airport_iata, arrival_airport_iata, airline_iata. Optional:
-          flight_number.
+          {t("csv.description")}
         </Text>
 
         <FileInput
           accept=".csv"
-          placeholder="Select CSV file"
-          label="Flight data CSV"
-          description="Upload your flight data in CSV format"
+          placeholder={t("csv.file_input.placeholder")}
+          label={t("csv.file_input.label")}
+          description={t("csv.file_input.description")}
           icon={<IconUpload size={14} />}
           value={file}
           onChange={setFile}
@@ -213,7 +191,11 @@ const FlightCsvUpload = ({ onComplete }) => {
         />
 
         {error && (
-          <Alert color="red" title="Error" icon={<IconAlertCircle size={16} />}>
+          <Alert
+            color="red"
+            title={t("csv.errors.no_file")}
+            icon={<IconAlertCircle size={16} />}
+          >
             {error}
           </Alert>
         )}
@@ -229,7 +211,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
         <Group justify="flex-end">
           <Button onClick={handleUpload} loading={parsing} disabled={!file}>
-            Upload Flights
+            {t("csv.upload_button")}
           </Button>
         </Group>
       </Stack>

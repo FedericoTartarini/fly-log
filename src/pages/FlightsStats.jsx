@@ -26,6 +26,7 @@ import {
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightEntryForm from "../components/FlightEntryForm.tsx";
 import NoFlightsCard from "../components/NoFlightsCard.jsx";
+import { useTranslation } from "react-i18next";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
@@ -48,6 +49,8 @@ const FlightsStats = () => {
   // Prepare chart data outside of the conditional rendering
   const chartData = getDeparturesByCountry(filteredFlights);
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
+
+  const { t } = useTranslation("flights");
 
   if (isLoading) {
     return (
@@ -75,7 +78,7 @@ const FlightsStats = () => {
         <Modal
           opened={formOpened}
           onClose={() => setFormOpened(false)}
-          title="Add New Flight"
+          title={t("form.add_new_flight")}
           size="lg"
         >
           <FlightEntryForm onSaved={handleFlightSaved} />
@@ -106,13 +109,13 @@ const FlightsStats = () => {
 
           {/* Add button to open modal */}
           <Button onClick={() => setFormOpened(true)} fullWidth>
-            Add New Flight
+            {t("form.add_new_flight")}
           </Button>
 
           <Modal
             opened={formOpened}
             onClose={() => setFormOpened(false)}
-            title="Add New Flight"
+            title={t("form.add_new_flight")}
             size="lg"
           >
             <FlightEntryForm onSaved={handleFlightSaved} />
@@ -127,14 +130,14 @@ const FlightsStats = () => {
             <Grid.Col span={{ base: 12, md: 6 }}>
               <FlightCard
                 flight={stats.shortestFlight}
-                title="Shortest Flight"
+                title={t("stats.shortest_flight")}
                 color="orange"
               />
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <FlightCard
                 flight={stats.longestFlight}
-                title="Longest Flight"
+                title={t("stats.longest_flight")}
                 color="teal"
               />
             </Grid.Col>
@@ -142,7 +145,7 @@ const FlightsStats = () => {
 
           <Card shadow="sm" radius="md" withBorder>
             <Title order={3} mb="md">
-              Departures by Country
+              {t("charts.departures_by_country")}
             </Title>
             <BarChart
               h={(chartData.length + 1) * 28}
@@ -156,27 +159,29 @@ const FlightsStats = () => {
                 tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
               }}
               barProps={{ radius: 8 }}
-              series={[{ name: "departures", color: "blue.6" }]}
+              series={[{ name: t("charts.departures"), color: "blue.6" }]}
             />
           </Card>
 
           <Card shadow="sm" radius="md" withBorder>
             <Stack mb="md">
               <Title order={3}>
-                Flights by{" "}
-                {timeGrouping === "dayOfWeek"
-                  ? "Day of Week"
-                  : timeGrouping === "year"
-                    ? "Year"
-                    : "Month"}
+                {t("charts.flights_by", {
+                  period:
+                    timeGrouping === "dayOfWeek"
+                      ? t("time.day_of_week")
+                      : timeGrouping === "year"
+                        ? t("time.year")
+                        : t("time.month"),
+                })}
               </Title>
               <SegmentedControl
                 value={timeGrouping}
                 onChange={setTimeGrouping}
                 data={[
-                  { label: "Day of Week", value: "dayOfWeek" },
-                  { label: "Year", value: "year" },
-                  { label: "Month", value: "month" },
+                  { label: t("time.day_of_week"), value: "dayOfWeek" },
+                  { label: t("time.year"), value: "year" },
+                  { label: t("time.month"), value: "month" },
                 ]}
               />
             </Stack>

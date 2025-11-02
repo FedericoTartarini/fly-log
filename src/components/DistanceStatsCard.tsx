@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Title, Grid, Stack, Group, Text } from "@mantine/core";
-import StatDisplay from "./StatDisplay";
+import StatDisplay from "./StatDisplay.jsx";
+import { useTranslation } from "react-i18next";
 
 interface DistanceStatsCardProps {
   totalDistance: number;
@@ -28,47 +29,53 @@ const DistanceStatsCard: React.FC<DistanceStatsCardProps> = ({
   const moonProgress = totalDistance / DISTANCE_TO_MOON;
   const marsProgress = totalDistance / DISTANCE_TO_MARS;
 
+  const { t } = useTranslation("flights");
+
   const chartData: ChartDataItem[] = [
     {
-      destination: "🌍 Earth",
+      destination: `🌍 ${t("distance.destinations.earth")}`,
       percentage: Math.min((earthMultiples % 1) * 100, 100),
       actual: earthMultiples,
-      label: `${earthMultiples.toFixed(1)}x around Earth`,
+      label: t("distance.earth_label", { value: earthMultiples.toFixed(1) }),
     },
     {
-      destination: "🌙 Moon",
+      destination: `🌙 ${t("distance.destinations.moon")}`,
       percentage: Math.min(moonProgress * 100, 100),
       actual: moonProgress,
-      label: `${(moonProgress * 100).toFixed(1)}% to Moon`,
+      label: t("distance.moon_label", {
+        value: (moonProgress * 100).toFixed(1),
+      }),
     },
     {
-      destination: "🚀 Mars",
+      destination: `🚀 ${t("distance.destinations.mars")}`,
       percentage: Math.min(marsProgress * 100, 100),
       actual: marsProgress,
-      label: `${(marsProgress * 100).toFixed(3)}% to Mars`,
+      label: t("distance.mars_label", {
+        value: (marsProgress * 100).toFixed(3),
+      }),
     },
   ];
 
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack gap="md">
-        <Title order={3}>Distance Statistics</Title>
+        <Title order={3}>{t("distance.title")}</Title>
         <Grid>
           <Grid.Col span={{ base: 6 }}>
             <StatDisplay
               value={Math.round(totalDistance).toLocaleString()}
-              label="Total Distance (km)"
+              label={t("distance.total_distance")}
             />
           </Grid.Col>
           <Grid.Col span={{ base: 6 }}>
             <StatDisplay
               value={Math.round(averageDistance).toLocaleString()}
-              label="Mean Distance (km)"
+              label={t("distance.mean_distance")}
             />
           </Grid.Col>
         </Grid>
         <Stack gap="xs">
-          <Title order={4}>Journey to Space</Title>
+          <Title order={4}>{t("distance.journey_title")}</Title>
           <Stack gap="xs" mb="md">
             {chartData.map((item) => (
               <Group key={item.destination} justify="space-between">

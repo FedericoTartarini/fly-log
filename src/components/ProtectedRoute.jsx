@@ -1,13 +1,17 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { PATHS } from "../constants/MyClasses.ts";
-import { Loader } from "@mantine/core";
+import { Center, Loader } from "@mantine/core";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <Loader />;
+    return (
+      <Center>
+        <Loader />
+      </Center>
+    );
   }
 
   if (!user) {

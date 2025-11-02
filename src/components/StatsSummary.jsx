@@ -7,10 +7,12 @@ import useFlightStore from "../store.ts";
 import flightImg from "../assets/flight.jpg";
 import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
+import { useTranslation } from "react-i18next";
 
 function StatsSummary() {
   const { filteredFlights } = useFlightStore();
   const navigate = useNavigate();
+  const { t } = useTranslation("flights");
 
   // Use the enhanced flight stats with our enriched flight data
   const stats = useFlightStats(filteredFlights);
@@ -18,7 +20,7 @@ function StatsSummary() {
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Card.Section>
-        <Image src={flightImg} height={160} alt="plane wing" />
+        <Image src={flightImg} height={160} alt={t("image_alt")} />
       </Card.Section>
 
       <FlightYearFilter />
@@ -27,68 +29,68 @@ function StatsSummary() {
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={filteredFlights.length}
-            label="Total Flights"
+            label={t("stats.total_flights")}
             id={IDS.STATS.TOTAL_FLIGHTS}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={Math.round(stats.totalDistance).toLocaleString()}
-            label="Distance (km)"
+            label={t("stats.distance_km")}
             id={IDS.STATS.TOTAL_DISTANCE}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={(stats.totalFlightTime / 24).toFixed(1)}
-            label="Flight Time (days)"
+            label={t("stats.flight_time_days")}
             id={IDS.STATS.TOTAL_TIME}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.airports}
-            label="Airports Visited"
+            label={t("stats.airports_visited")}
             id={IDS.STATS.AIRPORTS_VISITED}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.airlines}
-            label="Airlines Flown"
+            label={t("stats.airlines_flown")}
             id={IDS.STATS.AIRLINES_FLOWN}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.countries}
-            label="Countries Visited"
+            label={t("stats.countries_visited")}
             id={IDS.STATS.COUNTRIES_VISITED}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.internationalFlights}
-            label="International Flights"
+            label={t("stats.international_flights")}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.longHaulFlights}
-            label="Long Haul Flights"
+            label={t("stats.long_haul_flights")}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 6, xs: 4 }}>
           <StatDisplay
             value={stats.westBoundFlights}
-            label="West Bound Flights"
+            label={t("stats.west_bound_flights")}
           />
         </Grid.Col>
       </Grid>
 
       <Group justify="center" mt="md">
         <Button variant="light" onClick={() => navigate(PATHS.FLIGHTS)}>
-          View Flights
+          {t("stats.view_flights")}
         </Button>
       </Group>
     </Card>
