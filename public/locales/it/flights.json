@@ -1,0 +1,69 @@
+{
+  "csv": {
+    "title": "Carica dati voli da CSV",
+    "label": "File CSV dei voli",
+    "button": "Carica voli",
+    "validation_error_title": "Errore di validazione CSV",
+    "validation_error_message": "Il tuo CSV deve includere queste colonne:",
+    "required_columns": "Colonne richieste",
+    "upload_success": "Voli caricati con successo!",
+    "upload_error": "Errore nel caricamento dei voli"
+  },
+  "filter": {
+    "label": "Filtra per anno",
+    "all_years": "Tutti gli anni"
+  },
+  "no_flights_card": {
+    "title": "Nessun volo ancora",
+    "description": "Inizia a tracciare i tuoi voli aggiungendo il tuo primo volo sopra",
+    "image_alt": "Illustrazione aereo"
+  },
+  "no_flights": "Nessun volo da visualizzare per questa selezione.",
+  "stats": {
+    "total_flights": "Voli totali",
+    "total_distance": "Distanza totale",
+    "total_countries": "Paesi visitati",
+    "total_time": "Tempo di volo",
+    "view_flights": "Visualizza voli",
+    "shortest_flight": "Volo più breve",
+    "longest_flight": "Volo più lungo"
+  },
+  "distance": {
+    "title": "Statistiche distanza",
+    "total_km": "Distanza totale",
+    "average_km": "Volo medio",
+    "longest_km": "Volo più lungo",
+    "shortest_km": "Volo più breve",
+    "journey_title": "Viaggio più lungo",
+    "destinations": {
+      "from": "Da",
+      "to": "A"
+    }
+  },
+  "charts": {
+    "departures_by_country": "Partenze per paese",
+    "flights_over_time": "Voli nel tempo"
+  },
+  "time": {
+    "day_of_week": "Giorno della settimana",
+    "month": "Mese",
+    "year": "Anno"
+  },
+  "form": {
+    "add_new_flight": "Aggiungi nuovo volo",
+    "departure_date": "Data di partenza",
+    "departure_airport": "Aeroporto di partenza",
+    "arrival_airport": "Aeroporto di arrivo",
+    "airline": "Compagnia aerea",
+    "flight_number": "Numero volo",
+    "departure_time": "Orario di partenza",
+    "save_flight": "Salva volo",
+    "cancel": "Annulla",
+    "required_field": "Campo obbligatorio",
+    "invalid_iata": "Codice IATA non valido",
+    "flight_saved": "Volo salvato con successo!",
+    "flight_error": "Errore nel salvataggio del volo"
+  },
+  "flight_time": "{{hours}}h {{minutes}}m tempo di volo",
+  "image_alt": "Aereo"
+}

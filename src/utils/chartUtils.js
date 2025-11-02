@@ -1,3 +1,40 @@
+import i18n from '../i18n';
+import { parseToDate } from './dateUtils';
+import { capitalize } from './stringUtils';
+
+/**
+ * Get localized weekday names in order
+ */
+function localizedWeekdays(locale) {
+  const weekdays = [];
+  // Create a date for each day of the week (starting Monday)
+  const baseDate = new Date(2024, 0, 1); // Jan 1, 2024 is a Monday
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(baseDate);
+    date.setDate(baseDate.getDate() + i);
+    const weekday = capitalize(
+      new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(date)
+    );
+    weekdays.push(weekday);
+  }
+  return weekdays;
+}
+
+/**
+ * Get localized month names in order
+ */
+function localizedMonths(locale) {
+  const months = [];
+  for (let i = 0; i < 12; i++) {
+    const date = new Date(2024, i, 1);
+    const month = capitalize(
+      new Intl.DateTimeFormat(locale, { month: 'long' }).format(date)
+    );
+    months.push(month);
+  }
+  return months;
+}
+
 export const getDeparturesByCountry = (flights) => {
   const departuresByCountry = flights.reduce((acc, flight) => {
     const country = flight.departure_country;
@@ -17,59 +54,45 @@ export const getDeparturesByCountry = (flights) => {
 
 export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
   const grouping = {};
+  const locale = i18n.language || 'en-AU';
 
   flights.forEach((flight) => {
     if (!flight.departure_date) return;
 
-    const date = new Date(flight.departure_date);
+    const date = parseToDate(flight.departure_date);
+    if (!date) return;
+
     let key;
 
     switch (timeGrouping) {
-      case "dayOfWeek":
-        key = date.toLocaleDateString("en-US", { weekday: "long" });
+      case 'dayOfWeek':
+        key = capitalize(
+          new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(date)
+        );
         break;
-      case "year":
+      case 'year':
         key = date.getFullYear().toString();
         break;
-      case "month":
-        key = date.toLocaleDateString("en-US", { month: "long" });
+      case 'month':
+        key = capitalize(
+          new Intl.DateTimeFormat(locale, { month: 'long' }).format(date)
+        );
         break;
       default:
-        key = "Unknown";
+        key = 'Unknown';
     }
 
     grouping[key] = (grouping[key] || 0) + 1;
   });
 
-  // Define order for consistent display
+  // Define order for consistent display using localized names
   let order;
   switch (timeGrouping) {
-    case "dayOfWeek":
-      order = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ];
+    case 'dayOfWeek':
+      order = localizedWeekdays(locale);
       break;
-    case "month":
-      order = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
+    case 'month':
+      order = localizedMonths(locale);
       break;
     default:
       order = Object.keys(grouping).sort();

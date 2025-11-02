@@ -41,7 +41,7 @@ describe("FlightCard", () => {
     expect(screen.getByText("Test EnhancedFlight"));
     expect(screen.getByText("Qantas"));
     expect(screen.getByText("SG"));
-    expect(screen.getByText("11.24h flight time"));
+    expect(screen.getByText("11h 14m flight time"));
     expect(screen.getByText("10,117 km"));
     expect(screen.getByText("SIN → BLQ"));
     expect(screen.getByText("SG"));

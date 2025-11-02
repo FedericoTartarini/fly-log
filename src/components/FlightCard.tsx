@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
 
 interface FlightCardProps {
@@ -14,7 +15,12 @@ interface FlightCardProps {
  * Displays flight information in a styled card.
  */
 const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
+  const { t } = useTranslation('flights');
+  
   if (!flight) return null;
+
+  const hours = Math.floor(flight.flight_time);
+  const minutes = Math.round((flight.flight_time % 1) * 60);
 
   return (
     <Card shadow="sm" radius="md" withBorder>
@@ -58,7 +64,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
               {new Date(flight.departure_date).toLocaleDateString()}
             </Text>
             <Text size="sm" c="dimmed">
-              {flight.flight_time.toFixed(2)}h flight time
+              {t('flight_time', { hours, minutes })}
             </Text>
           </Group>
         </Group>

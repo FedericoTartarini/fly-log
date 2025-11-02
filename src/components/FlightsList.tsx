@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 import useFlightStore from "../store";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
@@ -10,6 +11,7 @@ import type { JSX } from "react";
  * @returns {JSX.Element}
  */
 const FlightsList: React.FC = () => {
+  const { t } = useTranslation('flights');
   const { filteredFlights } = useFlightStore() as {
     filteredFlights: enhancedFlight[];
   };
@@ -17,7 +19,7 @@ const FlightsList: React.FC = () => {
   if (filteredFlights.length === 0) {
     return (
       <Text mt="md" ta="center">
-        No flights to display for this selection.
+        {t('no_flights')}
       </Text>
     );
   }
