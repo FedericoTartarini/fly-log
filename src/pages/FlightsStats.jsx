@@ -48,6 +48,7 @@ const FlightsStats = () => {
 
   // Prepare chart data outside of the conditional rendering
   const chartData = getDeparturesByCountry(filteredFlights);
+  console.log(chartData.length);
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
 
   const { t } = useTranslation("flights");
@@ -159,7 +160,7 @@ const FlightsStats = () => {
                 tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
               }}
               barProps={{ radius: 8 }}
-              series={[{ name: t("charts.departures"), color: "blue.6" }]}
+              series={[{ name: "departures", color: "blue.6" }]}
             />
           </Card>
 
