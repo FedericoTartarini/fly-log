@@ -13,6 +13,7 @@ import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
@@ -20,6 +21,7 @@ function MyAppShell() {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation("common");
 
   const handleSignOut = async () => {
     await signOut();
@@ -79,7 +81,7 @@ function MyAppShell() {
             <NavLink
               component={Link}
               to={PATHS.HOME}
-              label="Home"
+              label={t("nav.home")}
               className={classes.control}
               onClick={handleNavClick}
             />
@@ -90,14 +92,14 @@ function MyAppShell() {
             <NavLink
               component={Link}
               to={PATHS.STATS}
-              label="Stats"
+              label={t("nav.stats")}
               className={classes.control}
               onClick={handleNavClick}
             />
             <NavLink
               component={Link}
               to={PATHS.FLIGHTS}
-              label="Flights"
+              label={t("nav.flights")}
               className={classes.control}
               onClick={handleNavClick}
             />
@@ -106,7 +108,7 @@ function MyAppShell() {
         <NavLink
           component={Link}
           to={PATHS.ABOUT}
-          label="About"
+          label={t("nav.about")}
           className={classes.control}
           onClick={handleNavClick}
         />
@@ -114,7 +116,7 @@ function MyAppShell() {
           <>
             <NavLink
               href="#"
-              label="Sign Out"
+              label={t("nav.sign_out")}
               className={classes.control}
               onClick={async (e) => {
                 e.preventDefault();
@@ -128,7 +130,7 @@ function MyAppShell() {
             <NavLink
               component={Link}
               to={PATHS.LOGIN}
-              label="Login"
+              label={t("nav.login")}
               className={classes.control}
               onClick={handleNavClick}
             />

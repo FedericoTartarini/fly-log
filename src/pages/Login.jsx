@@ -23,7 +23,7 @@ import { PATHS } from "../constants/MyClasses.ts";
 
 function Login() {
   const { session } = useAuth();
-  const { t } = useTranslation();
+  const { t } = useTranslation("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,9 +45,9 @@ function Login() {
       // In dev show the full code too for easier debugging
       const code = e?.code || e?._tokenResponse?.error?.message || "";
       const isDev =
-        typeof process !== "undefined"
-          ? process.env?.NODE_ENV === "development"
-          : false;
+        typeof import.meta !== "undefined" &&
+        import.meta.env &&
+        import.meta.env.DEV;
       setError(isDev && code ? `${msg} (${code})` : msg);
     } finally {
       setLoading(false);
@@ -69,9 +69,9 @@ function Login() {
       const msg = parseFirebaseError(e);
       const code = e?.code || e?._tokenResponse?.error?.message || "";
       const isDev2 =
-        typeof process !== "undefined"
-          ? process.env?.NODE_ENV === "development"
-          : false;
+        typeof import.meta !== "undefined" &&
+        import.meta.env &&
+        import.meta.env.DEV;
       setError(isDev2 && code ? `${msg} (${code})` : msg);
     } finally {
       setLoading(false);
@@ -118,16 +118,16 @@ function Login() {
     <Container size="xs" mt="xl">
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <Stack>
-          <Title ta="center">{t("login.title")}</Title>
+          <Title ta="center">{t("title")}</Title>
           <TextInput
-            label={t("login.email")}
+            label={t("email")}
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <PasswordInput
-            label={t("login.password")}
+            label={t("password")}
             placeholder="Your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -137,7 +137,7 @@ function Login() {
 
           {mode === "signup" && (
             <PasswordInput
-              label={t("login.confirm_password")}
+              label={t("confirm_password")}
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -152,7 +152,7 @@ function Login() {
               }
               loading={loading}
             >
-              {mode === "signin" ? t("login.sign_in") : t("login.sign_up")}
+              {mode === "signin" ? t("sign_in") : t("sign_up")}
             </Button>
 
             <Button
@@ -161,9 +161,7 @@ function Login() {
               onClick={handleGoogle}
               loading={loading}
             >
-              {mode === "signin"
-                ? t("login.sign_in_google")
-                : t("login.sign_up_google")}
+              {mode === "signin" ? t("sign_in_google") : t("sign_up_google")}
             </Button>
           </Group>
 
@@ -174,7 +172,7 @@ function Login() {
                 size="sm"
                 onClick={() => setMode("signup")}
               >
-                {t("login.dont_have_account")}
+                {t("dont_have_account")}
               </Anchor>
             ) : (
               <Anchor
@@ -182,7 +180,7 @@ function Login() {
                 size="sm"
                 onClick={() => setMode("signin")}
               >
-                {t("login.already_have_account")}
+                {t("already_have_account")}
               </Anchor>
             )}
           </div>

@@ -22,17 +22,19 @@ import {
   IconAlertCircle,
 } from "@tabler/icons-react";
 import { APP_INFO } from "../constants/MyClasses.js";
+import { useTranslation } from "react-i18next";
 
 function About() {
+  const { t } = useTranslation("about");
   return (
     <Paper shadow="md" p="xl" radius="md">
       <Stack spacing="xl">
         <div>
           <Title order={2} ta="center" mb="lg">
-            About My Flight Tracker
+            {t("title")}
           </Title>
           <Text size="lg" ta="center" c="dimmed" mb="xl">
-            Personal flight data visualization made simple and beautiful
+            {t("subtitle")}
           </Text>
         </div>
 
@@ -42,18 +44,11 @@ function About() {
               <ThemeIcon variant="light" size="lg">
                 <IconPlane size={20} />
               </ThemeIcon>
-              What is this project?
+              {t("what_is_this")}
             </Group>
           </Title>
-          <Text mb="md">
-            This Flight Data Visualizer is a personal project that transforms
-            raw flight history into beautiful, interactive visualizations.
-          </Text>
-          <Text>
-            Whether you're an aviation enthusiast, frequent traveler, or data
-            visualization lover, this tool helps you explore and understand your
-            travel patterns in ways you've never seen before.
-          </Text>
+          <Text mb="md">{t("what_is_this_p1")}</Text>
+          <Text>{t("what_is_this_p2")}</Text>
         </div>
 
         <Divider />
@@ -64,21 +59,11 @@ function About() {
               <ThemeIcon variant="light" size="lg">
                 <IconCode size={20} />
               </ThemeIcon>
-              About the Developer
+              {t("about_developer")}
             </Group>
           </Title>
-          <Text mb="md">
-            Hi! I'm <strong>Federico Tartarini</strong>, a passionate developer
-            who loves creating tools that make data beautiful and accessible.
-            With expertise in both backend data processing and frontend
-            visualization, I enjoy building applications that solve real
-            problems while delivering great user experiences.
-          </Text>
-          <Text>
-            This project combines my interests in aviation, data science, and
-            web development. I believe in open-source software and sharing
-            knowledge with the developer community.
-          </Text>
+          <Text mb="md">{t("developer_p1")}</Text>
+          <Text>{t("developer_p2")}</Text>
         </div>
 
         <Divider />
@@ -89,17 +74,15 @@ function About() {
               <ThemeIcon variant="light" size="lg">
                 <IconUsers size={20} />
               </ThemeIcon>
-              Features & Technology
+              {t("features_technology")}
             </Group>
           </Title>
           <List spacing="xs" center>
-            <List.Item>
-              Interactive globe visualization of flight paths
-            </List.Item>
-            <List.Item>Comprehensive flight statistics and analytics</List.Item>
-            <List.Item>Year-based filtering and data exploration</List.Item>
-            <List.Item>Responsive design for desktop and mobile</List.Item>
-            <List.Item>Modern UI</List.Item>
+            <List.Item>{t("features_1")}</List.Item>
+            <List.Item>{t("features_2")}</List.Item>
+            <List.Item>{t("features_3")}</List.Item>
+            <List.Item>{t("features_4")}</List.Item>
+            <List.Item>{t("features_5")}</List.Item>
           </List>
         </div>
 
@@ -111,13 +94,10 @@ function About() {
               <ThemeIcon variant="light" size="lg">
                 <IconHeart size={20} />
               </ThemeIcon>
-              Support This Project
+              {t("support_project")}
             </Group>
           </Title>
-          <Text mb="md">
-            If you find this project useful or interesting, there are several
-            ways you can show your support and help it grow:
-          </Text>
+          <Text mb="md">{t("support_text_p1")}</Text>
 
           <Grid mb="lg" justify="space-around">
             <Grid.Col span={{ base: 12, md: 6 }}>
@@ -164,9 +144,7 @@ function About() {
           </Grid>
 
           <Text size="sm" c="dimmed">
-            Your support helps me dedicate more time to improving this project,
-            adding new features, and maintaining the codebase. Every
-            contribution, no matter how small, is greatly appreciated!
+            {t("support_text_p2")}
           </Text>
         </div>
 
@@ -177,13 +155,10 @@ function About() {
             <ThemeIcon variant="light" size="lg">
               <IconGitPullRequest size={20} />
             </ThemeIcon>
-            How to Contribute & Report Issues
+            {t("contribute")}
           </Group>
         </Title>
-        <Text mb="md">
-          Contributions are welcome! If you want to add features, fix bugs, or
-          improve documentation, please visit the project repository on GitHub.
-        </Text>
+        <Text mb="md">{t("contribute_p1")}</Text>
         <List spacing="xs" center>
           <List.Item
             icon={
@@ -197,7 +172,7 @@ function About() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Fork the repository and submit a pull request
+              {t("contribute_link_fork")}
             </a>
           </List.Item>
           <List.Item
@@ -212,7 +187,7 @@ function About() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Report bugs or request features via GitHub Issues
+              {t("contribute_link_issues")}
             </a>
           </List.Item>
         </List>
@@ -223,17 +198,11 @@ function About() {
 
         <div>
           <Title order={3} mb="md">
-            Open Source & Community
+            {t("open_source")}
           </Title>
-          <Text mb="md">
-            This project is open source and welcomes contributions from the
-            community. Whether you're interested in adding features, fixing
-            bugs, improving documentation, or just sharing feedback, your
-            involvement helps make this tool better for everyone.
-          </Text>
+          <Text mb="md">{t("open_source_p1")}</Text>
           <Text size="sm" c="dimmed">
-            Built with ❤️ using React, Vite, Mantine UI, Python, and lots of
-            coffee.
+            {t("open_source_p2")}
           </Text>
         </div>
       </Stack>

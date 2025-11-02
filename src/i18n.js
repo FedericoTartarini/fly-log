@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 
-// we will load translations from /locales/{{lng}}/{{ns}}.json which will be served from public/locales
+// Namespaces: 'common' for shared strings (nav, footer, etc) and per-page namespaces like 'login'
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
@@ -12,13 +12,12 @@ i18n
     supportedLngs: ["en", "it"],
     fallbackLng: "en",
     debug: false,
-    ns: ["translation"],
-    defaultNS: "translation",
+    ns: ["common", "login"],
+    defaultNS: "common",
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
     detection: {
-      // check localStorage, then navigator
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
     },
