@@ -2,6 +2,20 @@
   "title": "Benvenuto nel tuo Flight Tracker personale",
   "subtitle": "Tieni un registro dettagliato di tutti i tuoi voli, esplora le tue statistiche di viaggio e visualizza i tuoi percorsi su una mappa mondiale. Accedi per iniziare.",
   "get_started": "Inizia",
-  "learn_more": "Scopri di più"
+  "learn_more": "Scopri di più",
+  "features": {
+    "where_title": "Dove hai volato?",
+    "where_desc": "Visualizza tutti i tuoi voli su una mappa mondiale.",
+    "what_title": "Quali sono le tue statistiche?",
+    "what_desc": "Ottieni informazioni sulla tua cronologia dei voli e sulle statistiche.",
+    "which_title": "Quali paesi hai visitato?",
+    "which_desc": "Visualizza la tua cronologia di viaggio e i paesi visitati.",
+    "how_title": "Quanto hai volato?",
+    "how_desc": "Calcola la distanza totale percorsa e confrontala con la circonferenza della Terra, la distanza fino alla Luna e Marte.",
+    "when_title": "Quando hai volato?",
+    "when_desc": "Visualizza la cronologia dei voli per anno e controlla in quale anno, mese o giorno hai volato di più.",
+    "detail_title": "Dettagli del volo",
+    "detail_desc": "Visualizza informazioni dettagliate del volo come aeroporti di partenza/arrivo, compagnia e numero di volo."
+  }
 }
 

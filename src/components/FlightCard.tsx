@@ -4,6 +4,7 @@ import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
 import { formatDate } from "../utils/dateUtils";
+import { useTranslation } from "react-i18next";
 
 interface FlightCardProps {
   flight: enhancedFlight;
@@ -15,6 +16,8 @@ interface FlightCardProps {
  * Displays flight information in a styled card.
  */
 const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
+  const { t } = useTranslation(["flights"]);
+
   if (!flight) return null;
 
   return (
@@ -26,7 +29,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
           </Title>
           <Text size="sm">
             <Text span fw={500}>
-              Airline:
+              {t("airline_label")}
             </Text>{" "}
             {flight.airline_name}
           </Text>
@@ -34,10 +37,13 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
 
         <Group justify="space-between">
           <Text fw={500} size="lg">
-            {flight.departure_airport_iata} → {flight.arrival_airport_iata}
+            {flight.departure_airport_iata} {t("to") || "→"}{" "}
+            {flight.arrival_airport_iata}
           </Text>
           <Badge color={color} variant="light">
-            {Math.round(flight.distance_km).toLocaleString()} km
+            {t("km", {
+              value: Math.round(flight.distance_km).toLocaleString(),
+            })}
           </Badge>
         </Group>
 
@@ -47,7 +53,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
               {flight.departure_country}
             </Badge>
             <Text size="xs" c="dimmed">
-              to
+              {t("to")}
             </Text>
             <Badge size="sm" variant="outline">
               {flight.arrival_country}
@@ -59,7 +65,13 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
               {formatDate(flight.departure_date) || ""}
             </Text>
             <Text size="sm" c="dimmed">
-              {`${flight.flight_time.toFixed(2)}h flight time`}
+              {typeof flight.flight_time === "number"
+                ? (() => {
+                    const hours = Math.floor(flight.flight_time);
+                    const minutes = Math.round((flight.flight_time % 1) * 60);
+                    return t("flight_time", { hours, minutes });
+                  })()
+                : ""}
             </Text>
           </Group>
         </Group>
@@ -67,7 +79,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
         {flight.aircraft_type_name && (
           <Text size="sm">
             <Text span fw={500}>
-              Aircraft:
+              {t("aircraft_label")}
             </Text>{" "}
             {flight.aircraft_type_name}
           </Text>

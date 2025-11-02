@@ -1,6 +1,15 @@
 {
   "title": "Detailed Flight Statistics",
   "image_alt": "plane wing",
-  "no_flights": "No flights to display for this selection."
+  "no_flights": "No flights to display for this selection.",
+  "table": {
+    "icon": "Icon",
+    "from_to": "From → To",
+    "date_duration_distance": "Date, Duration & Distance"
+  },
+  "airline_label": "Airline:",
+  "aircraft_label": "Aircraft:",
+  "km": "{{value}} km",
+  "to": "→",
+  "flight_time": "{{hours}}h {{minutes}}m flight time"
 }
-

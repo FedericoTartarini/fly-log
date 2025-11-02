@@ -4,6 +4,7 @@ import useFlightStore from "../store";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
 import { formatDate } from "../utils/dateUtils";
+import { useTranslation } from "react-i18next";
 
 /**
  * Renders a list of flights in a table.
@@ -15,10 +16,12 @@ const FlightsList: React.FC = () => {
     filteredFlights: enhancedFlight[];
   };
 
+  const { t } = useTranslation("flights");
+
   if (filteredFlights.length === 0) {
     return (
       <Text mt="md" ta="center">
-        No flights to display for this selection.
+        {t("no_flights")}
       </Text>
     );
   }
@@ -121,9 +124,9 @@ const FlightsList: React.FC = () => {
     <Table striped highlightOnHover withTableBorder>
       <Table.Thead>
         <Table.Tr>
-          <Table.Th>Icon</Table.Th>
-          <Table.Th>From → To</Table.Th>
-          <Table.Th>Date, Duration & Distance</Table.Th>
+          <Table.Th>{t("table.icon")}</Table.Th>
+          <Table.Th>{t("table.from_to")}</Table.Th>
+          <Table.Th>{t("table.date_duration_distance")}</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>

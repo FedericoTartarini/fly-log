@@ -1,6 +1,15 @@
 {
   "title": "Statistiche dettagliate dei voli",
   "image_alt": "ala dell'aereo",
-  "no_flights": "Nessun volo da visualizzare per questa selezione."
+  "no_flights": "Nessun volo da visualizzare per questa selezione.",
+  "table": {
+    "icon": "Icona",
+    "from_to": "Da → A",
+    "date_duration_distance": "Data, Durata & Distanza"
+  },
+  "airline_label": "Compagnia:",
+  "aircraft_label": "Aereo:",
+  "km": "{{value}} km",
+  "to": "→",
+  "flight_time": "{{hours}}h {{minutes}}m durata volo"
 }
-
