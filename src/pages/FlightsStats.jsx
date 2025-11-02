@@ -48,7 +48,6 @@ const FlightsStats = () => {
 
   // Prepare chart data outside of the conditional rendering
   const chartData = getDeparturesByCountry(filteredFlights);
-  console.log(chartData.length);
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
 
   const { t } = useTranslation("flights");

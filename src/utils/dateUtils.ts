@@ -14,12 +14,12 @@ import i18n from "i18next";
  * Example: formatDate(value, "DD MMM YY", "en-AU") -> "10 Nov 24"
  *
  * @param value any date-like value
- * @param format optional format string using tokens (DD, D, MMM, MMMM, YY, YYYY). If omitted, returns locale date string.
+ * @param format format string using tokens (DD, D, MMM, MMMM, YY, YYYY). If omitted, returns locale date string.
  * @param locale optional BCP-47 locale string (default: 'en-AU')
  */
 export function formatDate(
   value: any,
-  format?: string = "DD MMM YY",
+  format: string = "DD MMM YY",
   locale?: string,
 ): string {
   if (value === null || value === undefined || value === "") return "";
@@ -39,9 +39,10 @@ export function formatDate(
 
     if (!d || Number.isNaN(d.getTime())) return "";
 
-    // Determine effective locale: explicit param -> i18n.language -> fallback 'en-US'
+    // Determine effective locale: explicit param -> i18n.language -> fallback 'en-AU'
     const effectiveLocale = locale || (i18n && i18n.language) || "en-AU";
 
+    // If no format specified, return the locale's default date string
     if (!format) return d.toLocaleDateString(effectiveLocale);
 
     // Token replacements
