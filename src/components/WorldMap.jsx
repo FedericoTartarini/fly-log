@@ -171,12 +171,12 @@ const WorldMap = () => {
           flight.arrival_coordinates,
         );
         const pathSegments = splitPathAtAntimeridian(greatCirclePath);
-        let flightColor = "#0077cc"; // default blue
+        let flightColor = "#5d41b0"; // default blue
         // if departure date is in the future, use green
         const departureDate = parseToDate(flight.departure_date);
         const now = new Date();
         if (departureDate && departureDate > now) {
-          flightColor = "#28a745"; // green for future flights
+          flightColor = "#d80818"; // green for future flights
         }
 
         return (
