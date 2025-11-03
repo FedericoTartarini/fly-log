@@ -52,12 +52,11 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <MantineProvider theme={theme} defaultColorScheme="auto">
-        <ColorSchemeScript defaultColorScheme="auto" />
-
+    <ColorSchemeScript defaultColorScheme="auto" />
+    <MantineProvider theme={theme} defaultColorScheme="auto">
+      <AuthProvider>
         <RouterProvider router={router} />
-      </MantineProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </MantineProvider>
   </React.StrictMode>,
 );

@@ -7,6 +7,7 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
 import { parseToDate } from "../utils/dateUtils";
@@ -138,6 +139,7 @@ const FitMapToBounds = ({ bounds }) => {
 
 const WorldMap = () => {
   const { filteredFlights } = useFlightStore();
+  const computedColorScheme = useComputedColorScheme("light");
   const center = useMemo(
     () => getFlightsCentroid(filteredFlights),
     [filteredFlights],
@@ -146,6 +148,10 @@ const WorldMap = () => {
     () => getFlightsBounds(filteredFlights),
     [filteredFlights],
   );
+
+  const tileUrl = `https://{s}.basemaps.cartocdn.com/${
+    computedColorScheme === "dark" ? "dark" : "light"
+  }_all/{z}/{x}/{y}.png`;
 
   return (
     <MapContainer
@@ -157,13 +163,14 @@ const WorldMap = () => {
         [-90, -180],
         [90, 180],
       ]}
-      worldCopyJump={true}
+      // worldCopyJump={true}
     >
       <FitMapToBounds bounds={bounds} />
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        key={computedColorScheme}
+        url={tileUrl}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        noWrap={true}
+        // noWrap={true}
       />
       {filteredFlights.map((flight) => {
         const greatCirclePath = getGreatCirclePath(

@@ -14,6 +14,7 @@ import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import ColorSchemeToggle from "../components/ColorSchemeToggle";
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
@@ -69,6 +70,9 @@ function MyAppShell() {
             aria-label="Toggle sidebar menu"
           />
           Fly Log
+          <Group ml="auto" gap="xs">
+            <ColorSchemeToggle />
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar
