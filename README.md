@@ -170,7 +170,7 @@ npm run cypress:run
 ### Test Structure
 
 - **Unit tests:** Located in `src/` alongside components (e.g., `Component.test.jsx`)
-- **Test utilities:** Shared testing utilities in `test-utils/`
+- **Test utilities:** Shared testing utilities in `test-utils/` (see `test-utils/README.md` for details on the global i18n test setup, how translations are injected during tests, and examples to override per-test).
 - **Cypress tests:** End-to-end tests in `cypress/e2e/`
 - **Test constants:** Centralized test IDS in `src/constants/testIds.js`
 

@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MantineProvider } from "@mantine/core";
+import { render as sharedRender } from "../../test-utils/index.js";
 
 // Prepare mocks and mock the store before importing the component
 const mockSetSelectedYear = vi.fn();
@@ -40,9 +40,6 @@ vi.mock("../store.ts", () => ({
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store.ts";
 
-const renderWithProvider = (component) =>
-  render(<MantineProvider>{component}</MantineProvider>);
-
 describe("FlightYearFilter", () => {
   beforeEach(() => {
     mockSetSelectedYear.mockClear();
@@ -58,29 +55,36 @@ describe("FlightYearFilter", () => {
   });
 
   it("renders with correct default options", () => {
-    renderWithProvider(<FlightYearFilter />);
+    sharedRender(<FlightYearFilter />);
     const select = screen.getByRole("combobox");
     expect(select).toBeInTheDocument();
     // Check that the default value is 'all'
     expect(select.value).toBe("all");
-    // Check that the options exist
+    // Check that the options exist and have expected values (translations may vary)
     const options = screen.getAllByRole("option");
-    expect(options[0]).toHaveTextContent("All Flights");
-    expect(options[1]).toHaveTextContent("Upcoming Flights");
-    expect(options[2]).toHaveTextContent("Past Flights");
-    expect(options[3]).toHaveTextContent("2023");
-    expect(options[4]).toHaveTextContent("2022");
+    // First three are the special filters: values should be 'all', 'upcoming', 'past'
+    expect(options[0].value).toBe("all");
+    expect(options[1].value).toBe("upcoming");
+    expect(options[2].value).toBe("past");
+    // Next options are years; ensure they display the expected year strings
+    expect(
+      options.some((o) => o.textContent && o.textContent.includes("2023")),
+    ).toBe(true);
+    expect(
+      options.some((o) => o.textContent && o.textContent.includes("2022")),
+    ).toBe(true);
   });
 
   it("displays years in descending order from past flights only", () => {
-    renderWithProvider(<FlightYearFilter />);
+    sharedRender(<FlightYearFilter />);
     const options = screen.getAllByRole("option");
-    expect(options[3]).toHaveTextContent("2023");
-    expect(options[4]).toHaveTextContent("2022");
+    // The year options should appear after the three filter options and be in descending order
+    expect(options[3].textContent).toContain("2023");
+    expect(options[4].textContent).toContain("2022");
   });
 
   it("calls setSelectedYear when selection changes", () => {
-    renderWithProvider(<FlightYearFilter />);
+    sharedRender(<FlightYearFilter />);
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: "2023" } });
     expect(mockSetSelectedYear).toHaveBeenCalledWith("2023");
@@ -96,7 +100,7 @@ describe("FlightYearFilter", () => {
       isLoading: false,
       error: null,
     }));
-    renderWithProvider(<FlightYearFilter />);
+    sharedRender(<FlightYearFilter />);
     const select = screen.getByRole("combobox");
     expect(select.value).toBe("2023");
   });

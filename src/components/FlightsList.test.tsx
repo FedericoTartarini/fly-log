@@ -6,13 +6,13 @@ vi.mock("../store", () => {
 });
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach } from "vitest";
 import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
-import { MantineProvider } from "@mantine/core";
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store";
+import { render } from "../../test-utils/index.js";
 
 // Create a mock flight
 const mockFlight = {
@@ -27,14 +27,6 @@ const mockFlight = {
 // Create an enriched version of the flight for testing
 const enrichedFlight = enrichFlightData(mockFlight);
 
-// Helper function to render with providers
-const renderWithProvider = (component: React.ReactNode) =>
-  render(
-    <MemoryRouter>
-      <MantineProvider>{component}</MantineProvider>
-    </MemoryRouter>,
-  );
-
 describe("FlightsList", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -46,7 +38,9 @@ describe("FlightsList", () => {
       filteredFlights: [enrichedFlight],
     });
 
-    renderWithProvider(<FlightsList />);
+    render(<FlightsList />, {
+      wrapper: ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
+    });
 
     expect(screen.getByText(/SFO → SEA/));
     expect(screen.getByText(/DL/));
@@ -59,7 +53,9 @@ describe("FlightsList", () => {
       filteredFlights: [],
     });
 
-    renderWithProvider(<FlightsList />);
+    render(<FlightsList />, {
+      wrapper: ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
+    });
 
     expect(screen.getByText(/No flights to display for this selection/));
   });

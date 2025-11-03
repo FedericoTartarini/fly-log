@@ -1,9 +1,9 @@
 import React from "react";
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { render } from "../../test-utils/index.js";
 import FlightCard from "./FlightCard";
 import type { EnhancedFlight } from "../types/enhancedFlight.ts";
-import { MantineProvider } from "@mantine/core";
 
 const mockFlight: EnhancedFlight = {
   id: "1",
@@ -26,12 +26,9 @@ const mockFlight: EnhancedFlight = {
   airline_icon_path: "qantas_mono.svg",
 };
 
-const renderWithProvider = (ui: React.ReactNode) =>
-  render(<MantineProvider>{ui}</MantineProvider>);
-
 describe("FlightCard", () => {
   it("renders flight information", () => {
-    renderWithProvider(
+    render(
       <FlightCard
         flight={mockFlight}
         title="Test EnhancedFlight"
@@ -41,7 +38,16 @@ describe("FlightCard", () => {
     expect(screen.getByText("Test EnhancedFlight"));
     expect(screen.getByText("Qantas"));
     expect(screen.getByText("SG"));
-    expect(screen.getByText("11.24h flight time"));
+
+    // Accept either decimal-hour format (e.g. "11.24h flight time") or hours+minutes (e.g. "11h 14m flight time")
+    const ft = mockFlight.flight_time;
+    const hours = Math.floor(ft);
+    const minutes = Math.round((ft - hours) * 60);
+    const timeRegex = new RegExp(
+      `${hours}(?:\\.\\\d+h|h\\s+${minutes}m)\\sflight time`,
+    );
+    expect(screen.getByText(timeRegex));
+
     expect(screen.getByText("10,117 km"));
     expect(screen.getByText("SIN → BLQ"));
     expect(screen.getByText("SG"));

@@ -1,20 +1,6 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MantineProvider } from "@mantine/core";
-
-// Mock window.matchMedia for Mantine
-if (!window.matchMedia) {
-  window.matchMedia = vi.fn().mockImplementation(() => ({
-    matches: false,
-    media: "",
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  }));
-}
+import { render } from "../../test-utils/index.js";
 
 // Mock firebaseClient
 vi.mock("../firebaseClient", () => ({
@@ -41,16 +27,13 @@ vi.mock("papaparse", () => ({
 import FlightCsvUpload, { validateCsvData } from "./FlightCsvUpload";
 import Papa from "papaparse";
 
-const renderWithProvider = (ui) =>
-  render(<MantineProvider>{ui}</MantineProvider>);
-
 describe("FlightCsvUpload", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("renders input and button", () => {
-    renderWithProvider(<FlightCsvUpload />);
+    render(<FlightCsvUpload />);
     expect(
       screen.getByText(/Upload Flight Data from CSV/i),
     ).toBeInTheDocument();
@@ -69,7 +52,7 @@ describe("FlightCsvUpload", () => {
       });
     });
 
-    renderWithProvider(<FlightCsvUpload />);
+    render(<FlightCsvUpload />);
     const file = new File(["invalid"], "test.csv", { type: "text/csv" });
     fireEvent.change(screen.getByLabelText(/Flight data CSV/i), {
       target: { files: [file] },
