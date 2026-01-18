@@ -10,8 +10,6 @@ import {
   Container,
   Loader,
   Text,
-  Button,
-  Modal,
   Center,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
@@ -27,6 +25,7 @@ import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightEntryForm from "../components/FlightEntryForm.tsx";
 import NoFlightsCard from "../components/NoFlightsCard.jsx";
 import { useTranslation } from "react-i18next";
+import FlightsTopBar from "../components/FlightsTopBar.jsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
@@ -73,22 +72,7 @@ const FlightsStats = () => {
   }
 
   if (allFlights.length === 0) {
-    return (
-      <>
-        <Modal
-          opened={formOpened}
-          onClose={() => setFormOpened(false)}
-          title={t("form.add_new_flight")}
-          size="lg"
-        >
-          <FlightEntryForm onSaved={handleFlightSaved} />
-        </Modal>
-
-        {allFlights.length === 0 && (
-          <NoFlightsCard setFormOpened={setFormOpened} />
-        )}
-      </>
-    );
+    return <FlightsTopBar fullWidth={true} />;
   }
 
   return (
@@ -108,18 +92,7 @@ const FlightsStats = () => {
           <StatsSummary />
 
           {/* Add button to open modal */}
-          <Button onClick={() => setFormOpened(true)} fullWidth>
-            {t("form.add_new_flight")}
-          </Button>
-
-          <Modal
-            opened={formOpened}
-            onClose={() => setFormOpened(false)}
-            title={t("form.add_new_flight")}
-            size="lg"
-          >
-            <FlightEntryForm onSaved={handleFlightSaved} />
-          </Modal>
+          <FlightsTopBar fullWidth={true} />
 
           <DistanceStatsCard
             totalDistance={stats.totalDistance}
