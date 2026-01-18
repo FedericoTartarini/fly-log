@@ -7,6 +7,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
+import airlinesInfo from "../assets/airlines_info.json";
 
 /**
  * Renders a list of flights in a table.
@@ -53,6 +54,7 @@ const FlightsList: React.FC = () => {
       );
     }
 
+    // Try to build a local/build URL for the image, falling back to public path
     let imageUrl: string;
     try {
       // new URL with import.meta may cause TypeScript to complain in some build configs; ignore the TS check here
@@ -63,6 +65,25 @@ const FlightsList: React.FC = () => {
       imageUrl = `/assets/logos/${sourcePath}`;
     }
 
+    // Determine IATA code to lookup in airlinesInfo: prefer flight.airline_iata, otherwise derive from filename
+    const iataFromFlight = (flight.airline_iata || "")
+      .toString()
+      .trim()
+      .toUpperCase();
+    let iataLookup = iataFromFlight;
+    if (!iataLookup && sourcePath) {
+      // Safely extract filename and base without causing undefined errors
+      const fname = (sourcePath.split("/").pop() ?? sourcePath) as string;
+      const base = (fname.split(".")[0] ?? "") as string;
+      iataLookup = base.toUpperCase();
+    }
+
+    const airlineEntry = (airlinesInfo as any[]).find(
+      (a) => (a.iata || "").toString().toUpperCase() === iataLookup,
+    );
+    const airlineIconFromInfo = airlineEntry?.icon as string | undefined;
+
+    // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
       <Image
         src={imageUrl}
@@ -72,6 +93,20 @@ const FlightsList: React.FC = () => {
         fit="contain"
         loading="lazy"
         p={4}
+        onError={(e: any) => {
+          try {
+            const img = e?.currentTarget as HTMLImageElement | null;
+            if (!img) return;
+            img.onerror = null; // prevent loop
+            if (airlineIconFromInfo) {
+              img.src = airlineIconFromInfo;
+            } else {
+              img.src = "/assets/logos/default-airline.png";
+            }
+          } catch (_err) {
+            // ignore
+          }
+        }}
       />
     );
   };
@@ -135,7 +170,7 @@ const FlightsList: React.FC = () => {
                 <Table.Td>
                   <FlightActions
                     flight={flight}
-                    onEdit={(f) => {
+                    onEdit={(f: any) => {
                       setEditFlight(f);
                       setEditOpen(true);
                     }}
