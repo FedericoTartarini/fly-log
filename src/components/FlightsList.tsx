@@ -49,10 +49,45 @@ const FlightsList: React.FC = () => {
     );
   }
 
-  // compute the flights to show on the current page
+  // Helper to get epoch ms for various departure_date representations
+  const getDepartureEpoch = (flight: any): number => {
+    const d = flight?.departure_date;
+    if (!d) return -Infinity;
+    // Firestore Timestamp-like object with toDate()
+    if (typeof d?.toDate === "function") {
+      try {
+        const dt = d.toDate();
+        if (dt instanceof Date && !isNaN(dt.getTime())) return dt.getTime();
+      } catch (e) {
+        // fallthrough
+      }
+    }
+    // If object with seconds property
+    if (typeof d === "object" && typeof d.seconds === "number") {
+      return d.seconds * 1000;
+    }
+    // Date instance
+    if (d instanceof Date) {
+      const t = d.getTime();
+      return isNaN(t) ? -Infinity : t;
+    }
+    // string or number
+    if (typeof d === "string" || typeof d === "number") {
+      const t = new Date(d).getTime();
+      return isNaN(t) ? -Infinity : t;
+    }
+    return -Infinity;
+  };
+
+  // Sort flights by departure date descending (newest first)
+  const sortedFlights = [...filteredFlights].sort(
+    (a, b) => getDepartureEpoch(b) - getDepartureEpoch(a),
+  );
+
+  // compute the flights to show on the current page (after sorting)
   const startIndex = (page - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
-  const paginatedFlights = filteredFlights.slice(startIndex, endIndex);
+  const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
   /**
    * Returns the airline icon or a fallback icon.

@@ -7,7 +7,7 @@ Migrate exported Supabase CSV flight records into Firestore under the path:
 
 Usage:
   python migrate_supabase_to_firestore.py \
-    --csv python/flights_export.csv \
+    --csv python/flighty_export.csv \
     --service-account /path/to/serviceAccount.json \
     --target-uid SOME_UID
 
@@ -18,7 +18,7 @@ that row. If a row has no value for that column it will skip the row (or you can
 `--fallback-uid`).
 
 Options:
-  --csv PATH                Path to CSV file (default: python/flights_export.csv)
+  --csv PATH                Path to CSV file (default: python/flighty_export.csv)
   --service-account PATH    Path to Firebase service account JSON file (required)
   --project-id ID           Optional Firebase project id
   --target-uid UID          Target Firestore user id to import all rows under (mutually exclusive with --user-field)
@@ -60,7 +60,7 @@ except Exception:
 
 def parse_args():
     p = argparse.ArgumentParser(description="Migrate Supabase-exported flights CSV into Firestore")
-    p.add_argument("--csv", default="python/flights_export.csv", help="Path to CSV file")
+    p.add_argument("--csv", default="python/flighty_export.csv", help="Path to CSV file")
     p.add_argument("--service-account", required=True, help="Path to Firebase service account JSON file")
     p.add_argument("--project-id", default=None, help="Optional Firebase project id")
     group = p.add_mutually_exclusive_group(required=True)
