@@ -15,7 +15,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
-import airlinesInfo from "../assets/airlines_info.json";
+import airlinesInfo from "../assets/airlines.json";
 
 /**
  * Renders a list of flights in a table.

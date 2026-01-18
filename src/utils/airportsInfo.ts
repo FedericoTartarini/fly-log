@@ -15,7 +15,7 @@ interface airportInfo {
 }
 
 // Ensure airportsInfoData is typed
-import airportsInfoData from "../assets/major_airports.json" with { type: "json" };
+import airportsInfoData from "../assets/airports.json" with { type: "json" };
 
 export let airportsInfo: airportInfo[];
 airportsInfo = airportsInfoData;

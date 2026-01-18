@@ -83,7 +83,7 @@ def main():
     final_airports.sort(key=lambda x: x["iata"])
 
     # Write to python/airports_info.json (the file imported by src/utils/airportsInfo.ts)
-    output_filename = "../src/assets/major_airports.json"
+    output_filename = "../src/assets/airports.json"
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(final_airports, f, indent=2, ensure_ascii=False)
 

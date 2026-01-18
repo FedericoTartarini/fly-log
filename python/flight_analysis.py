@@ -121,7 +121,7 @@ def get_iso_country(iata_code):
 
 
 # Load flights data
-df_flights = pd.read_csv("./python/flights_export.csv")
+df_flights = pd.read_csv("./python/flighty_export.csv")
 df_flights = df_flights.fillna("null")
 
 # drop columns that are not needed
@@ -247,7 +247,7 @@ def process_flighty_export():
     Process the Flighty export data and enrich it with coordinates, distance, and estimated flight time.
     """
     # Load the exported Flighty data
-    df = pd.read_csv("./python/flights_export.csv")
+    df = pd.read_csv("./python/flighty_export.csv")
 
     # change the column names to lowercase and replace spaces with underscores
     df.columns = [col.lower().replace(" ", "_") for col in df.columns]

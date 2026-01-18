@@ -17,14 +17,14 @@ pip install -r requirements.txt
 Dry run to preview operations without writing:
 
 ```bash
-python python/migrate_supabase_to_firestore.py --csv python/flights_export.csv --service-account /path/to/serviceAccount.json --target-uid YOUR_UID --dry-run --limit 10 --verbose
+python python/migrate_supabase_to_firestore.py --csv python/flighty_export.csv --service-account /path/to/serviceAccount.json --target-uid YOUR_UID --dry-run --limit 10 --verbose
 ```
 
 Example usage
 
 ```bash
 python migrate_supabase_to_firestore.py \
-  --csv flights_export.csv \
+  --csv flighty_export.csv \
   --service-account /path/to/serviceAccount.json \
   --target-uid NEW_FIRESTORE_USER_ID
 ```
@@ -33,7 +33,7 @@ To preserve original user ids stored in a CSV column named `supabase_user_id`:
 
 ```bash
 python migrate_supabase_to_firestore.py \
-  --csv flights_export.csv \
+  --csv flighty_export.csv \
   --service-account /path/to/serviceAccount.json \
   --user-field supabase_user_id \
   --fallback-uid SOME_FALLBACK_UID
