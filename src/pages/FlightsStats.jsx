@@ -125,6 +125,7 @@ const FlightsStats = () => {
               }}
               barProps={{ radius: 8 }}
               series={[{ name: "departures", color: "blue.6" }]}
+              withTooltip={false}
             />
           </Card>
 
@@ -163,6 +164,7 @@ const FlightsStats = () => {
               }}
               barProps={{ radius: 8 }}
               series={[{ name: "flights", color: "green.6" }]}
+              withTooltip={false}
             />
           </Card>
         </Stack>
