@@ -5,7 +5,8 @@
   "table": {
     "icon": "Icona",
     "from_to": "Da → A",
-    "date_duration_distance": "Data, Durata & Distanza"
+    "date_duration_distance": "Data, Durata & Distanza",
+    "actions": ""
   },
   "airline_label": "Compagnia:",
   "aircraft_label": "Aereo:",
@@ -36,6 +37,18 @@
     "upcoming": "Voli futuri",
     "past": "Voli passati"
   },
+  "actions": {
+    "open_menu": "Apri azioni",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "confirm_delete_title": "Elimina volo",
+    "confirm_delete_message": "Sei sicuro di voler eliminare definitivamente questo volo? Questa azione non può essere annullata.",
+    "cancel": "Annulla",
+    "deleted_title": "Eliminato",
+    "deleted_message": "Volo eliminato",
+    "delete_error_title": "Errore durante l'eliminazione",
+    "not_signed_in": "Devi essere autenticato per eseguire questa azione"
+  },
   "no_flights_card": {
     "title": "Benvenuto",
     "description": "Sembra che non hai ancora aggiunto voli. Non preoccuparti, è facile iniziare! Clicca il pulsante qui sotto per aggiungere il tuo primo volo.",
@@ -57,11 +70,8 @@
   },
   "form": {
     "add_new_flight": "Aggiungi nuovo volo",
-    "tabs": {
-      "manual": "Inserimento manuale",
-      "csv": "Carica CSV"
-    },
     "labels": {
+      "edit_flight": "Modifica volo",
       "departure_date": "Data di partenza",
       "departure_time": "Ora di partenza",
       "departure_airport": "Aeroporto di partenza",
@@ -102,6 +112,7 @@
     },
     "buttons": {
       "save_single": "Salva volo",
+      "update": "Aggiorna",
       "save_multiple": "Salva voli"
     }
   },

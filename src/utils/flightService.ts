@@ -1,6 +1,16 @@
 import { firestore } from "../firebaseClient";
 import { Timestamp } from "firebase/firestore";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import { airlinesInfo } from "./airlinesInfo";
 import { airportsInfo } from "./airportsInfo";
 
@@ -151,4 +161,55 @@ export const getFilteredUserFlights = async (
   const snap = await getDocs(q);
   const data = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
   return (data || []).map((flight: any) => enrichFlightData(flight));
+};
+
+/**
+ * Delete a flight document (hard delete) for a given user.
+ * @param uid - User ID (must match Firestore path)
+ * @param flightId - Document id of the flight to delete
+ */
+export const deleteFlightForUser = async (uid: string, flightId: string) => {
+  if (!uid) throw new Error("User id is required to delete a flight");
+  if (!firestore)
+    throw new Error(
+      "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
+    );
+
+  const docRef = doc(firestore, "flights", uid, "records", flightId);
+  return deleteDoc(docRef);
+};
+
+/**
+ * Update a flight document for a given user and return the updated enriched flight
+ */
+export const updateFlightForUser = async (
+  uid: string,
+  flightId: string,
+  updates: any,
+) => {
+  if (!uid) throw new Error("User id is required to update a flight");
+  if (!firestore)
+    throw new Error(
+      "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
+    );
+
+  const docRef = doc(firestore, "flights", uid, "records", flightId);
+
+  const data = { ...updates };
+  if (data.departure_date) {
+    try {
+      const d = new Date(data.departure_date);
+      if (!isNaN(d.getTime())) data.departure_date = Timestamp.fromDate(d);
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  await updateDoc(docRef, data);
+
+  // Return the fresh document enriched
+  const snap = await getDoc(docRef);
+  if (!snap.exists()) throw new Error("Updated flight not found");
+  const merged = { id: snap.id, ...(snap.data() as any) };
+  return enrichFlightData(merged);
 };

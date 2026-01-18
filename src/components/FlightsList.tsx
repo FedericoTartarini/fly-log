@@ -1,8 +1,10 @@
 import React from "react";
-import { Image, Table, Text, ActionIcon, Center } from "@mantine/core";
-import useFlightStore from "../store";
+import { Image, Table, Text, ActionIcon, Center, Modal } from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
-import type { enhancedFlight } from "../types/enhancedFlight.ts";
+import useFlightStore from "../store";
+import FlightActions from "./FlightActions.jsx";
+import FlightEntryForm from "./FlightEntryForm";
+import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 
@@ -17,6 +19,9 @@ const FlightsList: React.FC = () => {
   };
 
   const { t } = useTranslation("flights");
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [editFlight, setEditFlight] = React.useState<any>(null);
+  const fetchFlights = useFlightStore((s: any) => s.fetchFlights);
 
   if (filteredFlights.length === 0) {
     return (
@@ -71,62 +76,97 @@ const FlightsList: React.FC = () => {
     );
   };
 
-  const rows = filteredFlights.map((flight, index) => {
-    const departureDateStr = formatDate(flight.departure_date);
-
-    // Safe formatting for flight time and distance
-    const ft = flight.flight_time ?? null;
-    const dist = Number.isFinite(flight.distance_km)
-      ? Math.round(flight.distance_km)
-      : null;
-    let durationDistanceStr = "";
-    if (ft !== null) {
-      const hours = Math.floor(ft);
-      const minutes = Math.round((ft % 1) * 60);
-      if (dist !== null) {
-        durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
-      } else {
-        durationDistanceStr = `${hours}h ${minutes}m`;
-      }
-    } else if (dist !== null) {
-      durationDistanceStr = `${dist.toLocaleString()} km`;
-    }
-
-    return (
-      <Table.Tr key={index}>
-        <Table.Td p={"0"}>
-          <Center>{getAirlineIcon(flight)}</Center>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">
-            {flight.departure_airport_iata} → {flight.arrival_airport_iata}
-          </Text>
-          <Text size="xs" c="dimmed">
-            {flight.airline_iata || flight.airline_name}{" "}
-            {flight.flight_number ? `: ${flight.flight_number}` : ""}
-          </Text>
-        </Table.Td>
-        <Table.Td>
-          <Text size="sm">{departureDateStr}</Text>
-          <Text size="xs" c="dimmed">
-            {durationDistanceStr}
-          </Text>
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
-
   return (
-    <Table striped highlightOnHover withTableBorder>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>{t("table.icon")}</Table.Th>
-          <Table.Th>{t("table.from_to")}</Table.Th>
-          <Table.Th>{t("table.date_duration_distance")}</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+    <>
+      <Table striped highlightOnHover withTableBorder>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>
+              <Center>{t("table.icon")}</Center>
+            </Table.Th>
+            <Table.Th>{t("table.from_to")}</Table.Th>
+            <Table.Th>{t("table.date_duration_distance")}</Table.Th>
+            <Table.Th>{t("table.actions")}</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {filteredFlights.map((flight) => {
+            const departureDateStr = formatDate(flight.departure_date);
+
+            // Safe formatting for flight time and distance
+            const ft = flight.flight_time ?? null;
+            const dist = Number.isFinite(flight.distance_km)
+              ? Math.round(flight.distance_km)
+              : null;
+            let durationDistanceStr = "";
+            if (ft !== null) {
+              const hours = Math.floor(ft);
+              const minutes = Math.round((ft % 1) * 60);
+              if (dist !== null) {
+                durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
+              } else {
+                durationDistanceStr = `${hours}h ${minutes}m`;
+              }
+            } else if (dist !== null) {
+              durationDistanceStr = `${dist.toLocaleString()} km`;
+            }
+
+            return (
+              <Table.Tr key={flight.id}>
+                <Table.Td p={"0.5rem"}>
+                  <Center>{getAirlineIcon(flight)}</Center>
+                </Table.Td>
+                <Table.Td>
+                  <Text size="sm">
+                    {flight.departure_airport_iata} →{" "}
+                    {flight.arrival_airport_iata}
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    {flight.airline_iata || flight.airline_name}{" "}
+                    {flight.flight_number ? `: ${flight.flight_number}` : ""}
+                  </Text>
+                </Table.Td>
+                <Table.Td>
+                  <Text size="sm">{departureDateStr}</Text>
+                  <Text size="xs" c="dimmed">
+                    {durationDistanceStr}
+                  </Text>
+                </Table.Td>
+                <Table.Td>
+                  <FlightActions
+                    flight={flight}
+                    onEdit={(f) => {
+                      setEditFlight(f);
+                      setEditOpen(true);
+                    }}
+                  />
+                </Table.Td>
+              </Table.Tr>
+            );
+          })}
+        </Table.Tbody>
+      </Table>
+      <Modal
+        opened={editOpen}
+        onClose={() => setEditOpen(false)}
+        title={t("form.labels.edit_flight")}
+      >
+        {editFlight && (
+          <FlightEntryForm
+            flight={editFlight}
+            onSaved={async () => {
+              setEditOpen(false);
+              // refresh flights list
+              try {
+                await fetchFlights();
+              } catch (e) {
+                // ignore
+              }
+            }}
+          />
+        )}
+      </Modal>
+    </>
   );
 };
 

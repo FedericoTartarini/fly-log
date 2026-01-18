@@ -5,7 +5,8 @@
   "table": {
     "icon": "Icon",
     "from_to": "From → To",
-    "date_duration_distance": "Date, Duration & Distance"
+    "date_duration_distance": "Date, Duration & Distance",
+    "actions": ""
   },
   "airline_label": "Airline:",
   "aircraft_label": "Aircraft:",
@@ -36,6 +37,18 @@
     "upcoming": "Upcoming Flights",
     "past": "Past Flights"
   },
+  "actions": {
+    "open_menu": "Open actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm_delete_title": "Delete flight",
+    "confirm_delete_message": "Are you sure you want to permanently delete this flight? This action cannot be undone.",
+    "cancel": "Cancel",
+    "deleted_title": "Deleted",
+    "deleted_message": "Flight deleted",
+    "delete_error_title": "Error deleting flight",
+    "not_signed_in": "You must be signed in to perform this action"
+  },
   "no_flights_card": {
     "title": "Welcome",
     "description": "It looks like you haven't added any flights yet. Don't worry, it's easy to get started! Click the button below to add your first flight.",
@@ -57,11 +70,8 @@
   },
   "form": {
     "add_new_flight": "Add New Flight",
-    "tabs": {
-      "manual": "Manual Entry",
-      "csv": "CSV Upload"
-    },
     "labels": {
+      "edit_flight": "Edit Flight",
       "departure_date": "Departure Date",
       "departure_time": "Departure Time",
       "departure_airport": "Departure Airport",
@@ -73,6 +83,10 @@
       "return_date": "Return Date",
       "return_time": "Return Time",
       "not_signed_in": "You are not signed in. Please sign in to save flights."
+    },
+    "tabs": {
+      "manual": "Manual Entry",
+      "csv": "CSV Upload"
     },
     "placeholders": {
       "select_date": "Select date",
@@ -102,6 +116,7 @@
     },
     "buttons": {
       "save_single": "Save Flight",
+      "update": "Update",
       "save_multiple": "Save Flights"
     }
   },

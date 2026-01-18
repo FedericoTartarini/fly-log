@@ -10,7 +10,7 @@ onAuthStateChanged((user) => {
 });
 
 interface Flight {
-  id: number;
+  id: string;
   departure_date: string;
   departure_airport_iata: string;
   arrival_airport_iata: string;
@@ -26,6 +26,8 @@ interface FlightStoreState {
   error: string | null;
   fetchFlights: () => Promise<void>;
   setSelectedYear: (year: string) => Promise<void>;
+  // remove a flight by id from both lists (optimistic UI)
+  removeFlightById: (id: string) => void;
 }
 
 const filterByYear = (flights: Flight[], year: string) => {
@@ -93,6 +95,17 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
+  },
+
+  removeFlightById: (id: string) => {
+    set((state) => ({
+      allFlights: state.allFlights.filter(
+        (f: any) => String(f.id) !== String(id),
+      ),
+      filteredFlights: state.filteredFlights.filter(
+        (f: any) => String(f.id) !== String(id),
+      ),
+    }));
   },
 }));
 
