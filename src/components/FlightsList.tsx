@@ -1,5 +1,13 @@
 import React from "react";
-import { Image, Table, Text, ActionIcon, Center, Modal } from "@mantine/core";
+import {
+  Image,
+  Table,
+  Text,
+  ActionIcon,
+  Center,
+  Modal,
+  Pagination,
+} from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import FlightActions from "./FlightActions.jsx";
@@ -24,6 +32,15 @@ const FlightsList: React.FC = () => {
   const [editFlight, setEditFlight] = React.useState<any>(null);
   const fetchFlights = useFlightStore((s: any) => s.fetchFlights);
 
+  const PAGE_SIZE = 20;
+  const [page, setPage] = React.useState(1);
+  const totalPages = Math.max(1, Math.ceil(filteredFlights.length / PAGE_SIZE));
+
+  // reset to first page if filteredFlights changes (e.g., new fetch or filter applied)
+  React.useEffect(() => {
+    setPage(1);
+  }, [filteredFlights.length]);
+
   if (filteredFlights.length === 0) {
     return (
       <Text mt="md" ta="center">
@@ -31,6 +48,11 @@ const FlightsList: React.FC = () => {
       </Text>
     );
   }
+
+  // compute the flights to show on the current page
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedFlights = filteredFlights.slice(startIndex, endIndex);
 
   /**
    * Returns the airline icon or a fallback icon.
@@ -66,11 +88,10 @@ const FlightsList: React.FC = () => {
     }
 
     // Determine IATA code to lookup in airlinesInfo: prefer flight.airline_iata, otherwise derive from filename
-    const iataFromFlight = (flight.airline_iata || "")
+    let iataLookup = (flight.airline_iata || "")
       .toString()
       .trim()
       .toUpperCase();
-    let iataLookup = iataFromFlight;
     if (!iataLookup && sourcePath) {
       // Safely extract filename and base without causing undefined errors
       const fname = (sourcePath.split("/").pop() ?? sourcePath) as string;
@@ -125,7 +146,7 @@ const FlightsList: React.FC = () => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {filteredFlights.map((flight) => {
+          {paginatedFlights.map((flight) => {
             const departureDateStr = formatDate(flight.departure_date);
 
             // Safe formatting for flight time and distance
@@ -181,6 +202,14 @@ const FlightsList: React.FC = () => {
           })}
         </Table.Tbody>
       </Table>
+
+      {/* Pagination control (Mantine) */}
+      {totalPages > 1 && (
+        <Center mt="md">
+          <Pagination total={totalPages} value={page} onChange={setPage} />
+        </Center>
+      )}
+
       <Modal
         opened={editOpen}
         onClose={() => setEditOpen(false)}
