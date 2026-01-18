@@ -22,15 +22,12 @@ import {
   getFlightsByTimeGrouping,
 } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
-import FlightEntryForm from "../components/FlightEntryForm.tsx";
-import NoFlightsCard from "../components/NoFlightsCard.jsx";
 import { useTranslation } from "react-i18next";
 import FlightsTopBar from "../components/FlightsTopBar.jsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
     useFlightStore();
-  const [formOpened, setFormOpened] = useState(false);
   const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
 
   // Move the stats calculation here to avoid conditional hook calls
@@ -39,11 +36,6 @@ const FlightsStats = () => {
   useEffect(() => {
     fetchFlights();
   }, [fetchFlights]);
-
-  const handleFlightSaved = () => {
-    setFormOpened(false);
-    fetchFlights(); // Refresh data after saving a new flight
-  };
 
   // Prepare chart data outside of the conditional rendering
   const chartData = getDeparturesByCountry(filteredFlights);
