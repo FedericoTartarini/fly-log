@@ -26,3 +26,5 @@ departure_date,departure_time,departure_airport_iata,arrival_airport_iata,airlin
 2025-07-09,20:45,SIN,SYD,QF,82
 2025-08-13,10:05,SYD,BNE,QF,512
 2025-08-18,09:15,BNE,SYD,QF,513
+2025-11-19,21:25,SYD,HND,QF,25
+2025-12-03,21:25,HND,SYD,QF,60
