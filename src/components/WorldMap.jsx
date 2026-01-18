@@ -181,9 +181,16 @@ const WorldMap = () => {
     [filteredFlights],
   );
 
-  const tileUrl = `https://{s}.basemaps.cartocdn.com/${
-    computedColorScheme === "dark" ? "dark" : "light"
-  }_all/{z}/{x}/{y}.png`;
+  // Current Carto (has gray borders)
+  // const tileUrl = `https://{s}.basemaps.cartocdn.com/${computedColorScheme === "dark" ? "dark" : "light"}_all/{z}/{x}/{y}.png`;
+
+  // Try this: Esri World Terrain (Clean, physical look, no borders)
+  // Note: This does not automatically support dark mode efficiently,
+  // so you might need a different URL for dark mode or use CSS filters.
+  const tileUrl =
+    computedColorScheme === "dark"
+      ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png" // Carto Dark without text (borders are very faint)
+      : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}"; // Esri Terrain (Very clean, no borders)
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
@@ -199,7 +206,7 @@ const WorldMap = () => {
       center={center}
       zoom={2}
       minZoom={2}
-      style={{ height: "70vh", width: "100%" }}
+      style={{ height: "600px", width: "100%" }}
       worldCopyJump={true} // Keep this for smooth navigation
     >
       <FitMapToBounds bounds={bounds} />
