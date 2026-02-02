@@ -37,10 +37,23 @@ export const useFlightStats = (filteredFlights) => {
     const longHaulFlights = filteredFlights.filter(
       (flight) => flight.distance_km >= 5000,
     );
-    const westBoundFlights = filteredFlights.filter(
-      (flight) =>
-        flight.departure_coordinates[1] > flight.arrival_coordinates[1],
-    );
+    // todo I need to fix this since breaking the code
+    const westBoundFlights = filteredFlights.filter((flight) => {
+      try {
+        const depLon = flight.departure_coordinates[1];
+        const arrLon = flight.arrival_coordinates[1];
+        // Handle crossing the antimeridian
+        if (Math.abs(depLon - arrLon) > 180) {
+          return depLon < arrLon;
+        }
+        return depLon > arrLon;
+      } catch (error) {
+        console.warn(
+          `Flight ${flight.flight_number} from ${flight.departure_airport_iata} to ${flight.arrival_airport_iata} caused an error in westBound calculation: ${error.message}. Please edit this flight.`,
+        );
+        return false;
+      }
+    });
 
     // Find shortest and longest flights
     const shortestFlight = filteredFlights.reduce(
