@@ -16,6 +16,7 @@ import { addFlightsForUser } from "../firebaseClient";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
+import { validateAndNormalizeCsvRows } from "../utils/iataValidation";
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -109,14 +110,19 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           const flightData = results.data;
 
-          const uid = user?.uid || null;
-          if (!uid) {
-            setError(t("csv.errors.not_signed_in"));
+          // todo I should check that the airport exists in the database otherwise throw error
+
+          // Validate and normalize IATA codes against local assets
+          const { errors: iataErrors, normalizedRows } =
+            validateAndNormalizeCsvRows(flightData);
+
+          if (iataErrors.length > 0) {
+            setError(iataErrors.join("\n"));
             setParsing(false);
             return;
           }
 
-          const formattedFlights = flightData.map((flight) => ({
+          const formattedFlights = normalizedRows.map((flight) => ({
             departure_date: flight.departure_date,
             departure_time: flight.departure_time,
             departure_airport_iata: flight.departure_airport_iata,
