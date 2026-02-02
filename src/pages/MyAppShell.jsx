@@ -144,7 +144,7 @@ function MyAppShell() {
       </AppShell.Navbar>
 
       <AppShell.Main pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}>
-        <Container size="xs" p={0}>
+        <Container size="lg" p={0}>
           <Outlet />
         </Container>
       </AppShell.Main>
