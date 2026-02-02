@@ -206,7 +206,7 @@ const WorldMap = () => {
       center={center}
       zoom={2}
       minZoom={2}
-      style={{ height: "600px", width: "100%" }}
+      style={{ height: "60vh", width: "100%" }}
       worldCopyJump={true} // Keep this for smooth navigation
     >
       <FitMapToBounds bounds={bounds} />
