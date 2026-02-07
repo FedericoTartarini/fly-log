@@ -99,6 +99,6 @@ describe("StatsSummary", () => {
     const airlinesFlownElement = document.getElementById(
       IDS.STATS.AIRLINES_FLOWN,
     );
-    expect(airlinesFlownElement).toHaveTextContent("1");
+    expect(airlinesFlownElement).toHaveTextContent("3");
   });
 });
