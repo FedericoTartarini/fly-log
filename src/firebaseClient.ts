@@ -17,26 +17,16 @@ import {
   enableIndexedDbPersistence,
 } from "firebase/firestore";
 
-// Read Vite env vars
-const getEnv = (key: string, fallback = ""): string => {
-  // @ts-ignore
-  if (typeof import.meta !== "undefined" && import.meta.env?.[key]) {
-    // @ts-ignore
-    return import.meta.env[key] as string;
-  }
-  if (typeof process !== "undefined" && process.env?.[key]) {
-    return process.env[key] as string;
-  }
-  return fallback;
-};
-
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: getEnv("VITE_FIREBASE_API_KEY", ""),
-  authDomain: getEnv("VITE_FIREBASE_AUTH_DOMAIN", ""),
-  projectId: getEnv("VITE_FIREBASE_PROJECT_ID", ""),
-  storageBucket: getEnv("VITE_FIREBASE_STORAGE_BUCKET", ""),
-  messagingSenderId: getEnv("VITE_FIREBASE_MESSAGING_SENDER_ID", ""),
-  appId: getEnv("VITE_FIREBASE_APP_ID", ""),
+  apiKey: "AIzaSyBftl7iMtJnmX3D2waYTfdREsIH1IkuvTM",
+  authDomain: "fly-log-78b66.firebaseapp.com",
+  projectId: "fly-log-78b66",
+  storageBucket: "fly-log-78b66.firebasestorage.app",
+  messagingSenderId: "1098570639331",
+  appId: "1:1098570639331:web:c58bae65c78641e2e122d6",
+  measurementId: "G-F88REW0KLN"
 };
 
 let app: any = null;
