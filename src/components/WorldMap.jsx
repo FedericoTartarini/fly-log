@@ -53,10 +53,17 @@ function splitPathAtAntimeridian(path) {
  * @returns {[number, number]} [lat, lon]
  */
 const getFlightsCentroid = (flights) => {
-  const coords = flights.flatMap((f) => [
-    f.departure_coordinates,
-    f.arrival_coordinates,
-  ]);
+  const coords = flights
+    .flatMap((f) => [
+      f.departure_coordinates,
+      f.arrival_coordinates,
+    ])
+    .filter(
+      (coord) =>
+        Array.isArray(coord) &&
+        coord.length === 2 &&
+        coord.every((n) => typeof n === "number" && isFinite(n)),
+    );
   if (coords.length === 0) return [25, 74];
 
   const toRad = (deg) => (deg * Math.PI) / 180;
@@ -88,10 +95,17 @@ const getFlightsCentroid = (flights) => {
  * rather than splitting the view.
  */
 const getFlightsBounds = (flights) => {
-  const coords = flights.flatMap((f) => [
-    f.departure_coordinates,
-    f.arrival_coordinates,
-  ]);
+  const coords = flights
+    .flatMap((f) => [
+      f.departure_coordinates,
+      f.arrival_coordinates,
+    ])
+    .filter(
+      (coord) =>
+        Array.isArray(coord) &&
+        coord.length === 2 &&
+        coord.every((n) => typeof n === "number" && isFinite(n)),
+    );
 
   if (!coords.length)
     return [
