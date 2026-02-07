@@ -29,6 +29,12 @@ service cloud.firestore {
       // remains a timestamp and string fields remain strings.
       allow update: if request.auth != null
         && request.auth.uid == userId
+        && request.resource.data.keys().hasAll([
+          'departure_date',
+          'departure_airport_iata',
+          'arrival_airport_iata',
+          'airline_iata'
+        ])
         && (
           !('departure_date' in request.resource.data) || request.resource.data.departure_date is timestamp
         )
@@ -52,4 +58,3 @@ service cloud.firestore {
     }
   }
 }
-
