@@ -21,16 +21,16 @@ def fetch_openflights_icao():
     Example: { 'AA': 'AAL', 'DL': 'DAL' }
     """
     print(f"Fetching OpenFlights data from {OPENFLIGHTS_URL}...")
-    response = requests.get(OPENFLIGHTS_URL)
-    response.raise_for_status()
+    openflights_response = requests.get(OPENFLIGHTS_URL, timeout=10)
+    openflights_response.raise_for_status()
 
     # OpenFlights CSV format: ID, Name, Alias, IATA, ICAO, ...
-    decoded_content = response.content.decode("utf-8")
+    decoded_content = openflights_response.content.decode("utf-8")
     csv_reader = csv.reader(io.StringIO(decoded_content))
 
     lookup = {}
     for row in csv_reader:
-        if len(row) < 5:
+        if len(row) < 8:
             continue
 
         iata = row[3]
@@ -50,7 +50,9 @@ def main():
 
     # 2. Get the base list (Names + Logos)
     print(f"Fetching Besrourms data from {BESROURMS_URL}...")
-    base_data = requests.get(BESROURMS_URL).json()
+    besrourms_response = requests.get(BESROURMS_URL, timeout=10)
+    besrourms_response.raise_for_status()
+    base_data = besrourms_response.json()
 
     final_airlines = []
 
