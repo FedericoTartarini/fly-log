@@ -95,6 +95,13 @@ const FlightCsvUpload = ({ onComplete }) => {
     setParsing(true);
     setError(null);
 
+    const uid = user.uid;
+    if (!uid) {
+      setError("User not authenticated");
+      setParsing(false);
+      return;
+    }
+
     try {
       // Parse the CSV file
       Papa.parse(file, {
@@ -132,35 +139,41 @@ const FlightCsvUpload = ({ onComplete }) => {
           }));
 
           let lastProgress = 0;
-          await addFlightsForUser(uid, formattedFlights, (p) => {
-            if (p !== lastProgress) {
-              lastProgress = p;
-              setUploadProgress(p);
+          try {
+            await addFlightsForUser(uid, formattedFlights, (p) => {
+              if (p !== lastProgress) {
+                lastProgress = p;
+                setUploadProgress(p);
+              }
+            });
+
+            const successCount = formattedFlights.length;
+            const errorCount = 0;
+
+            // Show completion notification
+            notifications.show({
+              title: t("csv.notification.title"),
+              message: t("csv.notification.message", {
+                success: successCount,
+                failed: errorCount,
+              }),
+              color: errorCount > 0 ? "orange" : "green",
+              icon:
+                errorCount > 0 ? (
+                  <IconAlertCircle size={16} />
+                ) : (
+                  <IconCheck size={16} />
+                ),
+            });
+
+            setParsing(false);
+            if (onComplete) {
+              onComplete();
             }
-          });
-
-          const successCount = formattedFlights.length;
-          const errorCount = 0;
-
-          // Show completion notification
-          notifications.show({
-            title: t("csv.notification.title"),
-            message: t("csv.notification.message", {
-              success: successCount,
-              failed: errorCount,
-            }),
-            color: errorCount > 0 ? "orange" : "green",
-            icon:
-              errorCount > 0 ? (
-                <IconAlertCircle size={16} />
-              ) : (
-                <IconCheck size={16} />
-              ),
-          });
-
-          setParsing(false);
-          if (onComplete) {
-            onComplete();
+          } catch (e) {
+            setError(e.message);
+            setParsing(false);
+            setUploadProgress(0);
           }
         },
         error: (error) => {
