@@ -57,35 +57,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     returnFlightNumber: "",
   };
 
-  // If editing, prefill values
-  if (flight) {
-    try {
-      const depDate =
-        flight.departure_date &&
-        typeof flight.departure_date.toDate === "function"
-          ? flight.departure_date.toDate()
-          : flight.departure_date
-            ? new Date(flight.departure_date)
-            : null;
-
-      initialValues.departureDate = depDate;
-      initialValues.departureTime = "";
-      initialValues.departureAirport = flight.departure_airport_iata || "";
-      initialValues.arrivalAirport = flight.arrival_airport_iata || "";
-      initialValues.airline = flight.airline_iata || "";
-      initialValues.flightNumber = flight.flight_number || "";
-
-      // For now we don't prefill return flight (editing single flight at a time)
-      initialValues.returnDate = null;
-      initialValues.returnTime = "";
-      initialValues.returnFlightNumber = "";
-
-      // hide return fields when editing a single flight
-      // setAddReturn(false) handled in useEffect
-    } catch (e) {
-      // ignore
-    }
-  }
 
   const form = useForm({
     initialValues,
@@ -220,7 +191,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         });
       } else {
         // Create new flights
-        for (const [idx, f] of flightsToInsert.entries()) {
+        for (const f of flightsToInsert) {
           await addFlightForUser(uid, f);
         }
 
