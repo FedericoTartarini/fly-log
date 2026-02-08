@@ -51,18 +51,32 @@ def main():
         full_country_name = country_lookup.get(iso_code, iso_code or "")
 
         # Parse numeric fields safely
-        try:
-            lat = float(row.get("latitude_deg") or 0.0)
-        except (ValueError, TypeError):
+        val = row.get("latitude_deg")
+        if val is None or val == "":
             lat = None
-        try:
-            lon = float(row.get("longitude_deg") or 0.0)
-        except (ValueError, TypeError):
+        else:
+            try:
+                lat = float(val)
+            except (ValueError, TypeError):
+                lat = None
+
+        val = row.get("longitude_deg")
+        if val is None or val == "":
             lon = None
-        try:
-            elev = int(row.get("elevation_ft") or 0)
-        except (ValueError, TypeError):
+        else:
+            try:
+                lon = float(val)
+            except (ValueError, TypeError):
+                lon = None
+
+        val = row.get("elevation_ft")
+        if val is None or val == "":
             elev = None
+        else:
+            try:
+                elev = int(val)
+            except (ValueError, TypeError):
+                elev = None
 
         # Build object in the exact schema expected by the app
         airport_obj = {
