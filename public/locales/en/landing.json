@@ -3,6 +3,7 @@
   "subtitle": "Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map. Sign in to get started.",
   "get_started": "Get Started",
   "learn_more": "Learn More",
+  "flight_image_alt": "Airplane flying through clouds",
   "features": {
     "where_title": "Where did you fly?",
     "where_desc": "Visualize all your flights on a world map.",
@@ -18,4 +19,3 @@
     "detail_desc": "See detailed flight information like departure/arrival airports, airline, and flight number."
   }
 }
-

@@ -22,7 +22,7 @@ function Landing() {
         <Image
           radius="md"
           src={flightImg}
-          alt={t("title")}
+          alt={t("flight_image_alt")}
           h="auto"
           w="100%"
           fit="contain"

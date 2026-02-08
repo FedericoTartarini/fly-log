@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import classes from "../pages/MyAppShell.module.css";
 
 const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const value = i18n.language || "en";
 
@@ -20,7 +20,7 @@ const LanguageSwitcher = () => {
 
   return (
     <Select
-      label="Language"
+      label={t("language")}
       size="xs"
       value={value}
       onChange={handleChange}

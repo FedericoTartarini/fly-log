@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
 
 function Login() {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const { t } = useTranslation("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ function Login() {
   const [mode, setMode] = useState("signin"); // 'signin' or 'signup'
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  if (session) return <Navigate to={PATHS.STATS} />;
+  if (user) return <Navigate to={PATHS.STATS} />;
 
   const handleEmailSignIn = async () => {
     setLoading(true);
