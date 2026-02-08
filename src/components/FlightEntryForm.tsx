@@ -57,7 +57,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     returnFlightNumber: "",
   };
 
-
   const form = useForm({
     initialValues,
     validate: {
@@ -312,7 +311,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
             />
             <TextInput
               label={t("form.labels.flight_number")}
-              placeholder={t("form.placeholders.time_example")}
+              placeholder={t("form.placeholders.flight_number_example")}
               {...form.getInputProps("flightNumber")}
             />
           </Group>
@@ -361,7 +360,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
                     />
                     <TextInput
                       label={t("form.labels.flight_number")}
-                      placeholder={t("form.placeholders.time_example")}
+                      placeholder={t("form.placeholders.flight_number_example")}
                       {...form.getInputProps("returnFlightNumber")}
                     />
                   </Group>
