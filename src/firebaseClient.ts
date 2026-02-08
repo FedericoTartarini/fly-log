@@ -9,12 +9,12 @@ import {
   onAuthStateChanged as fbOnAuthStateChanged,
 } from "firebase/auth";
 import {
-  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
   collection,
   addDoc,
   serverTimestamp,
   Timestamp,
-  enableIndexedDbPersistence,
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -40,12 +40,10 @@ if (firebaseConfig.apiKey) {
   app = initializeApp(firebaseConfig);
   // Lazily import auth and firestore SDKs
   auth = getAuth(app);
-  firestore = getFirestore(app);
-
-  // Try to enable offline persistence for Firestore (IndexedDB). Not fatal if it fails.
   try {
-    // @ts-ignore
-    enableIndexedDbPersistence(firestore);
+    firestore = initializeFirestore(app, {
+      localCache: persistentLocalCache(),
+    });
   } catch (e) {
     // Persistence can fail if multiple tabs open or unsupported environment; ignore.
     // eslint-disable-next-line no-console
