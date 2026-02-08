@@ -3,6 +3,7 @@
   "permission": {
     "read": {
       "*": "allow",
+      ".env": "deny",
       "*.env": "deny",
       "*.env.*": "deny",
       "*.env.example": "allow"
@@ -13,7 +14,9 @@
       "coderabbit --prompt-only --type uncommitted": "allow",
       "coderabbit --prompt-only --base *": "allow",
       "git branch --show-current": "allow",
+      "git commit": "ask",
       "git commit *": "ask",
+      "git push": "deny",
       "git push *": "deny",
       "git diff *": "allow",
       "npm test *": "allow",
@@ -33,6 +36,7 @@
     },
     "edit": {
       "*": "allow",
+      ".env": "deny",
       "*.env": "deny",
       "*.env.*": "deny",
       "*.env.example": "allow"
