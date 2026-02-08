@@ -93,12 +93,28 @@ const FlightsList: React.FC = () => {
   const endIndex = startIndex + PAGE_SIZE;
   const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
+  const [failedImages, setFailedImages] = React.useState(new Set<string>());
+
   /**
    * Returns the airline icon or a fallback icon.
    * @param {Flight} flight
    * @returns {JSX.Element}
    */
   const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
+    if (failedImages.has(flight.id)) {
+      return (
+        <ActionIcon
+          aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
+          color="gray"
+        >
+          <IconPlaneInflight
+            style={{ width: "70%", height: "70%" }}
+            stroke={1.5}
+          />
+        </ActionIcon>
+      );
+    }
+
     const sourcePath = flight.airline_icon_path;
 
     if (!sourcePath) {
@@ -153,31 +169,7 @@ const FlightsList: React.FC = () => {
         fit="contain"
         loading="lazy"
         p={4}
-        onError={(e: any) => {
-          try {
-            const img = e?.currentTarget as HTMLImageElement | null;
-            if (!img) return;
-            img.onerror = null; // prevent loop
-            if (airlineIconFromInfo && img.src !== airlineIconFromInfo) {
-              img.src = airlineIconFromInfo;
-            } else if (img.src !== "/assets/logos/default-airline.png") {
-              img.src = "/assets/logos/default-airline.png";
-            } else {
-              // Final fallback: replace with IconPlaneInflight
-              const parent = img.parentElement;
-              if (parent) {
-                const icon = document.createElement("div");
-                icon.innerHTML =
-                  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plane-inflight"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6l-6 -6l6 -6"/><path d="M21 6l-6 6l6 6l-6 -6z"/></svg>';
-                icon.style.width = "50px";
-                icon.style.height = "50px";
-                parent.replaceChild(icon, img);
-              }
-            }
-          } catch (_err) {
-            // ignore
-          }
-        }}
+        onError={() => setFailedImages((prev) => new Set(prev).add(flight.id))}
       />
     );
   };
