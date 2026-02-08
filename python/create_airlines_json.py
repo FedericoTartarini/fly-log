@@ -79,6 +79,7 @@ def main():
     base_dir = os.path.dirname(__file__)
     output_filename = os.path.join(base_dir, "..", "src", "assets", "airlines.json")
     output_filename = os.path.abspath(output_filename)
+    os.makedirs(os.path.dirname(output_filename), exist_ok=True)
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(final_airlines, f, indent=2)
 
