@@ -42,7 +42,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
           </Text>
           <Badge color={color} variant="light">
             {t("km", {
-              value: Math.round(flight.distance_km).toLocaleString(),
+              value: Math.round(flight.distance_km),
             })}
           </Badge>
         </Group>
