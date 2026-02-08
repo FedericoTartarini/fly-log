@@ -36,14 +36,13 @@ function Login() {
     } catch (e) {
       console.error("signInWithEmail failed:", e);
       // Normalize Firebase style errors like 'auth/invalid-email: The email address is badly formatted.'
-      const msg = parseFirebaseError(e);
+      const { message, code } = parseFirebaseError(e);
       // In dev show the full code too for easier debugging
-      const code = e?.code || e?._tokenResponse?.error?.message || "";
       const isDev =
         typeof import.meta !== "undefined" &&
         import.meta.env &&
         import.meta.env.DEV;
-      setError(isDev && code ? `${msg} (${code})` : msg);
+      setError(isDev && code ? `${message} (${code})` : message);
     } finally {
       setLoading(false);
     }
@@ -61,20 +60,19 @@ function Login() {
       await signUpWithEmail(email, password);
     } catch (e) {
       console.error("signUpWithEmail failed:", e);
-      const msg = parseFirebaseError(e);
-      const code = e?.code || e?._tokenResponse?.error?.message || "";
+      const { message, code } = parseFirebaseError(e);
       const isDev2 =
         typeof import.meta !== "undefined" &&
         import.meta.env &&
         import.meta.env.DEV;
-      setError(isDev2 && code ? `${msg} (${code})` : msg);
+      setError(isDev2 && code ? `${message} (${code})` : message);
     } finally {
       setLoading(false);
     }
   };
 
   const parseFirebaseError = (err) => {
-    if (!err) return "Unknown error";
+    if (!err) return { message: "Unknown error", code: undefined };
     const raw = err.message || String(err);
     // If message contains code prefix like 'auth/invalid-password: ...'
     const parts = raw.split(":");
@@ -91,9 +89,9 @@ function Login() {
         "auth/weak-password": t('login.weakPassword'),
         "auth/invalid-api-key": t('login.invalidApiKey'),
       };
-      return map[code] || rest || raw;
+      return { message: map[code] || rest || raw, code };
     }
-    return raw;
+    return { message: raw, code: undefined };
   };
 
   const handleSubmit = async (e) => {
