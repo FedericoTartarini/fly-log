@@ -5,17 +5,6 @@ import { onAuthStateChanged, auth } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
 
-let currentUid: string | null = null;
-let authUnsubscribe: Unsubscribe | null = null;
-
-const ensureAuthListener = (): Unsubscribe => {
-  if (authUnsubscribe) return authUnsubscribe;
-  authUnsubscribe = onAuthStateChanged((user) => {
-    currentUid = user?.uid ?? null;
-  });
-  return authUnsubscribe;
-};
-
 export const clearAuthListener = () => {
   if (authUnsubscribe) {
     authUnsubscribe();
@@ -43,6 +32,8 @@ interface FlightStoreState {
   setSelectedYear: (year: string) => Promise<void>;
   // remove a flight by id from both lists (optimistic UI)
   removeFlightById: (id: string) => void;
+  // restore a flight to both lists (rollback optimistic delete)
+  restoreFlight: (flight: Flight) => void;
 }
 
 const filterByYear = (flights: Flight[], year: string) => {
@@ -54,14 +45,14 @@ const filterByYear = (flights: Flight[], year: string) => {
   if (year === "upcoming") {
     return flights.filter((f) => {
       const dt = parseToDate((f as any).departure_date);
-      return dt !== null && dt > today;
+      return dt !== null && dt >= today;
     });
   }
 
   if (year === "past") {
     return flights.filter((f) => {
       const dt = parseToDate((f as any).departure_date);
-      return dt !== null && dt < today;
+      return dt !== null && dt <= today;
     });
   }
 
@@ -82,7 +73,6 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
-      ensureAuthListener();
       const uid = auth.currentUser?.uid;
       if (!uid) {
         set({ allFlights: [], filteredFlights: [], isLoading: false });
@@ -121,6 +111,16 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
       ),
       filteredFlights: state.filteredFlights.filter(
         (f: any) => String(f.id) !== String(id),
+      ),
+    }));
+  },
+
+  restoreFlight: (flight: Flight) => {
+    set((state) => ({
+      allFlights: [...state.allFlights, flight],
+      filteredFlights: filterByYear(
+        [...state.allFlights, flight],
+        state.selectedYear,
       ),
     }));
   },

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, Modal, Text, Button, Center } from "@mantine/core";
+import { Menu, Modal, Text, Button, Center, ActionIcon } from "@mantine/core";
 import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import { deleteFlightForUser } from "../utils/flightService";
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 const FlightActions = ({ flight, onEdit }) => {
   const { user } = useAuth();
   const removeFlightById = useFlightStore((s) => s.removeFlightById);
+  const restoreFlight = useFlightStore((s) => s.restoreFlight);
   const fetchFlights = useFlightStore((s) => s.fetchFlights);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -25,6 +26,7 @@ const FlightActions = ({ flight, onEdit }) => {
       return;
     }
     setIsDeleting(true);
+    const removed = flight;
     try {
       // Optimistic UI: remove from store immediately
       removeFlightById(flight.id);
@@ -45,7 +47,7 @@ const FlightActions = ({ flight, onEdit }) => {
       try {
         await fetchFlights();
       } catch {
-        // ignore
+        restoreFlight(removed);
       }
     } finally {
       setIsDeleting(false);
@@ -57,11 +59,9 @@ const FlightActions = ({ flight, onEdit }) => {
     <>
       <Menu withArrow>
         <Menu.Target>
-          <Center>
-            <IconDotsVertical aria-label={t("actions.open_menu")}>
-              <IconDotsVertical />
-            </IconDotsVertical>
-          </Center>
+          <ActionIcon aria-label={t("actions.open_menu")}>
+            <IconDotsVertical />
+          </ActionIcon>
         </Menu.Target>
 
         <Menu.Dropdown>
@@ -85,7 +85,10 @@ const FlightActions = ({ flight, onEdit }) => {
 
       <Modal
         opened={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
+        onClose={() => !isDeleting && setConfirmOpen(false)}
+        closeOnClickOutside={!isDeleting}
+        closeOnEscape={!isDeleting}
+        withCloseButton={!isDeleting}
         title={t("actions.confirm_delete_title")}
         centered
       >
@@ -95,7 +98,8 @@ const FlightActions = ({ flight, onEdit }) => {
         >
           <Button
             variant="default"
-            onClick={() => setConfirmOpen(false)}
+            onClick={() => !isDeleting && setConfirmOpen(false)}
+            disabled={isDeleting}
             mr={8}
             data-testid={`flight-delete-cancel-${flight.id}`}
           >
