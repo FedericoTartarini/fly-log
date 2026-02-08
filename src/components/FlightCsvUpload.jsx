@@ -97,7 +97,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
     const uid = user?.uid;
     if (!uid) {
-      setError("User not authenticated");
+      setError(t("userNotAuthenticated"));
       setParsing(false);
       return;
     }
@@ -177,7 +177,9 @@ const FlightCsvUpload = ({ onComplete }) => {
           }
         },
         error: (error) => {
-          setError(`${t("csv.errors.parse_error")} - ${error}`);
+          setError(
+            `${t("csv.errors.parse_error")} - ${error.message || String(error)}`,
+          );
           setParsing(false);
         },
       });
