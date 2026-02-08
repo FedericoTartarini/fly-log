@@ -2,6 +2,7 @@ import requests
 import csv
 import json
 import io
+import os
 
 # --- Configuration ---
 # Source 1: besrourms (Good for Names, IATA, Logos)
@@ -75,7 +76,9 @@ def main():
         final_airlines.append(airline_obj)
 
     # 3. Save to file
-    output_filename = "../src/assets/airlines.json"
+    base_dir = os.path.dirname(__file__)
+    output_filename = os.path.join(base_dir, "..", "src", "assets", "airlines.json")
+    output_filename = os.path.abspath(output_filename)
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(final_airlines, f, indent=2)
 

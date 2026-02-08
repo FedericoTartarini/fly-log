@@ -16,7 +16,7 @@ ALLOWED_TYPES = {"large_airport", "medium_airport"}
 
 def fetch_country_names():
     print(f"Fetching countries from {COUNTRIES_URL}...")
-    response = requests.get(COUNTRIES_URL)
+    response = requests.get(COUNTRIES_URL, timeout=10)
     response.raise_for_status()
     csv_reader = csv.DictReader(io.StringIO(response.content.decode("utf-8")))
     return {row["code"]: row["name"] for row in csv_reader if row.get("code")}
@@ -26,7 +26,7 @@ def main():
     country_lookup = fetch_country_names()
 
     print(f"Fetching airports from {AIRPORTS_URL}...")
-    response = requests.get(AIRPORTS_URL)
+    response = requests.get(AIRPORTS_URL, timeout=10)
     response.raise_for_status()
 
     csv_reader = csv.DictReader(io.StringIO(response.content.decode("utf-8")))
@@ -54,15 +54,15 @@ def main():
         try:
             lat = float(row.get("latitude_deg") or 0.0)
         except (ValueError, TypeError):
-            lat = 0.0
+            lat = None
         try:
             lon = float(row.get("longitude_deg") or 0.0)
         except (ValueError, TypeError):
-            lon = 0.0
+            lon = None
         try:
             elev = int(row.get("elevation_ft") or 0)
         except (ValueError, TypeError):
-            elev = 0
+            elev = None
 
         # Build object in the exact schema expected by the app
         airport_obj = {
@@ -83,7 +83,9 @@ def main():
     final_airports.sort(key=lambda x: x["iata"])
 
     # Write to python/airports_info.json (the file imported by src/utils/airportsInfo.ts)
-    output_filename = "../src/assets/airports.json"
+    base_dir = os.path.dirname(__file__)
+    output_filename = os.path.join(base_dir, "..", "src", "assets", "airports.json")
+    output_filename = os.path.abspath(output_filename)
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(final_airports, f, indent=2, ensure_ascii=False)
 
