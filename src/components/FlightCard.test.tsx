@@ -48,7 +48,7 @@ describe("FlightCard", () => {
     );
     expect(screen.getByText(timeRegex));
 
-    expect(screen.getByText("10,117 km"));
+    expect(screen.getByText("10117 km"));
     expect(screen.getByText("SIN → BLQ"));
     expect(screen.getByText("SG"));
     expect(screen.getByText("IT"));
