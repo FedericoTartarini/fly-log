@@ -72,11 +72,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       },
       airline: (value) =>
         value ? null : t("form.validation.airline_required"),
-      // Only validate return fields if addReturn is true
-      ...(addReturn && {
-        returnDate: (value) =>
-          value ? null : t("form.validation.return_date_required"),
-      }),
+      returnDate: (value) =>
+        addReturn ? (value ? null : t("form.validation.return_date_required")) : null,
     },
   });
 
