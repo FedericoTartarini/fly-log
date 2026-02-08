@@ -10,7 +10,8 @@ import {
   Anchor,
   Center,
 } from "@mantine/core";
-import { signInWithEmail, signUpWithEmail } from "../firebaseClient";
+import { signInWithEmail, signUpWithEmail, auth } from "../firebaseClient";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -71,6 +72,21 @@ function Login() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError(t("enterEmailForReset"));
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setError(null);
+      alert(t("resetEmailSent"));
+    } catch (e) {
+      const { message } = parseFirebaseError(e);
+      setError(message);
+    }
+  };
+
   const parseFirebaseError = (err) => {
     if (!err) return { message: "Unknown error", code: undefined };
     const raw = err.message || String(err);
@@ -88,6 +104,7 @@ function Login() {
         "auth/email-already-in-use": t('emailAlreadyInUse'),
         "auth/weak-password": t('weakPassword'),
         "auth/invalid-api-key": t('invalidApiKey'),
+        "auth/invalid-credential": t('invalidCredentials'),
       };
       return { message: map[code] || rest || raw, code };
     }
@@ -125,6 +142,13 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {mode === "signin" && (
+              <div style={{ textAlign: "right" }}>
+                <Anchor component="button" size="sm" onClick={handleForgotPassword}>
+                  {t("forgotPassword")}
+                </Anchor>
+              </div>
+            )}
             {error && <div style={{ color: "red" }}>{String(error)}</div>}
 
             {mode === "signup" && (
