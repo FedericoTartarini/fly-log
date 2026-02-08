@@ -5,6 +5,9 @@ import { onAuthStateChanged, auth } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
 
+let authUnsubscribe: Unsubscribe | null = null;
+let currentUid: string | null = null;
+
 export const clearAuthListener = () => {
   if (authUnsubscribe) {
     authUnsubscribe();
@@ -52,7 +55,7 @@ const filterByYear = (flights: Flight[], year: string) => {
   if (year === "past") {
     return flights.filter((f) => {
       const dt = parseToDate((f as any).departure_date);
-      return dt !== null && dt <= today;
+      return dt !== null && dt < today;
     });
   }
 
@@ -67,13 +70,13 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
   filteredFlights: [],
   selectedYear: "all",
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
-      const uid = auth.currentUser?.uid;
+      const uid = currentUid;
       if (!uid) {
         set({ allFlights: [], filteredFlights: [], isLoading: false });
         return;
@@ -116,14 +119,24 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   },
 
   restoreFlight: (flight: Flight) => {
-    set((state) => ({
-      allFlights: [...state.allFlights, flight],
-      filteredFlights: filterByYear(
-        [...state.allFlights, flight],
-        state.selectedYear,
-      ),
-    }));
+    set((state) => {
+      const newAllFlights = [...state.allFlights, flight].sort((a, b) => {
+        const dateA = parseToDate(a.departure_date);
+        const dateB = parseToDate(b.departure_date);
+        return (dateA?.getTime() || 0) - (dateB?.getTime() || 0);
+      });
+      return {
+        allFlights: newAllFlights,
+        filteredFlights: filterByYear(newAllFlights, state.selectedYear),
+      };
+    });
   },
 }));
 
 export default useFlightStore;
+
+// Initialize auth listener
+authUnsubscribe = onAuthStateChanged((user) => {
+  currentUid = user ? user.uid : null;
+  // Optionally trigger fetchFlights if needed, but since fetchFlights is called on mount, perhaps not
+});
