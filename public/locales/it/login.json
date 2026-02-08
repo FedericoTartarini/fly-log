@@ -9,6 +9,12 @@
   "sign_up_google": "Registrati con Google",
   "dont_have_account": "Non hai un account? Registrati",
   "already_have_account": "Hai già un account? Accedi",
-  "passwords_mismatch": "Le password non corrispondono"
+  "passwords_mismatch": "Le password non corrispondono",
+  "invalidEmail": "L'indirizzo email non è valido.",
+  "userDisabled": "Questo account utente è stato disabilitato.",
+  "userNotFound": "Nessun utente trovato con questa email.",
+  "wrongPassword": "Password errata.",
+  "emailAlreadyInUse": "Questa email è già in uso.",
+  "weakPassword": "La password è troppo debole.",
+  "invalidApiKey": "Chiave API Firebase non valida (controlla la tua VITE_FIREBASE_API_KEY)."
 }
-

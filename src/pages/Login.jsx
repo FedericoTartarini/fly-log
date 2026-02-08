@@ -3,7 +3,6 @@ import {
   TextInput,
   PasswordInput,
   Button,
-  Group,
   Container,
   Paper,
   Title,
@@ -84,14 +83,13 @@ function Login() {
       const rest = parts.slice(1).join(":").trim();
       // Map a few common codes to friendly messages
       const map = {
-        "auth/invalid-email": "The email address is badly formatted.",
-        "auth/user-disabled": "This user account has been disabled.",
-        "auth/user-not-found": "No user found with this email.",
-        "auth/wrong-password": "Incorrect password.",
-        "auth/email-already-in-use": "This email is already in use.",
-        "auth/weak-password": "Password is too weak.",
-        "auth/invalid-api-key":
-          "Invalid Firebase API key (check your VITE_FIREBASE_API_KEY).",
+        "auth/invalid-email": t('login.invalidEmail'),
+        "auth/user-disabled": t('login.userDisabled'),
+        "auth/user-not-found": t('login.userNotFound'),
+        "auth/wrong-password": t('login.wrongPassword'),
+        "auth/email-already-in-use": t('login.emailAlreadyInUse'),
+        "auth/weak-password": t('login.weakPassword'),
+        "auth/invalid-api-key": t('login.invalidApiKey'),
       };
       return map[code] || rest || raw;
     }
