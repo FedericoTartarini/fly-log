@@ -27,7 +27,7 @@ const FlightsTopBar = ({ fullWidth = false }) => {
       </Modal>
 
       {/* Show NoFlightsCard when there are no flights */}
-      {allFlights.length === 0 ? (
+      {!Array.isArray(allFlights) || allFlights.length === 0 ? (
         <NoFlightsCard setFormOpened={setFormOpened} />
       ) : (
         <Button onClick={() => setFormOpened(true)} fullWidth={fullWidth}>
