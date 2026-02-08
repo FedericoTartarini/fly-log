@@ -5,7 +5,6 @@ declare module "./AuthContext" {
 
   export function useAuth(): {
     user: AuthUser;
-    session: any;
     loading: boolean;
     signOut: () => void;
   };

@@ -7,7 +7,6 @@ const AuthContext = createContext({});
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
-  const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +14,6 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     const unsubscribe = onAuthStateChanged((firebaseUser) => {
       setUser(firebaseUser ?? null);
-      setSession(firebaseUser ?? null);
       setLoading(false);
     });
 
@@ -23,7 +21,6 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    session,
     user,
     loading, // Expose loading state
     signOut: () => signOutUser(),
