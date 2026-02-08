@@ -37,7 +37,6 @@ export const useFlightStats = (filteredFlights) => {
     const longHaulFlights = filteredFlights.filter(
       (flight) => flight.distance_km >= 5000,
     );
-    // todo I need to fix this since breaking the code
     const westBoundFlights = filteredFlights.filter((flight) => {
       try {
         const depLon = flight.departure_coordinates[1];

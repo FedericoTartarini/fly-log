@@ -75,8 +75,10 @@ export function formatDate(
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
 export function parseToDate(value: any): Date | null {
-  if (value === null || value === undefined || value === "") return null;
   try {
+    if (value === null || value === undefined) {
+      return null;
+    }
     if (value instanceof Date) {
       return Number.isNaN(value.getTime()) ? null : value;
     }
@@ -86,6 +88,10 @@ export function parseToDate(value: any): Date | null {
     }
     if (value && typeof value.seconds === "number") {
       const d = new Date(value.seconds * 1000);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    if (typeof value === "number") {
+      const d = new Date(value >= 1e12 ? value : value * 1000);
       return Number.isNaN(d.getTime()) ? null : d;
     }
     const d = new Date(String(value));
