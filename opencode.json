@@ -3,6 +3,17 @@
   "permission": {
     "read": {
       "*": "allow",
+      "bash": "deny",
+      "sh": "deny",
+      "cat": "deny",
+      "head": "deny",
+      "tail": "deny",
+      "less": "deny",
+      "more": "deny",
+      "sed": "deny",
+      "awk": "deny",
+      "python": "deny",
+      "perl": "deny",
       ".env": "deny",
       "*.env": "deny",
       "*.env.*": "deny",
