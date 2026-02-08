@@ -7,20 +7,20 @@ This project analyzes personal flight history using Python and visualizes the da
 - [Project Overview](#project-overview)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation & Setup](#installation--setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation & Setup](#installation--setup)
 - [Testing](#testing)
-    - [Unit Testing with Vitest](#unit-testing-with-vitest)
-    - [End-to-End Testing with Cypress](#end-to-end-testing-with-cypress)
-    - [Test Structure](#test-structure)
-    - [Writing Tests](#writing-tests)
+  - [Unit Testing with Vitest](#unit-testing-with-vitest)
+  - [End-to-End Testing with Cypress](#end-to-end-testing-with-cypress)
+  - [Test Structure](#test-structure)
+  - [Writing Tests](#writing-tests)
 - [Current Features](#current-features)
 - [To-Do / Future Improvements](#to-do--future-improvements)
-    - [Visualization Enhancements](#visualization-enhancements)
-    - [User Experience Improvements](#user-experience-improvements)
-    - [Accessibility](#accessibility)
-    - [Maintenance and DevOps](#maintenance-and-devops)
-    - [Data & Backend](#data--backend)
+  - [Visualization Enhancements](#visualization-enhancements)
+  - [User Experience Improvements](#user-experience-improvements)
+  - [Accessibility](#accessibility)
+  - [Maintenance and DevOps](#maintenance-and-devops)
+  - [Data & Backend](#data--backend)
 
 ## Project Overview
 
@@ -31,9 +31,9 @@ The application has two main parts:
 
 ## Tech Stack
 
-*   **Frontend:** React, Vite, Mantine UI
-*   **Data Processing:** Python, Pandas
-*   **Deployment:** Configured for static site deployment Netlify
+- **Frontend:** React, Vite, Mantine UI
+- **Data Processing:** Python, Pandas
+- **Deployment:** Configured for static site deployment Netlify
 
 ## Getting Started
 
@@ -41,40 +41,44 @@ Follow these instructions to get a local copy up and running.
 
 ### Prerequisites
 
-*   Node.js (v18 or newer)
-*   npm
-*   Python 3.x
+- Node.js (v18 or newer)
+- npm
+- Python 3.x
 
 ### Installation & Setup
 
 1.  **Clone the repository:**
+
     ```bash
     git clone <your-repository-url>
     cd <repository-directory>
     ```
 
 2.  **Prepare the data:**
-    *   Navigate to the `python` directory.
-    *   Run the data processing script to generate the `flights_with_coordinates.json` file. This file is required by the frontend. You need to install the devependencies using `uv`
+    - Navigate to the `python` directory.
+    - Run the data processing script to generate the `flights_with_coordinates.json` file. This file is required by the frontend. You need to install the devependencies using `uv`
 
 3.  **Install frontend dependencies:**
+
     ```bash
     npm install
     ```
 
 4.  **Run the development server:**
-    *   This will start the app on `http://localhost:5173`. The page will automatically reload if you make changes to the source code.
+    - This will start the app on `http://localhost:5173`. The page will automatically reload if you make changes to the source code.
+
     ```bash
     npm run dev
     ```
 
 5.  **Build for production:**
-    *   This command bundles the app into the `dist` directory for deployment.
+    - This command bundles the app into the `dist` directory for deployment.
     ```bash
     npm run build
     ```
-    
+
 ## Firebase Deployment
+
 1.  **Install Firebase CLI:**
     ```bash
     npm install -g firebase-tools
@@ -84,24 +88,24 @@ Follow these instructions to get a local copy up and running.
     firebase login:list  # to see logged in accounts
     firebase login  # if not already logged in
     firebase login:add  # to add another account
-    firebase login:use XX@gmail.com  # to select the project to use
+    firebase login:use  # to select the project to use (run from project directory)
     ```
 3.  **Initialize Firebase in your project:**
     ```bash
     firebase init
     ```
-    *   Select "Hosting" and follow the prompts to set up your project.
+
+    - Select "Hosting" and follow the prompts to set up your project.
 4.  **Deploy to Firebase:**
     ```bash
     firebase deploy
     ```
-    
+
 ## Firebase Firestore Security Rules Setup
 
 ```bash
 firebase deploy --only firestore:rules
 ```
-    
 
 ### Firestore Security Rules
 
@@ -127,21 +131,25 @@ This project uses two testing frameworks:
 Vitest is used for unit and integration testing of React components and utility functions.
 
 **Run all unit tests:**
+
 ```bash
 npm run test
 ```
 
 **Run tests in watch mode (automatically re-runs when files change):**
+
 ```bash
 npm run test:watch
 ```
 
 **Run tests with coverage report:**
+
 ```bash
 npm run test:coverage
 ```
 
 **Run tests in UI mode (interactive test runner):**
+
 ```bash
 npm run test:ui
 ```
@@ -151,16 +159,19 @@ npm run test:ui
 Cypress is used for end-to-end testing of the complete application workflow.
 
 **Run Cypress tests in headless mode:**
+
 ```bash
 npm run cypress:run
 ```
 
 **Open Cypress Test Runner (interactive mode):**
+
 ```bash
 npm run cypress:open
 ```
 
 **Run Cypress tests against production build:**
+
 ```bash
 npm run build
 npm run preview
@@ -177,6 +188,7 @@ npm run cypress:run
 ### Writing Tests
 
 **Example unit test:**
+
 ```javascript
 import { describe, it, expect } from "vitest";
 import { render } from "../test-utils/render";
@@ -207,7 +219,7 @@ describe("MyComponent", () => {
 
 ## Current Features
 
-*   Interactive globe displaying all flight paths.
-*   Detailed flight list in a table format.
-*   Filter flights by year.
-*   Displays airline logos for each flight.
+- Interactive globe displaying all flight paths.
+- Detailed flight list in a table format.
+- Filter flights by year.
+- Displays airline logos for each flight.
