@@ -62,8 +62,8 @@
     "airlines_flown": "Airlines Flown",
     "countries_visited": "Countries Visited",
     "international_flights": "International Flights",
-    "long_haul_flights": "Long Haul Flights",
-    "west_bound_flights": "West Bound Flights",
+    "long_haul_flights": "Long-Haul Flights",
+    "west_bound_flights": "Westbound Flights",
     "view_flights": "View Flights",
     "shortest_flight": "Shortest Flight",
     "longest_flight": "Longest Flight"
@@ -94,7 +94,8 @@
       "search_airports": "Search airports",
       "search_airlines": "Search airlines",
       "no_matching_airports": "No matching airports",
-      "no_matching_airlines": "No matching airlines"
+      "no_matching_airlines": "No matching airlines",
+      "flight_number_example": "ABC123"
     },
     "validation": {
       "departure_date_required": "Departure date is required",
@@ -118,6 +119,9 @@
       "save_single": "Save Flight",
       "update": "Update",
       "save_multiple": "Save Flights"
+    },
+    "errors": {
+      "userNotAuthenticated": "User not authenticated"
     }
   },
   "distance": {
