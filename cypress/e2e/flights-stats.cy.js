@@ -6,14 +6,6 @@ describe("StatsSummary Component", () => {
     const email = Cypress.env("CY_TEST_EMAIL");
     const password = Cypress.env("CY_TEST_PASSWORD");
 
-    if (!email || !password) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "Skipping StatsSummary tests: set CY_TEST_EMAIL and CY_TEST_PASSWORD in your CI or .env to run.",
-      );
-      this.skip();
-    }
-
     cy.visit("/login");
     expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
     expect(password, "CYPRESS password env var").to.be.a("string").and.not.be
@@ -28,19 +20,11 @@ describe("StatsSummary Component", () => {
     cy.scrollTo(0, 500);
     // Verify the presence of key statistics
     cy.contains("Total Flights").should("be.visible");
-    cy.contains("All Past Flights").should("be.visible");
+    cy.contains("All Flights").should("be.visible");
     cy.contains("Add New Flight").should("be.visible");
 
-    // Check if the statistics are displayed correctly
-    // cy.contains("40,420").should("be.visible"); // Distance (km)
-    // cy.contains("1.9").should("be.visible"); // Time (days)
-    // cy.contains("2").should("be.visible"); // Airlines Flown
-  });
-
-  it("should update statistics when year filter changes", () => {
-    cy.scrollTo(0, 500);
     // Select a specific year from the dropdown
-    cy.get("#flight-year-filter").select("2025");
+    cy.get("#flight-year-filter").select("2026");
 
     // Verify statistics update
     cy.contains("Total Flights").should("be.visible");
@@ -50,8 +34,8 @@ describe("StatsSummary Component", () => {
     cy.contains("Airlines Flown").should("be.visible");
     cy.contains("Countries").should("be.visible");
 
-    // cy.contains("12,801"); // Distance (km) for 2025
-    // cy.contains("0.6"); // Time (days) for 2025
-    // cy.contains("3"); // Airports Visited for 2025
+    cy.contains("16,407"); // Distance (km) for 2025
+    cy.contains("0.8"); // Time (days) for 2025
+    cy.contains("2"); // Airports Visited for 2025
   });
 });

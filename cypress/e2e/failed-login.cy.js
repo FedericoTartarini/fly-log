@@ -6,17 +6,6 @@ describe("Login Failure Scenario", () => {
     const email = Cypress.env("CY_WRONG_EMAIL");
     const password = Cypress.env("CY_WRONG_PASSWORD");
 
-    // If the expected env vars aren't present, skip these tests instead of failing.
-    if (!email || !password) {
-      // Provide a helpful message in the test output
-      // eslint-disable-next-line no-console
-      console.warn(
-        "Skipping Login Failure tests: set CY_WRONG_EMAIL and CY_WRONG_PASSWORD in your CI or .env to run.",
-      );
-      this.skip();
-      return;
-    }
-
     const base = Cypress.config("baseUrl") || "http://localhost:5173";
     const mochaCtx = this;
 
