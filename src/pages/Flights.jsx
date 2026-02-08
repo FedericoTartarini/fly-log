@@ -21,7 +21,7 @@ function Flights() {
   if (isLoading) {
     return (
       <Container mt="md">
-        <Stack spacing="xl">
+        <Stack gap="xl">
           <Title order={2} ta="center">
             {t("title")}
           </Title>
