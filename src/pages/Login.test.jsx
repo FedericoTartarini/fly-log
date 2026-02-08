@@ -3,7 +3,7 @@
 import React from "react";
 import { render, screen } from "../../test-utils/index.js"; // use project render wrapper
 import { MemoryRouter } from "react-router-dom";
-import { AuthProvider } from "../context/AuthContext";
+import AuthProvider from "../context/AuthContext";
 import Login from "./Login";
 
 test("renders login form with translated strings", () => {
