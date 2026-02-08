@@ -10,6 +10,9 @@
     "bash": {
       "*": "allow",
       "coderabbit *": "allow",
+      "coderabbit --prompt-only --type uncommitted": "allow",
+      "coderabbit --prompt-only --base *": "allow",
+      "git branch --show-current": "allow",
       "git commit *": "ask",
       "git push *": "deny",
       "git diff *": "allow",
