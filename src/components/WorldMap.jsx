@@ -180,7 +180,7 @@ const FitMapToBounds = ({ bounds }) => {
 
 const WorldMap = () => {
   const { filteredFlights } = useFlightStore();
-  const computedColorScheme = useComputedColorScheme("light");
+  const computedColorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
 
   // Use the new smart bounds logic
   const bounds = useMemo(
