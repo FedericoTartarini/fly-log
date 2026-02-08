@@ -207,12 +207,11 @@ export const updateFlightForUser = async (
 
   const data = { ...updates };
   if (data.departure_date) {
-    try {
-      const d = new Date(data.departure_date);
-      if (!isNaN(d.getTime())) data.departure_date = Timestamp.fromDate(d);
-    } catch (e) {
-      // ignore
+    const d = new Date(data.departure_date);
+    if (isNaN(d.getTime())) {
+      throw new Error("Invalid departure_date");
     }
+    data.departure_date = Timestamp.fromDate(d);
   }
 
   await updateDoc(docRef, data);
