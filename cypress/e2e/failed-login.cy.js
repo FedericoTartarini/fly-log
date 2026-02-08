@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, cy, Cypress, expect */
+/* global describe, it, beforeEach, cy, Cypress */
 
 describe("Login Failure Scenario", () => {
   // Use a regular function so we can call `this.skip()` when env vars are missing.
@@ -20,9 +20,6 @@ describe("Login Failure Scenario", () => {
       }
 
       cy.visit("/login");
-      expect(email, "CYPRESS email env var").to.be.a("string").and.not.be.empty;
-      expect(password, "CYPRESS password env var").to.be.a("string").and.not.be
-        .empty;
       cy.get('input[name="email"]').type(email, { log: false });
       cy.get('input[name="password"]').type(password, { log: false });
       cy.get('button[type="submit"]').click();
