@@ -203,8 +203,10 @@ const WorldMap = () => {
   // so you might need a different URL for dark mode or use CSS filters.
   const tileUrl =
     computedColorScheme === "dark"
-      ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png" // Carto Dark without text (borders are very faint)
-      : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}"; // Esri Terrain (Very clean, no borders)
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png" // Carto Dark with labels and borders
+      : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"; // Esri Topo with cities and borders
+
+  const attribution = computedColorScheme === "dark" ? "&copy; OpenStreetMap &copy; CARTO" : "&copy; Esri, Garmin, FAO, NOAA, USGS";
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
@@ -227,7 +229,7 @@ const WorldMap = () => {
       <TileLayer
         key={computedColorScheme}
         url={tileUrl}
-        attribution="&copy; OpenStreetMap &copy; CARTO"
+        attribution={attribution}
       />
 
       {filteredFlights.map((flight) => {
