@@ -1,13 +1,28 @@
 // src/store.ts
 import { create } from "zustand";
 import { getFilteredUserFlights } from "./utils/flightService";
-import { onAuthStateChanged } from "./firebaseClient";
+import { onAuthStateChanged, auth } from "./firebaseClient";
+import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
 
 let currentUid: string | null = null;
-onAuthStateChanged((user) => {
-  currentUid = user?.uid ?? null;
-});
+let authUnsubscribe: Unsubscribe | null = null;
+
+const ensureAuthListener = (): Unsubscribe => {
+  if (authUnsubscribe) return authUnsubscribe;
+  authUnsubscribe = onAuthStateChanged((user) => {
+    currentUid = user?.uid ?? null;
+  });
+  return authUnsubscribe;
+};
+
+export const clearAuthListener = () => {
+  if (authUnsubscribe) {
+    authUnsubscribe();
+    authUnsubscribe = null;
+    currentUid = null;
+  }
+};
 
 interface Flight {
   id: string;
@@ -67,13 +82,15 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
-      if (!currentUid) {
+      ensureAuthListener();
+      const uid = auth.currentUser?.uid;
+      if (!uid) {
         set({ allFlights: [], filteredFlights: [], isLoading: false });
         return;
       }
 
-      // getFilteredUserFlights(currentUid, "all") should return all user flights
-      const allFlights = await getFilteredUserFlights(currentUid, "all");
+      // getFilteredUserFlights(uid, "all") should return all user flights
+      const allFlights = await getFilteredUserFlights(uid, "all");
       const filteredFlights = filterByYear(allFlights, get().selectedYear);
 
       set({
