@@ -24,6 +24,9 @@ const buildSets = () => {
 };
 
 export function validateAndNormalizeCsvRows(rows) {
+  if (!Array.isArray(rows)) {
+    throw new TypeError("rows must be an array");
+  }
   const { airportsSet, airlinesSet } = buildSets();
   const errors = [];
   const normalizedRows = [];
