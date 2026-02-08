@@ -17,6 +17,10 @@
       "pytest *": "allow",
       "npm *": "ask",
       "rm *": "deny",
+      "rm -rf coverage": "allow",
+      "rm *.log": "allow",
+      "rm -rf *": "deny",
+      "npm run lint": "allow",
       "grep *": "allow"
     },
     "edit": {
