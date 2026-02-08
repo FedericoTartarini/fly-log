@@ -81,13 +81,13 @@ function Login() {
       const rest = parts.slice(1).join(":").trim();
       // Map a few common codes to friendly messages
       const map = {
-        "auth/invalid-email": t('login.invalidEmail'),
-        "auth/user-disabled": t('login.userDisabled'),
-        "auth/user-not-found": t('login.userNotFound'),
-        "auth/wrong-password": t('login.wrongPassword'),
-        "auth/email-already-in-use": t('login.emailAlreadyInUse'),
-        "auth/weak-password": t('login.weakPassword'),
-        "auth/invalid-api-key": t('login.invalidApiKey'),
+        "auth/invalid-email": t('invalidEmail'),
+        "auth/user-disabled": t('userDisabled'),
+        "auth/user-not-found": t('userNotFound'),
+        "auth/wrong-password": t('wrongPassword'),
+        "auth/email-already-in-use": t('emailAlreadyInUse'),
+        "auth/weak-password": t('weakPassword'),
+        "auth/invalid-api-key": t('invalidApiKey'),
       };
       return { message: map[code] || rest || raw, code };
     }
