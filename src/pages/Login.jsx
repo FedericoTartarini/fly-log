@@ -55,7 +55,7 @@ function Login() {
     setError(null);
     try {
       if (password !== confirmPassword) {
-        setError("Passwords do not match");
+        setError(t("passwordsDoNotMatch"));
         setLoading(false);
         return;
       }
@@ -98,72 +98,77 @@ function Login() {
     return raw;
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (mode === "signin") {
+      await handleEmailSignIn();
+    } else {
+      await handleEmailSignUp();
+    }
+  };
+
   return (
     <Container size="xs" mt="xl">
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <Stack>
-          <Title ta="center">{t("title")}</Title>
-          <TextInput
-            name="email"
-            label={t("email")}
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <PasswordInput
-            name="password"
-            label={t("password")}
-            placeholder="Your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <div style={{ color: "red" }}>{String(error)}</div>}
-
-          {mode === "signup" && (
-            <PasswordInput
-              name="confirmPassword"
-              label={t("confirm_password")}
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+        <form onSubmit={handleSubmit}>
+          <Stack>
+            <Title ta="center">{t("title")}</Title>
+            <TextInput
+              name="email"
+              label={t("email")}
+              placeholder={t("emailPlaceholder")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
-          )}
+            <PasswordInput
+              name="password"
+              label={t("password")}
+              placeholder={t("passwordPlaceholder")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {error && <div style={{ color: "red" }}>{String(error)}</div>}
 
-          <Center>
-            <Button
-              type="submit"
-              onClick={
-                mode === "signin" ? handleEmailSignIn : handleEmailSignUp
-              }
-              loading={loading}
-            >
-              {mode === "signin" ? t("sign_in") : t("sign_up")}
-            </Button>
-          </Center>
-
-          <div style={{ textAlign: "center" }}>
-            {mode === "signin" ? (
-              <Anchor
-                component="button"
-                size="sm"
-                onClick={() => setMode("signup")}
-              >
-                {t("dont_have_account")}
-              </Anchor>
-            ) : (
-              <Anchor
-                component="button"
-                size="sm"
-                onClick={() => setMode("signin")}
-              >
-                {t("already_have_account")}
-              </Anchor>
+            {mode === "signup" && (
+              <PasswordInput
+                name="confirmPassword"
+                label={t("confirm_password")}
+                placeholder={t("confirmPasswordPlaceholder")}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             )}
-          </div>
-        </Stack>
+
+            <Center>
+              <Button type="submit" loading={loading}>
+                {mode === "signin" ? t("sign_in") : t("sign_up")}
+              </Button>
+            </Center>
+
+            <div style={{ textAlign: "center" }}>
+              {mode === "signin" ? (
+                <Anchor
+                  component="button"
+                  size="sm"
+                  onClick={() => setMode("signup")}
+                >
+                  {t("dont_have_account")}
+                </Anchor>
+              ) : (
+                <Anchor
+                  component="button"
+                  size="sm"
+                  onClick={() => setMode("signin")}
+                >
+                  {t("already_have_account")}
+                </Anchor>
+              )}
+            </div>
+          </Stack>
+        </form>
       </Paper>
     </Container>
   );
