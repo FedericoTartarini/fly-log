@@ -15,7 +15,6 @@ import FlightEntryForm from "./FlightEntryForm";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
-import airlinesInfo from "../assets/airlines.json";
 
 /**
  * Renders a list of flights in a table.
@@ -44,6 +43,8 @@ const FlightsList: React.FC = () => {
   React.useEffect(() => {
     setPage(1);
   }, [filterKey]);
+
+  const [failedImages, setFailedImages] = React.useState(new Set<string>());
 
   if (filteredFlights.length === 0) {
     return (
@@ -93,7 +94,6 @@ const FlightsList: React.FC = () => {
   const endIndex = startIndex + PAGE_SIZE;
   const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
-  const [failedImages, setFailedImages] = React.useState(new Set<string>());
 
   /**
    * Returns the airline icon or a fallback icon.
@@ -142,22 +142,7 @@ const FlightsList: React.FC = () => {
       imageUrl = `/assets/logos/${sourcePath}`;
     }
 
-    // Determine IATA code to lookup in airlinesInfo: prefer flight.airline_iata, otherwise derive from filename
-    let iataLookup = (flight.airline_iata || "")
-      .toString()
-      .trim()
-      .toUpperCase();
-    if (!iataLookup && sourcePath) {
-      // Safely extract filename and base without causing undefined errors
-      const fname = (sourcePath.split("/").pop() ?? sourcePath) as string;
-      const base = (fname.split(".")[0] ?? "") as string;
-      iataLookup = base.toUpperCase();
-    }
 
-    const airlineEntry = (airlinesInfo as any[]).find(
-      (a) => (a.iata || "").toString().toUpperCase() === iataLookup,
-    );
-    const airlineIconFromInfo = airlineEntry?.icon as string | undefined;
 
     // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
