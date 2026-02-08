@@ -147,7 +147,15 @@ export const getFilteredUserFlights = async (
     let endDate = new Date(Number(year), 11, 31, 23, 59, 59);
     const thisYear = new Date().getFullYear().toString();
     if (String(year) === thisYear) {
-      endDate = todayDate;
+      endDate = new Date(
+        todayDate.getFullYear(),
+        todayDate.getMonth(),
+        todayDate.getDate(),
+        23,
+        59,
+        59,
+        999,
+      );
     }
 
     q = query(
@@ -170,6 +178,7 @@ export const getFilteredUserFlights = async (
  */
 export const deleteFlightForUser = async (uid: string, flightId: string) => {
   if (!uid) throw new Error("User id is required to delete a flight");
+  if (!flightId) throw new Error("Flight id is required to delete a flight");
   if (!firestore)
     throw new Error(
       "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
@@ -188,6 +197,7 @@ export const updateFlightForUser = async (
   updates: any,
 ) => {
   if (!uid) throw new Error("User id is required to update a flight");
+  if (!flightId) throw new Error("Flight id is required to update a flight");
   if (!firestore)
     throw new Error(
       "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
