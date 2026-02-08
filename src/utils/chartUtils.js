@@ -23,7 +23,10 @@ export const getDeparturesByCountry = (flights) => {
 const localizedWeekdays = (locale) => {
   // pick a Monday (1970-01-05 is Monday) and iterate 7 days
   const base = new Date(Date.UTC(1970, 0, 5));
-  const fmt = new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" });
+  const fmt = new Intl.DateTimeFormat(locale, {
+    weekday: "long",
+    timeZone: "UTC",
+  });
   return Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(base);
     d.setUTCDate(base.getUTCDate() + i);
@@ -33,7 +36,10 @@ const localizedWeekdays = (locale) => {
 
 // Helper: build localized month names January..December
 const localizedMonths = (locale) => {
-  const fmt = new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" });
+  const fmt = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    timeZone: "UTC",
+  });
   return Array.from({ length: 12 }).map((_, i) =>
     capitalize(fmt.format(new Date(Date.UTC(2020, i, 1)))),
   );
@@ -53,15 +59,21 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
     switch (timeGrouping) {
       case "dayOfWeek":
         key = capitalize(
-          new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" }).format(d),
+          new Intl.DateTimeFormat(locale, {
+            weekday: "long",
+            timeZone: "UTC",
+          }).format(d),
         );
         break;
       case "year":
-        key = d.getFullYear().toString();
+        key = d.getUTCFullYear().toString();
         break;
       case "month":
         key = capitalize(
-          new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(d),
+          new Intl.DateTimeFormat(locale, {
+            month: "long",
+            timeZone: "UTC",
+          }).format(d),
         );
         break;
       default:

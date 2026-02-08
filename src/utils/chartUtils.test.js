@@ -6,12 +6,17 @@ import { capitalize } from "./stringUtils";
 // Helper to get localized weekday/month label as used in chartUtils
 function weekdayLabel(date, locale) {
   return capitalize(
-    new Intl.DateTimeFormat(locale, { weekday: "long" }).format(date),
+    new Intl.DateTimeFormat(locale, {
+      weekday: "long",
+      timeZone: "UTC",
+    }).format(date),
   );
 }
 function monthLabel(date, locale) {
   return capitalize(
-    new Intl.DateTimeFormat(locale, { month: "long" }).format(date),
+    new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(
+      date,
+    ),
   );
 }
 
