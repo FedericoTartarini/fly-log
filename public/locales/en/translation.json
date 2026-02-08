@@ -1,0 +1,16 @@
+{
+  "login": {
+    "title": "Welcome Back",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "sign_in": "Sign in",
+    "sign_up": "Sign up",
+    "sign_in_google": "Sign in with Google",
+    "sign_up_google": "Sign up with Google",
+    "dont_have_account": "Don't have an account? Sign up",
+    "already_have_account": "Already have an account? Sign in",
+    "passwords_mismatch": "Passwords do not match"
+  }
+}
+

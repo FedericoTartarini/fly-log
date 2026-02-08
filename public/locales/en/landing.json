@@ -1,0 +1,21 @@
+{
+  "title": "Welcome to Your Personal Flight Tracker",
+  "subtitle": "Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map. Sign in to get started.",
+  "get_started": "Get Started",
+  "learn_more": "Learn More",
+  "flight_image_alt": "Airplane flying through clouds",
+  "features": {
+    "where_title": "Where did you fly?",
+    "where_desc": "Visualize all your flights on a world map.",
+    "what_title": "What are your stats?",
+    "what_desc": "Get insights into your flight history and statistics.",
+    "which_title": "Which countries did you visit?",
+    "which_desc": "See your travel history and countries visited.",
+    "how_title": "How far did you fly?",
+    "how_desc": "Calculate total distance traveled across all flights and compare it with the circumference of the Earth, distance to the Moon, and Mars.",
+    "when_title": "When did you fly?",
+    "when_desc": "View your flight history by year and check in which year, month, or day you flew the most.",
+    "detail_title": "Flight Details",
+    "detail_desc": "See detailed flight information like departure/arrival airports, airline, and flight number."
+  }
+}

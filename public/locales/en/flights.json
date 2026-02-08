@@ -1,0 +1,152 @@
+{
+  "title": "Detailed Flight Statistics",
+  "image_alt": "plane wing",
+  "no_flights": "No flights to display for this selection.",
+  "table": {
+    "icon": "Icon",
+    "from_to": "From → To",
+    "date_duration_distance": "Date, Duration & Distance",
+    "actions": ""
+  },
+  "airline_label": "Airline:",
+  "aircraft_label": "Aircraft:",
+  "km": "{{value}} km",
+  "to": "→",
+  "flight_time": "{{hours}}h {{minutes}}m flight time",
+  "csv": {
+    "title": "Upload Flight Data from CSV",
+    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number.",
+    "file_input": {
+      "placeholder": "Select CSV file",
+      "label": "Flight data CSV",
+      "description": "Upload your flight data in CSV format"
+    },
+    "errors": {
+      "no_file": "Please select a CSV file",
+      "not_signed_in": "You must be signed in to upload flights."
+    },
+    "upload_button": "Upload Flights",
+    "notification": {
+      "title": "CSV Upload Complete",
+      "message": "Successfully added {{success}} flights. Failed: {{failed}}"
+    }
+  },
+  "filter": {
+    "label": "Filter flights",
+    "all": "All Flights",
+    "upcoming": "Upcoming Flights",
+    "past": "Past Flights"
+  },
+  "actions": {
+    "open_menu": "Open actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm_delete_title": "Delete flight",
+    "confirm_delete_message": "Are you sure you want to permanently delete this flight? This action cannot be undone.",
+    "cancel": "Cancel",
+    "deleted_title": "Deleted",
+    "deleted_message": "Flight deleted",
+    "delete_error_title": "Error deleting flight",
+    "not_signed_in": "You must be signed in to perform this action"
+  },
+  "no_flights_card": {
+    "title": "Welcome",
+    "description": "It looks like you haven't added any flights yet. Don't worry, it's easy to get started! Click the button below to add your first flight.",
+    "cta": "Add New Flight"
+  },
+  "stats": {
+    "total_flights": "Total Flights",
+    "distance_km": "Distance (km)",
+    "flight_time_days": "Flight Time (days)",
+    "airports_visited": "Airports Visited",
+    "airlines_flown": "Airlines Flown",
+    "countries_visited": "Countries Visited",
+    "international_flights": "International Flights",
+    "long_haul_flights": "Long-Haul Flights",
+    "west_bound_flights": "Westbound Flights",
+    "view_flights": "View Flights",
+    "shortest_flight": "Shortest Flight",
+    "longest_flight": "Longest Flight"
+  },
+  "form": {
+    "add_new_flight": "Add New Flight",
+    "labels": {
+      "edit_flight": "Edit Flight",
+      "departure_date": "Departure Date",
+      "departure_time": "Departure Time",
+      "departure_airport": "Departure Airport",
+      "arrival_airport": "Arrival Airport",
+      "airline": "Airline",
+      "flight_number": "Flight Number",
+      "add_return": "Add return flight",
+      "return_flight": "Return Flight",
+      "return_date": "Return Date",
+      "return_time": "Return Time",
+      "not_signed_in": "You are not signed in. Please sign in to save flights."
+    },
+    "tabs": {
+      "manual": "Manual Entry",
+      "csv": "CSV Upload"
+    },
+    "placeholders": {
+      "select_date": "Select date",
+      "time_example": "e.g., 14:30",
+      "search_airports": "Search airports",
+      "search_airlines": "Search airlines",
+      "no_matching_airports": "No matching airports",
+      "no_matching_airlines": "No matching airlines",
+      "flight_number_example": "ABC123"
+    },
+    "validation": {
+      "departure_date_required": "Departure date is required",
+      "departure_airport_required": "Departure airport is required",
+      "arrival_airport_required": "Arrival airport is required",
+      "airline_required": "Airline is required",
+      "arrival_differs": "Arrival and departure airports must be different",
+      "return_date_required": "Return date is required"
+    },
+    "notifications": {
+      "saving_title": "Saving",
+      "saving_message": "Saving flight(s)...",
+      "success_single": "Flight saved successfully",
+      "success_multiple": "Flights saved successfully",
+      "error_title": "Error",
+      "error_save": "Could not save flight(s): {{msg}}",
+      "validation_error_title": "Validation error",
+      "validation_error_generic": "Please check required fields"
+    },
+    "buttons": {
+      "save_single": "Save Flight",
+      "update": "Update",
+      "save_multiple": "Save Flights"
+    },
+    "errors": {
+      "userNotAuthenticated": "User not authenticated"
+    }
+  },
+  "distance": {
+    "title": "Distance Statistics",
+    "total_distance": "Total Distance (km)",
+    "mean_distance": "Mean Distance (km)",
+    "journey_title": "Journey to Space",
+    "earth_label": "{{value}}x around Earth",
+    "moon_label": "{{value}}% to Moon",
+    "mars_label": "{{value}}% to Mars",
+    "destinations": {
+      "earth": "Earth",
+      "moon": "Moon",
+      "mars": "Mars"
+    }
+  },
+  "charts": {
+    "departures": "Departures",
+    "flights": "Flights",
+    "departures_by_country": "Departures by Country",
+    "flights_by": "Flights by {{period}}"
+  },
+  "time": {
+    "day_of_week": "Day of Week",
+    "year": "Year",
+    "month": "Month"
+  }
+}

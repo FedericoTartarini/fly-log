@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "home": "Home",
+    "stats": "Stats",
+    "flights": "Flights",
+    "about": "About",
+    "login": "Login",
+    "sign_out": "Sign Out"
+  },
+  "language": "Language"
+}

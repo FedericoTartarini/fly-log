@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "home": "Home",
+    "stats": "Statistiche",
+    "flights": "Voli",
+    "about": "Info",
+    "login": "Accedi",
+    "sign_out": "Esci"
+  }
+}
+

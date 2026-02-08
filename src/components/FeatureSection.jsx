@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import * as Framer from "framer-motion";
+import { useInView } from "framer-motion";
 import { Text, Card, Group, Image, ActionIcon } from "@mantine/core";
 import {
   IconAdjustments,
@@ -10,6 +11,7 @@ import {
   IconRuler2,
 } from "@tabler/icons-react";
 import { IDS } from "../constants/MyClasses";
+import { useTranslation } from "react-i18next";
 
 const FeatureCard = ({ icon, title, description, image, id, alt }) => {
   const ref = useRef(null);
@@ -18,7 +20,7 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
   let imageUrl = new URL(`../assets/${image}`, import.meta.url).href;
 
   return (
-    <motion.div
+    <Framer.motion.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -38,7 +40,7 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
           {description}
         </Text>
       </Card>
-    </motion.div>
+    </Framer.motion.div>
   );
 };
 
@@ -46,6 +48,8 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
  * Renders a stack of animated feature cards.
  */
 const FeatureSection = () => {
+  const { t } = useTranslation("landing");
+
   const features = [
     {
       icon: (
@@ -55,8 +59,8 @@ const FeatureSection = () => {
           stroke={1.5}
         />
       ),
-      title: "Where did you fly?",
-      description: "Visualize all your flights on a world map.",
+      title: t("features.where_title"),
+      description: t("features.where_desc"),
       image: "map.png",
       id: IDS.LANDING.FEATURES.WHERE,
       alt: "World map showing flight paths",
@@ -69,15 +73,15 @@ const FeatureSection = () => {
           stroke={1.5}
         />
       ),
-      title: "What are your stats?",
-      description: "Get insights into your flight history and statistics.",
+      title: t("features.what_title"),
+      description: t("features.what_desc"),
       image: "overall_stats.png",
       id: IDS.LANDING.FEATURES.WHAT,
       alt: "Flight statistics overview",
     },
     {
-      title: "Which countries did you visit?",
-      description: "See your travel history and countries visited.",
+      title: t("features.which_title"),
+      description: t("features.which_desc"),
       icon: (
         <IconAdjustments
           size={40}
@@ -90,9 +94,8 @@ const FeatureSection = () => {
       alt: "Countries visited chart",
     },
     {
-      title: "How far did you fly?",
-      description:
-        "Calculate total distance traveled across all flights and compare it with the circumference of the Earth, distance to the Moon, and Mars.",
+      title: t("features.how_title"),
+      description: t("features.how_desc"),
       icon: (
         <IconRuler2
           size={40}
@@ -105,9 +108,8 @@ const FeatureSection = () => {
       alt: "Distance traveled statistics",
     },
     {
-      title: "When did you fly?",
-      description:
-        "View your flight history by year and check in which year, month, or day you flew the most.",
+      title: t("features.when_title"),
+      description: t("features.when_desc"),
       icon: (
         <IconCalendarTime
           size={40}
@@ -120,9 +122,8 @@ const FeatureSection = () => {
       alt: "Flight history timeline",
     },
     {
-      title: "Flight Details",
-      description:
-        "See detailed flight information like departure/arrival airports, airline, and flight number.",
+      title: t("features.detail_title"),
+      description: t("features.detail_desc"),
       icon: (
         <IconPlane
           size={40}

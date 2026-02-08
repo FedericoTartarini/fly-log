@@ -1,28 +1,12 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MantineProvider } from "@mantine/core";
+import { render } from "../../test-utils/index.js";
 
-// Mock window.matchMedia for Mantine
-if (!window.matchMedia) {
-  window.matchMedia = vi.fn().mockImplementation(() => ({
-    matches: false,
-    media: "",
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  }));
-}
-
-// Mock supabaseClient
-vi.mock("../supabaseClient", () => ({
-  supabaseClient: {
-    from: vi.fn(() => ({
-      insert: vi.fn().mockResolvedValue({ error: null }),
-    })),
-  },
+// Mock firebaseClient
+vi.mock("../firebaseClient", () => ({
+  addFlightsForUser: vi.fn().mockResolvedValue(undefined),
+  addFlightForUser: vi.fn().mockResolvedValue(undefined),
+  signInWithEmail: vi.fn(),
 }));
 
 // Mock notifications
@@ -41,12 +25,7 @@ vi.mock("papaparse", () => ({
 }));
 
 import FlightCsvUpload, { validateCsvData } from "./FlightCsvUpload";
-import { supabaseClient } from "../supabaseClient.ts";
-import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
-
-const renderWithProvider = (ui) =>
-  render(<MantineProvider>{ui}</MantineProvider>);
 
 describe("FlightCsvUpload", () => {
   beforeEach(() => {
@@ -54,7 +33,7 @@ describe("FlightCsvUpload", () => {
   });
 
   it("renders input and button", () => {
-    renderWithProvider(<FlightCsvUpload />);
+    render(<FlightCsvUpload />);
     expect(
       screen.getByText(/Upload Flight Data from CSV/i),
     ).toBeInTheDocument();
@@ -73,7 +52,7 @@ describe("FlightCsvUpload", () => {
       });
     });
 
-    renderWithProvider(<FlightCsvUpload />);
+    render(<FlightCsvUpload />);
     const file = new File(["invalid"], "test.csv", { type: "text/csv" });
     fireEvent.change(screen.getByLabelText(/Flight data CSV/i), {
       target: { files: [file] },

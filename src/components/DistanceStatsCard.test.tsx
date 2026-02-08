@@ -1,17 +1,12 @@
 import React from "react";
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { MantineProvider } from "@mantine/core";
+import { screen } from "@testing-library/react";
+import { render } from "../../test-utils/index.js";
 import DistanceStatsCard from "./DistanceStatsCard";
-
-const renderWithProvider = (ui: React.ReactNode) =>
-  render(<MantineProvider>{ui}</MantineProvider>);
 
 describe("DistanceStatsCard", () => {
   it("renders total and mean distance", () => {
-    renderWithProvider(
-      <DistanceStatsCard totalDistance={100000} totalFlights={10} />,
-    );
+    render(<DistanceStatsCard totalDistance={100000} totalFlights={10} />);
     expect(screen.getByText("Distance Statistics"));
     expect(screen.getByText("Total Distance (km)"));
     expect(screen.getByText("Mean Distance (km)"));
@@ -20,9 +15,7 @@ describe("DistanceStatsCard", () => {
   });
 
   it("renders journey to space section", () => {
-    renderWithProvider(
-      <DistanceStatsCard totalDistance={32751} totalFlights={2} />,
-    );
+    render(<DistanceStatsCard totalDistance={32751} totalFlights={2} />);
     expect(screen.getByText("Journey to Space"));
     expect(screen.getByText("🌍 Earth"));
     expect(screen.getByText(/around Earth/));

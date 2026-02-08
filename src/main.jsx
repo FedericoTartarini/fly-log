@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider, ColorSchemeScript } from "@mantine/core";
+import "./i18n"; // initialize i18n
 
 import { App } from "./App.jsx";
 import FlightsStats from "./pages/FlightsStats.jsx";
@@ -51,12 +52,11 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <MantineProvider theme={theme} defaultColorScheme="auto">
-        <ColorSchemeScript defaultColorScheme="auto" />
-
+    <ColorSchemeScript defaultColorScheme="auto" />
+    <MantineProvider theme={theme} defaultColorScheme="auto">
+      <AuthProvider>
         <RouterProvider router={router} />
-      </MantineProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </MantineProvider>
   </React.StrictMode>,
 );

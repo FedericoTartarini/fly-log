@@ -1,25 +1,22 @@
 import React from "react";
 import { NativeSelect } from "@mantine/core";
 import useFlightStore from "../store.ts";
+import { parseToDate } from "../utils/dateUtils";
+import { useTranslation } from "react-i18next";
 
 const FlightYearFilter = () => {
   const { selectedYear, setSelectedYear, allFlights } = useFlightStore();
+  const { t } = useTranslation("flights");
 
-  // Only consider past flights for year options
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Extract unique years from all flights
+  const yearsSet = new Set();
+  allFlights.forEach((flight) => {
+    const dt = parseToDate(flight.departure_date);
+    if (!dt) return;
+    yearsSet.add(dt.getFullYear());
+  });
 
-  const pastFlights = allFlights.filter(
-    (flight) => new Date(flight.departure_date) <= today,
-  );
-
-  const years = [
-    ...new Set(
-      pastFlights.map((flight) =>
-        new Date(flight.departure_date).getFullYear(),
-      ),
-    ),
-  ].sort((a, b) => b - a);
+  const years = Array.from(yearsSet).sort((a, b) => b - a);
 
   return (
     <NativeSelect
@@ -28,10 +25,11 @@ const FlightYearFilter = () => {
       mt="md"
       mb="xs"
       id="flight-year-filter"
-      label="Fliter flights"
+      label={t("filter.label")}
       data={[
-        { value: "all", label: "All Past Flights" },
-        { value: "upcoming", label: "Upcoming Flights" },
+        { value: "all", label: t("filter.all") },
+        { value: "upcoming", label: t("filter.upcoming") },
+        { value: "past", label: t("filter.past") },
         ...years.map((year) => ({
           value: String(year),
           label: String(year),

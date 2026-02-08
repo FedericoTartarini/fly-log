@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from "react";
 import {
   Button,
@@ -10,9 +11,12 @@ import {
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
-import { supabaseClient } from "../supabaseClient.ts";
+import { useAuth } from "../context/AuthContext.jsx";
+import { addFlightsForUser } from "../firebaseClient";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
+import { useTranslation } from "react-i18next";
+import { validateAndNormalizeCsvRows } from "../utils/iataValidation";
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -79,15 +83,24 @@ const FlightCsvUpload = ({ onComplete }) => {
   const [parsing, setParsing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
+  const { t } = useTranslation("flights");
 
   const handleUpload = async () => {
     if (!file) {
-      setError("Please select a CSV file");
+      setError(t("csv.errors.no_file"));
       return;
     }
 
     setParsing(true);
     setError(null);
+
+    const uid = user?.uid;
+    if (!uid) {
+      setError(t("userNotAuthenticated"));
+      setParsing(false);
+      return;
+    }
 
     try {
       // Parse the CSV file
@@ -104,88 +117,74 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           const flightData = results.data;
 
-          // // Validate required fields
-          // const requiredFields = [
-          //   "departure_date",
-          //   "departure_time",
-          //   "departure_airport_iata",
-          //   "arrival_airport_iata",
-          //   "airline_iata",
-          // ];
-          //
-          // const missingFields = requiredFields.filter(
-          //   (field) =>
-          //     !flightData[0] || !Object.keys(flightData[0]).includes(field),
-          // );
-          //
-          // if (missingFields.length > 0) {
-          //   setError(`Missing required fields: ${missingFields.join(", ")}`);
-          //   setParsing(false);
-          //   return;
-          // }
+          // todo I should check that the airport exists in the database otherwise throw error
 
-          // Upload flights one by one with progress tracking
-          let successCount = 0;
-          let errorCount = 0;
+          // Validate and normalize IATA codes against local assets
+          const { errors: iataErrors, normalizedRows } =
+            validateAndNormalizeCsvRows(flightData);
 
-          for (let i = 0; i < flightData.length; i++) {
-            const flight = flightData[i];
-
-            // Format the data
-            const formattedFlight = {
-              departure_date: flight.departure_date,
-              departure_time: flight.departure_time,
-              departure_airport_iata: flight.departure_airport_iata,
-              arrival_airport_iata: flight.arrival_airport_iata,
-              airline_iata: flight.airline_iata,
-              flight_number: flight.flight_number || null,
-            };
-
-            try {
-              const { error: insertError } = await supabaseClient
-                .from("flights")
-                .insert(formattedFlight);
-
-              if (insertError) {
-                errorCount++;
-                console.error("Error inserting flight:", insertError);
-              } else {
-                successCount++;
-              }
-            } catch (e) {
-              errorCount++;
-              console.error("Exception while inserting flight:", e);
-            }
-
-            // Update progress
-            setUploadProgress(Math.round(((i + 1) / flightData.length) * 100));
+          if (iataErrors.length > 0) {
+            setError(iataErrors.join("\n"));
+            setParsing(false);
+            return;
           }
 
-          // Show completion notification
-          notifications.show({
-            title: "CSV Upload Complete",
-            message: `Successfully added ${successCount} flights. Failed: ${errorCount}`,
-            color: errorCount > 0 ? "orange" : "green",
-            icon:
-              errorCount > 0 ? (
-                <IconAlertCircle size={16} />
-              ) : (
-                <IconCheck size={16} />
-              ),
-          });
+          const formattedFlights = normalizedRows.map((flight) => ({
+            departure_date: flight.departure_date,
+            departure_time: flight.departure_time,
+            departure_airport_iata: flight.departure_airport_iata,
+            arrival_airport_iata: flight.arrival_airport_iata,
+            airline_iata: flight.airline_iata,
+            flight_number: flight.flight_number || null,
+          }));
 
-          setParsing(false);
-          if (onComplete) {
-            onComplete();
+          let lastProgress = 0;
+          try {
+            await addFlightsForUser(uid, formattedFlights, (p) => {
+              if (p !== lastProgress) {
+                lastProgress = p;
+                setUploadProgress(p);
+              }
+            });
+
+            const successCount = formattedFlights.length;
+            const errorCount = 0;
+
+            // Show completion notification
+            notifications.show({
+              title: t("csv.notification.title"),
+              message: t("csv.notification.message", {
+                success: successCount,
+                failed: errorCount,
+              }),
+              color: errorCount > 0 ? "orange" : "green",
+              icon:
+                errorCount > 0 ? (
+                  <IconAlertCircle size={16} />
+                ) : (
+                  <IconCheck size={16} />
+                ),
+            });
+
+            setParsing(false);
+            if (onComplete) {
+              onComplete();
+            }
+          } catch (e) {
+            setError(`${t("csv.errors.unexpected")} - ${e.message}`);
+            setParsing(false);
+            setUploadProgress(0);
           }
         },
         error: (error) => {
-          setError(`Failed to parse CSV: ${error}`);
+          setError(
+            `${t("csv.errors.parse_error")} - ${error.message || String(error)}`,
+          );
           setParsing(false);
         },
       });
     } catch (e) {
-      setError(`Error processing file: ${e.message}`);
+      setError(`${t("csv.errors.unexpected")} - ${e.message}`);
       setParsing(false);
     }
   };
@@ -194,20 +193,18 @@ const FlightCsvUpload = ({ onComplete }) => {
     <Paper p="md" withBorder>
       <Stack>
         <Text size="lg" fw={500}>
-          Upload Flight Data from CSV
+          {t("csv.title")}
         </Text>
 
         <Text size="sm" c="dimmed">
-          Your CSV must include these columns: departure_date, departure_time,
-          departure_airport_iata, arrival_airport_iata, airline_iata. Optional:
-          flight_number.
+          {t("csv.description")}
         </Text>
 
         <FileInput
           accept=".csv"
-          placeholder="Select CSV file"
-          label="Flight data CSV"
-          description="Upload your flight data in CSV format"
+          placeholder={t("csv.file_input.placeholder")}
+          label={t("csv.file_input.label")}
+          description={t("csv.file_input.description")}
           icon={<IconUpload size={14} />}
           value={file}
           onChange={setFile}
@@ -215,7 +212,11 @@ const FlightCsvUpload = ({ onComplete }) => {
         />
 
         {error && (
-          <Alert color="red" title="Error" icon={<IconAlertCircle size={16} />}>
+          <Alert
+            color="red"
+            title={t("csv.errors.error")}
+            icon={<IconAlertCircle size={16} />}
+          >
             {error}
           </Alert>
         )}
@@ -231,7 +232,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
         <Group justify="flex-end">
           <Button onClick={handleUpload} loading={parsing} disabled={!file}>
-            Upload Flights
+            {t("csv.upload_button")}
           </Button>
         </Group>
       </Stack>

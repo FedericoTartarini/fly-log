@@ -9,7 +9,7 @@ interface airlineInfo {
 }
 
 // Ensure airportsInfoData is typed
-import airlinesInfoData from "../../python/reduced_airlines.json" with { type: "json" };
+import airlinesInfoData from "../assets/airlines.json" with { type: "json" };
 
 export let airlinesInfo: airlineInfo[];
 airlinesInfo = airlinesInfoData;

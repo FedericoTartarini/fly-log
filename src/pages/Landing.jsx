@@ -12,26 +12,26 @@ import { Link } from "react-router-dom";
 import flightImg from "../assets/flight.jpg";
 import { PATHS } from "../constants/MyClasses.ts";
 import FeatureSection from "../components/FeatureSection.jsx";
+import { useTranslation } from "react-i18next";
 
 function Landing() {
+  const { t } = useTranslation("landing");
   return (
     <Container size="md" mt="xl">
       <Stack align="center" gap="xl">
         <Image
           radius="md"
           src={flightImg}
-          alt="Airplane wing in the sky"
+          alt={t("flight_image_alt")}
           h="auto"
           w="100%"
           fit="contain"
         />
         <Title order={1} ta="center">
-          Welcome to Your Personal Flight Tracker
+          {t("title")}
         </Title>
         <Text c="dimmed" ta="center" size="lg" maw={580}>
-          Keep a detailed log of all your flights, explore your travel
-          statistics, and visualize your journeys on a world map. Sign in to get
-          started.
+          {t("subtitle")}
         </Text>
         <Group justify="center" gap="md" mt="xl">
           <Button
@@ -41,10 +41,10 @@ function Landing() {
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
           >
-            Get Started
+            {t("get_started")}
           </Button>
           <Button component={Link} to={PATHS.ABOUT} size="lg" variant="default">
-            Learn More
+            {t("learn_more")}
           </Button>
         </Group>
         <Group justify="center" gap="md" mt="xl">

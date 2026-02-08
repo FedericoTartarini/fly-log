@@ -1,8 +1,23 @@
+// src/store.ts
 import { create } from "zustand";
-import { getUserFlights, getFilteredUserFlights } from "./utils/flightService";
+import { getFilteredUserFlights } from "./utils/flightService";
+import { onAuthStateChanged } from "./firebaseClient";
+import type { Unsubscribe } from "firebase/auth";
+import { getYear, parseToDate } from "./utils/dateUtils";
+
+let authUnsubscribe: Unsubscribe | null = null;
+let currentUid: string | null = null;
+
+export const clearAuthListener = () => {
+  if (authUnsubscribe) {
+    authUnsubscribe();
+    authUnsubscribe = null;
+    currentUid = null;
+  }
+};
 
 interface Flight {
-  id: number;
+  id: string;
   departure_date: string;
   departure_airport_iata: string;
   arrival_airport_iata: string;
@@ -11,32 +26,69 @@ interface Flight {
 }
 
 interface FlightStoreState {
-  flights: Flight[];
-  filteredFlights: Flight[];
-  allFlights: Flight[];
+  allFlights: Flight[]; // master list from backend
+  filteredFlights: Flight[]; // UI-facing filtered subset
   selectedYear: string;
   isLoading: boolean;
   error: string | null;
   fetchFlights: () => Promise<void>;
   setSelectedYear: (year: string) => Promise<void>;
+  // remove a flight by id from both lists (optimistic UI)
+  removeFlightById: (id: string) => void;
+  // restore a flight to both lists (rollback optimistic delete)
+  restoreFlight: (flight: Flight) => void;
 }
 
-const useFlightStore = create<FlightStoreState>((set) => ({
-  flights: [],
-  filteredFlights: [],
+const filterByYear = (flights: Flight[], year: string) => {
+  if (!year || year === "all") return flights;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (year === "upcoming") {
+    return flights.filter((f) => {
+      const dt = parseToDate((f as any).departure_date);
+      return dt !== null && dt >= today;
+    });
+  }
+
+  if (year === "past") {
+    return flights.filter((f) => {
+      const dt = parseToDate((f as any).departure_date);
+      return dt !== null && dt < today;
+    });
+  }
+
+  // Numeric year
+  return flights.filter((f) => {
+    const y = getYear((f as any).departure_date);
+    return y !== null && String(y) === year;
+  });
+};
+
+const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
+  filteredFlights: [],
   selectedYear: "all",
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
-      const flights = await getUserFlights();
+      const uid = currentUid;
+      if (!uid) {
+        set({ allFlights: [], filteredFlights: [], isLoading: false });
+        return;
+      }
+
+      // getFilteredUserFlights(uid, "all") should return all user flights
+      const allFlights = await getFilteredUserFlights(uid, "all");
+      const filteredFlights = filterByYear(allFlights, get().selectedYear);
+
       set({
-        flights,
-        filteredFlights: flights,
-        allFlights: flights,
+        allFlights,
+        filteredFlights,
         isLoading: false,
       });
     } catch (error: any) {
@@ -47,12 +99,49 @@ const useFlightStore = create<FlightStoreState>((set) => ({
   setSelectedYear: async (year: string) => {
     set({ selectedYear: year, isLoading: true, error: null });
     try {
-      const filteredFlights = await getFilteredUserFlights(year);
+      const allFlights = get().allFlights;
+      const filteredFlights = filterByYear(allFlights, year);
       set({ filteredFlights, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
   },
+
+  removeFlightById: (id: string) => {
+    set((state) => ({
+      allFlights: state.allFlights.filter(
+        (f: any) => String(f.id) !== String(id),
+      ),
+      filteredFlights: state.filteredFlights.filter(
+        (f: any) => String(f.id) !== String(id),
+      ),
+    }));
+  },
+
+  restoreFlight: (flight: Flight) => {
+    set((state) => {
+      const newAllFlights = [...state.allFlights, flight].sort((a, b) => {
+        const dateA = parseToDate(a.departure_date);
+        const dateB = parseToDate(b.departure_date);
+        return (dateA?.getTime() || 0) - (dateB?.getTime() || 0);
+      });
+      return {
+        allFlights: newAllFlights,
+        filteredFlights: filterByYear(newAllFlights, state.selectedYear),
+      };
+    });
+  },
 }));
 
 export default useFlightStore;
+
+// Initialize auth listener
+authUnsubscribe = onAuthStateChanged((user) => {
+  if (user) {
+    currentUid = user.uid;
+    useFlightStore.getState().fetchFlights();
+  } else {
+    currentUid = null;
+    useFlightStore.setState({ allFlights: [], filteredFlights: [] });
+  }
+});

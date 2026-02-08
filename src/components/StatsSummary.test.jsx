@@ -1,12 +1,20 @@
+// Mock useNavigate so the component doesn't require a Router during test render
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+  };
+});
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "../../test-utils/render";
+import { render } from "../../test-utils/index.js";
 import StatsSummary from "./StatsSummary";
 import { IDS } from "../constants/MyClasses.ts";
 
-import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store.ts";
-import { MantineProvider } from "@mantine/core";
 import { enrichFlightData } from "../utils/flightService.ts";
+import { makeRouterWrapper } from "../../test-utils/wrappers.jsx";
 
 // Mock the store
 vi.mock("../store", () => {
@@ -55,12 +63,7 @@ const enrichedFlights = (mockFlights || []).map((flight) =>
   enrichFlightData(flight),
 );
 
-const renderWithProvider = (component) =>
-  render(
-    <MemoryRouter>
-      <MantineProvider>{component}</MantineProvider>
-    </MemoryRouter>,
-  );
+const wrapper = makeRouterWrapper();
 
 describe("StatsSummary", () => {
   beforeEach(() => {
@@ -72,7 +75,7 @@ describe("StatsSummary", () => {
       filteredFlights: enrichedFlights,
       allFlights: enrichedFlights,
     });
-    renderWithProvider(<StatsSummary />);
+    render(<StatsSummary />, { wrapper });
 
     // Find element by ID and check its text content
     const totalFlightsElement = document.getElementById(
@@ -96,6 +99,6 @@ describe("StatsSummary", () => {
     const airlinesFlownElement = document.getElementById(
       IDS.STATS.AIRLINES_FLOWN,
     );
-    expect(airlinesFlownElement).toHaveTextContent("1");
+    expect(airlinesFlownElement).toHaveTextContent("3");
   });
 });
