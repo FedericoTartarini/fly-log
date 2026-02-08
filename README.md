@@ -15,12 +15,6 @@ This project analyzes personal flight history using Python and visualizes the da
   - [Test Structure](#test-structure)
   - [Writing Tests](#writing-tests)
 - [Current Features](#current-features)
-- [To-Do / Future Improvements](#to-do--future-improvements)
-  - [Visualization Enhancements](#visualization-enhancements)
-  - [User Experience Improvements](#user-experience-improvements)
-  - [Accessibility](#accessibility)
-  - [Maintenance and DevOps](#maintenance-and-devops)
-  - [Data & Backend](#data--backend)
 
 ## Project Overview
 
@@ -33,7 +27,7 @@ The application has two main parts:
 
 - **Frontend:** React, Vite, Mantine UI
 - **Data Processing:** Python, Pandas
-- **Deployment:** Configured for static site deployment Netlify
+- **Deployment:** Configured for static site deployment on Netlify
 
 ## Getting Started
 
@@ -56,7 +50,7 @@ Follow these instructions to get a local copy up and running.
 
 2.  **Prepare the data:**
     - Navigate to the `python` directory.
-    - Run the data processing script to generate the `flights_with_coordinates.json` file. This file is required by the frontend. You need to install the devependencies using `uv`
+    - Run the data processing script to generate the `flights_with_coordinates.json` file. This file is required by the frontend. You need to install the dependencies using `uv`
 
 3.  **Install frontend dependencies:**
 
