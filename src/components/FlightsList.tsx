@@ -37,9 +37,13 @@ const FlightsList: React.FC = () => {
   const totalPages = Math.max(1, Math.ceil(filteredFlights.length / PAGE_SIZE));
 
   // reset to first page if filteredFlights changes (e.g., new fetch or filter applied)
+  const filterKey = React.useMemo(
+    () => JSON.stringify(filteredFlights.map((f) => f.id).sort()),
+    [filteredFlights],
+  );
   React.useEffect(() => {
     setPage(1);
-  }, [filteredFlights.length]);
+  }, [filterKey]);
 
   if (filteredFlights.length === 0) {
     return (
@@ -154,10 +158,21 @@ const FlightsList: React.FC = () => {
             const img = e?.currentTarget as HTMLImageElement | null;
             if (!img) return;
             img.onerror = null; // prevent loop
-            if (airlineIconFromInfo) {
+            if (airlineIconFromInfo && img.src !== airlineIconFromInfo) {
               img.src = airlineIconFromInfo;
-            } else {
+            } else if (img.src !== "/assets/logos/default-airline.png") {
               img.src = "/assets/logos/default-airline.png";
+            } else {
+              // Final fallback: replace with IconPlaneInflight
+              const parent = img.parentElement;
+              if (parent) {
+                const icon = document.createElement("div");
+                icon.innerHTML =
+                  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plane-inflight"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6l-6 -6l6 -6"/><path d="M21 6l-6 6l6 6l-6 -6z"/></svg>';
+                icon.style.width = "50px";
+                icon.style.height = "50px";
+                parent.replaceChild(icon, img);
+              }
             }
           } catch (_err) {
             // ignore
@@ -259,7 +274,7 @@ const FlightsList: React.FC = () => {
               try {
                 await fetchFlights();
               } catch (e) {
-                // ignore
+                console.error("Failed to refresh flights:", e);
               }
             }}
           />
