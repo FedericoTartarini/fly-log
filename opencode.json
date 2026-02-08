@@ -9,11 +9,21 @@
     },
     "bash": {
       "*": "allow",
+      "coderabbit *": "allow",
       "git commit *": "ask",
       "git push *": "deny",
+      "git diff *": "allow",
+      "npm test *": "allow",
+      "pytest *": "allow",
       "npm *": "ask",
       "rm *": "deny",
       "grep *": "allow"
+    },
+    "edit": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
     }
   }
 }
