@@ -35,18 +35,10 @@ service cloud.firestore {
           'arrival_airport_iata',
           'airline_iata'
         ])
-        && (
-          !('departure_date' in request.resource.data) || request.resource.data.departure_date is timestamp
-        )
-        && (
-          !('departure_airport_iata' in request.resource.data) || request.resource.data.departure_airport_iata is string
-        )
-        && (
-          !('arrival_airport_iata' in request.resource.data) || request.resource.data.arrival_airport_iata is string
-        )
-        && (
-          !('airline_iata' in request.resource.data) || request.resource.data.airline_iata is string
-        );
+        && request.resource.data.departure_date is timestamp
+        && request.resource.data.departure_airport_iata is string
+        && request.resource.data.arrival_airport_iata is string
+        && request.resource.data.airline_iata is string;
 
       // Allow delete only for the authenticated owner
       allow delete: if request.auth != null && request.auth.uid == userId;
