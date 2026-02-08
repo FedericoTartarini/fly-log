@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, cy, Cypress */
+/* global describe, it, beforeEach, cy, Cypress, expect */
 
 describe("Login Failure Scenario", () => {
   // Use a regular function so we can call `this.skip()` when env vars are missing.
@@ -12,7 +12,6 @@ describe("Login Failure Scenario", () => {
     // Ensure the app server is up before visiting. If it's not reachable, skip tests.
     cy.request({ url: base, failOnStatusCode: false }).then(function (resp) {
       if (!resp || resp.status < 200 || resp.status >= 400) {
-        // eslint-disable-next-line no-console
         console.warn(
           `Skipping Login Failure tests: server not available at ${base}`,
         );
