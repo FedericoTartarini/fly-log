@@ -95,7 +95,7 @@ const FlightCsvUpload = ({ onComplete }) => {
     setParsing(true);
     setError(null);
 
-    const uid = user.uid;
+    const uid = user?.uid;
     if (!uid) {
       setError("User not authenticated");
       setParsing(false);
