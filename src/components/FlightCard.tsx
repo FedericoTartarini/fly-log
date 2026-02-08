@@ -37,7 +37,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
 
         <Group justify="space-between">
           <Text fw={500} size="lg">
-            {flight.departure_airport_iata} {t("to") || "→"}{" "}
+            {flight.departure_airport_iata} {t("to", { defaultValue: "→" })}{" "}
             {flight.arrival_airport_iata}
           </Text>
           <Badge color={color} variant="light">
@@ -53,7 +53,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
               {flight.departure_country}
             </Badge>
             <Text size="xs" c="dimmed">
-              {t("to")}
+              {t("to", { defaultValue: "→" })}
             </Text>
             <Badge size="sm" variant="outline">
               {flight.arrival_country}
@@ -67,8 +67,11 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
             <Text size="sm" c="dimmed">
               {typeof flight.flight_time === "number"
                 ? (() => {
-                    const hours = Math.floor(flight.flight_time);
-                    const minutes = Math.round((flight.flight_time % 1) * 60);
+                    const totalMinutes = Math.round(
+                      (flight.flight_time || 0) * 60,
+                    );
+                    const hours = Math.floor(totalMinutes / 60);
+                    const minutes = totalMinutes % 60;
                     return t("flight_time", { hours, minutes });
                   })()
                 : ""}
