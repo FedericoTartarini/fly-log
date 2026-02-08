@@ -21,7 +21,7 @@ describe("StatsSummary Component", () => {
     cy.contains("Add New Flight").should("be.visible");
 
     // Select a specific year from the dropdown
-    cy.get("#flight-year-filter").select("2025");
+    cy.get("#flight-year-filter").select("2026");
 
     // Verify statistics update
     cy.contains("Total Flights").should("be.visible");
