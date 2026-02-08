@@ -248,12 +248,35 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     await handleSubmit(form.values);
   };
 
+  const handleFormSubmit = form.onSubmit(async (values) => {
+    setSubmitError(null);
+    form.validate();
+    const errorMessages = Object.values(form.errors).filter(
+      Boolean,
+    ) as string[];
+    const hasErrors = errorMessages.length > 0;
+    if (hasErrors) {
+      const msg =
+        errorMessages.join("; ") ||
+        t("form.notifications.validation_error_generic");
+      setSubmitError(msg);
+      notifications.show({
+        title: t("form.notifications.validation_error_title"),
+        message: msg,
+        color: "red",
+      });
+      return;
+    }
+
+    await handleSubmit(values);
+  });
+
   const isEditing = Boolean(flight && flight.id);
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
   const manualPanel = (
     <Stack>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form onSubmit={handleFormSubmit}>
         <Stack>
           <Group grow>
             <DatePickerInput
@@ -394,12 +417,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           )}
 
           <Group justify="flex-end" mt="md">
-            <Button
-              type="button"
-              onClick={handleSaveClick}
-              loading={loading}
-              disabled={!user}
-            >
+            <Button type="submit" loading={loading} disabled={!user}>
               {isEditing
                 ? t("form.buttons.update") || "Update"
                 : addReturn
