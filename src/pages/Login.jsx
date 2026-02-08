@@ -104,6 +104,7 @@ function Login() {
         <Stack>
           <Title ta="center">{t("title")}</Title>
           <TextInput
+            name="email"
             label={t("email")}
             placeholder="you@example.com"
             value={email}
@@ -111,6 +112,7 @@ function Login() {
             required
           />
           <PasswordInput
+            name="password"
             label={t("password")}
             placeholder="Your password"
             value={password}
@@ -121,6 +123,7 @@ function Login() {
 
           {mode === "signup" && (
             <PasswordInput
+              name="confirmPassword"
               label={t("confirm_password")}
               placeholder="Confirm password"
               value={confirmPassword}
@@ -131,6 +134,7 @@ function Login() {
 
           <Center>
             <Button
+              type="submit"
               onClick={
                 mode === "signin" ? handleEmailSignIn : handleEmailSignUp
               }
