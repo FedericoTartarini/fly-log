@@ -8,10 +8,7 @@ const FlightYearFilter = () => {
   const { selectedYear, setSelectedYear, allFlights } = useFlightStore();
   const { t } = useTranslation("flights");
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // Only consider past flights for year options
+  // Extract unique years from all flights
   const yearsSet = new Set();
   allFlights.forEach((flight) => {
     const dt = parseToDate(flight.departure_date);
