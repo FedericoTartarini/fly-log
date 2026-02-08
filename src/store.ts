@@ -1,7 +1,7 @@
 // src/store.ts
 import { create } from "zustand";
 import { getFilteredUserFlights } from "./utils/flightService";
-import { onAuthStateChanged, auth } from "./firebaseClient";
+import { onAuthStateChanged } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
 
@@ -137,6 +137,11 @@ export default useFlightStore;
 
 // Initialize auth listener
 authUnsubscribe = onAuthStateChanged((user) => {
-  currentUid = user ? user.uid : null;
-  // Optionally trigger fetchFlights if needed, but since fetchFlights is called on mount, perhaps not
+  if (user) {
+    currentUid = user.uid;
+    useFlightStore.getState().fetchFlights();
+  } else {
+    currentUid = null;
+    useFlightStore.setState({ allFlights: [], filteredFlights: [] });
+  }
 });
