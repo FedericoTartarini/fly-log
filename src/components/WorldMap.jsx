@@ -12,6 +12,17 @@ import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
 import { parseToDate } from "../utils/dateUtils";
 
+// Helper to check if coordinates are valid
+const isValidCoords = (coord) =>
+  Array.isArray(coord) &&
+  coord.length === 2 &&
+  coord.every((n) => typeof n === "number" && isFinite(n));
+
+// Helper to check if a flight has valid coordinates
+const isValidFlight = (flight) =>
+  isValidCoords(flight.departure_coordinates) &&
+  isValidCoords(flight.arrival_coordinates);
+
 // Helper to generate points along the great-circle path
 function getGreatCirclePath(from, to, numPoints = 300) {
   const start = new LatLon(from[0], from[1]);
@@ -58,12 +69,7 @@ const getFlightsCentroid = (flights) => {
       f.departure_coordinates,
       f.arrival_coordinates,
     ])
-    .filter(
-      (coord) =>
-        Array.isArray(coord) &&
-        coord.length === 2 &&
-        coord.every((n) => typeof n === "number" && isFinite(n)),
-    );
+    .filter(isValidCoords);
   if (coords.length === 0) return [25, 74];
 
   const toRad = (deg) => (deg * Math.PI) / 180;
@@ -100,12 +106,7 @@ const getFlightsBounds = (flights) => {
       f.departure_coordinates,
       f.arrival_coordinates,
     ])
-    .filter(
-      (coord) =>
-        Array.isArray(coord) &&
-        coord.length === 2 &&
-        coord.every((n) => typeof n === "number" && isFinite(n)),
-    );
+    .filter(isValidCoords);
 
   if (!coords.length)
     return [
@@ -232,7 +233,7 @@ const WorldMap = () => {
         attribution={attribution}
       />
 
-      {filteredFlights.map((flight) => {
+      {filteredFlights.filter(isValidFlight).map((flight) => {
         const greatCirclePath = getGreatCirclePath(
           flight.departure_coordinates,
           flight.arrival_coordinates,
