@@ -171,18 +171,18 @@ const FlightCsvUpload = ({ onComplete }) => {
               onComplete();
             }
           } catch (e) {
-            setError(e.message);
+            setError(`${t("csv.errors.unexpected")} - ${e.message}`);
             setParsing(false);
             setUploadProgress(0);
           }
         },
         error: (error) => {
-          setError(`${t("csv.errors.no_file")} - ${error}`);
+          setError(`${t("csv.errors.parse_error")} - ${error}`);
           setParsing(false);
         },
       });
     } catch (e) {
-      setError(`${t("csv.errors.no_file")} - ${e.message}`);
+      setError(`${t("csv.errors.unexpected")} - ${e.message}`);
       setParsing(false);
     }
   };
@@ -212,7 +212,7 @@ const FlightCsvUpload = ({ onComplete }) => {
         {error && (
           <Alert
             color="red"
-            title={t("csv.errors.no_file")}
+            title={t("csv.errors.error")}
             icon={<IconAlertCircle size={16} />}
           >
             {error}
