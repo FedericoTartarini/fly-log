@@ -18,7 +18,6 @@
   "emailAlreadyInUse": "This email is already in use.",
   "weakPassword": "Password is too weak.",
   "invalidApiKey": "Invalid Firebase API key (check your VITE_FIREBASE_API_KEY).",
-  "suggestCreateAccount": "Would you like to create a new account?",
   "forgotPassword": "Forgot password?",
   "enterEmailForReset": "Please enter your email address first.",
   "resetEmailSent": "Password reset email sent. Check your inbox.",

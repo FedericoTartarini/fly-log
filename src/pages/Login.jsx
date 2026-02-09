@@ -78,6 +78,10 @@ function Login() {
       setError(t("enterEmailForReset"));
       return;
     }
+    if (!auth) {
+      setError("Firebase not initialized");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
