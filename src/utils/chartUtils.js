@@ -10,7 +10,7 @@ export const getDeparturesByCountry = (flights) => {
   const departuresByCountry = flights.reduce((acc, flight) => {
     const countryCode = flight.departure_country;
     if (countryCode) {
-      const countryName = getCountryName(countryCode);
+      const countryName = getCountryName(countryCode) || countryCode;
       acc[countryName] = (acc[countryName] || 0) + 1;
     }
     return acc;
@@ -113,7 +113,8 @@ export const getFlightsByAirline = (flights) => {
     const airlineCode = flight.airline_iata;
     if (airlineCode) {
       const airlineName = getAirlineName(airlineCode);
-      acc[airlineName] = (acc[airlineName] || 0) + 1;
+      const safeKey = airlineName || airlineCode;
+      acc[safeKey] = (acc[safeKey] || 0) + 1;
     }
     return acc;
   }, {});
@@ -131,7 +132,7 @@ export const getFlightsByAirport = (flights) => {
   const flightsByAirport = flights.reduce((acc, flight) => {
     const airportCode = flight.departure_airport_iata;
     if (airportCode) {
-      const airportCity = getAirportCity(airportCode);
+      const airportCity = getAirportCity(airportCode) || airportCode;
       acc[airportCity] = (acc[airportCity] || 0) + 1;
     }
     return acc;
