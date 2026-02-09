@@ -77,13 +77,16 @@ function Login() {
       setError(t("enterEmailForReset"));
       return;
     }
+    setLoading(true);
+    setError(null);
     try {
       await sendPasswordResetEmail(auth, email);
-      setError(null);
       alert(t("resetEmailSent"));
     } catch (e) {
       const { message } = parseFirebaseError(e);
       setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,14 +100,14 @@ function Login() {
       const rest = parts.slice(1).join(":").trim();
       // Map a few common codes to friendly messages
       const map = {
-        "auth/invalid-email": t('invalidEmail'),
-        "auth/user-disabled": t('userDisabled'),
-        "auth/user-not-found": t('userNotFound'),
-        "auth/wrong-password": t('wrongPassword'),
-        "auth/email-already-in-use": t('emailAlreadyInUse'),
-        "auth/weak-password": t('weakPassword'),
-        "auth/invalid-api-key": t('invalidApiKey'),
-        "auth/invalid-credential": t('invalidCredentials'),
+        "auth/invalid-email": t("invalidEmail"),
+        "auth/user-disabled": t("userDisabled"),
+        "auth/user-not-found": t("userNotFound"),
+        "auth/wrong-password": t("wrongPassword"),
+        "auth/email-already-in-use": t("emailAlreadyInUse"),
+        "auth/weak-password": t("weakPassword"),
+        "auth/invalid-api-key": t("invalidApiKey"),
+        "auth/invalid-credential": t("invalidCredentials"),
       };
       return { message: map[code] || rest || raw, code };
     }
@@ -144,7 +147,11 @@ function Login() {
             />
             {mode === "signin" && (
               <div style={{ textAlign: "right" }}>
-                <Anchor component="button" size="sm" onClick={handleForgotPassword}>
+                <Anchor
+                  component="button"
+                  size="sm"
+                  onClick={handleForgotPassword}
+                >
                   {t("forgotPassword")}
                 </Anchor>
               </div>
