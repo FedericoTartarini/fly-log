@@ -10,6 +10,7 @@ import {
   Anchor,
   Center,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { signInWithEmail, signUpWithEmail, auth } from "../firebaseClient";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { Navigate } from "react-router-dom";
@@ -81,7 +82,11 @@ function Login() {
     setError(null);
     try {
       await sendPasswordResetEmail(auth, email);
-      alert(t("resetEmailSent"));
+      notifications.show({
+        title: t("resetEmailSent"),
+        message: t("checkYourEmailForInstructions"),
+        color: "green",
+      });
     } catch (e) {
       const { message } = parseFirebaseError(e);
       setError(message);
@@ -151,6 +156,7 @@ function Login() {
                   component="button"
                   size="sm"
                   onClick={handleForgotPassword}
+                  disabled={loading}
                 >
                   {t("forgotPassword")}
                 </Anchor>
