@@ -147,7 +147,7 @@
   "group": {
     "country": "Country",
     "airline": "Airline",
-    "airport": "Airport"
+    "airport": "City"
   },
   "time": {
     "day_of_week": "Day of Week",
