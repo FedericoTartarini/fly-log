@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import WorldMap from "../components/WorldMap.jsx";
 import {
   Stack,
-  Card,
   Grid,
   Paper,
   Container,
