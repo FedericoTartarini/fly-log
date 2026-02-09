@@ -8,7 +8,13 @@ import {
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
 
-const FlightsByChart = ({ filteredFlights, data, timeGrouping: propTimeGrouping, height, onTimeGroupingChange }) => {
+const FlightsByChart = ({
+  filteredFlights,
+  data,
+  timeGrouping: propTimeGrouping,
+  height,
+  onTimeGroupingChange,
+}) => {
   const [grouping, setGrouping] = useState("country");
   const { t } = useTranslation("flights");
 
@@ -54,6 +60,11 @@ const FlightsByChart = ({ filteredFlights, data, timeGrouping: propTimeGrouping,
           barProps={{ radius: 8 }}
           series={[{ name: "flights", color: "blue.6" }]}
           withTooltip={false}
+          withBarValueLabel
+          valueFormatter={(value) =>
+            String(value) === "0" ? "" : String(value)
+          }
+          valueLabelProps={{ position: "inside", fill: "white" }}
         />
       </Card>
     );
@@ -107,7 +118,12 @@ const FlightsByChart = ({ filteredFlights, data, timeGrouping: propTimeGrouping,
       <Stack mb="md">
         <Title order={3}>
           {t("charts.flights_by", {
-            period: grouping === "country" ? t("group.country") : grouping === "airline" ? t("group.airline") : t("group.airport"),
+            period:
+              grouping === "country"
+                ? t("group.country")
+                : grouping === "airline"
+                  ? t("group.airline")
+                  : t("group.airport"),
           })}
         </Title>
         <SegmentedControl
@@ -123,10 +139,13 @@ const FlightsByChart = ({ filteredFlights, data, timeGrouping: propTimeGrouping,
       <BarChart
         h={(chartData.length + 1) * 28}
         data={chartData}
+        withBarValueLabel
+        valueFormatter={(value) => (String(value) === "0" ? "" : String(value))}
+        valueLabelProps={{ position: "inside", fill: "white" }}
         dataKey={getDataKey(grouping)}
         orientation="vertical"
         yAxisProps={{
-          width: 60,
+          width: 110,
         }}
         xAxisProps={{
           tickFormatter: (v) => (Number.isInteger(v) ? v : ""),

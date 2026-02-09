@@ -1,13 +1,17 @@
 import i18n from "i18next";
 import { parseToDate } from "./dateUtils";
 import { capitalize } from "./stringUtils";
+import { getCountryName } from "./countryUtils";
+import { getAirlineName } from "./airlineUtils";
+import { getAirportCity } from "./airportUtils";
 
 export const getDeparturesByCountry = (flights) => {
   if (!flights) return [];
   const departuresByCountry = flights.reduce((acc, flight) => {
-    const country = flight.departure_country;
-    if (country) {
-      acc[country] = (acc[country] || 0) + 1;
+    const countryCode = flight.departure_country;
+    if (countryCode) {
+      const countryName = getCountryName(countryCode);
+      acc[countryName] = (acc[countryName] || 0) + 1;
     }
     return acc;
   }, {});
@@ -106,9 +110,10 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
 export const getFlightsByAirline = (flights) => {
   if (!flights) return [];
   const flightsByAirline = flights.reduce((acc, flight) => {
-    const airline = flight.airline_iata;
-    if (airline) {
-      acc[airline] = (acc[airline] || 0) + 1;
+    const airlineCode = flight.airline_iata;
+    if (airlineCode) {
+      const airlineName = getAirlineName(airlineCode);
+      acc[airlineName] = (acc[airlineName] || 0) + 1;
     }
     return acc;
   }, {});
@@ -124,9 +129,10 @@ export const getFlightsByAirline = (flights) => {
 export const getFlightsByAirport = (flights) => {
   if (!flights) return [];
   const flightsByAirport = flights.reduce((acc, flight) => {
-    const airport = flight.departure_airport_iata;
-    if (airport) {
-      acc[airport] = (acc[airport] || 0) + 1;
+    const airportCode = flight.departure_airport_iata;
+    if (airportCode) {
+      const airportCity = getAirportCity(airportCode);
+      acc[airportCity] = (acc[airportCity] || 0) + 1;
     }
     return acc;
   }, {});
