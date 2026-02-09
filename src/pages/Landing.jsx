@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import {
   Container,
   Title,
@@ -7,14 +7,17 @@ import {
   Group,
   Stack,
   Image,
+  Loader,
+  Center,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import flightImg from "../assets/flight.webp";
 import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
 import { PATHS } from "../constants/MyClasses.ts";
-import FeatureSection from "../components/FeatureSection.jsx";
 import { useTranslation } from "react-i18next";
+
+const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 
 function Landing() {
   const { t } = useTranslation("landing");
@@ -53,7 +56,15 @@ function Landing() {
           </Button>
         </Group>
         <Group justify="center" gap="md" mt="xl">
-          <FeatureSection />
+          <Suspense
+            fallback={
+              <Center>
+                <Loader />
+              </Center>
+            }
+          >
+            <FeatureSection />
+          </Suspense>
         </Group>
       </Stack>
     </Container>

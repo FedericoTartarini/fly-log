@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
+const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 import {
   Stack,
   Grid,
@@ -17,7 +18,6 @@ import DistanceStatsCard from "../components/DistanceStatsCard.js";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
-import FlightsTopBar from "../components/FlightsTopBar.jsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
@@ -57,7 +57,11 @@ const FlightsStats = () => {
   }
 
   if (allFlights.length === 0) {
-    return <FlightsTopBar fullWidth={true} />;
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <FlightsTopBar fullWidth={true} />
+      </Suspense>
+    );
   }
 
   return (
@@ -85,7 +89,9 @@ const FlightsStats = () => {
           <StatsSummary />
 
           {/* Add button to open modal */}
-          <FlightsTopBar fullWidth={true} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <FlightsTopBar fullWidth={true} />
+          </Suspense>
 
           <DistanceStatsCard
             totalDistance={stats.totalDistance}
