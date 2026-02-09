@@ -4,5 +4,8 @@ export const getAirportCity = (iata: string): string => {
   const airport = airportsInfo.find((a) => a.iata === iata);
   if (!airport) return iata;
   // Remove text within parentheses
-  return airport.city.replace(/\s*\([^)]*\)/g, "");
+  return airport.city
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 };
