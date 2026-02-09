@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import i18n from "i18next";
-import { getFlightsByTimeGrouping } from "./chartUtils";
+import { getFlightsByTimeGrouping, getFlightsByAirline } from "./chartUtils";
 import { capitalize } from "./stringUtils";
 
 // Helper to get localized weekday/month label as used in chartUtils
@@ -96,5 +96,55 @@ describe("getFlightsByTimeGrouping", () => {
     const map = Object.fromEntries(out.map((r) => [r.period, r.flights]));
     expect(map[janLabel]).toBe(2);
     expect(map[febLabel]).toBe(1);
+  });
+});
+
+describe("getFlightsByAirline", () => {
+  it("returns empty array for empty input", () => {
+    const out = getFlightsByAirline([]);
+    expect(out).toEqual([]);
+  });
+
+  it("groups flights by airline and sorts by count descending", () => {
+    const flights = [
+      { airline_iata: "AA" },
+      { airline_iata: "DL" },
+      { airline_iata: "AA" },
+      { airline_iata: "UA" },
+      { airline_iata: "AA" },
+    ];
+
+    const out = getFlightsByAirline(flights);
+
+    // Should have 3 entries: American (3), Delta Air Lines (1), United (1)
+    expect(out).toHaveLength(3);
+    expect(out[0].airline).toBe("American");
+    expect(out[0].flights).toBe(3);
+    expect(out[1].airline).toBe("Delta");
+    expect(out[1].flights).toBe(1);
+    expect(out[2].airline).toBe("United");
+    expect(out[2].flights).toBe(1);
+  });
+
+  it("handles unknown airline codes by falling back to the code", () => {
+    const flights = [{ airline_iata: "UNKNOWN" }, { airline_iata: "AA" }];
+
+    const out = getFlightsByAirline(flights);
+
+    // Should have 2 entries, with UNKNOWN as key since getAirlineName("UNKNOWN") likely returns empty
+    expect(out).toHaveLength(2);
+    const unknownEntry = out.find((item) => item.airline === "UNKNOWN");
+    expect(unknownEntry).toBeDefined();
+    expect(unknownEntry.flights).toBe(1);
+  });
+
+  it("ignores flights without airline_iata", () => {
+    const flights = [{ airline_iata: "AA" }, {}, { airline_iata: null }];
+
+    const out = getFlightsByAirline(flights);
+
+    expect(out).toHaveLength(1);
+    expect(out[0].airline).toBe("American");
+    expect(out[0].flights).toBe(1);
   });
 });
