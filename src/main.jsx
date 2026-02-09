@@ -14,7 +14,6 @@ import {
 import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
 
-import { App } from "./App.jsx";
 const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
@@ -22,11 +21,12 @@ const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
+import MyAppShell from "./pages/MyAppShell.jsx";
 
 const router = createBrowserRouter([
   {
     path: PATHS.HOME,
-    element: <App />,
+    element: <MyAppShell />,
     children: [
       {
         index: true, // Default route
