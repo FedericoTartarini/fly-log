@@ -7,14 +7,14 @@ import { capitalize } from "./stringUtils";
 function weekdayLabel(date, locale) {
   return capitalize(
     new Intl.DateTimeFormat(locale, {
-      weekday: "long",
+      weekday: "short",
       timeZone: "UTC",
     }).format(date),
   );
 }
 function monthLabel(date, locale) {
   return capitalize(
-    new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(
+    new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" }).format(
       date,
     ),
   );

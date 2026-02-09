@@ -3,6 +3,7 @@ import { parseToDate } from "./dateUtils";
 import { capitalize } from "./stringUtils";
 
 export const getDeparturesByCountry = (flights) => {
+  if (!flights) return [];
   const departuresByCountry = flights.reduce((acc, flight) => {
     const country = flight.departure_country;
     if (country) {
@@ -24,7 +25,7 @@ const localizedWeekdays = (locale) => {
   // pick a Monday (1970-01-05 is Monday) and iterate 7 days
   const base = new Date(Date.UTC(1970, 0, 5));
   const fmt = new Intl.DateTimeFormat(locale, {
-    weekday: "long",
+    weekday: "short",
     timeZone: "UTC",
   });
   return Array.from({ length: 7 }).map((_, i) => {
@@ -37,7 +38,7 @@ const localizedWeekdays = (locale) => {
 // Helper: build localized month names January..December
 const localizedMonths = (locale) => {
   const fmt = new Intl.DateTimeFormat(locale, {
-    month: "long",
+    month: "short",
     timeZone: "UTC",
   });
   return Array.from({ length: 12 }).map((_, i) =>
@@ -46,6 +47,7 @@ const localizedMonths = (locale) => {
 };
 
 export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
+  if (!flights) return [];
   const grouping = {};
 
   // Choose locale from i18n; fallback to en-AU
@@ -60,7 +62,7 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
       case "dayOfWeek":
         key = capitalize(
           new Intl.DateTimeFormat(locale, {
-            weekday: "long",
+            weekday: "short",
             timeZone: "UTC",
           }).format(d),
         );
@@ -71,7 +73,7 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
       case "month":
         key = capitalize(
           new Intl.DateTimeFormat(locale, {
-            month: "long",
+            month: "short",
             timeZone: "UTC",
           }).format(d),
         );
@@ -99,4 +101,40 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
       period: key,
       flights: grouping[key] || 0,
     }));
+};
+
+export const getFlightsByAirline = (flights) => {
+  if (!flights) return [];
+  const flightsByAirline = flights.reduce((acc, flight) => {
+    const airline = flight.airline_iata;
+    if (airline) {
+      acc[airline] = (acc[airline] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return Object.entries(flightsByAirline)
+    .map(([airline, count]) => ({
+      airline,
+      flights: count,
+    }))
+    .sort((a, b) => b.flights - a.flights);
+};
+
+export const getFlightsByAirport = (flights) => {
+  if (!flights) return [];
+  const flightsByAirport = flights.reduce((acc, flight) => {
+    const airport = flight.departure_airport_iata;
+    if (airport) {
+      acc[airport] = (acc[airport] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return Object.entries(flightsByAirport)
+    .map(([airport, count]) => ({
+      airport,
+      flights: count,
+    }))
+    .sort((a, b) => b.flights - a.flights);
 };
