@@ -1,7 +1,17 @@
 import React, { useEffect } from "react";
-import {Container, Title, Stack, Card, Image, Center, Loader} from "@mantine/core";
+import {
+  Container,
+  Title,
+  Stack,
+  Card,
+  Image,
+  Center,
+  Loader,
+} from "@mantine/core";
 import FlightYearFilter from "../components/FlightYearFilter";
-import flightImg from "../assets/flight.jpg";
+import flightImg from "../assets/flight.webp";
+import flightImg380 from "../assets/flight-380.webp";
+import flightImg760 from "../assets/flight-760.webp";
 import FlightsList from "../components/FlightsList.tsx";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
@@ -57,7 +67,13 @@ function Flights() {
 
         <Card shadow="sm" radius="md" withBorder>
           <Card.Section>
-            <Image src={flightImg} height={160} alt={t("image_alt")} />
+            <Image
+              src={flightImg}
+              srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
+              sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
+              height={160}
+              alt={t("image_alt")}
+            />
           </Card.Section>
 
           <FlightYearFilter />
