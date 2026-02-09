@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Title, Stack, Card, SegmentedControl } from "@mantine/core";
+import {
+  Title,
+  Stack,
+  Card,
+  SegmentedControl,
+  ScrollArea,
+} from "@mantine/core";
 import { BarChart } from "@mantine/charts";
 import {
   getDeparturesByCountry,
@@ -46,26 +52,49 @@ const FlightsByChart = ({
             ]}
           />
         </Stack>
-        <BarChart
-          h={height || (timeChartData.length + 1) * 28}
-          data={timeChartData}
-          dataKey="period"
-          orientation="vertical"
-          yAxisProps={{
-            width: 60,
-          }}
-          xAxisProps={{
-            tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
-          }}
-          barProps={{ radius: 8 }}
-          series={[{ name: "flights", color: "blue.6" }]}
-          withTooltip={false}
-          withBarValueLabel
-          valueFormatter={(value) =>
-            String(value) === "0" ? "" : String(value)
-          }
-          valueLabelProps={{ position: "inside", fill: "white" }}
-        />
+        {timeGrouping === "year" ? (
+          <ScrollArea h={370} scrollbars="y" offsetScrollbars>
+            <BarChart
+              h={height || (timeChartData.length + 1) * 28}
+              data={timeChartData}
+              dataKey="period"
+              orientation="vertical"
+              yAxisProps={{
+                width: 60,
+              }}
+              withXAxis={false}
+              gridAxis="none"
+              barProps={{ radius: 8 }}
+              series={[{ name: "flights", color: "blue.6" }]}
+              withTooltip={false}
+              withBarValueLabel
+              valueFormatter={(value) =>
+                String(value) === "0" ? "" : String(value)
+              }
+              valueLabelProps={{ position: "inside", fill: "white" }}
+            />
+          </ScrollArea>
+        ) : (
+          <BarChart
+            h={height || (timeChartData.length + 1) * 28}
+            data={timeChartData}
+            dataKey="period"
+            orientation="vertical"
+            yAxisProps={{
+              width: 60,
+            }}
+            withXAxis={false}
+            gridAxis="none"
+            barProps={{ radius: 8 }}
+            series={[{ name: "flights", color: "blue.6" }]}
+            withTooltip={false}
+            withBarValueLabel
+            valueFormatter={(value) =>
+              String(value) === "0" ? "" : String(value)
+            }
+            valueLabelProps={{ position: "inside", fill: "white" }}
+          />
+        )}
       </Card>
     );
   }
@@ -136,24 +165,27 @@ const FlightsByChart = ({
           ]}
         />
       </Stack>
-      <BarChart
-        h={(chartData.length + 1) * 28}
-        data={chartData}
-        withBarValueLabel
-        valueFormatter={(value) => (String(value) === "0" ? "" : String(value))}
-        valueLabelProps={{ position: "inside", fill: "white" }}
-        dataKey={getDataKey(grouping)}
-        orientation="vertical"
-        yAxisProps={{
-          width: 110,
-        }}
-        xAxisProps={{
-          tickFormatter: (v) => (Number.isInteger(v) ? v : ""),
-        }}
-        barProps={{ radius: 8 }}
-        series={[{ name: getSeriesName(grouping), color: "blue.6" }]}
-        withTooltip={false}
-      />
+      <ScrollArea h={370} scrollbars="y" type="always" offsetScrollbars>
+        <BarChart
+          h={(chartData.length + 1) * 28}
+          data={chartData}
+          withBarValueLabel
+          valueFormatter={(value) =>
+            String(value) === "0" ? "" : String(value)
+          }
+          valueLabelProps={{ position: "inside", fill: "white" }}
+          dataKey={getDataKey(grouping)}
+          orientation="vertical"
+          yAxisProps={{
+            width: 110,
+          }}
+          withXAxis={false}
+          gridAxis="none"
+          barProps={{ radius: 8 }}
+          series={[{ name: getSeriesName(grouping), color: "blue.6" }]}
+          withTooltip={false}
+        />
+      </ScrollArea>
     </Card>
   );
 };
