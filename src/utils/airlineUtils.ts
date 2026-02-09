@@ -7,6 +7,6 @@ export const getAirlineName = (iata: string): string => {
   return airline.name
     .replace(/\s+airlines?$/i, "")
     .replace(/\s+airways?$/i, "")
-    .replace(/\s+air?$/i, "")
+    .replace(/\s+airs?$/i, "")
     .replace(/\s+air lines?$/i, "");
 };
