@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import WorldMap from "../components/WorldMap.jsx";
+import React, { useEffect, useState, lazy, Suspense } from "react";
+const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
+const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 import {
   Stack,
   Grid,
@@ -17,7 +18,6 @@ import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightsTopBar from "../components/FlightsTopBar.jsx";
-import FlightsByChart from "../components/FlightsByChart.jsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
@@ -63,7 +63,15 @@ const FlightsStats = () => {
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
-        <WorldMap />
+        <Suspense
+          fallback={
+            <Center h={200}>
+              <Loader />
+            </Center>
+          }
+        >
+          <WorldMap />
+        </Suspense>
       </div>
 
       {/* This Stack will scroll over the map */}
@@ -101,14 +109,30 @@ const FlightsStats = () => {
             </Grid.Col>
           </Grid>
 
-          <FlightsByChart
-            data={timeChartData}
-            timeGrouping={timeGrouping}
-            height={(timeChartData.length + 1) * 28}
-            onTimeGroupingChange={setTimeGrouping}
-          />
+          <Suspense
+            fallback={
+              <Center h={100}>
+                <Loader />
+              </Center>
+            }
+          >
+            <FlightsByChart
+              data={timeChartData}
+              timeGrouping={timeGrouping}
+              height={(timeChartData.length + 1) * 28}
+              onTimeGroupingChange={setTimeGrouping}
+            />
+          </Suspense>
 
-          <FlightsByChart filteredFlights={filteredFlights} />
+          <Suspense
+            fallback={
+              <Center h={100}>
+                <Loader />
+              </Center>
+            }
+          >
+            <FlightsByChart filteredFlights={filteredFlights} />
+          </Suspense>
         </Stack>
       </Paper>
     </>
