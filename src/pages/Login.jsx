@@ -154,6 +154,7 @@ function Login() {
               <div style={{ textAlign: "right" }}>
                 <Anchor
                   component="button"
+                  type="button"
                   size="sm"
                   onClick={handleForgotPassword}
                   disabled={loading}
