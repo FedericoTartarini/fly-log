@@ -186,6 +186,7 @@ function Login() {
               {mode === "signin" ? (
                 <Anchor
                   component="button"
+                  type="button"
                   size="sm"
                   onClick={() => setMode("signup")}
                 >
@@ -194,6 +195,7 @@ function Login() {
               ) : (
                 <Anchor
                   component="button"
+                  type="button"
                   size="sm"
                   onClick={() => setMode("signin")}
                 >
