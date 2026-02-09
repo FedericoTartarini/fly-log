@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import {
   createTheme,
   MantineProvider,
@@ -10,6 +11,7 @@ import {
   Loader,
   Center,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
 
 import { App } from "./App.jsx";
@@ -60,6 +62,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ColorSchemeScript defaultColorScheme="auto" />
     <MantineProvider theme={theme} defaultColorScheme="auto">
+      <Notifications />
       <AuthProvider>
         <Suspense
           fallback={

@@ -22,6 +22,6 @@
   "forgotPassword": "Forgot password?",
   "enterEmailForReset": "Please enter your email address first.",
   "resetEmailSent": "Password reset email sent. Check your inbox.",
-  "checkYourEmailForInstructions": "Check your email for instructions.",
+  "checkYourEmailForInstructions": "Check your email for instructions. Please note that the email may take a few minutes to arrive and could be in your spam folder.",
   "invalidCredentials": "Invalid email or password. Please check your credentials and try again. If you don't have an account, you can sign up by clicking 'Sign up'."
 }

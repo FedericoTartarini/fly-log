@@ -22,6 +22,6 @@
   "forgotPassword": "Password dimenticata?",
   "enterEmailForReset": "Inserisci prima il tuo indirizzo email.",
   "resetEmailSent": "Email di reset password inviata. Controlla la tua casella di posta.",
-  "checkYourEmailForInstructions": "Controlla la tua email per le istruzioni.",
+  "checkYourEmailForInstructions": "Controlla la tua email per le istruzioni. Tieni presente che l'email potrebbe impiegare alcuni minuti per arrivare e potrebbe finire nella tua cartella spam.",
   "invalidCredentials": "Email o password non validi. Controlla le tue credenziali e riprova. Se non hai un account, puoi registrarti cliccando su 'Registrati'."
 }
