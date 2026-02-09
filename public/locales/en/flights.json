@@ -144,6 +144,11 @@
     "departures_by_country": "Departures by Country",
     "flights_by": "Flights by {{period}}"
   },
+  "group": {
+    "country": "Country",
+    "airline": "Airline",
+    "airport": "City"
+  },
   "time": {
     "day_of_week": "Day of Week",
     "year": "Year",

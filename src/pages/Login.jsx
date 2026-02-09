@@ -10,7 +10,9 @@ import {
   Anchor,
   Center,
 } from "@mantine/core";
-import { signInWithEmail, signUpWithEmail } from "../firebaseClient";
+import { notifications } from "@mantine/notifications";
+import { signInWithEmail, signUpWithEmail, auth } from "../firebaseClient";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -71,6 +73,32 @@ function Login() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError(t("enterEmailForReset"));
+      return;
+    }
+    if (!auth) {
+      setError("Firebase not initialized");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      notifications.show({
+        title: t("resetEmailSent"),
+        message: t("checkYourEmailForInstructions"),
+        color: "green",
+      });
+    } catch (e) {
+      const { message } = parseFirebaseError(e);
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const parseFirebaseError = (err) => {
     if (!err) return { message: "Unknown error", code: undefined };
     const raw = err.message || String(err);
@@ -81,13 +109,14 @@ function Login() {
       const rest = parts.slice(1).join(":").trim();
       // Map a few common codes to friendly messages
       const map = {
-        "auth/invalid-email": t('invalidEmail'),
-        "auth/user-disabled": t('userDisabled'),
-        "auth/user-not-found": t('userNotFound'),
-        "auth/wrong-password": t('wrongPassword'),
-        "auth/email-already-in-use": t('emailAlreadyInUse'),
-        "auth/weak-password": t('weakPassword'),
-        "auth/invalid-api-key": t('invalidApiKey'),
+        "auth/invalid-email": t("invalidEmail"),
+        "auth/user-disabled": t("userDisabled"),
+        "auth/user-not-found": t("userNotFound"),
+        "auth/wrong-password": t("wrongPassword"),
+        "auth/email-already-in-use": t("emailAlreadyInUse"),
+        "auth/weak-password": t("weakPassword"),
+        "auth/invalid-api-key": t("invalidApiKey"),
+        "auth/invalid-credential": t("invalidCredentials"),
       };
       return { message: map[code] || rest || raw, code };
     }
@@ -125,6 +154,19 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {mode === "signin" && (
+              <div style={{ textAlign: "right" }}>
+                <Anchor
+                  component="button"
+                  type="button"
+                  size="sm"
+                  onClick={handleForgotPassword}
+                  disabled={loading}
+                >
+                  {t("forgotPassword")}
+                </Anchor>
+              </div>
+            )}
             {error && <div style={{ color: "red" }}>{String(error)}</div>}
 
             {mode === "signup" && (
@@ -148,6 +190,7 @@ function Login() {
               {mode === "signin" ? (
                 <Anchor
                   component="button"
+                  type="button"
                   size="sm"
                   onClick={() => setMode("signup")}
                 >
@@ -156,6 +199,7 @@ function Login() {
               ) : (
                 <Anchor
                   component="button"
+                  type="button"
                   size="sm"
                   onClick={() => setMode("signin")}
                 >

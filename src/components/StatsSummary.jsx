@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import FlightYearFilter from "./FlightYearFilter";
 import useFlightStore from "../store.ts";
-import flightImg from "../assets/flight.jpg";
+import flightImg from "../assets/flight.webp";
+import flightImg380 from "../assets/flight-380.webp";
+import flightImg760 from "../assets/flight-760.webp";
 import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
 import { useTranslation } from "react-i18next";
@@ -20,7 +22,13 @@ function StatsSummary() {
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Card.Section>
-        <Image src={flightImg} height={160} alt={t("image_alt")} />
+        <Image
+          src={flightImg}
+          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
+          sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
+          height={160}
+          alt={t("image_alt")}
+        />
       </Card.Section>
 
       <FlightYearFilter />

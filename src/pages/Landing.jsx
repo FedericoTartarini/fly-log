@@ -9,7 +9,9 @@ import {
   Image,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
-import flightImg from "../assets/flight.jpg";
+import flightImg from "../assets/flight.webp";
+import flightImg380 from "../assets/flight-380.webp";
+import flightImg760 from "../assets/flight-760.webp";
 import { PATHS } from "../constants/MyClasses.ts";
 import FeatureSection from "../components/FeatureSection.jsx";
 import { useTranslation } from "react-i18next";
@@ -22,10 +24,13 @@ function Landing() {
         <Image
           radius="md"
           src={flightImg}
+          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
+          sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
           alt={t("flight_image_alt")}
           h="auto"
           w="100%"
           fit="contain"
+          fetchPriority="high"
         />
         <Title order={1} ta="center">
           {t("title")}
