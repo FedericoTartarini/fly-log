@@ -1,7 +1,8 @@
 import { precacheAndRoute } from "workbox-precaching";
 
-const CACHE_NAME = "fly-log-v1";
-const DYNAMIC_CACHE = "fly-log-dynamic-v1";
+const CACHE_NAME = "fly-log-v2";
+const DYNAMIC_CACHE = "fly-log-dynamic-v2";
+const OFFLINE_URL = "/offline.html";
 
 // Precache all assets
 precacheAndRoute(self.__WB_MANIFEST);
@@ -17,6 +18,7 @@ self.addEventListener("install", (event) => {
           "/index.html",
           "/manifest.json",
           "/airplane.png",
+          OFFLINE_URL,
           // Add other static assets as needed
         ]);
       })
@@ -30,9 +32,15 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((cacheNames) => {
-        const cachesToDelete = cacheNames.filter(
-          (cache) => cache !== CACHE_NAME && cache !== DYNAMIC_CACHE,
-        );
+        const cachesToDelete = cacheNames.filter((cache) => {
+          if (cache === CACHE_NAME || cache === DYNAMIC_CACHE) return false;
+          if (
+            cache.startsWith("workbox-precache") ||
+            cache.startsWith("workbox-runtime")
+          )
+            return false;
+          return true;
+        });
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
       .then(() => self.clients.claim()),
@@ -55,7 +63,9 @@ self.addEventListener("fetch", (event) => {
           return fetchResponse;
         })
         .catch(() => {
-          return caches.match(event.request);
+          return caches
+            .match(event.request)
+            .then((cached) => cached || caches.match(OFFLINE_URL));
         }),
     );
   }
@@ -63,7 +73,9 @@ self.addEventListener("fetch", (event) => {
   else {
     event.respondWith(
       fetch(event.request).catch(() => {
-        return caches.match(event.request);
+        return caches
+          .match(event.request)
+          .then((cached) => cached || caches.match(OFFLINE_URL));
       }),
     );
   }
