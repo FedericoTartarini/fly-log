@@ -37,7 +37,7 @@ function Flights() {
             {t("title")}
           </Title>
           <Center>
-            <Loader color="blue" />
+            <Loader color="blue" aria-label={t("loading")} />
           </Center>
         </Stack>
       </Container>
@@ -53,7 +53,13 @@ function Flights() {
             {t("title")}
           </Title>
 
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Center>
+                <Loader color="blue" aria-label={t("loading")} />
+              </Center>
+            }
+          >
             <FlightsTopBar fullWidth={true} />
           </Suspense>
         </Stack>
@@ -82,11 +88,23 @@ function Flights() {
           <FlightYearFilter />
         </Card>
 
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <Center>
+              <Loader color="blue" aria-label={t("loading")} />
+            </Center>
+          }
+        >
           <FlightsTopBar fullWidth={false} />
         </Suspense>
 
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <Center>
+              <Loader color="blue" aria-label={t("loading")} />
+            </Center>
+          }
+        >
           <FlightsList />
         </Suspense>
       </Stack>
