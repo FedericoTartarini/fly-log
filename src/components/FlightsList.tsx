@@ -134,11 +134,11 @@ const FlightsList: React.FC = () => {
 
     // Try to build a local/build URL for the image, falling back to public path
     let imageUrl: string;
-    // new URL with import.meta may cause TypeScript to complain in some build configs; ignore the TS check here
-    // @ts-ignore
-    imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
-    // Fallback to a public path (if assets are copied to /assets at build)
-    // imageUrl = `/assets/logos/${sourcePath}`;
+    try {
+      imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
+    } catch {
+      imageUrl = `/assets/logos/${sourcePath}`;
+    }
 
     // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
