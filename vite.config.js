@@ -26,21 +26,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes("/src/store")) return "store";
-          if (id.includes("/src/utils/")) return "utils";
-          if (id.includes("react-leaflet") || id.includes("/leaflet"))
-            return "leaflet";
-          if (id.includes("react-i18next") || id.includes("/i18next"))
-            return "i18n";
-          if (id.includes("@mantine/charts")) return "charts";
-          if (id.includes("/node_modules/react-router-dom/")) return "vendor";
-          if (
-            id.includes("/node_modules/react-dom/") ||
-            id.includes("/node_modules/react/")
-          )
-            return "vendor";
-        },
+        // Use default chunking to avoid load-order issues
       },
     },
   },
