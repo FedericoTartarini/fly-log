@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import {
   Container,
   Title,
@@ -12,10 +12,11 @@ import FlightYearFilter from "../components/FlightYearFilter";
 import flightImg from "../assets/flight.webp";
 import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
-import FlightsList from "../components/FlightsList.tsx";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
-import FlightsTopBar from "../components/FlightsTopBar.jsx";
+
+const FlightsList = lazy(() => import("../components/FlightsList.tsx"));
+const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 
 function Flights() {
   const { t } = useTranslation("flights");
@@ -36,7 +37,7 @@ function Flights() {
             {t("title")}
           </Title>
           <Center>
-            <Loader color="blue" />
+            <Loader color="blue" aria-label={t("loading")} />
           </Center>
         </Stack>
       </Container>
@@ -52,7 +53,15 @@ function Flights() {
             {t("title")}
           </Title>
 
-          <FlightsTopBar fullWidth={true} />
+          <Suspense
+            fallback={
+              <Center>
+                <Loader color="blue" aria-label={t("loading")} />
+              </Center>
+            }
+          >
+            <FlightsTopBar fullWidth={true} />
+          </Suspense>
         </Stack>
       </Container>
     );
@@ -79,9 +88,25 @@ function Flights() {
           <FlightYearFilter />
         </Card>
 
-        <FlightsTopBar fullWidth={false} />
+        <Suspense
+          fallback={
+            <Center>
+              <Loader color="blue" aria-label={t("loading")} />
+            </Center>
+          }
+        >
+          <FlightsTopBar fullWidth={false} />
+        </Suspense>
 
-        <FlightsList />
+        <Suspense
+          fallback={
+            <Center>
+              <Loader color="blue" aria-label={t("loading")} />
+            </Center>
+          }
+        >
+          <FlightsList />
+        </Suspense>
       </Stack>
     </Container>
   );

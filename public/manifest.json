@@ -1,0 +1,39 @@
+{
+  "name": "Fly Log",
+  "short_name": "FlyLog",
+  "description": "Log and track your flights",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#228be6",
+  "lang": "en",
+  "categories": ["lifestyle", "travel"],
+  "icons": [
+    {
+      "src": "/airplane-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/airplane-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/airplane.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/airplane.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

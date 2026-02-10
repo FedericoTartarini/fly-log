@@ -145,5 +145,6 @@
     "country": "Paese",
     "airline": "Compagnia aerea",
     "airport": "Città"
-  }
+  },
+  "loading": "Caricamento..."
 }

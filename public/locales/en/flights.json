@@ -153,5 +153,6 @@
     "day_of_week": "Day of Week",
     "year": "Year",
     "month": "Month"
-  }
+  },
+  "loading": "Loading..."
 }

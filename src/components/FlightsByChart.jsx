@@ -65,7 +65,7 @@ const FlightsByChart = ({
               withXAxis={false}
               gridAxis="none"
               barProps={{ radius: 8 }}
-              series={[{ name: "flights", color: "blue.6" }]}
+              series={[{ name: "flights", color: "green.6" }]}
               withTooltip={false}
               withBarValueLabel
               valueFormatter={(value) =>
@@ -86,7 +86,7 @@ const FlightsByChart = ({
             withXAxis={false}
             gridAxis="none"
             barProps={{ radius: 8 }}
-            series={[{ name: "flights", color: "blue.6" }]}
+            series={[{ name: "flights", color: "green.6" }]}
             withTooltip={false}
             withBarValueLabel
             valueFormatter={(value) =>
@@ -182,7 +182,7 @@ const FlightsByChart = ({
           withXAxis={false}
           gridAxis="none"
           barProps={{ radius: 8 }}
-          series={[{ name: getSeriesName(grouping), color: "blue.6" }]}
+          series={[{ name: getSeriesName(grouping) }]}
           withTooltip={false}
         />
       </ScrollArea>

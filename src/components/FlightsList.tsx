@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import {
   Image,
   Table,
@@ -7,14 +7,16 @@ import {
   Center,
   Modal,
   Pagination,
+  Loader,
 } from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
-import FlightActions from "./FlightActions.jsx";
-import FlightEntryForm from "./FlightEntryForm";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
+
+const FlightActions = lazy(() => import("./FlightActions.jsx"));
+const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
 
 /**
  * Renders a list of flights in a table.
@@ -94,7 +96,6 @@ const FlightsList: React.FC = () => {
   const endIndex = startIndex + PAGE_SIZE;
   const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
-
   /**
    * Returns the airline icon or a fallback icon.
    * @param {Flight} flight
@@ -134,15 +135,10 @@ const FlightsList: React.FC = () => {
     // Try to build a local/build URL for the image, falling back to public path
     let imageUrl: string;
     try {
-      // new URL with import.meta may cause TypeScript to complain in some build configs; ignore the TS check here
-      // @ts-ignore
       imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
-    } catch (e) {
-      // Fallback to a public path (if assets are copied to /assets at build)
+    } catch {
       imageUrl = `/assets/logos/${sourcePath}`;
     }
-
-
 
     // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
@@ -216,13 +212,15 @@ const FlightsList: React.FC = () => {
                   </Text>
                 </Table.Td>
                 <Table.Td>
-                  <FlightActions
-                    flight={flight}
-                    onEdit={(f: any) => {
-                      setEditFlight(f);
-                      setEditOpen(true);
-                    }}
-                  />
+                  <Suspense fallback={<Loader size="sm" />}>
+                    <FlightActions
+                      flight={flight}
+                      onEdit={(f: any) => {
+                        setEditFlight(f);
+                        setEditOpen(true);
+                      }}
+                    />
+                  </Suspense>
                 </Table.Td>
               </Table.Tr>
             );
@@ -243,18 +241,20 @@ const FlightsList: React.FC = () => {
         title={t("form.labels.edit_flight")}
       >
         {editFlight && (
-          <FlightEntryForm
-            flight={editFlight}
-            onSaved={async () => {
-              setEditOpen(false);
-              // refresh flights list
-              try {
-                await fetchFlights();
-              } catch (e) {
-                console.error("Failed to refresh flights:", e);
-              }
-            }}
-          />
+          <Suspense fallback={<Loader size="sm" />}>
+            <FlightEntryForm
+              flight={editFlight}
+              onSaved={async () => {
+                setEditOpen(false);
+                // refresh flights list
+                try {
+                  await fetchFlights();
+                } catch (e) {
+                  console.error("Failed to refresh flights:", e);
+                }
+              }}
+            />
+          </Suspense>
         )}
       </Modal>
     </>
