@@ -1,9 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      strategies: "injectManifest",
+      srcDir: "public",
+      filename: "sw.js",
+      injectManifest: {
+        swSrc: "public/sw.js",
+        swDest: "dist/sw.js",
+      },
+    }),
+  ],
   build: {
     minify: "terser",
     chunkSizeWarningLimit: 1000,
@@ -14,24 +26,33 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          firebase: ["firebase/app", "firebase/auth", "firebase/firestore"],
-          mantine: [
-            "@mantine/core",
-            "@mantine/hooks",
-            "@mantine/notifications",
-            "@mantine/dates",
-          ],
-          charts: ["@mantine/charts"],
-          store: ["./src/store.ts"],
-          utils: [
-            "./src/utils/flightService",
-            "./src/utils/dateUtils",
-            "./src/utils/chartUtils",
-          ],
-          leaflet: ["leaflet", "react-leaflet"],
-          i18n: ["i18next", "react-i18next"],
+        manualChunks(id) {
+          if (id.includes("/src/store")) return "store";
+          if (id.includes("/src/utils/")) return "utils";
+          if (
+            id.includes("react") ||
+            id.includes("react-dom") ||
+            id.includes("react-router-dom")
+          )
+            return "vendor";
+          if (
+            id.includes("firebase/app") ||
+            id.includes("firebase/auth") ||
+            id.includes("firebase/firestore")
+          )
+            return "firebase";
+          if (
+            id.includes("@mantine/core") ||
+            id.includes("@mantine/hooks") ||
+            id.includes("@mantine/notifications") ||
+            id.includes("@mantine/dates")
+          )
+            return "mantine";
+          if (id.includes("@mantine/charts")) return "charts";
+          if (id.includes("leaflet") || id.includes("react-leaflet"))
+            return "leaflet";
+          if (id.includes("i18next") || id.includes("react-i18next"))
+            return "i18n";
         },
       },
     },
