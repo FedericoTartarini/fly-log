@@ -29,23 +29,17 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes("/src/store")) return "store";
           if (id.includes("/src/utils/")) return "utils";
+          if (id.includes("react-leaflet") || id.includes("/leaflet"))
+            return "leaflet";
+          if (id.includes("react-i18next") || id.includes("/i18next"))
+            return "i18n";
+          if (id.includes("@mantine/charts")) return "charts";
+          if (id.includes("/node_modules/react-router-dom/")) return "vendor";
           if (
-            id.includes("react") ||
-            id.includes("react-dom") ||
-            id.includes("react-router-dom")
+            id.includes("/node_modules/react-dom/") ||
+            id.includes("/node_modules/react/")
           )
             return "vendor";
-          if (
-            id.includes("firebase/app") ||
-            id.includes("firebase/auth") ||
-            id.includes("firebase/firestore")
-          )
-            return "firebase";
-          if (id.includes("@mantine/charts")) return "charts";
-          if (id.includes("leaflet") || id.includes("react-leaflet"))
-            return "leaflet";
-          if (id.includes("i18next") || id.includes("react-i18next"))
-            return "i18n";
         },
       },
     },
