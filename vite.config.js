@@ -8,10 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       strategies: "injectManifest",
-      srcDir: "public",
+      srcDir: "src",
       filename: "sw.js",
       injectManifest: {
-        swSrc: "public/sw.js",
+        swSrc: "src/sw.js",
         swDest: "dist/sw.js",
       },
     }),

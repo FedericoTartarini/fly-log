@@ -81,5 +81,4 @@ async function doBackgroundSync() {
   console.log("Background sync triggered");
   // Placeholder: simulate async work
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Example delay
-  return;
 }
