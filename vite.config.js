@@ -41,13 +41,6 @@ export default defineConfig({
             id.includes("firebase/firestore")
           )
             return "firebase";
-          if (
-            id.includes("@mantine/core") ||
-            id.includes("@mantine/hooks") ||
-            id.includes("@mantine/notifications") ||
-            id.includes("@mantine/dates")
-          )
-            return "mantine";
           if (id.includes("@mantine/charts")) return "charts";
           if (id.includes("leaflet") || id.includes("react-leaflet"))
             return "leaflet";
