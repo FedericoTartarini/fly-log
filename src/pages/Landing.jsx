@@ -33,7 +33,7 @@ function Landing() {
           h="auto"
           w="100%"
           fit="contain"
-          fetchPriority="high"
+          fetchpriority="high"
         />
         <Title order={1} ta="center">
           {t("title")}
