@@ -1,28 +1,52 @@
-import { precacheAndRoute } from "workbox-precaching";
-
 const CACHE_NAME = "fly-log-v2";
 const DYNAMIC_CACHE = "fly-log-dynamic-v2";
 const OFFLINE_URL = "/offline.html";
 
-// Precache all assets
-precacheAndRoute(self.__WB_MANIFEST);
-
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll([
-          "/",
-          "/index.html",
-          "/manifest.json",
-          "/airplane.png",
-          OFFLINE_URL,
-          // Add other static assets as needed
-        ]);
-      })
-      .then(() => self.skipWaiting()),
+    (async () => {
+      const staticAssets = [
+        "/",
+        "/index.html",
+        "/manifest.json",
+        "/airplane.png",
+        OFFLINE_URL,
+      ];
+      const localeFiles = [
+        "/locales/en/about.json",
+        "/locales/en/common.json",
+        "/locales/en/flights.json",
+        "/locales/en/landing.json",
+        "/locales/en/login.json",
+        "/locales/en/translation.json",
+        "/locales/it/about.json",
+        "/locales/it/common.json",
+        "/locales/it/flights.json",
+        "/locales/it/landing.json",
+        "/locales/it/login.json",
+        "/locales/it/translation.json",
+        // Add other static assets as needed
+      ];
+      const cache = await caches.open(CACHE_NAME);
+      // Add static assets atomically
+      await cache.addAll(staticAssets);
+      // Fetch and cache locale files individually
+      const localePromises = localeFiles.map(async (url) => {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            await cache.put(url, response.clone());
+          } else {
+            console.warn("Locale file failed to fetch:", url, response.status);
+          }
+        } catch (err) {
+          console.warn("Locale file fetch error:", url, err);
+        }
+      });
+      await Promise.allSettled(localePromises);
+      self.skipWaiting();
+    })(),
   );
 });
 
@@ -34,12 +58,10 @@ self.addEventListener("activate", (event) => {
       .then((cacheNames) => {
         const cachesToDelete = cacheNames.filter((cache) => {
           if (cache === CACHE_NAME || cache === DYNAMIC_CACHE) return false;
-          if (
+          return !(
             cache.startsWith("workbox-precache") ||
             cache.startsWith("workbox-runtime")
-          )
-            return false;
-          return true;
+          );
         });
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
@@ -54,7 +76,7 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request)
         .then((fetchResponse) => {
-          if (fetchResponse.status === 200) {
+          if (fetchResponse.status === 200 && event.request.method === "GET") {
             return caches.open(DYNAMIC_CACHE).then((cache) => {
               cache.put(event.request, fetchResponse.clone());
               return fetchResponse;
