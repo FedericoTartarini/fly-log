@@ -10,31 +10,48 @@ precacheAndRoute(self.__WB_MANIFEST);
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll([
-          "/",
-          "/index.html",
-          "/manifest.json",
-          "/airplane.png",
-          OFFLINE_URL,
-          "/locales/en/about.json",
-          "/locales/en/common.json",
-          "/locales/en/flights.json",
-          "/locales/en/landing.json",
-          "/locales/en/login.json",
-          "/locales/en/translation.json",
-          "/locales/it/about.json",
-          "/locales/it/common.json",
-          "/locales/it/flights.json",
-          "/locales/it/landing.json",
-          "/locales/it/login.json",
-          "/locales/it/translation.json",
-          // Add other static assets as needed
-        ]);
-      })
-      .then(() => self.skipWaiting()),
+    (async () => {
+      const staticAssets = [
+        "/",
+        "/index.html",
+        "/manifest.json",
+        "/airplane.png",
+        OFFLINE_URL,
+      ];
+      const localeFiles = [
+        "/locales/en/about.json",
+        "/locales/en/common.json",
+        "/locales/en/flights.json",
+        "/locales/en/landing.json",
+        "/locales/en/login.json",
+        "/locales/en/translation.json",
+        "/locales/it/about.json",
+        "/locales/it/common.json",
+        "/locales/it/flights.json",
+        "/locales/it/landing.json",
+        "/locales/it/login.json",
+        "/locales/it/translation.json",
+        // Add other static assets as needed
+      ];
+      const cache = await caches.open(CACHE_NAME);
+      // Add static assets atomically
+      await cache.addAll(staticAssets);
+      // Fetch and cache locale files individually
+      const localePromises = localeFiles.map(async (url) => {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            await cache.put(url, response.clone());
+          } else {
+            console.warn("Locale file failed to fetch:", url, response.status);
+          }
+        } catch (err) {
+          console.warn("Locale file fetch error:", url, err);
+        }
+      });
+      await Promise.allSettled(localePromises);
+      self.skipWaiting();
+    })(),
   );
 });
 
