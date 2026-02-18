@@ -19,6 +19,18 @@ self.addEventListener("install", (event) => {
           "/manifest.json",
           "/airplane.png",
           OFFLINE_URL,
+          "/locales/en/about.json",
+          "/locales/en/common.json",
+          "/locales/en/flights.json",
+          "/locales/en/landing.json",
+          "/locales/en/login.json",
+          "/locales/en/translation.json",
+          "/locales/it/about.json",
+          "/locales/it/common.json",
+          "/locales/it/flights.json",
+          "/locales/it/landing.json",
+          "/locales/it/login.json",
+          "/locales/it/translation.json",
           // Add other static assets as needed
         ]);
       })
@@ -34,12 +46,10 @@ self.addEventListener("activate", (event) => {
       .then((cacheNames) => {
         const cachesToDelete = cacheNames.filter((cache) => {
           if (cache === CACHE_NAME || cache === DYNAMIC_CACHE) return false;
-          if (
+          return !(
             cache.startsWith("workbox-precache") ||
             cache.startsWith("workbox-runtime")
-          )
-            return false;
-          return true;
+          );
         });
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
