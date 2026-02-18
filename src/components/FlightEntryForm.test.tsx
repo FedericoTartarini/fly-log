@@ -27,7 +27,7 @@ describe("FlightEntryForm", () => {
     // interact by sending keyboard events. Some Mantine inputs render non-editable wrappers; sending
     // a Tab key will move focus and verify the control is interactive.
     await userEvent.keyboard("{Tab}");
-    // If the input remains focused or is part of the tab order, the test ensures the control is interactive.
-    expect(document.activeElement).toBeTruthy();
+    // Assert that the dateInput no longer has focus after tabbing away
+    expect(dateInput).not.toHaveFocus();
   });
 });
