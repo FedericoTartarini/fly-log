@@ -1,11 +1,6 @@
-import { precacheAndRoute } from "workbox-precaching";
-
 const CACHE_NAME = "fly-log-v2";
 const DYNAMIC_CACHE = "fly-log-dynamic-v2";
 const OFFLINE_URL = "/offline.html";
-
-// Precache all assets
-precacheAndRoute(self.__WB_MANIFEST);
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
