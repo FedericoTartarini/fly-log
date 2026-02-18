@@ -81,7 +81,7 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request)
         .then((fetchResponse) => {
-          if (fetchResponse.status === 200) {
+          if (fetchResponse.status === 200 && event.request.method === "GET") {
             return caches.open(DYNAMIC_CACHE).then((cache) => {
               cache.put(event.request, fetchResponse.clone());
               return fetchResponse;
