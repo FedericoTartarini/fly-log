@@ -6,16 +6,6 @@ import { MantineProvider } from "@mantine/core";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
 
-function getTodayAriaLabel() {
-  // Format: 'Tuesday, February 18, 2026' (current date in context)
-  return new Date(2026, 1, 18).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
 describe("FlightEntryForm", () => {
   it("renders the DatePickerInput for departure date and is interactive", async () => {
     render(
