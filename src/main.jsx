@@ -82,10 +82,44 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // Register service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    let hasRefreshedForNewWorker = false;
+
+    const activateWaitingWorker = (registration) => {
+      if (registration.waiting) {
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+    };
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (hasRefreshedForNewWorker) return;
+      hasRefreshedForNewWorker = true;
+      window.location.reload();
+    });
+
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("/sw.js", { updateViaCache: "none" })
       .then((registration) => {
-        console.log("Service Worker registered: ", registration);
+        console.log("Service Worker registered:", registration);
+
+        activateWaitingWorker(registration);
+
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              activateWaitingWorker(registration);
+            }
+          });
+        });
+
+        registration.update().catch((error) => {
+          console.warn("Service Worker update check failed:", error);
+        });
       })
       .catch((registrationError) => {
         console.error("Service Worker registration failed:", registrationError);
