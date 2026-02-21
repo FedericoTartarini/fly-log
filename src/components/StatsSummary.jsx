@@ -11,7 +11,7 @@ import StatDisplay from "./StatDisplay";
 import { useTranslation } from "react-i18next";
 
 function StatsSummary() {
-  const { filteredFlights } = useFlightStore();
+  const filteredFlights = useFlightStore((s) => s.filteredFlights);
   const navigate = useNavigate();
   const { t } = useTranslation("flights");
 

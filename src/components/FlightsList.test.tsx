@@ -34,9 +34,12 @@ describe("FlightsList", () => {
 
   it("renders table rows for flights when flights are available", () => {
     // Mock the store to return flights
-    useFlightStore.mockReturnValue({
-      filteredFlights: [enrichedFlight],
-    });
+    useFlightStore.mockImplementation((selector: any) =>
+      selector({
+        filteredFlights: [enrichedFlight],
+        fetchFlights: vi.fn(),
+      }),
+    );
 
     render(<FlightsList />, {
       wrapper: ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
@@ -49,9 +52,12 @@ describe("FlightsList", () => {
 
   it("renders empty state when no flights are available", () => {
     // Mock the store to return no flights
-    useFlightStore.mockReturnValue({
-      filteredFlights: [],
-    });
+    useFlightStore.mockImplementation((selector: any) =>
+      selector({
+        filteredFlights: [],
+        fetchFlights: vi.fn(),
+      }),
+    );
 
     render(<FlightsList />, {
       wrapper: ({ children }) => <MemoryRouter>{children}</MemoryRouter>,

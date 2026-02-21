@@ -4,7 +4,13 @@ import { getFilteredUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
-import { YEAR_FILTER } from "./constants/filters";
+import {
+  CHART_GROUPING,
+  TIME_GROUPING,
+  YEAR_FILTER,
+  type ChartGrouping,
+  type TimeGrouping,
+} from "./constants/filters";
 
 let authUnsubscribe: Unsubscribe | null = null;
 let currentUid: string | null = null;
@@ -40,11 +46,15 @@ interface FlightStoreState {
   allFlights: Flight[]; // master list from backend
   filteredFlights: Flight[]; // UI-facing filtered subset
   selectedYear: string;
+  timeGrouping: TimeGrouping;
+  chartGrouping: ChartGrouping;
   filters: FlightFilters;
   isLoading: boolean;
   error: string | null;
   fetchFlights: () => Promise<void>;
   setSelectedYear: (year: string) => Promise<void>;
+  setTimeGrouping: (grouping: TimeGrouping) => void;
+  setChartGrouping: (grouping: ChartGrouping) => void;
   setFilters: (filters: Partial<FlightFilters>) => void;
   clearFilters: () => void;
   // remove a flight by id from both lists (optimistic UI)
@@ -124,6 +134,8 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
   filteredFlights: [],
   selectedYear: YEAR_FILTER.ALL,
+  timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
+  chartGrouping: CHART_GROUPING.COUNTRY,
   filters: {
     airline: null,
     departureAirport: null,
@@ -170,6 +182,14 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
+  },
+
+  setTimeGrouping: (grouping: TimeGrouping) => {
+    set({ timeGrouping: grouping });
+  },
+
+  setChartGrouping: (grouping: ChartGrouping) => {
+    set({ chartGrouping: grouping });
   },
 
   setFilters: (filters: Partial<FlightFilters>) => {
@@ -256,6 +276,8 @@ authUnsubscribe = onAuthStateChanged((user) => {
       isLoading: false,
       error: null,
       selectedYear: YEAR_FILTER.ALL,
+      timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
+      chartGrouping: CHART_GROUPING.COUNTRY,
       filters: {
         airline: null,
         departureAirport: null,

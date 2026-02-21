@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -21,11 +21,13 @@ import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
-import { TIME_GROUPING } from "../constants/filters.ts";
 
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, allFlights } = useFlightStore();
-  const [timeGrouping, setTimeGrouping] = useState(TIME_GROUPING.DAY_OF_WEEK);
+  const filteredFlights = useFlightStore((s) => s.filteredFlights);
+  const isLoading = useFlightStore((s) => s.isLoading);
+  const error = useFlightStore((s) => s.error);
+  const allFlights = useFlightStore((s) => s.allFlights);
+  const timeGrouping = useFlightStore((s) => s.timeGrouping);
 
   // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);
@@ -130,9 +132,7 @@ const FlightsStats = () => {
           >
             <FlightsByChart
               data={timeChartData}
-              timeGrouping={timeGrouping}
               height={(timeChartData.length + 1) * 28}
-              onTimeGroupingChange={setTimeGrouping}
             />
           </Suspense>
 

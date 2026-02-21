@@ -24,10 +24,9 @@ const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
  * @returns {JSX.Element}
  */
 const FlightsList: React.FC = () => {
-  // The store's Flight type differs from enhancedFlight; cast via unknown to satisfy TypeScript
-  const { filteredFlights } = useFlightStore() as unknown as {
-    filteredFlights: enhancedFlight[];
-  };
+  const filteredFlights = useFlightStore(
+    (s: any) => s.filteredFlights,
+  ) as enhancedFlight[];
 
   const { t } = useTranslation("flights");
   const [editOpen, setEditOpen] = React.useState(false);

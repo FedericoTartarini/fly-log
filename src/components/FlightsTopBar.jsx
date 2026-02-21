@@ -6,7 +6,8 @@ import FlightEntryForm from "./FlightEntryForm.tsx";
 import NoFlightsCard from "./NoFlightsCard.jsx";
 
 const FlightsTopBar = ({ fullWidth = false }) => {
-  const { allFlights, fetchFlights } = useFlightStore();
+  const allFlights = useFlightStore((s) => s.allFlights);
+  const fetchFlights = useFlightStore((s) => s.fetchFlights);
   const [formOpened, setFormOpened] = useState(false);
   const { t } = useTranslation("flights");
 

@@ -90,10 +90,12 @@ describe("StatsSummary", () => {
   });
 
   it("should display correct total values for all years", () => {
-    useFlightStore.mockReturnValue({
-      filteredFlights: enrichedFlights,
-      allFlights: enrichedFlights,
-    });
+    useFlightStore.mockImplementation((selector) =>
+      selector({
+        filteredFlights: enrichedFlights,
+        allFlights: enrichedFlights,
+      }),
+    );
     render(<StatsSummary />, { wrapper });
 
     // Find element by ID and check its text content

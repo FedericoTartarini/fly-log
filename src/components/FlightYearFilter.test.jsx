@@ -27,15 +27,17 @@ const mockFlights = [
 
 vi.mock("../store.ts", () => ({
   __esModule: true,
-  default: vi.fn(() => ({
-    selectedYear: YEAR_FILTER.ALL,
-    setSelectedYear: mockSetSelectedYear,
-    flights: mockFlights,
-    filteredFlights: mockFlights,
-    allFlights: mockFlights,
-    isLoading: false,
-    error: null,
-  })),
+  default: vi.fn((selector) =>
+    selector({
+      selectedYear: YEAR_FILTER.ALL,
+      setSelectedYear: mockSetSelectedYear,
+      flights: mockFlights,
+      filteredFlights: mockFlights,
+      allFlights: mockFlights,
+      isLoading: false,
+      error: null,
+    }),
+  ),
 }));
 
 import FlightYearFilter from "./FlightYearFilter";
@@ -44,15 +46,17 @@ import useFlightStore from "../store.ts";
 describe("FlightYearFilter", () => {
   beforeEach(() => {
     mockSetSelectedYear.mockClear();
-    useFlightStore.mockImplementation(() => ({
-      selectedYear: YEAR_FILTER.ALL,
-      setSelectedYear: mockSetSelectedYear,
-      flights: mockFlights,
-      filteredFlights: mockFlights,
-      allFlights: mockFlights,
-      isLoading: false,
-      error: null,
-    }));
+    useFlightStore.mockImplementation((selector) =>
+      selector({
+        selectedYear: YEAR_FILTER.ALL,
+        setSelectedYear: mockSetSelectedYear,
+        flights: mockFlights,
+        filteredFlights: mockFlights,
+        allFlights: mockFlights,
+        isLoading: false,
+        error: null,
+      }),
+    );
   });
 
   it("renders with correct default options", () => {
@@ -92,15 +96,17 @@ describe("FlightYearFilter", () => {
   });
 
   it("reflects the current selected year from store", () => {
-    useFlightStore.mockImplementation(() => ({
-      selectedYear: "2023",
-      setSelectedYear: mockSetSelectedYear,
-      flights: mockFlights,
-      filteredFlights: mockFlights,
-      allFlights: mockFlights,
-      isLoading: false,
-      error: null,
-    }));
+    useFlightStore.mockImplementation((selector) =>
+      selector({
+        selectedYear: "2023",
+        setSelectedYear: mockSetSelectedYear,
+        flights: mockFlights,
+        filteredFlights: mockFlights,
+        allFlights: mockFlights,
+        isLoading: false,
+        error: null,
+      }),
+    );
     sharedRender(<FlightYearFilter />);
     const select = screen.getByRole("combobox");
     expect(select.value).toBe("2023");

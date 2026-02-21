@@ -6,7 +6,9 @@ import { useTranslation } from "react-i18next";
 import { YEAR_FILTER } from "../constants/filters.ts";
 
 const FlightYearFilter = () => {
-  const { selectedYear, setSelectedYear, allFlights } = useFlightStore();
+  const selectedYear = useFlightStore((s) => s.selectedYear);
+  const setSelectedYear = useFlightStore((s) => s.setSelectedYear);
+  const allFlights = useFlightStore((s) => s.allFlights);
   const { t } = useTranslation("flights");
 
   // Extract unique years from all flights

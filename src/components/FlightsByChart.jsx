@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Title,
   Stack,
@@ -14,21 +14,22 @@ import {
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
 import { CHART_GROUPING, TIME_GROUPING } from "../constants/filters.ts";
+import useFlightStore from "../store.ts";
 
 const FlightsByChart = ({
   filteredFlights,
   data,
-  timeGrouping: propTimeGrouping,
   height,
-  onTimeGroupingChange,
 }) => {
-  const [grouping, setGrouping] = useState(CHART_GROUPING.COUNTRY);
+  const timeGrouping = useFlightStore((s) => s.timeGrouping);
+  const setTimeGrouping = useFlightStore((s) => s.setTimeGrouping);
+  const grouping = useFlightStore((s) => s.chartGrouping);
+  const setGrouping = useFlightStore((s) => s.setChartGrouping);
   const { t } = useTranslation("flights");
 
   // If data is provided, it's the old time-based chart
   if (data) {
     const timeChartData = data;
-    const timeGrouping = propTimeGrouping || TIME_GROUPING.DAY_OF_WEEK;
 
     return (
       <Card shadow="sm" radius="md" withBorder>
@@ -45,7 +46,7 @@ const FlightsByChart = ({
           </Title>
           <SegmentedControl
             value={timeGrouping}
-            onChange={onTimeGroupingChange} // Handled by parent
+            onChange={setTimeGrouping}
             data={[
               { label: t("time.day_of_week"), value: TIME_GROUPING.DAY_OF_WEEK },
               { label: t("time.year"), value: TIME_GROUPING.YEAR },
