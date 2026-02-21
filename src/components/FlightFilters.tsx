@@ -12,7 +12,7 @@ import useFlightStore from "../store";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { parseToDate } from "../utils/dateUtils";
-import { airportsInfo } from "../utils/airportsInfo";
+import { loadAirportsInfo } from "../utils/referenceData";
 
 type Option = { value: string; label: string };
 
@@ -32,6 +32,17 @@ const FlightFilters: React.FC = () => {
   const clearFilters = useFlightStore((s: any) => s.clearFilters);
   const selectedYear = useFlightStore((s: any) => s.selectedYear);
   const setSelectedYear = useFlightStore((s: any) => s.setSelectedYear);
+  const [airportsData, setAirportsData] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    loadAirportsInfo().then((data) => {
+      if (mounted) setAirportsData(data);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // build year options from allFlights (same logic as FlightYearFilter)
   const yearsSet = React.useMemo(() => {
@@ -71,7 +82,7 @@ const FlightFilters: React.FC = () => {
 
     // Prefer detailed labels from airportsInfo when available
     const options: Option[] = [];
-    airportsInfo.forEach((airport: any) => {
+    airportsData.forEach((airport: any) => {
       if (iataSet.has(airport.iata)) {
         options.push({
           value: airport.iata,
@@ -88,7 +99,7 @@ const FlightFilters: React.FC = () => {
     });
 
     return options.sort((a, b) => a.label.localeCompare(b.label));
-  }, [allFlights]);
+  }, [allFlights, airportsData]);
 
   const arrivalOptions = React.useMemo(() => {
     const iataSet = new Set<string>();
@@ -99,7 +110,7 @@ const FlightFilters: React.FC = () => {
     });
 
     const options: Option[] = [];
-    airportsInfo.forEach((airport: any) => {
+    airportsData.forEach((airport: any) => {
       if (iataSet.has(airport.iata)) {
         options.push({
           value: airport.iata,
@@ -115,7 +126,7 @@ const FlightFilters: React.FC = () => {
     });
 
     return options.sort((a, b) => a.label.localeCompare(b.label));
-  }, [allFlights]);
+  }, [allFlights, airportsData]);
 
   const hasFilters =
     Boolean(filters.airline) ||

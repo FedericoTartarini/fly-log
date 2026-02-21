@@ -12,6 +12,18 @@ export default defineConfig({
           src: "src/sw.js",
           dest: "",
         },
+        {
+          src: "src/assets/logos/*",
+          dest: "logos",
+        },
+        {
+          src: "src/assets/airports.json",
+          dest: "data",
+        },
+        {
+          src: "src/assets/airlines.json",
+          dest: "data",
+        },
       ],
     }),
   ],

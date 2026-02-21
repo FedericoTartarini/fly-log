@@ -17,8 +17,7 @@ import { updateFlightForUser } from "../utils/flightService";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
-import { airlinesInfo } from "../utils/airlinesInfo";
-import { airportsInfo } from "../utils/airportsInfo";
+import { loadAirlinesInfo, loadAirportsInfo } from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
 
 type SelectOption = {
@@ -80,6 +79,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   useEffect(() => {
     const fetchAirportsInfo = async () => {
       try {
+        const [airportsInfo, airlinesInfo] = await Promise.all([
+          loadAirportsInfo(),
+          loadAirlinesInfo(),
+        ]);
+
         const airports: SelectOption[] = airportsInfo
           .map((airport) => ({
             value: airport.iata,

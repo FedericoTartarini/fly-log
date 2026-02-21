@@ -1,11 +1,14 @@
 // Helper to validate and normalize IATA codes against local assets
 // Exports: validateAndNormalizeCsvRows(rows) -> { errors: string[], normalizedRows: Array }
 
-import { airportsInfo } from "./airportsInfo";
-// Import airlines JSON as JSON module
-import airlinesData from "../assets/airlines.json" with { type: "json" };
+import { loadAirlinesInfo, loadAirportsInfo } from "./referenceData";
 
-const buildSets = () => {
+const buildSets = async () => {
+  const [airportsInfo, airlinesData] = await Promise.all([
+    loadAirportsInfo(),
+    loadAirlinesInfo(),
+  ]);
+
   const airportsSet = new Set();
   if (Array.isArray(airportsInfo)) {
     airportsInfo.forEach((a) => {
@@ -23,11 +26,11 @@ const buildSets = () => {
   return { airportsSet, airlinesSet };
 };
 
-export function validateAndNormalizeCsvRows(rows) {
+export async function validateAndNormalizeCsvRows(rows) {
   if (!Array.isArray(rows)) {
     throw new TypeError("rows must be an array");
   }
-  const { airportsSet, airlinesSet } = buildSets();
+  const { airportsSet, airlinesSet } = await buildSets();
   const errors = [];
   const normalizedRows = [];
 

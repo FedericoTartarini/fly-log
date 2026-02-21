@@ -127,13 +127,7 @@ const FlightsList: React.FC = () => {
       );
     }
 
-    // Try to build a local/build URL for the image, falling back to public path
-    let imageUrl: string;
-    try {
-      imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
-    } catch {
-      imageUrl = `/assets/logos/${sourcePath}`;
-    }
+    const imageUrl = `/logos/${sourcePath}`;
 
     // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
