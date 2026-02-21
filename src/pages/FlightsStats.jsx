@@ -10,6 +10,8 @@ import {
   Loader,
   Text,
   Center,
+  Card,
+  Title,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.ts";
@@ -18,6 +20,7 @@ import DistanceStatsCard from "../components/DistanceStatsCard.js";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
+import FlightFilters from "../components/FlightFilters.tsx";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
@@ -87,6 +90,13 @@ const FlightsStats = () => {
           style={{ position: "relative", zIndex: 1 }}
         >
           <StatsSummary />
+
+          <Card shadow="sm" radius="md" withBorder>
+            <Title order={3} mb="md">
+              {t("filters.title")}
+            </Title>
+            <FlightFilters />
+          </Card>
 
           {/* Add button to open modal */}
           <Suspense fallback={<div>Loading...</div>}>
