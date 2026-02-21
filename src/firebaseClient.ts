@@ -13,8 +13,10 @@ import {
   persistentLocalCache,
   collection,
   addDoc,
+  doc,
   serverTimestamp,
   Timestamp,
+  writeBatch,
 } from "firebase/firestore";
 
 
@@ -148,6 +150,8 @@ export const addFlightsForUser = async (
 
   for (let i = 0; i < flights.length; i += chunkSize) {
     const chunk = flights.slice(i, i + chunkSize);
+    const batch = writeBatch(firestore);
+    const recordsCol = collection(firestore, "flights", uid, "records");
 
     for (const f of chunk) {
       const data = { ...f };
@@ -162,11 +166,12 @@ export const addFlightsForUser = async (
         }
       }
       data.created_at = serverTimestamp();
-      await addDoc(collection(firestore, "flights", uid, "records"), data);
-      processed++;
-      if (progressCb)
-        progressCb(Math.round((processed / flights.length) * 100));
+      batch.set(doc(recordsCol), data);
     }
+
+    await batch.commit();
+    processed += chunk.length;
+    if (progressCb) progressCb(Math.round((processed / flights.length) * 100));
   }
 
   if (progressCb) progressCb(100);

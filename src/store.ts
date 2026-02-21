@@ -252,6 +252,8 @@ authUnsubscribe = onAuthStateChanged((user) => {
     useFlightStore.setState({
       allFlights: [],
       filteredFlights: [],
+      isLoading: false,
+      error: null,
       selectedYear: "all",
       filters: {
         airline: null,

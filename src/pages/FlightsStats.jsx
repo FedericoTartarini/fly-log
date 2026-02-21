@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -23,16 +23,11 @@ import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
-    useFlightStore();
+  const { filteredFlights, isLoading, error, allFlights } = useFlightStore();
   const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
 
   // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);
-
-  useEffect(() => {
-    fetchFlights();
-  }, [fetchFlights]);
 
   // Prepare chart data outside of the conditional rendering
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);

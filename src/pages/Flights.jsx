@@ -1,4 +1,4 @@
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import {
   Container,
   Title,
@@ -20,13 +20,8 @@ const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 
 function Flights() {
   const { t } = useTranslation("flights");
-  const fetchFlights = useFlightStore((state) => state.fetchFlights);
   const allFlights = useFlightStore((state) => state.allFlights);
   const isLoading = useFlightStore((state) => state.isLoading);
-
-  useEffect(() => {
-    fetchFlights();
-  }, [fetchFlights]);
 
   // If loading, show loading indicator
   if (isLoading) {
