@@ -4,6 +4,7 @@ import { capitalize } from "./stringUtils";
 import { getCountryName } from "./countryUtils";
 import { getAirlineName } from "./airlineUtils";
 import { getAirportCity } from "./airportUtils";
+import { TIME_GROUPING } from "../constants/filters.ts";
 
 export const getDeparturesByCountry = (flights) => {
   if (!flights) return [];
@@ -63,7 +64,7 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
 
     let key;
     switch (timeGrouping) {
-      case "dayOfWeek":
+      case TIME_GROUPING.DAY_OF_WEEK:
         key = capitalize(
           new Intl.DateTimeFormat(locale, {
             weekday: "short",
@@ -71,10 +72,10 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
           }).format(d),
         );
         break;
-      case "year":
+      case TIME_GROUPING.YEAR:
         key = d.getUTCFullYear().toString();
         break;
-      case "month":
+      case TIME_GROUPING.MONTH:
         key = capitalize(
           new Intl.DateTimeFormat(locale, {
             month: "short",
@@ -91,9 +92,9 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
 
   // Build ordered list matching locale
   let order;
-  if (timeGrouping === "dayOfWeek") {
+  if (timeGrouping === TIME_GROUPING.DAY_OF_WEEK) {
     order = localizedWeekdays(locale);
-  } else if (timeGrouping === "month") {
+  } else if (timeGrouping === TIME_GROUPING.MONTH) {
     order = localizedMonths(locale);
   } else {
     order = Object.keys(grouping).sort();

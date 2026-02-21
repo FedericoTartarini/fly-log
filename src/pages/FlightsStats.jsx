@@ -21,10 +21,11 @@ import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
+import { TIME_GROUPING } from "../constants/filters.ts";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, allFlights } = useFlightStore();
-  const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
+  const [timeGrouping, setTimeGrouping] = useState(TIME_GROUPING.DAY_OF_WEEK);
 
   // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);

@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { parseToDate } from "../utils/dateUtils";
 import { loadAirportsInfo } from "../utils/referenceData";
+import { YEAR_FILTER } from "../constants/filters";
 
 type Option = { value: string; label: string };
 
@@ -134,7 +135,7 @@ const FlightFilters: React.FC = () => {
     Boolean(filters.arrivalAirport) ||
     filters.minDuration !== null ||
     filters.maxDuration !== null ||
-    (selectedYear && selectedYear !== "all");
+    (selectedYear && selectedYear !== YEAR_FILTER.ALL);
 
   // RangeSlider state (hours) - default range 0..24
   const DEFAULT_MIN = 0;
@@ -166,9 +167,9 @@ const FlightFilters: React.FC = () => {
           id="flight-year-filter"
           label={t("filter.label")}
           data={[
-            { value: "all", label: t("filter.all") },
-            { value: "upcoming", label: t("filter.upcoming") },
-            { value: "past", label: t("filter.past") },
+            { value: YEAR_FILTER.ALL, label: t("filter.all") },
+            { value: YEAR_FILTER.UPCOMING, label: t("filter.upcoming") },
+            { value: YEAR_FILTER.PAST, label: t("filter.past") },
             ...yearsSet.map((year) => ({
               value: String(year),
               label: String(year),
@@ -246,7 +247,7 @@ const FlightFilters: React.FC = () => {
           onClick={() => {
             clearFilters();
             // reset year as well
-            setSelectedYear("all");
+            setSelectedYear(YEAR_FILTER.ALL);
           }}
           disabled={!hasFilters}
         >

@@ -4,6 +4,7 @@ import { getFilteredUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
+import { YEAR_FILTER } from "./constants/filters";
 
 let authUnsubscribe: Unsubscribe | null = null;
 let currentUid: string | null = null;
@@ -53,19 +54,19 @@ interface FlightStoreState {
 }
 
 const filterByYear = (flights: Flight[], year: string) => {
-  if (!year || year === "all") return flights;
+  if (!year || year === YEAR_FILTER.ALL) return flights;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (year === "upcoming") {
+  if (year === YEAR_FILTER.UPCOMING) {
     return flights.filter((f) => {
       const dt = parseToDate((f as any).departure_date);
       return dt !== null && dt >= today;
     });
   }
 
-  if (year === "past") {
+  if (year === YEAR_FILTER.PAST) {
     return flights.filter((f) => {
       const dt = parseToDate((f as any).departure_date);
       return dt !== null && dt < today;
@@ -122,7 +123,7 @@ const applyFilters = (
 const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
   filteredFlights: [],
-  selectedYear: "all",
+  selectedYear: YEAR_FILTER.ALL,
   filters: {
     airline: null,
     departureAirport: null,
@@ -142,8 +143,8 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
         return;
       }
 
-      // getFilteredUserFlights(uid, "all") should return all user flights
-      const allFlights = await getFilteredUserFlights(uid, "all");
+      // getFilteredUserFlights(uid, ALL) should return all user flights
+      const allFlights = await getFilteredUserFlights(uid, YEAR_FILTER.ALL);
       const filteredFlights = applyFilters(
         allFlights,
         get().selectedYear,
@@ -254,7 +255,7 @@ authUnsubscribe = onAuthStateChanged((user) => {
       filteredFlights: [],
       isLoading: false,
       error: null,
-      selectedYear: "all",
+      selectedYear: YEAR_FILTER.ALL,
       filters: {
         airline: null,
         departureAirport: null,

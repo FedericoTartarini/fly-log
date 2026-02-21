@@ -12,6 +12,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { getReferenceMapsSync, loadReferenceMaps } from "./referenceData";
+import { YEAR_FILTER } from "../constants/filters";
 
 /**
  * Calculate the great-circle distance between two points on the Earth surface.
@@ -150,13 +151,13 @@ export const getFilteredUserFlights = async (
   const todayDate = new Date();
 
   let q;
-  if (year === "upcoming") {
+  if (year === YEAR_FILTER.UPCOMING) {
     q = query(
       colRef,
       where("departure_date", ">", Timestamp.fromDate(todayDate)),
       orderBy("departure_date", "desc"),
     );
-  } else if (year === "all") {
+  } else if (year === YEAR_FILTER.ALL) {
     q = query(colRef, orderBy("departure_date", "desc"));
   } else {
     const startDate = new Date(Number(year), 0, 1);

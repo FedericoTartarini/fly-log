@@ -13,6 +13,7 @@ import {
   getFlightsByAirport,
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
+import { CHART_GROUPING, TIME_GROUPING } from "../constants/filters.ts";
 
 const FlightsByChart = ({
   filteredFlights,
@@ -21,13 +22,13 @@ const FlightsByChart = ({
   height,
   onTimeGroupingChange,
 }) => {
-  const [grouping, setGrouping] = useState("country");
+  const [grouping, setGrouping] = useState(CHART_GROUPING.COUNTRY);
   const { t } = useTranslation("flights");
 
   // If data is provided, it's the old time-based chart
   if (data) {
     const timeChartData = data;
-    const timeGrouping = propTimeGrouping || "dayOfWeek";
+    const timeGrouping = propTimeGrouping || TIME_GROUPING.DAY_OF_WEEK;
 
     return (
       <Card shadow="sm" radius="md" withBorder>
@@ -35,9 +36,9 @@ const FlightsByChart = ({
           <Title order={3}>
             {t("charts.flights_by", {
               period:
-                timeGrouping === "dayOfWeek"
+                timeGrouping === TIME_GROUPING.DAY_OF_WEEK
                   ? t("time.day_of_week")
-                  : timeGrouping === "year"
+                  : timeGrouping === TIME_GROUPING.YEAR
                     ? t("time.year")
                     : t("time.month"),
             })}
@@ -46,13 +47,13 @@ const FlightsByChart = ({
             value={timeGrouping}
             onChange={onTimeGroupingChange} // Handled by parent
             data={[
-              { label: t("time.day_of_week"), value: "dayOfWeek" },
-              { label: t("time.year"), value: "year" },
-              { label: t("time.month"), value: "month" },
+              { label: t("time.day_of_week"), value: TIME_GROUPING.DAY_OF_WEEK },
+              { label: t("time.year"), value: TIME_GROUPING.YEAR },
+              { label: t("time.month"), value: TIME_GROUPING.MONTH },
             ]}
           />
         </Stack>
-        {timeGrouping === "year" ? (
+        {timeGrouping === TIME_GROUPING.YEAR ? (
           <ScrollArea h={370} scrollbars="y" offsetScrollbars>
             <BarChart
               h={height || (timeChartData.length + 1) * 28}
@@ -103,11 +104,11 @@ const FlightsByChart = ({
   const getChartData = (flights, groupBy) => {
     if (!flights || !Array.isArray(flights)) return [];
     switch (groupBy) {
-      case "country":
+      case CHART_GROUPING.COUNTRY:
         return getDeparturesByCountry(flights);
-      case "airline":
+      case CHART_GROUPING.AIRLINE:
         return getFlightsByAirline(flights);
-      case "airport":
+      case CHART_GROUPING.AIRPORT:
         return getFlightsByAirport(flights);
       default:
         return [];
@@ -118,11 +119,11 @@ const FlightsByChart = ({
 
   const getDataKey = (groupBy) => {
     switch (groupBy) {
-      case "country":
+      case CHART_GROUPING.COUNTRY:
         return "country";
-      case "airline":
+      case CHART_GROUPING.AIRLINE:
         return "airline";
-      case "airport":
+      case CHART_GROUPING.AIRPORT:
         return "airport";
       default:
         return "";
@@ -131,10 +132,10 @@ const FlightsByChart = ({
 
   const getSeriesName = (groupBy) => {
     switch (groupBy) {
-      case "country":
+      case CHART_GROUPING.COUNTRY:
         return "departures";
-      case "airline":
-      case "airport":
+      case CHART_GROUPING.AIRLINE:
+      case CHART_GROUPING.AIRPORT:
         return "flights";
 
       default:
@@ -148,9 +149,9 @@ const FlightsByChart = ({
         <Title order={3}>
           {t("charts.flights_by", {
             period:
-              grouping === "country"
+              grouping === CHART_GROUPING.COUNTRY
                 ? t("group.country")
-                : grouping === "airline"
+                : grouping === CHART_GROUPING.AIRLINE
                   ? t("group.airline")
                   : t("group.airport"),
           })}
@@ -159,9 +160,9 @@ const FlightsByChart = ({
           value={grouping}
           onChange={setGrouping}
           data={[
-            { label: t("group.country"), value: "country" },
-            { label: t("group.airline"), value: "airline" },
-            { label: t("group.airport"), value: "airport" },
+            { label: t("group.country"), value: CHART_GROUPING.COUNTRY },
+            { label: t("group.airline"), value: CHART_GROUPING.AIRLINE },
+            { label: t("group.airport"), value: CHART_GROUPING.AIRPORT },
           ]}
         />
       </Stack>

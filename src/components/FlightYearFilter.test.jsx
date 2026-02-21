@@ -1,6 +1,7 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render as sharedRender } from "../../test-utils/index.js";
+import { YEAR_FILTER } from "../constants/filters.ts";
 
 // Prepare mocks and mock the store before importing the component
 const mockSetSelectedYear = vi.fn();
@@ -27,7 +28,7 @@ const mockFlights = [
 vi.mock("../store.ts", () => ({
   __esModule: true,
   default: vi.fn(() => ({
-    selectedYear: "all",
+    selectedYear: YEAR_FILTER.ALL,
     setSelectedYear: mockSetSelectedYear,
     flights: mockFlights,
     filteredFlights: mockFlights,
@@ -44,7 +45,7 @@ describe("FlightYearFilter", () => {
   beforeEach(() => {
     mockSetSelectedYear.mockClear();
     useFlightStore.mockImplementation(() => ({
-      selectedYear: "all",
+      selectedYear: YEAR_FILTER.ALL,
       setSelectedYear: mockSetSelectedYear,
       flights: mockFlights,
       filteredFlights: mockFlights,
@@ -59,13 +60,13 @@ describe("FlightYearFilter", () => {
     const select = screen.getByRole("combobox");
     expect(select).toBeInTheDocument();
     // Check that the default value is 'all'
-    expect(select.value).toBe("all");
+    expect(select.value).toBe(YEAR_FILTER.ALL);
     // Check that the options exist and have expected values (translations may vary)
     const options = screen.getAllByRole("option");
     // First three are the special filters: values should be 'all', 'upcoming', 'past'
-    expect(options[0].value).toBe("all");
-    expect(options[1].value).toBe("upcoming");
-    expect(options[2].value).toBe("past");
+    expect(options[0].value).toBe(YEAR_FILTER.ALL);
+    expect(options[1].value).toBe(YEAR_FILTER.UPCOMING);
+    expect(options[2].value).toBe(YEAR_FILTER.PAST);
     // Next options are years; ensure they display the expected year strings
     expect(
       options.some((o) => o.textContent && o.textContent.includes("2023")),
