@@ -215,5 +215,119 @@ describe("MyComponent", () => {
 
 - Interactive globe displaying all flight paths.
 - Detailed flight list in a table format.
-- Filter flights by year.
+- Filter flights by date range, airline, and airport.
 - Displays airline logos for each flight.
+
+## Feature Roadmap (Suggestions)
+
+### Missing / Core Gaps
+
+- Offline write sync is still placeholder-only.
+- No user data export/backup workflow.
+- No search/sort controls in the flights table beyond default date ordering.
+- No duplicate detection workflow for CSV/manual imports.
+
+### High-Value, Low-Maintenance (No External API)
+
+- [ ] Add CSV/JSON export for full or filtered flight data.
+- [ ] Add duplicate detection + skip/merge flow on import.
+- [ ] Add table search (airline/airport/flight number) + user-selectable sorting.
+- [ ] Add undo-delete toast with short restore window.
+
+### Nice Features (Medium Complexity, No External API)
+
+- [ ] Trip grouping (outbound/return/date-range) + trip-level stats.
+- [ ] Custom tags and notes per flight.
+- [ ] Goals/milestones (e.g., flights, countries, distance).
+- [ ] Data quality diagnostics (unknown airport/airline, suspicious durations).
+- [ ] Public read-only share links for stats.
+
+### Nice but Significantly Harder to Maintain
+
+1. True offline-first queue with conflict resolution across devices.
+
+### External API-Dependent Features (Highest Ongoing Maintenance)
+
+1. Live flight status/history enrichment.
+2. Aircraft-level emissions estimation from external aviation datasets.
+3. Ticket price analytics and currency normalization.
+4. Weather overlays for flight dates/routes.
+5. Frequent-flyer miles/status tracking across airlines.
+
+## AI Upload Ideas and New Pages
+
+### AI Features to Facilitate Uploading
+
+#### 1. Smart CSV Mapper
+
+- Let users upload CSV files with arbitrary headers/order.
+- Use heuristics or AI to suggest mapping to your schema fields.
+- Save accepted mapping templates for reuse.
+- Difficulty: Medium
+- External API: Optional
+
+#### 2. Natural-Language Flight Parser
+
+- Accept text input like: `12 Jan 2025, QF12, SYD -> LAX`.
+- Parse and extract structured flight fields into draft rows.
+- Ask user for confirmation before saving.
+- Difficulty: Medium
+- External API: Usually yes (LLM), but partial rule-based fallback is possible.
+
+#### 3. Screenshot/PDF Itinerary Import
+
+- Upload booking screenshots or itinerary PDFs.
+- OCR + parser extracts flight data and pre-fills entries.
+- User reviews and confirms before import.
+- Difficulty: High
+- External API: Usually yes (OCR and/or AI extraction).
+
+#### 4. Auto-Fix with Confidence Scores
+
+- During import, flag uncertain/invalid values.
+- Suggest likely corrections (airport/airline/date normalization).
+- Show confidence and let user approve each fix.
+- Difficulty: Medium
+- External API: Optional
+
+### New Visualizations and Pages
+
+#### 1. Timeline Page
+
+- Display flights by month/year. using a chart similar to GitHub contributions graph, an heatmap chart
+- https://mantine.dev/charts/heatmap/
+- Highlight travel streaks, busy periods, and inactivity gaps.
+- Difficulty: Low-Medium
+
+#### 2. Route Network Page
+
+- Airports as nodes and routes as weighted edges.
+- Show hubs, most frequent routes, and network evolution by year.
+- Difficulty: Medium
+
+#### 3. Year-over-Year Comparison Page
+
+- Compare two selected years side-by-side.
+- Metrics: flights, distance, countries, top airlines/routes.
+- Difficulty: Low-Medium
+
+#### 4. Airport Profile Page
+
+- Drill down into a specific airport.
+- Show arrivals/departures, connected airports, first/last visit.
+- Difficulty: Medium
+
+#### 5. Stories / Replay Page
+
+- Animated playback of flights over time.
+- "Year in review" style summaries and shareable outputs.
+- Difficulty: Medium-High
+
+#### 6. Data Quality Page
+
+- Show missing fields, suspicious values, and possible duplicates.
+- Provide one-click suggested fixes where possible.
+- Difficulty: Medium
+
+#### 7. more visualizations
+- use the vector map from tabler to show country visited https://docs.tabler.io/ui/components/vector-maps
