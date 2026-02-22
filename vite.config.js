@@ -31,6 +31,9 @@ export default defineConfig({
       ],
     }),
   ],
+  resolve: {
+    dedupe: ["react", "react-dom"],
+  },
   build: {
     minify: "terser",
     chunkSizeWarningLimit: 1000,
@@ -107,10 +110,5 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./vitest.setup.mjs",
-    // Define environment variables for the test environment
-    env: {
-      VITE_SUPABASE_URL: "http://localhost:54321",
-      VITE_SUPABASE_ANON_KEY: "your-test-anon-key",
-    },
   },
 });
