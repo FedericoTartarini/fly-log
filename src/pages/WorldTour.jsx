@@ -549,7 +549,7 @@ function WorldTour() {
             <Divider />
 
             {hasStartedAnimation && currentRoute && (
-        <Text align="center">
+              <Text align="center">
                 {t("current_route", {
                   from: currentRoute.fromCity,
                   to: currentRoute.toCity,
