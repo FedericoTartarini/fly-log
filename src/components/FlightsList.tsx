@@ -13,7 +13,7 @@ import {
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { formatDate } from "../utils/dateUtils";
+import { formatDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 import { useShallow } from "zustand/react/shallow";
@@ -58,32 +58,10 @@ const FlightsList: React.FC = () => {
 
   // Helper to get epoch ms for various departure_date representations
   const getDepartureEpoch = (flight: enhancedFlight): number => {
-    const d = flight?.departure_date;
-    if (!d) return -Infinity;
-    // Firestore Timestamp-like object with toDate()
-    if (typeof d?.toDate === "function") {
-      try {
-        const dt = d.toDate();
-        if (dt instanceof Date && !isNaN(dt.getTime())) return dt.getTime();
-      } catch {
-        // fallthrough
-      }
-    }
-    // If object with seconds property
-    if (typeof d === "object" && typeof d.seconds === "number") {
-      return d.seconds * 1000;
-    }
-    // Date instance
-    if (d instanceof Date) {
-      const t = d.getTime();
-      return isNaN(t) ? -Infinity : t;
-    }
-    // string or number
-    if (typeof d === "string" || typeof d === "number") {
-      const t = new Date(d).getTime();
-      return isNaN(t) ? -Infinity : t;
-    }
-    return -Infinity;
+    const dt = parseToDate(flight?.departure_date);
+    if (!dt) return -Infinity;
+    const t = dt.getTime();
+    return isNaN(t) ? -Infinity : t;
   };
 
   // Sort flights by departure date descending (newest first)
@@ -98,7 +76,7 @@ const FlightsList: React.FC = () => {
 
   /**
    * Returns the airline icon or a fallback icon.
-   * @param {Flight} flight
+   * @param {enhancedFlight} flight
    * @returns {JSX.Element}
    */
   const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
@@ -230,7 +208,7 @@ const FlightsList: React.FC = () => {
             </Table.Tbody>
           </Table>
 
-          {/* Pagination control (Mantine) */}
+          {/* Pagination control */}
           {totalPages > 1 && (
             <Center mt="md">
               <Pagination total={totalPages} value={page} onChange={setPage} />

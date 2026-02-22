@@ -3,7 +3,7 @@ import i18n from "i18next";
 
 type TimestampLike = { toDate: () => Date };
 type SecondsLike = { seconds: number };
-type DateLike =
+export type DateLike =
   | Date
   | TimestampLike
   | SecondsLike
@@ -12,13 +12,23 @@ type DateLike =
   | null
   | undefined;
 
+const isTimestampLike = (value: unknown): value is TimestampLike => {
+  if (!value || typeof value !== "object") return false;
+  return typeof (value as { toDate?: unknown }).toDate === "function";
+};
+
+const isSecondsLike = (value: unknown): value is SecondsLike => {
+  if (!value || typeof value !== "object") return false;
+  return typeof (value as { seconds?: unknown }).seconds === "number";
+};
+
 /**
  * Format a date-like value into a string. Supports Firestore Timestamp, objects with `seconds`, Date,
  * and parseable date strings. If `format` is provided it supports tokens:
  *  - DD: zero-padded day (01..31)
  *  - D: day (1..31)
- *  - MMM: short month name (Jan..Dec)
- *  - MMMM: full month name (January..December)
+ *  - MMM: short month name (Jan.Dec)
+ *  - MMMM: full month name (January.December)
  *  - YY: two-digit year
  *  - YYYY: four-digit year
  *
@@ -29,7 +39,7 @@ type DateLike =
  * @param locale optional BCP-47 locale string (default: 'en-AU')
  */
 export function formatDate(
-  value: DateLike,
+  value: unknown,
   format: string = "DD MMM YY",
   locale?: string,
 ): string {
@@ -38,10 +48,10 @@ export function formatDate(
     let d: Date | null;
     if (value instanceof Date) {
       d = value;
-    } else if (value && typeof value.toDate === "function") {
+    } else if (isTimestampLike(value)) {
       // Firestore Timestamp
       d = value.toDate();
-    } else if (value && typeof value.seconds === "number") {
+    } else if (isSecondsLike(value)) {
       // Firestore-like object with seconds
       d = new Date(value.seconds * 1000);
     } else {
@@ -85,7 +95,7 @@ export function formatDate(
 /**
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
-export function parseToDate(value: DateLike): Date | null {
+export function parseToDate(value: unknown): Date | null {
   try {
     if (value === null || value === undefined) {
       return null;
@@ -93,11 +103,11 @@ export function parseToDate(value: DateLike): Date | null {
     if (value instanceof Date) {
       return Number.isNaN(value.getTime()) ? null : value;
     }
-    if (value && typeof value.toDate === "function") {
+    if (isTimestampLike(value)) {
       const d = value.toDate();
       return Number.isNaN(d.getTime()) ? null : d;
     }
-    if (value && typeof value.seconds === "number") {
+    if (isSecondsLike(value)) {
       const d = new Date(value.seconds * 1000);
       return Number.isNaN(d.getTime()) ? null : d;
     }
