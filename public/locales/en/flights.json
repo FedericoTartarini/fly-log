@@ -81,7 +81,8 @@
     "west_bound_flights": "Westbound Flights",
     "view_flights": "View Individual Flights",
     "shortest_flight": "Shortest Flight",
-    "longest_flight": "Longest Flight"
+    "longest_flight": "Longest Flight",
+    "view_tour": "View Route Tour"
   },
   "form": {
     "add_new_flight": "Add New Flight",

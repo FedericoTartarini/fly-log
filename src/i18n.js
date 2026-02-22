@@ -12,7 +12,7 @@ i18n
     supportedLngs: ["en", "it"],
     fallbackLng: "en",
     debug: false,
-    ns: ["common", "login", "flights", "about", "landing"],
+    ns: ["common", "login", "flights", "about", "landing", "tour"],
     defaultNS: "common",
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",

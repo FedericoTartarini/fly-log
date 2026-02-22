@@ -81,7 +81,8 @@
     "west_bound_flights": "Voli verso ovest",
     "view_flights": "Visualizza voli individuali",
     "shortest_flight": "Volo più corto",
-    "longest_flight": "Volo più lungo"
+    "longest_flight": "Volo più lungo",
+    "view_tour": "Visualizza tour rotte"
   },
   "form": {
     "add_new_flight": "Aggiungi nuovo volo",

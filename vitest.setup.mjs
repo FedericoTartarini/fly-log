@@ -57,6 +57,7 @@ import commonEn from "./public/locales/en/common.json";
 import flightsEn from "./public/locales/en/flights.json";
 import landingEn from "./public/locales/en/landing.json";
 import loginEn from "./public/locales/en/login.json";
+import tourEn from "./public/locales/en/tour.json";
 import translationEn from "./public/locales/en/translation.json";
 
 // initialize i18n for tests once
@@ -71,10 +72,11 @@ i18n.init({
       flights: flightsEn,
       landing: landingEn,
       login: loginEn,
+      tour: tourEn,
       translation: translationEn,
     },
   },
-  ns: ["common", "login", "about", "flights", "landing", "translation"],
+  ns: ["common", "login", "about", "flights", "landing", "tour", "translation"],
   defaultNS: "common",
   react: { useSuspense: false },
   interpolation: { escapeValue: false },

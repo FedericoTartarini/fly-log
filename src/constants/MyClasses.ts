@@ -36,6 +36,7 @@ export const PATHS = {
   LANDING: "/landing",
   FLIGHTS: "/flights",
   STATS: "/stats",
+  TOUR: "/tour",
   ADD_FLIGHT: "/add-flight",
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",

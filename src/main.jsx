@@ -18,6 +18,7 @@ import "./i18n"; // initialize i18n
 const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
+const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Flights />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.TOUR,
+        element: (
+          <ProtectedRoute>
+            <WorldTour />
           </ProtectedRoute>
         ),
       },

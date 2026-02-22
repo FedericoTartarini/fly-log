@@ -98,6 +98,9 @@ function StatsSummary() {
           <Button variant="light" onClick={() => navigate(PATHS.FLIGHTS)}>
             {t("stats.view_flights")}
           </Button>
+          <Button variant="light" onClick={() => navigate(PATHS.TOUR)}>
+            {t("stats.view_tour")}
+          </Button>
         </Group>
       </Stack>
     </Card>

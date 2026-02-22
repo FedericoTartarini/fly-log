@@ -299,7 +299,7 @@ describe("MyComponent", () => {
 - Highlight travel streaks, busy periods, and inactivity gaps.
 - Difficulty: Low-Medium
 
-#### 2. Route Network Page
+#### 2. Route Network Page (stashed)
 
 - Airports as nodes and routes as weighted edges.
 - Show hubs, most frequent routes, and network evolution by year.

@@ -5,7 +5,8 @@
     "flights": "Flights",
     "about": "About",
     "login": "Login",
-    "sign_out": "Sign Out"
+    "sign_out": "Sign Out",
+    "tour": "Tour"
   },
   "language": "Language"
 }
