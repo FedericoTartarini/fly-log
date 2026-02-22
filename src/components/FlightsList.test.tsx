@@ -12,7 +12,7 @@ import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store";
-import { render } from "../../test-utils/index.js";
+import { render } from "../../test-utils";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
 // Create a mock flight

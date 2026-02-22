@@ -38,7 +38,7 @@ interface FlightEntryFormProps {
     departure_airport_iata?: string;
     arrival_airport_iata?: string;
     airline_iata?: string;
-    flight_number?: string;
+    flight_number?: string | null;
   } | null;
 }
 

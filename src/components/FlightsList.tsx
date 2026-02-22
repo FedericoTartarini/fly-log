@@ -152,9 +152,14 @@ const FlightsList: React.FC = () => {
 
                 // Safe formatting for flight time and distance
                 const ft = flight.flight_time ?? null;
-                const dist = Number.isFinite(flight.distance_km)
-                  ? Math.round(flight.distance_km)
-                  : null;
+                const distValue =
+                  typeof flight.distance_km === "number"
+                    ? flight.distance_km
+                    : null;
+                const dist =
+                  distValue !== null && Number.isFinite(distValue)
+                    ? Math.round(distValue)
+                    : null;
                 let durationDistanceStr = "";
                 if (ft !== null) {
                   const hours = Math.floor(ft);
