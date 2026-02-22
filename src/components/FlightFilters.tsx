@@ -1,7 +1,8 @@
 import React from "react";
 import {
   Button,
-  Group,
+  Box,
+  SimpleGrid,
   Select,
   Stack,
   RangeSlider,
@@ -229,7 +230,7 @@ const FlightFilters: React.FC = () => {
 
   return (
     <Stack gap="xs">
-      <Group grow align="flex-end">
+      <SimpleGrid cols={{ base: 2, sm: 3 }} spacing="md" verticalSpacing="md">
         <NativeSelect
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
@@ -257,9 +258,6 @@ const FlightFilters: React.FC = () => {
           onChange={(value) => setFilters({ arrivalAirport: value })}
           nothingFoundMessage={t("filters.no_results")}
         />
-      </Group>
-
-      <Group grow align="flex-end">
         <Select
           label={t("filters.airline")}
           placeholder={t("filters.airline_placeholder")}
@@ -270,7 +268,7 @@ const FlightFilters: React.FC = () => {
           onChange={(value) => setFilters({ airline: value })}
           nothingFoundMessage={t("filters.no_results")}
         />
-        <div style={{ width: "100%" }}>
+        <Box>
           <Text size="sm">{t("filters.duration_label")}</Text>
           <RangeSlider
             color="blue"
@@ -300,21 +298,23 @@ const FlightFilters: React.FC = () => {
             <span>{rangeValue[0]}h</span>
             <span>{rangeValue[1]}h</span>
           </div>
-        </div>
-
-        <Button
-          data-testid="filters-clear"
-          variant="light"
-          onClick={() => {
-            clearFilters();
-            // reset year as well
-            setSelectedYear(YEAR_FILTER.ALL);
-          }}
-          disabled={!hasFilters}
-        >
-          {t("filters.clear")}
-        </Button>
-      </Group>
+        </Box>
+        <Box style={{ display: "flex", alignItems: "flex-end" }}>
+          <Button
+            data-testid="filters-clear"
+            variant="light"
+            fullWidth
+            onClick={() => {
+              clearFilters();
+              // reset year as well
+              setSelectedYear(YEAR_FILTER.ALL);
+            }}
+            disabled={!hasFilters}
+          >
+            {t("filters.clear")}
+          </Button>
+        </Box>
+      </SimpleGrid>
     </Stack>
   );
 };
