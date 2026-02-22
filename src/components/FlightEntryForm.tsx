@@ -17,7 +17,11 @@ import { updateFlightForUser } from "../utils/flightService";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
-import { loadAirlinesInfo, loadAirportsInfo } from "../utils/referenceData";
+import {
+  loadAirlinesInfo,
+  loadAirportsInfo,
+  type AirlineInfo,
+} from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
 
 type SelectOption = {
@@ -27,7 +31,14 @@ type SelectOption = {
 
 interface FlightEntryFormProps {
   onSaved?: () => void;
-  flight?: any; // optional flight for editing
+  flight?: {
+    id: string;
+    departure_date?: unknown;
+    departure_airport_iata?: string;
+    arrival_airport_iata?: string;
+    airline_iata?: string;
+    flight_number?: string;
+  } | null;
 }
 
 const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
@@ -95,7 +106,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        const airlines: SelectOption[] = (airlinesInfo as any[])
+        const airlines: SelectOption[] = (airlinesInfo as AirlineInfo[])
           .map((airline) => ({
             value: airline.iata,
             label: `${airline.iata} - ${airline.name}`,
@@ -150,7 +161,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     });
 
     try {
-      const flightsToInsert = [
+      const flightsToInsert: Array<{
+        departure_date: Date | null;
+        departure_airport_iata: string;
+        arrival_airport_iata: string;
+        airline_iata: string;
+        flight_number: string;
+      }> = [
         {
           departure_date: values.departureDate,
           departure_airport_iata: values.departureAirport,
@@ -214,9 +231,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       setAddReturn(false);
 
       if (onSaved) onSaved();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving flight:", error);
-      const msg = error?.message || String(error) || "Unknown error";
+      const msg = error instanceof Error ? error.message : String(error);
       setSubmitError(msg);
       notifications.show({
         title: t("form.notifications.error_title"),

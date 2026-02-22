@@ -27,17 +27,23 @@ import type { FlightStoreState, StoreFlightFilters } from "../store";
 
 const FlightFilters: React.FC = () => {
   const { t } = useTranslation("flights");
-  const { allFlights, filters, setFilters, clearFilters, selectedYear, setSelectedYear } =
-    useFlightStore(
-      useShallow((s: FlightStoreState) => ({
-        allFlights: s.allFlights as enhancedFlight[],
-        filters: s.filters as StoreFlightFilters,
-        setFilters: s.setFilters,
-        clearFilters: s.clearFilters,
-        selectedYear: s.selectedYear,
-        setSelectedYear: s.setSelectedYear,
-      })),
-    );
+  const {
+    allFlights,
+    filters,
+    setFilters,
+    clearFilters,
+    selectedYear,
+    setSelectedYear,
+  } = useFlightStore(
+    useShallow((s: FlightStoreState) => ({
+      allFlights: s.allFlights as enhancedFlight[],
+      filters: s.filters as StoreFlightFilters,
+      setFilters: s.setFilters,
+      clearFilters: s.clearFilters,
+      selectedYear: s.selectedYear,
+      setSelectedYear: s.setSelectedYear,
+    })),
+  );
   const [airportsData, setAirportsData] = React.useState<AirportInfo[]>([]);
 
   React.useEffect(() => {
@@ -56,7 +62,13 @@ const FlightFilters: React.FC = () => {
   );
 
   const flightsForAirlineOptions = React.useMemo(
-    () => filterFlightsForFacetOptions(allFlights, selectedYear, filters, "airline"),
+    () =>
+      filterFlightsForFacetOptions(
+        allFlights,
+        selectedYear,
+        filters,
+        "airline",
+      ),
     [allFlights, selectedYear, filters],
   );
 
@@ -115,7 +127,8 @@ const FlightFilters: React.FC = () => {
       if (facet === "departureAirport" && !nextFilters.departureAirport) {
         return true;
       }
-      if (facet === "arrivalAirport" && !nextFilters.arrivalAirport) return true;
+      if (facet === "arrivalAirport" && !nextFilters.arrivalAirport)
+        return true;
 
       const facetFlights = filterFlightsForFacetOptions(
         allFlights,
@@ -126,7 +139,9 @@ const FlightFilters: React.FC = () => {
 
       if (facet === "airline") {
         const facetOptions = buildAirlineOptions(facetFlights);
-        return facetOptions.some((option) => option.value === nextFilters.airline);
+        return facetOptions.some(
+          (option) => option.value === nextFilters.airline,
+        );
       }
 
       if (facet === "departureAirport") {
@@ -145,7 +160,9 @@ const FlightFilters: React.FC = () => {
         airportsData,
         "arrival_airport_iata",
       );
-      return facetOptions.some((option) => option.value === nextFilters.arrivalAirport);
+      return facetOptions.some(
+        (option) => option.value === nextFilters.arrivalAirport,
+      );
     };
 
     let changed = false;
@@ -212,7 +229,7 @@ const FlightFilters: React.FC = () => {
 
   return (
     <Stack gap="xs">
-      <Group grow>
+      <Group grow align="flex-end">
         <NativeSelect
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}

@@ -1,6 +1,10 @@
 // src/utils/dateUtils.ts
 import i18n from "i18next";
 
+type TimestampLike = { toDate: () => Date };
+type SecondsLike = { seconds: number };
+type DateLike = Date | TimestampLike | SecondsLike | string | number | null | undefined;
+
 /**
  * Format a date-like value into a string. Supports Firestore Timestamp, objects with `seconds`, Date,
  * and parseable date strings. If `format` is provided it supports tokens:
@@ -13,12 +17,12 @@ import i18n from "i18next";
  *
  * Example: formatDate(value, "DD MMM YY", "en-AU") -> "10 Nov 24"
  *
- * @param value any date-like value
+ * @param value date-like value
  * @param format format string using tokens (DD, D, MMM, MMMM, YY, YYYY). If omitted, returns locale date string.
  * @param locale optional BCP-47 locale string (default: 'en-AU')
  */
 export function formatDate(
-  value: any,
+  value: DateLike,
   format: string = "DD MMM YY",
   locale?: string,
 ): string {
@@ -74,7 +78,7 @@ export function formatDate(
 /**
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
-export function parseToDate(value: any): Date | null {
+export function parseToDate(value: DateLike): Date | null {
   try {
     if (value === null || value === undefined) {
       return null;
@@ -104,7 +108,7 @@ export function parseToDate(value: any): Date | null {
 /**
  * Return the full year (e.g., 2024) for a date-like value, or null if unparsable
  */
-export function getYear(value: any): number | null {
+export function getYear(value: DateLike): number | null {
   const d = parseToDate(value);
   return d ? d.getFullYear() : null;
 }
