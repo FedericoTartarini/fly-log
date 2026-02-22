@@ -23,6 +23,7 @@ const Landing = lazy(() => import("./pages/Landing.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 import MyAppShell from "./pages/MyAppShell.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,11 +40,19 @@ const router = createBrowserRouter([
       },
       {
         path: PATHS.STATS,
-        element: <FlightsStats />,
+        element: (
+          <ProtectedRoute>
+            <FlightsStats />
+          </ProtectedRoute>
+        ),
       },
       {
         path: PATHS.FLIGHTS,
-        element: <Flights />,
+        element: (
+          <ProtectedRoute>
+            <Flights />
+          </ProtectedRoute>
+        ),
       },
       {
         path: PATHS.LOGIN,
