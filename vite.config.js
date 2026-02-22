@@ -74,6 +74,28 @@ export default defineConfig({
             return "vendor-react";
           }
 
+          if (
+            id.includes("node_modules/i18next") ||
+            id.includes("node_modules/react-i18next")
+          ) {
+            return "vendor-i18n";
+          }
+
+          if (id.includes("node_modules/framer-motion")) {
+            return "vendor-motion";
+          }
+
+          if (id.includes("node_modules/@tabler/icons-react")) {
+            return "vendor-icons";
+          }
+
+          if (
+            id.includes("node_modules/papaparse") ||
+            id.includes("node_modules/geodesy")
+          ) {
+            return "vendor-utils";
+          }
+
           return "vendor-misc";
         },
       },
