@@ -76,44 +76,65 @@ const buildMaps = (
 
 export const loadAirportsInfo = async (): Promise<AirportInfo[]> => {
   if (!airportsPromise) {
-    airportsPromise = loadJson<AirportInfo>("/data/airports.json").then(
-      (airports) => {
+    airportsPromise = loadJson<AirportInfo>("/data/airports.json")
+      .then((airports) => {
+        if (!Array.isArray(airports) || airports.length === 0) {
+          airportsLoaded = false;
+          airportsPromise = null;
+          throw new Error("Invalid airports data");
+        }
         airportsCache = airports;
         airportsLoaded = true;
         maybeUpdateReferenceMaps();
         return airportsCache;
-      },
-    );
+      })
+      .catch((error) => {
+        airportsLoaded = false;
+        airportsPromise = null;
+        throw error;
+      });
   }
   return airportsPromise;
 };
 
 export const loadAirlinesInfo = async (): Promise<AirlineInfo[]> => {
   if (!airlinesPromise) {
-    airlinesPromise = loadJson<AirlineInfo>("/data/airlines.json").then(
-      (airlines) => {
+    airlinesPromise = loadJson<AirlineInfo>("/data/airlines.json")
+      .then((airlines) => {
+        if (!Array.isArray(airlines) || airlines.length === 0) {
+          airlinesLoaded = false;
+          airlinesPromise = null;
+          throw new Error("Invalid airlines data");
+        }
         airlinesCache = airlines;
         airlinesLoaded = true;
         maybeUpdateReferenceMaps();
         return airlinesCache;
-      },
-    );
+      })
+      .catch((error) => {
+        airlinesLoaded = false;
+        airlinesPromise = null;
+        throw error;
+      });
   }
   return airlinesPromise;
 };
 
 export const loadReferenceMaps = async (): Promise<ReferenceMaps> => {
   if (!mapsPromise) {
-    mapsPromise = Promise.all([loadAirportsInfo(), loadAirlinesInfo()]).then(
-      ([airports, airlines]) => {
+    mapsPromise = Promise.all([loadAirportsInfo(), loadAirlinesInfo()])
+      .then(([airports, airlines]) => {
         airportsCache = airports;
         airlinesCache = airlines;
         airportsLoaded = true;
         airlinesLoaded = true;
         maybeUpdateReferenceMaps();
         return referenceMapsCache;
-      },
-    );
+      })
+      .catch((error) => {
+        mapsPromise = null;
+        throw error;
+      });
   }
   return mapsPromise;
 };
