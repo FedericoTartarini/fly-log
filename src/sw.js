@@ -1,6 +1,7 @@
 const CACHE_NAME = "fly-log-static-v3";
 const DYNAMIC_CACHE = "fly-log-dynamic-v3";
 const OFFLINE_URL = "/offline.html";
+const LOCALES_PREFIX = "/locales/";
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
@@ -12,38 +13,9 @@ self.addEventListener("install", (event) => {
         "/airplane-192.png",
         OFFLINE_URL,
       ];
-      const localeFiles = [
-        "/locales/en/about.json",
-        "/locales/en/common.json",
-        "/locales/en/flights.json",
-        "/locales/en/landing.json",
-        "/locales/en/login.json",
-        "/locales/en/translation.json",
-        "/locales/it/about.json",
-        "/locales/it/common.json",
-        "/locales/it/flights.json",
-        "/locales/it/landing.json",
-        "/locales/it/login.json",
-        "/locales/it/translation.json",
-        // Add other static assets as needed
-      ];
       const cache = await caches.open(CACHE_NAME);
       // Add static assets atomically
       await cache.addAll(staticAssets);
-      // Fetch and cache locale files individually
-      const localePromises = localeFiles.map(async (url) => {
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            await cache.put(url, response.clone());
-          } else {
-            console.warn("Locale file failed to fetch:", url, response.status);
-          }
-        } catch (err) {
-          console.warn("Locale file fetch error:", url, err);
-        }
-      });
-      await Promise.allSettled(localePromises);
       self.skipWaiting();
     })(),
   );
@@ -87,6 +59,27 @@ self.addEventListener("fetch", (event) => {
         const cachedOfflinePage = await caches.match(OFFLINE_URL);
         return cachedOfflinePage || Response.error();
       }),
+    );
+    return;
+  }
+
+  // Cache locale files dynamically to avoid brittle hardcoded lists.
+  if (requestUrl.pathname.startsWith(LOCALES_PREFIX)) {
+    event.respondWith(
+      fetch(event.request)
+        .then((fetchResponse) => {
+          if (fetchResponse.ok) {
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, fetchResponse.clone());
+              return fetchResponse;
+            });
+          }
+          return fetchResponse;
+        })
+        .catch(async () => {
+          const cached = await caches.match(event.request);
+          return cached || Response.error();
+        }),
     );
     return;
   }
