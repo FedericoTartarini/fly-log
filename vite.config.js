@@ -53,17 +53,17 @@ export default defineConfig({
           }
 
           if (
-            id.includes("node_modules/@mantine") ||
-            id.includes("node_modules/@emotion")
-          ) {
-            return "vendor-mantine";
-          }
-
-          if (
             id.includes("node_modules/recharts") ||
             id.includes("node_modules/@mantine/charts")
           ) {
             return "vendor-charts";
+          }
+
+          if (
+            id.includes("node_modules/@mantine") ||
+            id.includes("node_modules/@emotion")
+          ) {
+            return "vendor-mantine";
           }
 
           if (
