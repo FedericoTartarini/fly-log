@@ -53,7 +53,11 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   if (!requestUrl.protocol.startsWith("http")) return;
 
-  if (event.request.mode === "navigate") {
+  const isDocumentRequest =
+    event.request.mode === "navigate" ||
+    event.request.destination === "document";
+
+  if (isDocumentRequest && requestUrl.origin === self.location.origin) {
     event.respondWith(
       fetch(event.request).catch(async () => {
         const cachedOfflinePage = await caches.match(OFFLINE_URL);
@@ -102,15 +106,13 @@ self.addEventListener("fetch", (event) => {
         }),
     );
   }
-  // Default: network first for other requests
-  else {
-    event.respondWith(
-      fetch(event.request).catch(async () => {
-        const cached = await caches.match(event.request);
-        return cached || Response.error();
-      }),
-    );
-  }
+  // Default: network first for other requests (no offline fallback)
+  event.respondWith(
+    fetch(event.request).catch(async () => {
+      const cached = await caches.match(event.request);
+      return cached || Response.error();
+    }),
+  );
 });
 
 // Background sync for offline actions (placeholder)
