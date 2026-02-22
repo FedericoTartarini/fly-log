@@ -52,12 +52,12 @@ export default defineConfig({
             return "vendor-firebase";
           }
 
-          if (
-            id.includes("node_modules/recharts") ||
-            id.includes("node_modules/@mantine/charts")
-          ) {
-            return "vendor-charts";
-          }
+          // if (
+          //   id.includes("node_modules/recharts") ||
+          //   id.includes("node_modules/@mantine/charts")
+          // ) {
+          //   return "vendor-charts";
+          // }
 
           if (
             id.includes("node_modules/@mantine") ||
