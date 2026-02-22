@@ -4,10 +4,15 @@ import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
 import FlightEntryForm from "./FlightEntryForm.tsx";
 import NoFlightsCard from "./NoFlightsCard.jsx";
+import { useShallow } from "zustand/react/shallow";
 
 const FlightsTopBar = ({ fullWidth = false }) => {
-  const allFlights = useFlightStore((s) => s.allFlights);
-  const fetchFlights = useFlightStore((s) => s.fetchFlights);
+  const { allFlights, fetchFlights } = useFlightStore(
+    useShallow((s) => ({
+      allFlights: s.allFlights,
+      fetchFlights: s.fetchFlights,
+    })),
+  );
   const [formOpened, setFormOpened] = useState(false);
   const { t } = useTranslation("flights");
 

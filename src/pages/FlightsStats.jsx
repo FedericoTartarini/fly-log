@@ -21,13 +21,19 @@ import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
+import { useShallow } from "zustand/react/shallow";
 
 const FlightsStats = () => {
-  const filteredFlights = useFlightStore((s) => s.filteredFlights);
-  const isLoading = useFlightStore((s) => s.isLoading);
-  const error = useFlightStore((s) => s.error);
-  const allFlights = useFlightStore((s) => s.allFlights);
-  const timeGrouping = useFlightStore((s) => s.timeGrouping);
+  const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
+    useFlightStore(
+      useShallow((s) => ({
+        filteredFlights: s.filteredFlights,
+        isLoading: s.isLoading,
+        error: s.error,
+        allFlights: s.allFlights,
+        timeGrouping: s.timeGrouping,
+      })),
+    );
 
   // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);
