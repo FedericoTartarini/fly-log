@@ -22,6 +22,15 @@ const sampleFlights = [
     airline_name: "Japan Airlines",
     flight_time: 11.25,
   },
+  {
+    id: "f3",
+    departure_date: "2025-03-01",
+    departure_airport_iata: "BLQ",
+    arrival_airport_iata: "FCO",
+    airline_iata: "AZ",
+    airline_name: "ITA Airways",
+    flight_time: 1,
+  },
 ];
 
 describe("FlightFilters", () => {
@@ -66,6 +75,30 @@ describe("FlightFilters", () => {
       expect(state.filters.airline).toBeNull();
       expect(state.filters.minDuration).toBeNull();
       expect(state.filteredFlights.length).toBe(sampleFlights.length);
+    });
+  });
+
+  it("auto-clears invalid arrival when other active filters make it impossible", async () => {
+    useFlightStore.setState({
+      allFlights: sampleFlights,
+      filteredFlights: sampleFlights,
+      selectedYear: "all",
+      filters: {
+        airline: "AZ",
+        departureAirport: "BLQ",
+        arrivalAirport: "LHR",
+        minDuration: null,
+        maxDuration: null,
+      },
+    });
+
+    render(<FlightFilters />);
+
+    await waitFor(() => {
+      const state = useFlightStore.getState();
+      expect(state.filters.arrivalAirport).toBeNull();
+      expect(state.filters.airline).toBe("AZ");
+      expect(state.filters.departureAirport).toBe("BLQ");
     });
   });
 });

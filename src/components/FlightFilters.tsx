@@ -19,7 +19,10 @@ import {
   buildAirlineOptions,
   buildAirportOptions,
 } from "../utils/flightFilterOptions";
-import { filterFlightsForFacetOptions } from "../utils/flightFilterFacets";
+import {
+  type FacetKey,
+  filterFlightsForFacetOptions,
+} from "../utils/flightFilterFacets";
 import type { FlightStoreState, StoreFlightFilters } from "../store";
 
 const FlightFilters: React.FC = () => {
@@ -103,6 +106,80 @@ const FlightFilters: React.FC = () => {
       ),
     [flightsForArrivalOptions, airportsData],
   );
+
+  React.useEffect(() => {
+    const nextFilters: StoreFlightFilters = { ...filters };
+
+    const isFacetValueValid = (facet: FacetKey): boolean => {
+      if (facet === "airline" && !nextFilters.airline) return true;
+      if (facet === "departureAirport" && !nextFilters.departureAirport) {
+        return true;
+      }
+      if (facet === "arrivalAirport" && !nextFilters.arrivalAirport) return true;
+
+      const facetFlights = filterFlightsForFacetOptions(
+        allFlights,
+        selectedYear,
+        nextFilters,
+        facet,
+      );
+
+      if (facet === "airline") {
+        const facetOptions = buildAirlineOptions(facetFlights);
+        return facetOptions.some((option) => option.value === nextFilters.airline);
+      }
+
+      if (facet === "departureAirport") {
+        const facetOptions = buildAirportOptions(
+          facetFlights,
+          airportsData,
+          "departure_airport_iata",
+        );
+        return facetOptions.some(
+          (option) => option.value === nextFilters.departureAirport,
+        );
+      }
+
+      const facetOptions = buildAirportOptions(
+        facetFlights,
+        airportsData,
+        "arrival_airport_iata",
+      );
+      return facetOptions.some((option) => option.value === nextFilters.arrivalAirport);
+    };
+
+    let changed = false;
+    const validationOrder: FacetKey[] = [
+      "arrivalAirport",
+      "airline",
+      "departureAirport",
+    ];
+
+    validationOrder.forEach((facet) => {
+      if (isFacetValueValid(facet)) return;
+      changed = true;
+      if (facet === "airline") nextFilters.airline = null;
+      if (facet === "departureAirport") nextFilters.departureAirport = null;
+      if (facet === "arrivalAirport") nextFilters.arrivalAirport = null;
+    });
+
+    if (!changed) return;
+
+    const patch: Partial<StoreFlightFilters> = {};
+    if (nextFilters.airline !== filters.airline) {
+      patch.airline = nextFilters.airline;
+    }
+    if (nextFilters.departureAirport !== filters.departureAirport) {
+      patch.departureAirport = nextFilters.departureAirport;
+    }
+    if (nextFilters.arrivalAirport !== filters.arrivalAirport) {
+      patch.arrivalAirport = nextFilters.arrivalAirport;
+    }
+
+    if (Object.keys(patch).length > 0) {
+      setFilters(patch);
+    }
+  }, [allFlights, selectedYear, filters, airportsData, setFilters]);
 
   const hasFilters =
     Boolean(filters.airline) ||
