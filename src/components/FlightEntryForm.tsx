@@ -14,6 +14,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { addFlightForUser } from "../firebaseClient";
 import { updateFlightForUser } from "../utils/flightService";
+import { parseToDate } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
@@ -126,13 +127,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     // If flight prop changes, update form values accordingly
     if (!flight) return;
     try {
-      const depDate =
-        flight.departure_date &&
-        typeof flight.departure_date.toDate === "function"
-          ? flight.departure_date.toDate()
-          : flight.departure_date
-            ? new Date(flight.departure_date)
-            : null;
+      const depDate = parseToDate(flight.departure_date);
       form.setValues({
         departureDate: depDate,
         departureTime: "",
