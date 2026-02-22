@@ -12,6 +12,7 @@ self.addEventListener("install", (event) => {
         "/airplane.png",
         "/airplane-192.png",
         OFFLINE_URL,
+        "/data/world-fallback.json",
       ];
       const cache = await caches.open(CACHE_NAME);
       // Add static assets atomically

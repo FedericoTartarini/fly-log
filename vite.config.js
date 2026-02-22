@@ -24,6 +24,10 @@ export default defineConfig({
           src: "src/assets/airlines.json",
           dest: "data",
         },
+        {
+          src: "src/assets/world-fallback.json",
+          dest: "data",
+        },
       ],
     }),
   ],

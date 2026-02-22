@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { getYearValuesFromFlights } from "../utils/yearFilterOptions";
 import { getYear, parseToDate } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
+import fallbackWorld from "../assets/world-fallback.json";
 
 const WORLD_GEOJSON_URL =
   "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
@@ -200,16 +201,20 @@ function WorldTour() {
   React.useEffect(() => {
     let mounted = true;
 
-    d3.json(WORLD_GEOJSON_URL)
-      .then((data) => {
+    const loadGeoJson = async () => {
+      try {
+        const data = await d3.json(WORLD_GEOJSON_URL);
         if (!mounted) return;
         setWorldData(data);
         setLoadError(null);
-      })
-      .catch(() => {
+      } catch {
         if (!mounted) return;
+        setWorldData(fallbackWorld);
         setLoadError(t("load_error"));
-      });
+      }
+    };
+
+    loadGeoJson();
 
     return () => {
       mounted = false;
@@ -544,7 +549,7 @@ function WorldTour() {
             <Divider />
 
             {hasStartedAnimation && currentRoute && (
-              <Text align="center">
+        <Text align="center">
                 {t("current_route", {
                   from: currentRoute.fromCity,
                   to: currentRoute.toCity,
