@@ -3,15 +3,17 @@
 import React from "react";
 import { render, screen } from "../../test-utils/index.js"; // use project render wrapper
 import { MemoryRouter } from "react-router-dom";
-import AuthProvider from "../context/AuthContext";
 import Login from "./Login";
+import { vi } from "vitest";
+
+vi.mock("../context/AuthContext", () => ({
+  useAuth: () => ({ user: null }),
+}));
 
 test("renders login form with translated strings", () => {
   render(<Login />, {
     wrapper: ({ children }) => (
-      <AuthProvider>
-        <MemoryRouter>{children}</MemoryRouter>
-      </AuthProvider>
+      <MemoryRouter>{children}</MemoryRouter>
     ),
   });
 
