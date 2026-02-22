@@ -1,4 +1,4 @@
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import {
   Container,
   Title,
@@ -8,25 +8,20 @@ import {
   Center,
   Loader,
 } from "@mantine/core";
-import FlightYearFilter from "../components/FlightYearFilter";
 import flightImg from "../assets/flight.webp";
 import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
+import FlightFilters from "../components/FlightFilters.tsx";
 
 const FlightsList = lazy(() => import("../components/FlightsList.tsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 
 function Flights() {
   const { t } = useTranslation("flights");
-  const fetchFlights = useFlightStore((state) => state.fetchFlights);
   const allFlights = useFlightStore((state) => state.allFlights);
   const isLoading = useFlightStore((state) => state.isLoading);
-
-  useEffect(() => {
-    fetchFlights();
-  }, [fetchFlights]);
 
   // If loading, show loading indicator
   if (isLoading) {
@@ -75,7 +70,7 @@ function Flights() {
         </Title>
 
         <Card shadow="sm" radius="md" withBorder>
-          <Card.Section>
+          <Card.Section mb="md">
             <Image
               src={flightImg}
               srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
@@ -85,7 +80,7 @@ function Flights() {
             />
           </Card.Section>
 
-          <FlightYearFilter />
+          <FlightFilters />
         </Card>
 
         <Suspense

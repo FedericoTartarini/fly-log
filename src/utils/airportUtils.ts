@@ -1,13 +1,9 @@
-import { airportsInfo } from "./airportsInfo";
-
-const airportCityByIata: Map<string, string> = new Map(
-  airportsInfo
-    .filter((a) => a.iata && a.city)
-    .map((a) => [a.iata, a.city.replace(/\s*\([^)]*\)/g, "")])
-);
+import { getReferenceMapsSync } from "./referenceData";
 
 export const getAirportCity = (iata: string): string => {
-  const city = airportCityByIata.get(iata);
+  const { airportByIata } = getReferenceMapsSync();
+  const airport = airportByIata.get(String(iata || "").toUpperCase());
+  const city = airport?.city;
   if (!city) return iata;
   return city.replace(/\s*\([^)]*\)/g, "")
     .replace(/\s+/g, " ")

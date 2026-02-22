@@ -97,7 +97,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
     const uid = user?.uid;
     if (!uid) {
-      setError(t("userNotAuthenticated"));
+      setError(t("form.errors.user_not_authenticated"));
       setParsing(false);
       return;
     }
@@ -121,7 +121,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           // Validate and normalize IATA codes against local assets
           const { errors: iataErrors, normalizedRows } =
-            validateAndNormalizeCsvRows(flightData);
+            await validateAndNormalizeCsvRows(flightData);
 
           if (iataErrors.length > 0) {
             setError(iataErrors.join("\n"));

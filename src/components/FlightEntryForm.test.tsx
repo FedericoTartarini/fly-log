@@ -1,6 +1,18 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
+import { render } from "../../test-utils/index.js";
 import userEvent from "@testing-library/user-event";
+
+// Mock referenceData helpers before importing the component so useEffect won't call the real functions
+import { vi } from "vitest";
+vi.mock("../utils/referenceData", () => {
+  return {
+    loadAirportsInfo: async () => [],
+    loadAirlinesInfo: async () => [],
+  };
+});
+
 import FlightEntryForm from "./FlightEntryForm";
 import { MantineProvider } from "@mantine/core";
 import { I18nextProvider } from "react-i18next";

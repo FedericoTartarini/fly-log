@@ -6,6 +6,7 @@ import {
   Group,
   rem,
   NavLink,
+  Button,
 } from "@mantine/core";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
@@ -26,7 +27,7 @@ function MyAppShell() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate(PATHS.LOGIN);
+    navigate(PATHS.LANDING);
     closeMobile();
   };
 
@@ -71,6 +72,25 @@ function MyAppShell() {
           />
           Fly Log
           <Group ml="auto" gap="xs">
+            {user ? (
+              <Button
+                size="xs"
+                variant="default"
+                onClick={handleSignOut}
+                c="red"
+              >
+                {t("nav.sign_out")}
+              </Button>
+            ) : (
+              <Button
+                size="xs"
+                variant="default"
+                component={Link}
+                to={PATHS.LOGIN}
+              >
+                {t("nav.login")}
+              </Button>
+            )}
             <ColorSchemeToggle />
           </Group>
         </Group>
@@ -84,7 +104,7 @@ function MyAppShell() {
           <>
             <NavLink
               component={Link}
-              to={PATHS.HOME}
+              to={PATHS.LANDING}
               label={t("nav.home")}
               className={classes.control}
               onClick={handleNavClick}
@@ -107,6 +127,13 @@ function MyAppShell() {
               className={classes.control}
               onClick={handleNavClick}
             />
+            <NavLink
+              component={Link}
+              to={PATHS.TOUR}
+              label={t("nav.tour")}
+              className={classes.control}
+              onClick={handleNavClick}
+            />
           </>
         )}
         <NavLink
@@ -116,30 +143,6 @@ function MyAppShell() {
           className={classes.control}
           onClick={handleNavClick}
         />
-        {user && (
-          <>
-            <NavLink
-              href="#"
-              label={t("nav.sign_out")}
-              className={classes.control}
-              onClick={async (e) => {
-                e.preventDefault();
-                await handleSignOut();
-              }}
-            />
-          </>
-        )}
-        {!user && (
-          <>
-            <NavLink
-              component={Link}
-              to={PATHS.LOGIN}
-              label={t("nav.login")}
-              className={classes.control}
-              onClick={handleNavClick}
-            />
-          </>
-        )}
         <LanguageSwitcher />
       </AppShell.Navbar>
 

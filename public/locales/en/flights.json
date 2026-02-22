@@ -6,7 +6,7 @@
     "icon": "Icon",
     "from_to": "From → To",
     "date_duration_distance": "Date, Duration & Distance",
-    "actions": ""
+    "actions": "Edit"
   },
   "airline_label": "Airline:",
   "aircraft_label": "Aircraft:",
@@ -32,10 +32,25 @@
     }
   },
   "filter": {
-    "label": "Filter flights",
+    "label": "Filter by year",
     "all": "All Flights",
     "upcoming": "Upcoming Flights",
     "past": "Past Flights"
+  },
+  "filters": {
+    "title": "Filters",
+    "airline": "Airline",
+    "airline_placeholder": "Select airline",
+    "departure_airport": "Departure airport",
+    "departure_airport_placeholder": "Select departure airport",
+    "arrival_airport": "Arrival airport",
+    "arrival_airport_placeholder": "Select arrival airport",
+    "duration_label": "Duration (min / max)",
+    "min_duration": "Min duration (hours)",
+    "max_duration": "Max duration (hours)",
+    "duration_placeholder": "e.g., 1.5",
+    "no_results": "No results",
+    "clear": "Clear"
   },
   "actions": {
     "open_menu": "Open actions",
@@ -64,9 +79,10 @@
     "international_flights": "International Flights",
     "long_haul_flights": "Long-Haul Flights",
     "west_bound_flights": "Westbound Flights",
-    "view_flights": "View Flights",
+    "view_flights": "View Individual Flights",
     "shortest_flight": "Shortest Flight",
-    "longest_flight": "Longest Flight"
+    "longest_flight": "Longest Flight",
+    "view_tour": "View Route Tour"
   },
   "form": {
     "add_new_flight": "Add New Flight",
@@ -121,7 +137,7 @@
       "save_multiple": "Save Flights"
     },
     "errors": {
-      "userNotAuthenticated": "User not authenticated"
+      "user_not_authenticated": "User not authenticated"
     }
   },
   "distance": {

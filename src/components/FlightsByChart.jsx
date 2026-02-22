@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Title,
   Stack,
@@ -13,21 +13,68 @@ import {
   getFlightsByAirport,
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
+import { CHART_GROUPING, TIME_GROUPING } from "../constants/filters.ts";
+import useFlightStore from "../store.ts";
+import { useShallow } from "zustand/react/shallow";
+
+const CHART_GROUPING_CONFIG = {
+  [CHART_GROUPING.COUNTRY]: {
+    getData: getDeparturesByCountry,
+    dataKey: "country",
+    seriesName: "departures",
+    tLabel: "group.country",
+  },
+  [CHART_GROUPING.AIRLINE]: {
+    getData: getFlightsByAirline,
+    dataKey: "airline",
+    seriesName: "flights",
+    tLabel: "group.airline",
+  },
+  [CHART_GROUPING.AIRPORT]: {
+    getData: getFlightsByAirport,
+    dataKey: "airport",
+    seriesName: "flights",
+    tLabel: "group.airport",
+  },
+};
+
+const VALUE_FORMATTER = (value) => (String(value) === "0" ? "" : String(value));
 
 const FlightsByChart = ({
   filteredFlights,
   data,
-  timeGrouping: propTimeGrouping,
   height,
-  onTimeGroupingChange,
 }) => {
-  const [grouping, setGrouping] = useState("country");
+  const { timeGrouping, setTimeGrouping, grouping, setGrouping } = useFlightStore(
+    useShallow((s) => ({
+      timeGrouping: s.timeGrouping,
+      setTimeGrouping: s.setTimeGrouping,
+      grouping: s.chartGrouping,
+      setGrouping: s.setChartGrouping,
+    })),
+  );
   const { t } = useTranslation("flights");
 
   // If data is provided, it's the old time-based chart
   if (data) {
     const timeChartData = data;
-    const timeGrouping = propTimeGrouping || "dayOfWeek";
+    const commonTimeBarProps = {
+      h: height || (timeChartData.length + 1) * 28,
+      data: timeChartData,
+      dataKey: "period",
+      orientation: "vertical",
+      yAxisProps: {
+        width: 60,
+      },
+      withXAxis: false,
+      gridAxis: "none",
+      barProps: { radius: 8 },
+      series: [{ name: "flights", color: "green.6" }],
+      withTooltip: false,
+      withBarValueLabel: true,
+      valueFormatter: VALUE_FORMATTER,
+      valueLabelProps: { position: "inside", fill: "white" },
+    };
 
     return (
       <Card shadow="sm" radius="md" withBorder>
@@ -35,133 +82,55 @@ const FlightsByChart = ({
           <Title order={3}>
             {t("charts.flights_by", {
               period:
-                timeGrouping === "dayOfWeek"
+                timeGrouping === TIME_GROUPING.DAY_OF_WEEK
                   ? t("time.day_of_week")
-                  : timeGrouping === "year"
+                  : timeGrouping === TIME_GROUPING.YEAR
                     ? t("time.year")
                     : t("time.month"),
             })}
           </Title>
           <SegmentedControl
             value={timeGrouping}
-            onChange={onTimeGroupingChange} // Handled by parent
+            onChange={setTimeGrouping}
             data={[
-              { label: t("time.day_of_week"), value: "dayOfWeek" },
-              { label: t("time.year"), value: "year" },
-              { label: t("time.month"), value: "month" },
+              { label: t("time.day_of_week"), value: TIME_GROUPING.DAY_OF_WEEK },
+              { label: t("time.year"), value: TIME_GROUPING.YEAR },
+              { label: t("time.month"), value: TIME_GROUPING.MONTH },
             ]}
           />
         </Stack>
-        {timeGrouping === "year" ? (
+        {timeGrouping === TIME_GROUPING.YEAR && (
           <ScrollArea h={370} scrollbars="y" offsetScrollbars>
-            <BarChart
-              h={height || (timeChartData.length + 1) * 28}
-              data={timeChartData}
-              dataKey="period"
-              orientation="vertical"
-              yAxisProps={{
-                width: 60,
-              }}
-              withXAxis={false}
-              gridAxis="none"
-              barProps={{ radius: 8 }}
-              series={[{ name: "flights", color: "green.6" }]}
-              withTooltip={false}
-              withBarValueLabel
-              valueFormatter={(value) =>
-                String(value) === "0" ? "" : String(value)
-              }
-              valueLabelProps={{ position: "inside", fill: "white" }}
-            />
+            <BarChart {...commonTimeBarProps} />
           </ScrollArea>
-        ) : (
-          <BarChart
-            h={height || (timeChartData.length + 1) * 28}
-            data={timeChartData}
-            dataKey="period"
-            orientation="vertical"
-            yAxisProps={{
-              width: 60,
-            }}
-            withXAxis={false}
-            gridAxis="none"
-            barProps={{ radius: 8 }}
-            series={[{ name: "flights", color: "green.6" }]}
-            withTooltip={false}
-            withBarValueLabel
-            valueFormatter={(value) =>
-              String(value) === "0" ? "" : String(value)
-            }
-            valueLabelProps={{ position: "inside", fill: "white" }}
-          />
         )}
+        {timeGrouping !== TIME_GROUPING.YEAR && <BarChart {...commonTimeBarProps} />}
       </Card>
     );
   }
 
-  // New group-based chart
-  const getChartData = (flights, groupBy) => {
-    if (!flights || !Array.isArray(flights)) return [];
-    switch (groupBy) {
-      case "country":
-        return getDeparturesByCountry(flights);
-      case "airline":
-        return getFlightsByAirline(flights);
-      case "airport":
-        return getFlightsByAirport(flights);
-      default:
-        return [];
-    }
-  };
-
-  const chartData = getChartData(filteredFlights, grouping);
-
-  const getDataKey = (groupBy) => {
-    switch (groupBy) {
-      case "country":
-        return "country";
-      case "airline":
-        return "airline";
-      case "airport":
-        return "airport";
-      default:
-        return "";
-    }
-  };
-
-  const getSeriesName = (groupBy) => {
-    switch (groupBy) {
-      case "country":
-        return "departures";
-      case "airline":
-      case "airport":
-        return "flights";
-
-      default:
-        return "";
-    }
-  };
+  const currentGroupingConfig =
+    CHART_GROUPING_CONFIG[grouping] || CHART_GROUPING_CONFIG[CHART_GROUPING.COUNTRY];
+  const chartData =
+    !filteredFlights || !Array.isArray(filteredFlights)
+      ? []
+      : currentGroupingConfig.getData(filteredFlights);
 
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack mb="md">
         <Title order={3}>
           {t("charts.flights_by", {
-            period:
-              grouping === "country"
-                ? t("group.country")
-                : grouping === "airline"
-                  ? t("group.airline")
-                  : t("group.airport"),
+            period: t(currentGroupingConfig.tLabel),
           })}
         </Title>
         <SegmentedControl
           value={grouping}
           onChange={setGrouping}
           data={[
-            { label: t("group.country"), value: "country" },
-            { label: t("group.airline"), value: "airline" },
-            { label: t("group.airport"), value: "airport" },
+            { label: t("group.country"), value: CHART_GROUPING.COUNTRY },
+            { label: t("group.airline"), value: CHART_GROUPING.AIRLINE },
+            { label: t("group.airport"), value: CHART_GROUPING.AIRPORT },
           ]}
         />
       </Stack>
@@ -170,11 +139,9 @@ const FlightsByChart = ({
           h={(chartData.length + 1) * 28}
           data={chartData}
           withBarValueLabel
-          valueFormatter={(value) =>
-            String(value) === "0" ? "" : String(value)
-          }
+          valueFormatter={VALUE_FORMATTER}
           valueLabelProps={{ position: "inside", fill: "white" }}
-          dataKey={getDataKey(grouping)}
+          dataKey={currentGroupingConfig.dataKey}
           orientation="vertical"
           yAxisProps={{
             width: 110,
@@ -182,7 +149,7 @@ const FlightsByChart = ({
           withXAxis={false}
           gridAxis="none"
           barProps={{ radius: 8 }}
-          series={[{ name: getSeriesName(grouping) }]}
+          series={[{ name: currentGroupingConfig.seriesName }]}
           withTooltip={false}
         />
       </ScrollArea>

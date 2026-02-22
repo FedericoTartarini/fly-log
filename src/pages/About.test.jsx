@@ -1,5 +1,5 @@
 /* eslint-env vitest */
-/* global test, expect */
+import { test, expect } from "vitest";
 import React from "react";
 import { render, screen } from "../../test-utils/index.js"; // use project render wrapper
 import About from "./About";

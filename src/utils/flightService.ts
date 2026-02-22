@@ -11,8 +11,35 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
-import { airlinesInfo } from "./airlinesInfo";
-import { airportsInfo } from "./airportsInfo";
+import {
+  getReferenceMapsSync,
+  loadReferenceMaps,
+  type AirlineInfo,
+  type AirportInfo,
+} from "./referenceData";
+import { YEAR_FILTER } from "../constants/filters";
+
+type FirestoreFlightRecord = {
+  id: string;
+  departure_date: unknown;
+  departure_airport_iata: string;
+  arrival_airport_iata: string;
+  airline_iata: string;
+  [key: string]: unknown;
+};
+
+type EnrichedFlightRecord = FirestoreFlightRecord & {
+  departure_coordinates: [number, number] | null;
+  arrival_coordinates: [number, number] | null;
+  distance_km: number | null;
+  flight_time: number | null;
+  departure_country: string | null;
+  arrival_country: string | null;
+  international: boolean;
+  airline_name: string | null;
+  airline_icon_path: string | null;
+  airline_icao: string | null;
+};
 
 /**
  * Calculate the great-circle distance between two points on the Earth surface.
@@ -62,8 +89,11 @@ const estimateFlightTime = (
  * @param iataCode - IATA code of the airport
  * @returns [latitude, longitude] if found, else null
  */
-const getAirportCoordinates = (iataCode: string): [number, number] | null => {
-  const airport = airportsInfo.find((airport) => airport.iata === iataCode);
+const getAirportCoordinates = (
+  iataCode: string,
+  airportByIata: Map<string, AirportInfo>,
+): [number, number] | null => {
+  const airport = airportByIata.get(String(iataCode || "").toUpperCase());
   return airport ? [airport.lat, airport.lon] : null;
 };
 
@@ -72,8 +102,11 @@ const getAirportCoordinates = (iataCode: string): [number, number] | null => {
  * @param iataCode - IATA code of the airport
  * @returns ISO country code if found, else null
  */
-const getIsoCountry = (iataCode: string): string | null => {
-  const airport = airportsInfo.find((airport) => airport.iata === iataCode);
+const getIsoCountry = (
+  iataCode: string,
+  airportByIata: Map<string, AirportInfo>,
+): string | null => {
+  const airport = airportByIata.get(String(iataCode || "").toUpperCase());
   return airport ? airport.iso_country : null;
 };
 
@@ -82,16 +115,28 @@ const getIsoCountry = (iataCode: string): string | null => {
  * @param flight - EnhancedFlight data from database
  * @returns Enriched flight data
  */
-export const enrichFlightData = (flight: any): any => {
-  const depCoords = getAirportCoordinates(flight.departure_airport_iata);
-  const depCountry = getIsoCountry(flight.departure_airport_iata);
-  const arrCoords = getAirportCoordinates(flight.arrival_airport_iata);
-  const arrCountry = getIsoCountry(flight.arrival_airport_iata);
+export const enrichFlightData = (
+  flight: FirestoreFlightRecord,
+): EnrichedFlightRecord => {
+  const { airportByIata, airlineByIata } = getReferenceMapsSync();
+
+  const depCoords = getAirportCoordinates(
+    flight.departure_airport_iata,
+    airportByIata,
+  );
+  const depCountry = getIsoCountry(flight.departure_airport_iata, airportByIata);
+  const arrCoords = getAirportCoordinates(
+    flight.arrival_airport_iata,
+    airportByIata,
+  );
+  const arrCountry = getIsoCountry(flight.arrival_airport_iata, airportByIata);
 
   const distance = haversine(depCoords, arrCoords);
   const flightTime = estimateFlightTime(distance);
 
-  const airline = airlinesInfo.find((a: any) => a.iata === flight.airline_iata);
+  const airline = airlineByIata.get(
+    String(flight.airline_iata || "").toUpperCase(),
+  ) as AirlineInfo | undefined;
 
   let airlineName: string | null = null;
   let airlineIcao: string | null = null;
@@ -127,20 +172,21 @@ export const enrichFlightData = (flight: any): any => {
 export const getFilteredUserFlights = async (
   uid: string,
   year: number | string,
-): Promise<any[]> => {
+): Promise<EnrichedFlightRecord[]> => {
   if (!uid) throw new Error("User id is required to fetch flights");
+  await loadReferenceMaps();
 
   const colRef = collection(firestore, "flights", uid, "records");
   const todayDate = new Date();
 
   let q;
-  if (year === "upcoming") {
+  if (year === YEAR_FILTER.UPCOMING) {
     q = query(
       colRef,
       where("departure_date", ">", Timestamp.fromDate(todayDate)),
       orderBy("departure_date", "desc"),
     );
-  } else if (year === "all") {
+  } else if (year === YEAR_FILTER.ALL) {
     q = query(colRef, orderBy("departure_date", "desc"));
   } else {
     const startDate = new Date(Number(year), 0, 1);
@@ -167,8 +213,11 @@ export const getFilteredUserFlights = async (
   }
 
   const snap = await getDocs(q);
-  const data = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-  return (data || []).map((flight: any) => enrichFlightData(flight));
+  const data = snap.docs.map((d) => ({
+    id: d.id,
+    ...(d.data() as Omit<FirestoreFlightRecord, "id">),
+  }));
+  return (data || []).map((flight) => enrichFlightData(flight));
 };
 
 /**
@@ -194,7 +243,7 @@ export const deleteFlightForUser = async (uid: string, flightId: string) => {
 export const updateFlightForUser = async (
   uid: string,
   flightId: string,
-  updates: any,
+  updates: Partial<FirestoreFlightRecord>,
 ) => {
   if (!uid) throw new Error("User id is required to update a flight");
   if (!flightId) throw new Error("Flight id is required to update a flight");
@@ -219,6 +268,9 @@ export const updateFlightForUser = async (
   // Return the fresh document enriched
   const snap = await getDoc(docRef);
   if (!snap.exists()) throw new Error("Updated flight not found");
-  const merged = { id: snap.id, ...(snap.data() as any) };
+  const merged = {
+    id: snap.id,
+    ...(snap.data() as Omit<FirestoreFlightRecord, "id">),
+  };
   return enrichFlightData(merged);
 };

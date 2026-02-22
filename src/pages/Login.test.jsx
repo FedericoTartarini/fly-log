@@ -1,18 +1,17 @@
 /* eslint-env vitest */
-/* global test, expect */
+import { test, expect, vi } from "vitest";
 import React from "react";
 import { render, screen } from "../../test-utils/index.js"; // use project render wrapper
 import { MemoryRouter } from "react-router-dom";
-import AuthProvider from "../context/AuthContext";
 import Login from "./Login";
+
+vi.mock("../context/AuthContext", () => ({
+  useAuth: () => ({ user: null }),
+}));
 
 test("renders login form with translated strings", () => {
   render(<Login />, {
-    wrapper: ({ children }) => (
-      <AuthProvider>
-        <MemoryRouter>{children}</MemoryRouter>
-      </AuthProvider>
-    ),
+    wrapper: ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
   });
 
   expect(screen.getByText("Welcome Back")).toBeInTheDocument();

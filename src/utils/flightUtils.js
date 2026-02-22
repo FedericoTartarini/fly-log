@@ -1,5 +1,6 @@
 // src/utils/flightUtils.js
 // todo: delete this file since it should be replaced by flightService.ts
+import { YEAR_FILTER } from "../constants/filters.ts";
 /**
  * Filters flights based on the selected year or category.
  * @param {import('../types').Flight[]} allFlights - The array of all flights.
@@ -17,10 +18,10 @@ export function getFilteredFlights(allFlights, selectedYear) {
     (flight) => new Date(flight.date) > today,
   );
 
-  if (selectedYear === "all") {
+  if (selectedYear === YEAR_FILTER.ALL) {
     return pastFlights;
   }
-  if (selectedYear === "upcoming") {
+  if (selectedYear === YEAR_FILTER.UPCOMING) {
     return upcomingFlights;
   }
   return pastFlights.filter(

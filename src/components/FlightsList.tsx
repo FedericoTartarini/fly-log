@@ -8,12 +8,15 @@ import {
   Modal,
   Pagination,
   Loader,
+  Stack,
 } from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { formatDate } from "../utils/dateUtils";
+import { formatDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
+import type { FlightStoreState } from "../store";
+import { useShallow } from "zustand/react/shallow";
 
 const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
@@ -23,15 +26,18 @@ const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
  * @returns {JSX.Element}
  */
 const FlightsList: React.FC = () => {
-  // The store's Flight type differs from enhancedFlight; cast via unknown to satisfy TypeScript
-  const { filteredFlights } = useFlightStore() as unknown as {
-    filteredFlights: enhancedFlight[];
-  };
+  const { filteredFlights, fetchFlights } = useFlightStore(
+    useShallow((s: FlightStoreState) => ({
+      filteredFlights: s.filteredFlights as enhancedFlight[],
+      fetchFlights: s.fetchFlights,
+    })),
+  );
 
   const { t } = useTranslation("flights");
   const [editOpen, setEditOpen] = React.useState(false);
-  const [editFlight, setEditFlight] = React.useState<any>(null);
-  const fetchFlights = useFlightStore((s: any) => s.fetchFlights);
+  const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
+    null,
+  );
 
   const PAGE_SIZE = 20;
   const [page, setPage] = React.useState(1);
@@ -48,42 +54,14 @@ const FlightsList: React.FC = () => {
 
   const [failedImages, setFailedImages] = React.useState(new Set<string>());
 
-  if (filteredFlights.length === 0) {
-    return (
-      <Text mt="md" ta="center">
-        {t("no_flights")}
-      </Text>
-    );
-  }
+  const hasResults = filteredFlights.length > 0;
 
   // Helper to get epoch ms for various departure_date representations
-  const getDepartureEpoch = (flight: any): number => {
-    const d = flight?.departure_date;
-    if (!d) return -Infinity;
-    // Firestore Timestamp-like object with toDate()
-    if (typeof d?.toDate === "function") {
-      try {
-        const dt = d.toDate();
-        if (dt instanceof Date && !isNaN(dt.getTime())) return dt.getTime();
-      } catch (e) {
-        // fallthrough
-      }
-    }
-    // If object with seconds property
-    if (typeof d === "object" && typeof d.seconds === "number") {
-      return d.seconds * 1000;
-    }
-    // Date instance
-    if (d instanceof Date) {
-      const t = d.getTime();
-      return isNaN(t) ? -Infinity : t;
-    }
-    // string or number
-    if (typeof d === "string" || typeof d === "number") {
-      const t = new Date(d).getTime();
-      return isNaN(t) ? -Infinity : t;
-    }
-    return -Infinity;
+  const getDepartureEpoch = (flight: enhancedFlight): number => {
+    const dt = parseToDate(flight?.departure_date);
+    if (!dt) return -Infinity;
+    const t = dt.getTime();
+    return isNaN(t) ? -Infinity : t;
   };
 
   // Sort flights by departure date descending (newest first)
@@ -98,7 +76,7 @@ const FlightsList: React.FC = () => {
 
   /**
    * Returns the airline icon or a fallback icon.
-   * @param {Flight} flight
+   * @param {enhancedFlight} flight
    * @returns {JSX.Element}
    */
   const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
@@ -132,13 +110,7 @@ const FlightsList: React.FC = () => {
       );
     }
 
-    // Try to build a local/build URL for the image, falling back to public path
-    let imageUrl: string;
-    try {
-      imageUrl = new URL(`../assets/logos/${sourcePath}`, import.meta.url).href;
-    } catch {
-      imageUrl = `/assets/logos/${sourcePath}`;
-    }
+    const imageUrl = `/logos/${sourcePath}`;
 
     // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
     return (
@@ -156,83 +128,98 @@ const FlightsList: React.FC = () => {
   };
 
   return (
-    <>
-      <Table striped highlightOnHover withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Center>{t("table.icon")}</Center>
-            </Table.Th>
-            <Table.Th>{t("table.from_to")}</Table.Th>
-            <Table.Th>{t("table.date_duration_distance")}</Table.Th>
-            <Table.Th>{t("table.actions")}</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {paginatedFlights.map((flight) => {
-            const departureDateStr = formatDate(flight.departure_date);
-
-            // Safe formatting for flight time and distance
-            const ft = flight.flight_time ?? null;
-            const dist = Number.isFinite(flight.distance_km)
-              ? Math.round(flight.distance_km)
-              : null;
-            let durationDistanceStr = "";
-            if (ft !== null) {
-              const hours = Math.floor(ft);
-              const minutes = Math.round((ft % 1) * 60);
-              if (dist !== null) {
-                durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
-              } else {
-                durationDistanceStr = `${hours}h ${minutes}m`;
-              }
-            } else if (dist !== null) {
-              durationDistanceStr = `${dist.toLocaleString()} km`;
-            }
-
-            return (
-              <Table.Tr key={flight.id}>
-                <Table.Td p={"0.5rem"}>
-                  <Center>{getAirlineIcon(flight)}</Center>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm">
-                    {flight.departure_airport_iata} →{" "}
-                    {flight.arrival_airport_iata}
-                  </Text>
-                  <Text size="xs" c="dimmed">
-                    {flight.airline_iata || flight.airline_name}{" "}
-                    {flight.flight_number ? `: ${flight.flight_number}` : ""}
-                  </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm">{departureDateStr}</Text>
-                  <Text size="xs" c="dimmed">
-                    {durationDistanceStr}
-                  </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Suspense fallback={<Loader size="sm" />}>
-                    <FlightActions
-                      flight={flight}
-                      onEdit={(f: any) => {
-                        setEditFlight(f);
-                        setEditOpen(true);
-                      }}
-                    />
-                  </Suspense>
-                </Table.Td>
+    <Stack gap="md">
+      {!hasResults ? (
+        <Text mt="md" ta="center">
+          {t("no_flights")}
+        </Text>
+      ) : (
+        <>
+          <Table striped highlightOnHover withTableBorder>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>
+                  <Center>{t("table.icon")}</Center>
+                </Table.Th>
+                <Table.Th>{t("table.from_to")}</Table.Th>
+                <Table.Th>{t("table.date_duration_distance")}</Table.Th>
+                <Table.Th>{t("table.actions")}</Table.Th>
               </Table.Tr>
-            );
-          })}
-        </Table.Tbody>
-      </Table>
+            </Table.Thead>
+            <Table.Tbody>
+              {paginatedFlights.map((flight) => {
+                const departureDateStr = formatDate(flight.departure_date);
 
-      {/* Pagination control (Mantine) */}
-      {totalPages > 1 && (
-        <Center mt="md">
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-        </Center>
+                // Safe formatting for flight time and distance
+                const ft = flight.flight_time ?? null;
+                const distValue =
+                  typeof flight.distance_km === "number"
+                    ? flight.distance_km
+                    : null;
+                const dist =
+                  distValue !== null && Number.isFinite(distValue)
+                    ? Math.round(distValue)
+                    : null;
+                let durationDistanceStr = "";
+                if (ft !== null) {
+                  const hours = Math.floor(ft);
+                  const minutes = Math.round((ft % 1) * 60);
+                  if (dist !== null) {
+                    durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
+                  } else {
+                    durationDistanceStr = `${hours}h ${minutes}m`;
+                  }
+                } else if (dist !== null) {
+                  durationDistanceStr = `${dist.toLocaleString()} km`;
+                }
+
+                return (
+                  <Table.Tr key={flight.id}>
+                    <Table.Td p={"0.5rem"}>
+                      <Center>{getAirlineIcon(flight)}</Center>
+                    </Table.Td>
+                    <Table.Td>
+                      <Text size="sm">
+                        {flight.departure_airport_iata} →{" "}
+                        {flight.arrival_airport_iata}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {flight.airline_iata || flight.airline_name}{" "}
+                        {flight.flight_number
+                          ? `: ${flight.flight_number}`
+                          : ""}
+                      </Text>
+                    </Table.Td>
+                    <Table.Td>
+                      <Text size="sm">{departureDateStr}</Text>
+                      <Text size="xs" c="dimmed">
+                        {durationDistanceStr}
+                      </Text>
+                    </Table.Td>
+                    <Table.Td>
+                      <Suspense fallback={<Loader size="sm" />}>
+                        <FlightActions
+                          flight={flight}
+                          onEdit={(f: enhancedFlight) => {
+                            setEditFlight(f);
+                            setEditOpen(true);
+                          }}
+                        />
+                      </Suspense>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })}
+            </Table.Tbody>
+          </Table>
+
+          {/* Pagination control */}
+          {totalPages > 1 && (
+            <Center mt="md">
+              <Pagination total={totalPages} value={page} onChange={setPage} />
+            </Center>
+          )}
+        </>
       )}
 
       <Modal
@@ -257,7 +244,7 @@ const FlightsList: React.FC = () => {
           </Suspense>
         )}
       </Modal>
-    </>
+    </Stack>
   );
 };
 

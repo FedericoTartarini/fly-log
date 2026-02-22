@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import i18n from "i18next";
 import { getFlightsByTimeGrouping, getFlightsByAirline } from "./chartUtils";
 import { capitalize } from "./stringUtils";
+import { TIME_GROUPING } from "../constants/filters.ts";
 
 // Helper to get localized weekday/month label as used in chartUtils
 function weekdayLabel(date, locale) {
@@ -27,7 +28,7 @@ describe("getFlightsByTimeGrouping", () => {
   });
 
   it("returns empty array for empty input", () => {
-    const out = getFlightsByTimeGrouping([], "dayOfWeek");
+    const out = getFlightsByTimeGrouping([], TIME_GROUPING.DAY_OF_WEEK);
     expect(out).toEqual([]);
   });
 
@@ -44,7 +45,7 @@ describe("getFlightsByTimeGrouping", () => {
       { departure_date: dWed.toISOString() },
     ];
 
-    const out = getFlightsByTimeGrouping(flights, "dayOfWeek");
+    const out = getFlightsByTimeGrouping(flights, TIME_GROUPING.DAY_OF_WEEK);
 
     // Expect entries for Monday (2), Tuesday (1), Wednesday (1)
     const monLabel = weekdayLabel(dMon, i18n.language);
@@ -67,7 +68,7 @@ describe("getFlightsByTimeGrouping", () => {
       { departure_date: { seconds: Math.floor(dTue.getTime() / 1000) } },
     ];
 
-    const out = getFlightsByTimeGrouping(flights, "dayOfWeek");
+    const out = getFlightsByTimeGrouping(flights, TIME_GROUPING.DAY_OF_WEEK);
 
     const monLabel = weekdayLabel(dMon, i18n.language);
     const tueLabel = weekdayLabel(dTue, i18n.language);
@@ -88,7 +89,7 @@ describe("getFlightsByTimeGrouping", () => {
       { departure_date: { seconds: Math.floor(feb.getTime() / 1000) } },
     ];
 
-    const out = getFlightsByTimeGrouping(flights, "month");
+    const out = getFlightsByTimeGrouping(flights, TIME_GROUPING.MONTH);
 
     const janLabel = monthLabel(jan, i18n.language);
     const febLabel = monthLabel(feb, i18n.language);

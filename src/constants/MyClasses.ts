@@ -33,8 +33,10 @@ export const IDS = {
  */
 export const PATHS = {
   HOME: "/",
+  LANDING: "/landing",
   FLIGHTS: "/flights",
   STATS: "/stats",
+  TOUR: "/tour",
   ADD_FLIGHT: "/add-flight",
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",

@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import type { FirebaseApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -8,21 +9,24 @@ import {
   signOut as fbSignOut,
   onAuthStateChanged as fbOnAuthStateChanged,
 } from "firebase/auth";
+import type { Auth, User } from "firebase/auth";
 import {
   initializeFirestore,
   persistentLocalCache,
   collection,
   addDoc,
+  doc,
   serverTimestamp,
   Timestamp,
+  writeBatch,
 } from "firebase/firestore";
-
+import type { Firestore } from "firebase/firestore";
 
 // Read Vite env vars
 const getEnv = (key: string, fallback = ""): string => {
-  // @ts-ignore
+  // @ts-expect-error - Vite injects import.meta.env at build time
   if (typeof import.meta !== "undefined" && import.meta.env?.[key]) {
-    // @ts-ignore
+    // @ts-expect-error - Vite injects import.meta.env at build time
     return import.meta.env[key] as string;
   }
   if (typeof process !== "undefined" && process.env?.[key]) {
@@ -40,9 +44,9 @@ const firebaseConfig = {
   appId: getEnv("VITE_FIREBASE_APP_ID", ""),
 };
 
-let app: any = null;
-let auth: any = null;
-let firestore: any = null;
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let firestore: Firestore | null = null;
 
 // Initialize Firebase only when a proper API key is set. This avoids errors in test
 // environments where env vars are not configured (Vitest/Node). Callers should mock
@@ -55,10 +59,9 @@ if (firebaseConfig.apiKey) {
     firestore = initializeFirestore(app, {
       localCache: persistentLocalCache(),
     });
-  } catch (e) {
+  } catch (error) {
     // Persistence can fail if multiple tabs open or unsupported environment; ignore.
-    // eslint-disable-next-line no-console
-    console.warn("Could not enable Firestore persistence:", e);
+    console.warn("Could not enable Firestore persistence:", error);
   }
 }
 
@@ -66,16 +69,33 @@ export { auth, firestore };
 
 const googleProvider = new GoogleAuthProvider();
 
+type FirebaseErrorLike = {
+  code?: string;
+  message?: string;
+  _tokenResponse?: { error?: { message?: string } };
+  customData?: { message?: string };
+};
+
+const getFirebaseErrorInfo = (err: unknown) => {
+  if (!err || typeof err !== "object") {
+    return { code: "auth/error", message: String(err) };
+  }
+  const error = err as FirebaseErrorLike;
+  const code = error.code ?? "auth/error";
+  const tokenMsg =
+    error._tokenResponse?.error?.message || error.customData?.message;
+  const serverMsg = error.message || tokenMsg || JSON.stringify(error);
+  return { code, message: serverMsg };
+};
+
 export const signInWithGoogle = async () => {
   if (!auth) throw new Error("Firebase not initialized");
   try {
     return await signInWithPopup(auth, googleProvider);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("signInWithGoogle error:", err);
-    // Normalize Firebase errors
-    throw new Error(
-      err?.code ? `${err.code}: ${err.message}` : err?.message || String(err),
-    );
+    const { code, message } = getFirebaseErrorInfo(err);
+    throw new Error(`${code}: ${message}`);
   }
 };
 
@@ -83,15 +103,10 @@ export const signInWithEmail = async (email: string, password: string) => {
   if (!auth) throw new Error("Firebase not initialized");
   try {
     return await signInWithEmailAndPassword(auth, email, password);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("signInWithEmail error:", err);
-    // Extract useful info from different SDK shapes
-    const code = err?.code || "auth/error";
-    const tokenMsg =
-      err?._tokenResponse?.error?.message || err?.customData?.message;
-    const serverMsg = err?.message || tokenMsg || (err && JSON.stringify(err));
-    const message = `${code}: ${serverMsg}`;
-    throw new Error(message);
+    const { code, message } = getFirebaseErrorInfo(err);
+    throw new Error(`${code}: ${message}`);
   }
 };
 
@@ -99,14 +114,10 @@ export const signUpWithEmail = async (email: string, password: string) => {
   if (!auth) throw new Error("Firebase not initialized");
   try {
     return await createUserWithEmailAndPassword(auth, email, password);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("signUpWithEmail error:", err);
-    const code = err?.code || "auth/error";
-    const tokenMsg =
-      err?._tokenResponse?.error?.message || err?.customData?.message;
-    const serverMsg = err?.message || tokenMsg || (err && JSON.stringify(err));
-    const message = `${code}: ${serverMsg}`;
-    throw new Error(message);
+    const { code, message } = getFirebaseErrorInfo(err);
+    throw new Error(`${code}: ${message}`);
   }
 };
 
@@ -115,7 +126,7 @@ export const signOutUser = async () => {
   return fbSignOut(auth);
 };
 
-export const onAuthStateChanged = (cb: (user: any) => void) => {
+export const onAuthStateChanged = (cb: (user: User | null) => void) => {
   if (!auth) {
     // In non-initialized environments, call back with null and return a noop unsubscribe
     cb(null);
@@ -135,7 +146,7 @@ export const onAuthStateChanged = (cb: (user: any) => void) => {
  */
 export const addFlightsForUser = async (
   uid: string,
-  flights: any[],
+  flights: Array<{ departure_date?: unknown } & Record<string, unknown>>,
   progressCb?: (p: number) => void,
 ) => {
   if (!uid) throw new Error("No user ID provided");
@@ -148,42 +159,52 @@ export const addFlightsForUser = async (
 
   for (let i = 0; i < flights.length; i += chunkSize) {
     const chunk = flights.slice(i, i + chunkSize);
+    const batch = writeBatch(firestore);
+    const recordsCol = collection(firestore, "flights", uid, "records");
 
     for (const f of chunk) {
-      const data = { ...f };
+      const data: { departure_date?: unknown } & Record<string, unknown> = {
+        ...f,
+      };
       if (data.departure_date) {
         try {
-          const d = new Date(data.departure_date);
+          const d = new Date(data.departure_date as string);
           if (!isNaN(d.getTime())) {
             data.departure_date = Timestamp.fromDate(d);
           }
-        } catch (e) {
+        } catch {
           // ignore
         }
       }
       data.created_at = serverTimestamp();
-      await addDoc(collection(firestore, "flights", uid, "records"), data);
-      processed++;
-      if (progressCb)
-        progressCb(Math.round((processed / flights.length) * 100));
+      batch.set(doc(recordsCol), data);
     }
+
+    await batch.commit();
+    processed += chunk.length;
+    if (progressCb) progressCb(Math.round((processed / flights.length) * 100));
   }
 
   if (progressCb) progressCb(100);
 };
 
-export const addFlightForUser = async (uid: string, flight: any) => {
+export const addFlightForUser = async (
+  uid: string,
+  flight: { departure_date?: unknown } & Record<string, unknown>,
+) => {
   if (!uid) throw new Error("No user ID provided");
   if (!firestore)
     throw new Error(
       "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
     );
-  const data = { ...flight };
+  const data: { departure_date?: unknown } & Record<string, unknown> = {
+    ...flight,
+  };
   if (data.departure_date) {
     try {
-      const d = new Date(data.departure_date);
+      const d = new Date(data.departure_date as string);
       if (!isNaN(d.getTime())) data.departure_date = Timestamp.fromDate(d);
-    } catch (e) {
+    } catch {
       // ignore
     }
   }

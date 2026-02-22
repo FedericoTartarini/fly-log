@@ -3,9 +3,9 @@ import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { render } from "../../test-utils/index.js";
 import FlightCard from "./FlightCard";
-import type { EnhancedFlight } from "../types/enhancedFlight.ts";
+import type { enhancedFlight } from "../types/enhancedFlight.ts";
 
-const mockFlight: EnhancedFlight = {
+const mockFlight: enhancedFlight = {
   id: "1",
   user_id: "user1",
   departure_date: "2025-08-14",

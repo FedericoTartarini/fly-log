@@ -1,7 +1,7 @@
 {
   "name": "fly-log",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,6 +21,7 @@
     "@mantine/hooks": "^8.3.6",
     "@mantine/notifications": "^8.3.6",
     "@tabler/icons-react": "^3.34.1",
+    "d3": "^7.9.0",
     "firebase": "^12.5.0",
     "framer-motion": "^12.23.12",
     "geodesy": "^2.4.0",
@@ -45,6 +46,8 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
     "@vitejs/plugin-react": "^4.6.0",
     "cypress": "^14.5.3",
     "dotenv": "^17.2.1",
@@ -60,7 +63,6 @@
     "terser": "^5.46.0",
     "typescript": "^5.9.2",
     "vite": "7.1.12",
-    "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-static-copy": "^3.2.0",
     "vitest": "^3.2.4"
   }

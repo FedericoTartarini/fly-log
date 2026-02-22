@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -10,6 +10,8 @@ import {
   Loader,
   Text,
   Center,
+  Card,
+  Title,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.ts";
@@ -18,18 +20,23 @@ import DistanceStatsCard from "../components/DistanceStatsCard.js";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
+import FlightFilters from "../components/FlightFilters.tsx";
+import { useShallow } from "zustand/react/shallow";
 
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, fetchFlights, allFlights } =
-    useFlightStore();
-  const [timeGrouping, setTimeGrouping] = useState("dayOfWeek");
+  const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
+    useFlightStore(
+      useShallow((s) => ({
+        filteredFlights: s.filteredFlights,
+        isLoading: s.isLoading,
+        error: s.error,
+        allFlights: s.allFlights,
+        timeGrouping: s.timeGrouping,
+      })),
+    );
 
   // Move the stats calculation here to avoid conditional hook calls
   const stats = useFlightStats(filteredFlights);
-
-  useEffect(() => {
-    fetchFlights();
-  }, [fetchFlights]);
 
   // Prepare chart data outside of the conditional rendering
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
@@ -88,6 +95,13 @@ const FlightsStats = () => {
         >
           <StatsSummary />
 
+          <Card shadow="sm" radius="md" withBorder>
+            <Title order={3} mb="md">
+              {t("filters.title")}
+            </Title>
+            <FlightFilters />
+          </Card>
+
           {/* Add button to open modal */}
           <Suspense fallback={<div>Loading...</div>}>
             <FlightsTopBar fullWidth={true} />
@@ -124,9 +138,7 @@ const FlightsStats = () => {
           >
             <FlightsByChart
               data={timeChartData}
-              timeGrouping={timeGrouping}
               height={(timeChartData.length + 1) * 28}
-              onTimeGroupingChange={setTimeGrouping}
             />
           </Suspense>
 

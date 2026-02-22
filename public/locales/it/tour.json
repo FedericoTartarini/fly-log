@@ -1,0 +1,24 @@
+{
+  "title": "Tour delle rotte",
+  "scope": {
+    "label": "Voli",
+    "range": "Intervallo anni",
+    "past": "Voli passati",
+    "future": "Voli futuri",
+    "all": "Tutti i voli"
+  },
+  "from_year": "Anno iniziale",
+  "to_year": "Anno finale",
+  "start": "Avvia animazione",
+  "stop": "Stop",
+  "no_routes": "Nessuna rotta valida trovata per questo filtro.",
+  "load_error": "Impossibile caricare la mappa del mondo. Le rotte dei voli sono comunque disponibili.",
+  "current_route": "Rotta {{index}}/{{total}}: {{from}} -> {{to}}",
+  "map_aria": "Mappa 3D del tour voli",
+  "speed": {
+    "label": "Velocità dell'animazione",
+    "slow": "Lenta",
+    "normal": "Normale",
+    "fast": "Veloce"
+  }
+}

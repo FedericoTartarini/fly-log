@@ -6,13 +6,28 @@
     "icon": "Icona",
     "from_to": "Da → A",
     "date_duration_distance": "Data, Durata & Distanza",
-    "actions": ""
+    "actions": "Modifica"
   },
   "airline_label": "Compagnia:",
   "aircraft_label": "Aereo:",
   "km": "{{value}} km",
   "to": "→",
   "flight_time": "{{hours}}h {{minutes}}m durata volo",
+  "filters": {
+    "title": "Filtri",
+    "airline": "Compagnia",
+    "airline_placeholder": "Seleziona compagnia",
+    "departure_airport": "Aeroporto di partenza",
+    "departure_airport_placeholder": "Seleziona aeroporto di partenza",
+    "arrival_airport": "Aeroporto di arrivo",
+    "arrival_airport_placeholder": "Seleziona aeroporto di arrivo",
+    "duration_label": "Durata (min / max)",
+    "min_duration": "Durata minima (ore)",
+    "max_duration": "Durata massima (ore)",
+    "duration_placeholder": "es. 1.5",
+    "no_results": "Nessun risultato",
+    "clear": "Azzera"
+  },
   "csv": {
     "title": "Carica dati volo da CSV",
     "description": "Il tuo CSV deve includere queste colonne: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Opzionale: flight_number.",
@@ -32,7 +47,7 @@
     }
   },
   "filter": {
-    "label": "Filtra voli",
+    "label": "Filtra per anno",
     "all": "Tutti i voli",
     "upcoming": "Voli futuri",
     "past": "Voli passati"
@@ -64,9 +79,10 @@
     "international_flights": "Voli internazionali",
     "long_haul_flights": "A lungo raggio",
     "west_bound_flights": "Voli verso ovest",
-    "view_flights": "Visualizza voli",
+    "view_flights": "Visualizza voli individuali",
     "shortest_flight": "Volo più corto",
-    "longest_flight": "Volo più lungo"
+    "longest_flight": "Volo più lungo",
+    "view_tour": "Visualizza le tue rotte"
   },
   "form": {
     "add_new_flight": "Aggiungi nuovo volo",
@@ -80,25 +96,30 @@
       "flight_number": "Numero volo",
       "add_return": "Aggiungi volo di ritorno",
       "return_flight": "Volo di ritorno",
-      "return_date": "Data di ritorno",
-      "return_time": "Ora di ritorno",
+      "return_date": "Data ritorno",
+      "return_time": "Ora ritorno",
       "not_signed_in": "Non sei autenticato. Effettua l'accesso per salvare i voli."
+    },
+    "tabs": {
+      "manual": "Inserimento manuale",
+      "csv": "Caricamento CSV"
     },
     "placeholders": {
       "select_date": "Seleziona data",
       "time_example": "es. 14:30",
       "search_airports": "Cerca aeroporti",
       "search_airlines": "Cerca compagnie",
-      "no_matching_airports": "Nessun aeroporto corrispondente",
-      "no_matching_airlines": "Nessuna compagnia corrispondente"
+      "no_matching_airports": "Nessun aeroporto trovato",
+      "no_matching_airlines": "Nessuna compagnia trovata",
+      "flight_number_example": "ABC123"
     },
     "validation": {
-      "departure_date_required": "La data di partenza è richiesta",
-      "departure_airport_required": "L'aeroporto di partenza è richiesto",
-      "arrival_airport_required": "L'aeroporto di arrivo è richiesto",
-      "airline_required": "La compagnia è richiesta",
+      "departure_date_required": "La data di partenza è obbligatoria",
+      "departure_airport_required": "L'aeroporto di partenza è obbligatorio",
+      "arrival_airport_required": "L'aeroporto di arrivo è obbligatorio",
+      "airline_required": "La compagnia è obbligatoria",
       "arrival_differs": "L'aeroporto di arrivo deve essere diverso da quello di partenza",
-      "return_date_required": "La data di ritorno è richiesta"
+      "return_date_required": "La data di ritorno è obbligatoria"
     },
     "notifications": {
       "saving_title": "Salvataggio",
@@ -106,7 +127,7 @@
       "success_single": "Volo salvato con successo",
       "success_multiple": "Voli salvati con successo",
       "error_title": "Errore",
-      "error_save": "Impossibile salvare il/i volo/i: {{msg}}",
+      "error_save": "Impossibile salvare il volo: {{msg}}",
       "validation_error_title": "Errore di validazione",
       "validation_error_generic": "Controlla i campi obbligatori"
     },
@@ -114,6 +135,9 @@
       "save_single": "Salva volo",
       "update": "Aggiorna",
       "save_multiple": "Salva voli"
+    },
+    "errors": {
+      "user_not_authenticated": "Utente non autenticato"
     }
   },
   "distance": {
@@ -122,8 +146,8 @@
     "mean_distance": "Distanza media (km)",
     "journey_title": "Viaggio nello spazio",
     "earth_label": "{{value}}x intorno alla Terra",
-    "moon_label": "{{value}}% per la Luna",
-    "mars_label": "{{value}}% per Marte",
+    "moon_label": "{{value}}% verso la Luna",
+    "mars_label": "{{value}}% verso Marte",
     "destinations": {
       "earth": "Terra",
       "moon": "Luna",

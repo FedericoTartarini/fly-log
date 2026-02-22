@@ -14,11 +14,15 @@ import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { addFlightForUser } from "../firebaseClient";
 import { updateFlightForUser } from "../utils/flightService";
+import { parseToDate } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
-import { airlinesInfo } from "../utils/airlinesInfo";
-import { airportsInfo } from "../utils/airportsInfo";
+import {
+  loadAirlinesInfo,
+  loadAirportsInfo,
+  type AirlineInfo,
+} from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
 
 type SelectOption = {
@@ -28,7 +32,14 @@ type SelectOption = {
 
 interface FlightEntryFormProps {
   onSaved?: () => void;
-  flight?: any; // optional flight for editing
+  flight?: {
+    id: string;
+    departure_date?: unknown;
+    departure_airport_iata?: string;
+    arrival_airport_iata?: string;
+    airline_iata?: string;
+    flight_number?: string | null;
+  } | null;
 }
 
 const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
@@ -73,13 +84,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       airline: (value) =>
         value ? null : t("form.validation.airline_required"),
       returnDate: (value) =>
-        addReturn ? (value ? null : t("form.validation.return_date_required")) : null,
+        addReturn
+          ? value
+            ? null
+            : t("form.validation.return_date_required")
+          : null,
     },
   });
 
   useEffect(() => {
     const fetchAirportsInfo = async () => {
       try {
+        const [airportsInfo, airlinesInfo] = await Promise.all([
+          loadAirportsInfo(),
+          loadAirlinesInfo(),
+        ]);
+
         const airports: SelectOption[] = airportsInfo
           .map((airport) => ({
             value: airport.iata,
@@ -87,7 +107,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        const airlines: SelectOption[] = (airlinesInfo as any[])
+        const airlines: SelectOption[] = (airlinesInfo as AirlineInfo[])
           .map((airline) => ({
             value: airline.iata,
             label: `${airline.iata} - ${airline.name}`,
@@ -107,13 +127,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     // If flight prop changes, update form values accordingly
     if (!flight) return;
     try {
-      const depDate =
-        flight.departure_date &&
-        typeof flight.departure_date.toDate === "function"
-          ? flight.departure_date.toDate()
-          : flight.departure_date
-            ? new Date(flight.departure_date)
-            : null;
+      const depDate = parseToDate(flight.departure_date);
       form.setValues({
         departureDate: depDate,
         departureTime: "",
@@ -126,7 +140,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         returnFlightNumber: "",
       });
       setAddReturn(false);
-    } catch (e) {
+    } catch {
       // ignore
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +156,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     });
 
     try {
-      const flightsToInsert = [
+      const flightsToInsert: Array<{
+        departure_date: Date | null;
+        departure_airport_iata: string;
+        arrival_airport_iata: string;
+        airline_iata: string;
+        flight_number: string;
+      }> = [
         {
           departure_date: values.departureDate,
           departure_airport_iata: values.departureAirport,
@@ -206,9 +226,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       setAddReturn(false);
 
       if (onSaved) onSaved();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving flight:", error);
-      const msg = error?.message || String(error) || "Unknown error";
+      const msg = error instanceof Error ? error.message : String(error);
       setSubmitError(msg);
       notifications.show({
         title: t("form.notifications.error_title"),
@@ -218,31 +238,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  // Wrapper for the Save button: validate form first and show notification on errors
-  const handleSaveClick = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError(null);
-    form.validate();
-    const errorMessages = Object.values(form.errors).filter(
-      Boolean,
-    ) as string[];
-    const hasErrors = errorMessages.length > 0;
-    if (hasErrors) {
-      const msg =
-        errorMessages.join("; ") ||
-        t("form.notifications.validation_error_generic");
-      setSubmitError(msg);
-      notifications.show({
-        title: t("form.notifications.validation_error_title"),
-        message: msg,
-        color: "red",
-      });
-      return;
-    }
-
-    await handleSubmit(form.values);
   };
 
   const handleFormSubmit = form.onSubmit(async (values) => {

@@ -1,7 +1,7 @@
 // src/main.jsx
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
@@ -18,11 +18,13 @@ import "./i18n"; // initialize i18n
 const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
+const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 import MyAppShell from "./pages/MyAppShell.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true, // Default route
+        element: <Navigate to={PATHS.STATS} replace />,
+      },
+      {
+        path: PATHS.LANDING,
         element: <Landing />,
       },
       {
@@ -39,11 +45,27 @@ const router = createBrowserRouter([
       },
       {
         path: PATHS.STATS,
-        element: <FlightsStats />,
+        element: (
+          <ProtectedRoute>
+            <FlightsStats />
+          </ProtectedRoute>
+        ),
       },
       {
         path: PATHS.FLIGHTS,
-        element: <Flights />,
+        element: (
+          <ProtectedRoute>
+            <Flights />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.TOUR,
+        element: (
+          <ProtectedRoute>
+            <WorldTour />
+          </ProtectedRoute>
+        ),
       },
       {
         path: PATHS.LOGIN,
@@ -82,10 +104,44 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // Register service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    let hasRefreshedForNewWorker = false;
+
+    const activateWaitingWorker = (registration) => {
+      if (registration.waiting) {
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+    };
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (hasRefreshedForNewWorker) return;
+      hasRefreshedForNewWorker = true;
+      window.location.reload();
+    });
+
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("/sw.js", { updateViaCache: "none" })
       .then((registration) => {
-        console.log("Service Worker registered: ", registration);
+        console.log("Service Worker registered:", registration);
+
+        activateWaitingWorker(registration);
+
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              activateWaitingWorker(registration);
+            }
+          });
+        });
+
+        registration.update().catch((error) => {
+          console.warn("Service Worker update check failed:", error);
+        });
       })
       .catch((registrationError) => {
         console.error("Service Worker registration failed:", registrationError);
