@@ -164,10 +164,12 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   },
 
   setSelectedYear: async (year: string) => {
-    set({ selectedYear: year, isLoading: true, error: null });
+    // Update selectedYear synchronously without toggling a loading state
+    set({ selectedYear: year, error: null });
     try {
       const allFlights = get().allFlights;
       const filteredFlights = applyFilters(allFlights, year, get().filters);
+      // Apply filtered results synchronously; no loading flash for in-memory work
       set({ filteredFlights, isLoading: false });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);

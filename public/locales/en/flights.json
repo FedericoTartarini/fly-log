@@ -137,7 +137,7 @@
       "save_multiple": "Save Flights"
     },
     "errors": {
-      "userNotAuthenticated": "User not authenticated"
+      "user_not_authenticated": "User not authenticated"
     }
   },
   "distance": {
