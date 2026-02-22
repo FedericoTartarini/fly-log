@@ -19,6 +19,7 @@ import {
   buildAirlineOptions,
   buildAirportOptions,
 } from "../utils/flightFilterOptions";
+import { filterFlightsForFacetOptions } from "../utils/flightFilterFacets";
 import type { FlightStoreState, StoreFlightFilters } from "../store";
 
 const FlightFilters: React.FC = () => {
@@ -51,19 +52,56 @@ const FlightFilters: React.FC = () => {
     [allFlights, t],
   );
 
+  const flightsForAirlineOptions = React.useMemo(
+    () => filterFlightsForFacetOptions(allFlights, selectedYear, filters, "airline"),
+    [allFlights, selectedYear, filters],
+  );
+
+  const flightsForDepartureOptions = React.useMemo(
+    () =>
+      filterFlightsForFacetOptions(
+        allFlights,
+        selectedYear,
+        filters,
+        "departureAirport",
+      ),
+    [allFlights, selectedYear, filters],
+  );
+
+  const flightsForArrivalOptions = React.useMemo(
+    () =>
+      filterFlightsForFacetOptions(
+        allFlights,
+        selectedYear,
+        filters,
+        "arrivalAirport",
+      ),
+    [allFlights, selectedYear, filters],
+  );
+
   const airlineOptions = React.useMemo(
-    () => buildAirlineOptions(allFlights),
-    [allFlights],
+    () => buildAirlineOptions(flightsForAirlineOptions),
+    [flightsForAirlineOptions],
   );
 
   const departureOptions = React.useMemo(
-    () => buildAirportOptions(allFlights, airportsData, "departure_airport_iata"),
-    [allFlights, airportsData],
+    () =>
+      buildAirportOptions(
+        flightsForDepartureOptions,
+        airportsData,
+        "departure_airport_iata",
+      ),
+    [flightsForDepartureOptions, airportsData],
   );
 
   const arrivalOptions = React.useMemo(
-    () => buildAirportOptions(allFlights, airportsData, "arrival_airport_iata"),
-    [allFlights, airportsData],
+    () =>
+      buildAirportOptions(
+        flightsForArrivalOptions,
+        airportsData,
+        "arrival_airport_iata",
+      ),
+    [flightsForArrivalOptions, airportsData],
   );
 
   const hasFilters =
