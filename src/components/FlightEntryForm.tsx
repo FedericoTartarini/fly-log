@@ -72,7 +72,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       airline: (value) =>
         value ? null : t("form.validation.airline_required"),
       returnDate: (value) =>
-        addReturn ? (value ? null : t("form.validation.return_date_required")) : null,
+        addReturn
+          ? value
+            ? null
+            : t("form.validation.return_date_required")
+          : null,
     },
   });
 
@@ -222,31 +226,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  // Wrapper for the Save button: validate form first and show notification on errors
-  const handleSaveClick = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError(null);
-    form.validate();
-    const errorMessages = Object.values(form.errors).filter(
-      Boolean,
-    ) as string[];
-    const hasErrors = errorMessages.length > 0;
-    if (hasErrors) {
-      const msg =
-        errorMessages.join("; ") ||
-        t("form.notifications.validation_error_generic");
-      setSubmitError(msg);
-      notifications.show({
-        title: t("form.notifications.validation_error_title"),
-        message: msg,
-        color: "red",
-      });
-      return;
-    }
-
-    await handleSubmit(form.values);
   };
 
   const handleFormSubmit = form.onSubmit(async (values) => {

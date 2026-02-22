@@ -11,29 +11,30 @@ import {
 import useFlightStore from "../store";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { parseToDate } from "../utils/dateUtils";
-import { loadAirportsInfo } from "../utils/referenceData";
+import { useShallow } from "zustand/react/shallow";
+import { loadAirportsInfo, type AirportInfo } from "../utils/referenceData";
 import { YEAR_FILTER } from "../constants/filters";
-
-type Option = { value: string; label: string };
+import { buildYearFilterSelectData } from "../utils/yearFilterOptions";
+import {
+  buildAirlineOptions,
+  buildAirportOptions,
+} from "../utils/flightFilterOptions";
+import type { FlightStoreState, StoreFlightFilters } from "../store";
 
 const FlightFilters: React.FC = () => {
   const { t } = useTranslation("flights");
-  const allFlights = useFlightStore(
-    (s: any) => s.allFlights,
-  ) as enhancedFlight[];
-  const filters = useFlightStore((s: any) => s.filters) as {
-    airline: string | null;
-    departureAirport: string | null;
-    arrivalAirport: string | null;
-    minDuration: number | null;
-    maxDuration: number | null;
-  };
-  const setFilters = useFlightStore((s: any) => s.setFilters);
-  const clearFilters = useFlightStore((s: any) => s.clearFilters);
-  const selectedYear = useFlightStore((s: any) => s.selectedYear);
-  const setSelectedYear = useFlightStore((s: any) => s.setSelectedYear);
-  const [airportsData, setAirportsData] = React.useState<any[]>([]);
+  const { allFlights, filters, setFilters, clearFilters, selectedYear, setSelectedYear } =
+    useFlightStore(
+      useShallow((s: FlightStoreState) => ({
+        allFlights: s.allFlights as enhancedFlight[],
+        filters: s.filters as StoreFlightFilters,
+        setFilters: s.setFilters,
+        clearFilters: s.clearFilters,
+        selectedYear: s.selectedYear,
+        setSelectedYear: s.setSelectedYear,
+      })),
+    );
+  const [airportsData, setAirportsData] = React.useState<AirportInfo[]>([]);
 
   React.useEffect(() => {
     let mounted = true;
@@ -45,89 +46,25 @@ const FlightFilters: React.FC = () => {
     };
   }, []);
 
-  // build year options from allFlights (same logic as FlightYearFilter)
-  const yearsSet = React.useMemo(() => {
-    const set = new Set<number>();
-    allFlights.forEach((flight) => {
-      const dt = parseToDate((flight as any).departure_date);
-      if (!dt) return;
-      set.add(dt.getFullYear());
-    });
-    return Array.from(set).sort((a, b) => b - a);
-  }, [allFlights]);
+  const yearFilterOptions = React.useMemo(
+    () => buildYearFilterSelectData(allFlights, t),
+    [allFlights, t],
+  );
 
-  const airlineOptions = React.useMemo(() => {
-    const map = new Map<string, string>();
-    allFlights.forEach((flight) => {
-      if (flight.airline_iata) {
-        const label = flight.airline_name
-          ? `${flight.airline_iata} - ${flight.airline_name}`
-          : flight.airline_iata;
-        map.set(flight.airline_iata, label);
-      } else if (flight.airline_name) {
-        map.set(flight.airline_name, flight.airline_name);
-      }
-    });
-    return Array.from(map.entries())
-      .map(([value, label]) => ({ value, label }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [allFlights]);
+  const airlineOptions = React.useMemo(
+    () => buildAirlineOptions(allFlights),
+    [allFlights],
+  );
 
-  const departureOptions = React.useMemo(() => {
-    const iataSet = new Set<string>();
-    allFlights.forEach((flight) => {
-      if (flight.departure_airport_iata) {
-        iataSet.add(flight.departure_airport_iata);
-      }
-    });
+  const departureOptions = React.useMemo(
+    () => buildAirportOptions(allFlights, airportsData, "departure_airport_iata"),
+    [allFlights, airportsData],
+  );
 
-    // Prefer detailed labels from airportsInfo when available
-    const options: Option[] = [];
-    airportsData.forEach((airport: any) => {
-      if (iataSet.has(airport.iata)) {
-        options.push({
-          value: airport.iata,
-          label: `${airport.iata} - ${airport.airport_name}, ${airport.city}, ${airport.country}`,
-        });
-      }
-    });
-
-    // Fall back to any iata not present in airportsInfo
-    iataSet.forEach((iata) => {
-      if (!options.find((o) => o.value === iata)) {
-        options.push({ value: iata, label: iata });
-      }
-    });
-
-    return options.sort((a, b) => a.label.localeCompare(b.label));
-  }, [allFlights, airportsData]);
-
-  const arrivalOptions = React.useMemo(() => {
-    const iataSet = new Set<string>();
-    allFlights.forEach((flight) => {
-      if (flight.arrival_airport_iata) {
-        iataSet.add(flight.arrival_airport_iata);
-      }
-    });
-
-    const options: Option[] = [];
-    airportsData.forEach((airport: any) => {
-      if (iataSet.has(airport.iata)) {
-        options.push({
-          value: airport.iata,
-          label: `${airport.iata} - ${airport.airport_name}, ${airport.city}, ${airport.country}`,
-        });
-      }
-    });
-
-    iataSet.forEach((iata) => {
-      if (!options.find((o) => o.value === iata)) {
-        options.push({ value: iata, label: iata });
-      }
-    });
-
-    return options.sort((a, b) => a.label.localeCompare(b.label));
-  }, [allFlights, airportsData]);
+  const arrivalOptions = React.useMemo(
+    () => buildAirportOptions(allFlights, airportsData, "arrival_airport_iata"),
+    [allFlights, airportsData],
+  );
 
   const hasFilters =
     Boolean(filters.airline) ||
@@ -166,15 +103,7 @@ const FlightFilters: React.FC = () => {
           onChange={(e) => setSelectedYear(e.target.value)}
           id="flight-year-filter"
           label={t("filter.label")}
-          data={[
-            { value: YEAR_FILTER.ALL, label: t("filter.all") },
-            { value: YEAR_FILTER.UPCOMING, label: t("filter.upcoming") },
-            { value: YEAR_FILTER.PAST, label: t("filter.past") },
-            ...yearsSet.map((year) => ({
-              value: String(year),
-              label: String(year),
-            })),
-          ]}
+          data={yearFilterOptions}
         />
         <Select
           label={t("filters.departure_airport")}

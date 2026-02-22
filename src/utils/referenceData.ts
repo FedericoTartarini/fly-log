@@ -1,4 +1,4 @@
-type AirportInfo = {
+export type AirportInfo = {
   iata: string;
   airport_name: string;
   city: string;

@@ -23,7 +23,7 @@ export const clearAuthListener = () => {
   }
 };
 
-interface Flight {
+export interface StoreFlight {
   id: string;
   departure_date: string;
   departure_airport_iata: string;
@@ -34,7 +34,7 @@ interface Flight {
   flight_time?: number | null;
 }
 
-interface FlightFilters {
+export interface StoreFlightFilters {
   airline: string | null;
   departureAirport: string | null;
   arrivalAirport: string | null;
@@ -42,28 +42,28 @@ interface FlightFilters {
   maxDuration: number | null;
 }
 
-interface FlightStoreState {
-  allFlights: Flight[]; // master list from backend
-  filteredFlights: Flight[]; // UI-facing filtered subset
+export interface FlightStoreState {
+  allFlights: StoreFlight[]; // master list from backend
+  filteredFlights: StoreFlight[]; // UI-facing filtered subset
   selectedYear: string;
   timeGrouping: TimeGrouping;
   chartGrouping: ChartGrouping;
-  filters: FlightFilters;
+  filters: StoreFlightFilters;
   isLoading: boolean;
   error: string | null;
   fetchFlights: () => Promise<void>;
   setSelectedYear: (year: string) => Promise<void>;
   setTimeGrouping: (grouping: TimeGrouping) => void;
   setChartGrouping: (grouping: ChartGrouping) => void;
-  setFilters: (filters: Partial<FlightFilters>) => void;
+  setFilters: (filters: Partial<StoreFlightFilters>) => void;
   clearFilters: () => void;
   // remove a flight by id from both lists (optimistic UI)
   removeFlightById: (id: string) => void;
   // restore a flight to both lists (rollback optimistic delete)
-  restoreFlight: (flight: Flight) => void;
+  restoreFlight: (flight: StoreFlight) => void;
 }
 
-const filterByYear = (flights: Flight[], year: string) => {
+const filterByYear = (flights: StoreFlight[], year: string) => {
   if (!year || year === YEAR_FILTER.ALL) return flights;
 
   const today = new Date();
@@ -91,9 +91,9 @@ const filterByYear = (flights: Flight[], year: string) => {
 };
 
 const applyFilters = (
-  flights: Flight[],
+  flights: StoreFlight[],
   year: string,
-  filters: FlightFilters,
+  filters: StoreFlightFilters,
 ) => {
   let result = filterByYear(flights, year);
 
@@ -120,10 +120,9 @@ const applyFilters = (
       if (filters.minDuration !== null && f.flight_time < filters.minDuration) {
         return false;
       }
-      if (filters.maxDuration !== null && f.flight_time > filters.maxDuration) {
-        return false;
-      }
-      return true;
+      return !(
+        filters.maxDuration !== null && f.flight_time > filters.maxDuration
+      );
     });
   }
 
@@ -192,7 +191,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     set({ chartGrouping: grouping });
   },
 
-  setFilters: (filters: Partial<FlightFilters>) => {
+  setFilters: (filters: Partial<StoreFlightFilters>) => {
     set((state) => {
       const nextFilters = { ...state.filters, ...filters };
       return {
@@ -208,7 +207,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
 
   clearFilters: () => {
     set((state) => {
-      const cleared: FlightFilters = {
+      const cleared: StoreFlightFilters = {
         airline: null,
         departureAirport: null,
         arrivalAirport: null,
@@ -242,7 +241,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     });
   },
 
-  restoreFlight: (flight: Flight) => {
+  restoreFlight: (flight: StoreFlight) => {
     set((state) => {
       const newAllFlights = [...state.allFlights, flight].sort((a, b) => {
         const dateA = parseToDate(a.departure_date);
