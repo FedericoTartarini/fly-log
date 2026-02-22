@@ -11,6 +11,7 @@ import {
   type ChartGrouping,
   type TimeGrouping,
 } from "./constants/filters";
+import type { enhancedFlight } from "./types/enhancedFlight";
 
 let authUnsubscribe: Unsubscribe | null = null;
 let currentUid: string | null = null;
@@ -23,17 +24,6 @@ export const clearAuthListener = () => {
   }
 };
 
-export interface StoreFlight {
-  id: string;
-  departure_date: unknown;
-  departure_airport_iata: string;
-  arrival_airport_iata: string;
-  airline_iata: string;
-  flight_number: number;
-  airline_name?: string | null;
-  flight_time?: number | null;
-}
-
 export interface StoreFlightFilters {
   airline: string | null;
   departureAirport: string | null;
@@ -43,8 +33,8 @@ export interface StoreFlightFilters {
 }
 
 export interface FlightStoreState {
-  allFlights: StoreFlight[]; // master list from backend
-  filteredFlights: StoreFlight[]; // UI-facing filtered subset
+  allFlights: enhancedFlight[]; // master list from backend
+  filteredFlights: enhancedFlight[]; // UI-facing filtered subset
   selectedYear: string;
   timeGrouping: TimeGrouping;
   chartGrouping: ChartGrouping;
@@ -60,10 +50,10 @@ export interface FlightStoreState {
   // remove a flight by id from both lists (optimistic UI)
   removeFlightById: (id: string) => void;
   // restore a flight to both lists (rollback optimistic delete)
-  restoreFlight: (flight: StoreFlight) => void;
+  restoreFlight: (flight: enhancedFlight) => void;
 }
 
-const filterByYear = (flights: StoreFlight[], year: string) => {
+const filterByYear = (flights: enhancedFlight[], year: string) => {
   if (!year || year === YEAR_FILTER.ALL) return flights;
 
   const today = new Date();
@@ -91,7 +81,7 @@ const filterByYear = (flights: StoreFlight[], year: string) => {
 };
 
 const applyFilters = (
-  flights: StoreFlight[],
+  flights: enhancedFlight[],
   year: string,
   filters: StoreFlightFilters,
 ) => {
@@ -243,7 +233,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     });
   },
 
-  restoreFlight: (flight: StoreFlight) => {
+  restoreFlight: (flight: enhancedFlight) => {
     set((state) => {
       const newAllFlights = [...state.allFlights, flight].sort((a, b) => {
         const dateA = parseToDate(a.departure_date);

@@ -99,8 +99,6 @@ export default defineConfig({
           ) {
             return "vendor-utils";
           }
-
-          return;
         },
       },
     },
