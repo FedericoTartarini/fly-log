@@ -31,6 +31,16 @@ let referenceMapsCache: ReferenceMaps = {
 let airportsPromise: Promise<AirportInfo[]> | null = null;
 let airlinesPromise: Promise<AirlineInfo[]> | null = null;
 let mapsPromise: Promise<ReferenceMaps> | null = null;
+let airportsLoaded = false;
+let airlinesLoaded = false;
+
+const maybeUpdateReferenceMaps = () => {
+  if (!airportsLoaded || !airlinesLoaded) {
+    return;
+  }
+
+  referenceMapsCache = buildMaps(airportsCache, airlinesCache);
+};
 
 const loadJson = async <T>(path: string): Promise<T[]> => {
   try {
@@ -69,7 +79,8 @@ export const loadAirportsInfo = async (): Promise<AirportInfo[]> => {
     airportsPromise = loadJson<AirportInfo>("/data/airports.json").then(
       (airports) => {
         airportsCache = airports;
-        referenceMapsCache = buildMaps(airportsCache, airlinesCache);
+        airportsLoaded = true;
+        maybeUpdateReferenceMaps();
         return airportsCache;
       },
     );
@@ -82,7 +93,8 @@ export const loadAirlinesInfo = async (): Promise<AirlineInfo[]> => {
     airlinesPromise = loadJson<AirlineInfo>("/data/airlines.json").then(
       (airlines) => {
         airlinesCache = airlines;
-        referenceMapsCache = buildMaps(airportsCache, airlinesCache);
+        airlinesLoaded = true;
+        maybeUpdateReferenceMaps();
         return airlinesCache;
       },
     );
@@ -94,7 +106,11 @@ export const loadReferenceMaps = async (): Promise<ReferenceMaps> => {
   if (!mapsPromise) {
     mapsPromise = Promise.all([loadAirportsInfo(), loadAirlinesInfo()]).then(
       ([airports, airlines]) => {
-        referenceMapsCache = buildMaps(airports, airlines);
+        airportsCache = airports;
+        airlinesCache = airlines;
+        airportsLoaded = true;
+        airlinesLoaded = true;
+        maybeUpdateReferenceMaps();
         return referenceMapsCache;
       },
     );
