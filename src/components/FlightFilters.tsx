@@ -120,7 +120,10 @@ const FlightFilters: React.FC = () => {
     [flightsForArrivalOptions, airportsData],
   );
 
-  const filterSignature = React.useMemo(() => JSON.stringify(filters), [filters]);
+  const filterSignature = React.useMemo(
+    () => JSON.stringify(filters),
+    [filters],
+  );
   const pendingValidationKeyRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
@@ -209,13 +212,7 @@ const FlightFilters: React.FC = () => {
       });
       setFilters(patch);
     }
-  }, [
-    allFlights,
-    selectedYear,
-    airportsData,
-    setFilters,
-    filterSignature,
-  ]);
+  }, [allFlights, selectedYear, airportsData, setFilters, filterSignature]);
 
   const hasFilters =
     Boolean(filters.airline) ||
@@ -242,8 +239,8 @@ const FlightFilters: React.FC = () => {
   }, [filters.minDuration, filters.maxDuration]);
 
   const toNumber = (value: string | number): number | null => {
-    if (typeof value !== "number" || Number.isNaN(value)) return null;
-    return value;
+    const parsed = typeof value === "number" ? value : Number(value);
+    return Number.isNaN(parsed) ? null : parsed;
   };
 
   return (
