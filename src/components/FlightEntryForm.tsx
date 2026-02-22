@@ -145,7 +145,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         returnFlightNumber: "",
       });
       setAddReturn(false);
-    } catch (e) {
+    } catch {
       // ignore
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

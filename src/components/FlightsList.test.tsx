@@ -13,6 +13,7 @@ import { enrichFlightData } from "../utils/flightService";
 import { MemoryRouter } from "react-router-dom";
 import useFlightStore from "../store";
 import { render } from "../../test-utils/index.js";
+import type { enhancedFlight } from "../types/enhancedFlight";
 
 // Create a mock flight
 const mockFlight = {
@@ -25,7 +26,12 @@ const mockFlight = {
 };
 
 // Create an enriched version of the flight for testing
-const enrichedFlight = enrichFlightData(mockFlight);
+const enrichedFlight = enrichFlightData(mockFlight) as enhancedFlight;
+
+type StoreShape = {
+  filteredFlights: enhancedFlight[];
+  fetchFlights: () => void;
+};
 
 describe("FlightsList", () => {
   beforeEach(() => {
@@ -34,11 +40,12 @@ describe("FlightsList", () => {
 
   it("renders table rows for flights when flights are available", () => {
     // Mock the store to return flights
-    useFlightStore.mockImplementation((selector: any) =>
-      selector({
-        filteredFlights: [enrichedFlight],
-        fetchFlights: vi.fn(),
-      }),
+    useFlightStore.mockImplementation(
+      (selector: (state: StoreShape) => unknown) =>
+        selector({
+          filteredFlights: [enrichedFlight],
+          fetchFlights: vi.fn(),
+        }),
     );
 
     render(<FlightsList />, {
@@ -52,11 +59,12 @@ describe("FlightsList", () => {
 
   it("renders empty state when no flights are available", () => {
     // Mock the store to return no flights
-    useFlightStore.mockImplementation((selector: any) =>
-      selector({
-        filteredFlights: [],
-        fetchFlights: vi.fn(),
-      }),
+    useFlightStore.mockImplementation(
+      (selector: (state: StoreShape) => unknown) =>
+        selector({
+          filteredFlights: [],
+          fetchFlights: vi.fn(),
+        }),
     );
 
     render(<FlightsList />, {

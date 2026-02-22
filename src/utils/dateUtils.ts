@@ -3,7 +3,14 @@ import i18n from "i18next";
 
 type TimestampLike = { toDate: () => Date };
 type SecondsLike = { seconds: number };
-type DateLike = Date | TimestampLike | SecondsLike | string | number | null | undefined;
+type DateLike =
+  | Date
+  | TimestampLike
+  | SecondsLike
+  | string
+  | number
+  | null
+  | undefined;
 
 /**
  * Format a date-like value into a string. Supports Firestore Timestamp, objects with `seconds`, Date,
@@ -70,7 +77,7 @@ export function formatDate(
     out = out.replace(/YY/g, year2);
 
     return out;
-  } catch (e) {
+  } catch {
     return "";
   }
 }
@@ -100,7 +107,7 @@ export function parseToDate(value: DateLike): Date | null {
     }
     const d = new Date(String(value));
     return Number.isNaN(d.getTime()) ? null : d;
-  } catch (e) {
+  } catch {
     return null;
   }
 }

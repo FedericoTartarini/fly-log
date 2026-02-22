@@ -137,7 +137,7 @@
       "save_multiple": "Salva voli"
     },
     "errors": {
-      "userNotAuthenticated": "Utente non autenticato"
+      "user_not_authenticated": "Utente non autenticato"
     }
   },
   "distance": {

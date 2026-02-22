@@ -1,7 +1,7 @@
 declare module "./AuthContext" {
   import type { FC, ReactNode } from "react";
 
-  export type AuthUser = { uid?: string; [key: string]: any } | null;
+  export type AuthUser = { uid?: string; [key: string]: unknown } | null;
 
   export function useAuth(): {
     user: AuthUser;

@@ -65,7 +65,7 @@ const FlightsList: React.FC = () => {
       try {
         const dt = d.toDate();
         if (dt instanceof Date && !isNaN(dt.getTime())) return dt.getTime();
-      } catch (e) {
+      } catch {
         // fallthrough
       }
     }

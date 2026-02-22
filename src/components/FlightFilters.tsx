@@ -212,7 +212,14 @@ const FlightFilters: React.FC = () => {
       });
       setFilters(patch);
     }
-  }, [allFlights, selectedYear, airportsData, setFilters, filterSignature]);
+  }, [
+    allFlights,
+    selectedYear,
+    airportsData,
+    setFilters,
+    filterSignature,
+    filters,
+  ]);
 
   const hasFilters =
     Boolean(filters.airline) ||

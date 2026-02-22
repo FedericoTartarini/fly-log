@@ -45,6 +45,10 @@ export default defineConfig([
     ? [
         {
           files: ["**/*.{ts,tsx}"],
+          extends: [
+            reactHooks.configs["recommended-latest"],
+            reactRefresh.configs.vite,
+          ],
           plugins: {
             "@typescript-eslint": tsPlugin,
           },

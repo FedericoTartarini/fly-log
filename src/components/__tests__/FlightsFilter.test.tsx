@@ -4,6 +4,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { MantineProvider } from "@mantine/core";
 import FlightFilters from "../FlightFilters";
 import useFlightStore from "../../store";
+import type { FlightStoreState } from "../../store";
 import { vi } from "vitest";
 
 vi.mock("../../utils/referenceData", async () => {
@@ -33,7 +34,8 @@ describe("FlightsFilter", () => {
     });
 
     // ensure store functions exist
-    const { setFilters, clearFilters } = useFlightStore.getState() as any;
+    const { setFilters, clearFilters } =
+      useFlightStore.getState() as FlightStoreState;
     expect(typeof setFilters).toBe("function");
     expect(typeof clearFilters).toBe("function");
   });

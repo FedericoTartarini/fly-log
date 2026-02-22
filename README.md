@@ -294,7 +294,7 @@ describe("MyComponent", () => {
 
 #### 1. Timeline Page
 
-- Display flights by month/year. using a chart similar to GitHub contributions graph, an heatmap chart
+- Display flights by month/year, using a chart similar to the GitHub contributions graph, a heatmap chart
 - https://mantine.dev/charts/heatmap/
 - Highlight travel streaks, busy periods, and inactivity gaps.
 - Difficulty: Low-Medium
@@ -329,5 +329,6 @@ describe("MyComponent", () => {
 - Provide one-click suggested fixes where possible.
 - Difficulty: Medium
 
-#### 7. more visualizations
-- use the vector map from tabler to show country visited https://docs.tabler.io/ui/components/vector-maps
+#### 7. More visualizations
+- Use the vector map from Tabler to show countries visited: https://docs.tabler.io/ui/components/vector-maps
+- Difficulty: Low-Medium
