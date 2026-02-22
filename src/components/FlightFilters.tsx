@@ -120,7 +120,15 @@ const FlightFilters: React.FC = () => {
     [flightsForArrivalOptions, airportsData],
   );
 
+  const filterSignature = React.useMemo(() => JSON.stringify(filters), [filters]);
+  const pendingValidationKeyRef = React.useRef<string | null>(null);
+
   React.useEffect(() => {
+    if (pendingValidationKeyRef.current === filterSignature) {
+      pendingValidationKeyRef.current = null;
+      return;
+    }
+
     const nextFilters: StoreFlightFilters = { ...filters };
 
     const isFacetValueValid = (facet: FacetKey): boolean => {
@@ -195,9 +203,19 @@ const FlightFilters: React.FC = () => {
     }
 
     if (Object.keys(patch).length > 0) {
+      pendingValidationKeyRef.current = JSON.stringify({
+        ...filters,
+        ...patch,
+      });
       setFilters(patch);
     }
-  }, [allFlights, selectedYear, filters, airportsData, setFilters]);
+  }, [
+    allFlights,
+    selectedYear,
+    airportsData,
+    setFilters,
+    filterSignature,
+  ]);
 
   const hasFilters =
     Boolean(filters.airline) ||
