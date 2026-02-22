@@ -25,7 +25,7 @@ export const clearAuthListener = () => {
 
 export interface StoreFlight {
   id: string;
-  departure_date: string;
+  departure_date: unknown;
   departure_airport_iata: string;
   arrival_airport_iata: string;
   airline_iata: string;
@@ -71,21 +71,21 @@ const filterByYear = (flights: StoreFlight[], year: string) => {
 
   if (year === YEAR_FILTER.UPCOMING) {
     return flights.filter((f) => {
-      const dt = parseToDate((f as any).departure_date);
+      const dt = parseToDate(f.departure_date);
       return dt !== null && dt >= today;
     });
   }
 
   if (year === YEAR_FILTER.PAST) {
     return flights.filter((f) => {
-      const dt = parseToDate((f as any).departure_date);
+      const dt = parseToDate(f.departure_date);
       return dt !== null && dt < today;
     });
   }
 
   // Numeric year
   return flights.filter((f) => {
-    const y = getYear((f as any).departure_date);
+    const y = getYear(f.departure_date);
     return y !== null && String(y) === year;
   });
 };
@@ -167,8 +167,9 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
         filteredFlights,
         isLoading: false,
       });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -178,8 +179,9 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
       const allFlights = get().allFlights;
       const filteredFlights = applyFilters(allFlights, year, get().filters);
       set({ filteredFlights, isLoading: false });
-    } catch (error: any) {
-      set({ error: error.message, isLoading: false });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -228,7 +230,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   removeFlightById: (id: string) => {
     set((state) => {
       const newAllFlights = state.allFlights.filter(
-        (f: any) => String(f.id) !== String(id),
+        (f) => String(f.id) !== String(id),
       );
       return {
         allFlights: newAllFlights,

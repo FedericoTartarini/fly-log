@@ -15,6 +15,8 @@ import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
+import type { FlightStoreState } from "../store";
+import { useShallow } from "zustand/react/shallow";
 
 const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
@@ -24,14 +26,18 @@ const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
  * @returns {JSX.Element}
  */
 const FlightsList: React.FC = () => {
-  const filteredFlights = useFlightStore(
-    (s: any) => s.filteredFlights,
-  ) as enhancedFlight[];
+  const { filteredFlights, fetchFlights } = useFlightStore(
+    useShallow((s: FlightStoreState) => ({
+      filteredFlights: s.filteredFlights as enhancedFlight[],
+      fetchFlights: s.fetchFlights,
+    })),
+  );
 
   const { t } = useTranslation("flights");
   const [editOpen, setEditOpen] = React.useState(false);
-  const [editFlight, setEditFlight] = React.useState<any>(null);
-  const fetchFlights = useFlightStore((s: any) => s.fetchFlights);
+  const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
+    null,
+  );
 
   const PAGE_SIZE = 20;
   const [page, setPage] = React.useState(1);
@@ -51,7 +57,7 @@ const FlightsList: React.FC = () => {
   const hasResults = filteredFlights.length > 0;
 
   // Helper to get epoch ms for various departure_date representations
-  const getDepartureEpoch = (flight: any): number => {
+  const getDepartureEpoch = (flight: enhancedFlight): number => {
     const d = flight?.departure_date;
     if (!d) return -Infinity;
     // Firestore Timestamp-like object with toDate()
@@ -211,7 +217,7 @@ const FlightsList: React.FC = () => {
                       <Suspense fallback={<Loader size="sm" />}>
                         <FlightActions
                           flight={flight}
-                          onEdit={(f: any) => {
+                          onEdit={(f: enhancedFlight) => {
                             setEditFlight(f);
                             setEditOpen(true);
                           }}

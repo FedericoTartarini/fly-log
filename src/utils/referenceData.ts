@@ -10,13 +10,13 @@ export type AirportInfo = {
   elevation: number;
 };
 
-type AirlineInfo = {
+export type AirlineInfo = {
   iata: string;
   name: string;
   icao: string;
 };
 
-type ReferenceMaps = {
+export type ReferenceMaps = {
   airportByIata: Map<string, AirportInfo>;
   airlineByIata: Map<string, AirlineInfo>;
 };
