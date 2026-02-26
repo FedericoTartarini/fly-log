@@ -1,9 +1,9 @@
 import React from "react";
-import { AppShell, Container, Group, Text, Anchor } from "@mantine/core";
+import { Container, Group, Text, Anchor } from "@mantine/core";
 import { APP_INFO } from "../constants/MyClasses.js";
 
 const AppFooter = () => (
-  <AppShell.Footer>
+  <footer>
     <Container size="xs" p={0}>
       <Group justify="center" py="md" gap="xs">
         <Text size="sm" c="dimmed">
@@ -18,12 +18,16 @@ const AppFooter = () => (
         <Text size="sm" c="dimmed">
           &middot;
         </Text>
-        <Text size="sm" c="dimmed">
+        <Anchor
+          href={APP_INFO.PERSONAL_WEBSITE}
+          target="_blank"
+          rel="noopener noreferrer"
+          size="sm"
+          c="dimmed"
+        >
           by {APP_INFO.AUTHOR}
-        </Text>
-        <Text size="sm" c="dimmed">
-          &middot;
-        </Text>
+        </Anchor>
+        <Text size="sm" c="dimmed"></Text>
         <Anchor
           href={APP_INFO.GITHUB_REPO}
           target="_blank"
@@ -35,7 +39,7 @@ const AppFooter = () => (
         </Anchor>
       </Group>
     </Container>
-  </AppShell.Footer>
+  </footer>
 );
 
 export default AppFooter;

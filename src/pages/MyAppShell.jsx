@@ -17,6 +17,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import ColorSchemeToggle from "../components/ColorSchemeToggle";
+import AppFooter from "../components/AppFooter";
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
@@ -167,7 +168,7 @@ function MyAppShell() {
           <Outlet />
         </Container>
       </AppShell.Main>
-      {/*<AppFooter />*/}
+      <AppFooter />
     </AppShell>
   );
 }
