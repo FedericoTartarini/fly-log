@@ -100,7 +100,7 @@ function About() {
           <Text mb="md">{t("support_text_p1")}</Text>
 
           <Grid mb="lg" justify="space-around">
-            <Grid.Col span={{ base: 12, md: 6 }}>
+            <Grid.Col span={{ base: 12, md: 4 }}>
               <Center>
                 <Button
                   component="a"
@@ -114,7 +114,7 @@ function About() {
                 </Button>
               </Center>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 6 }}>
+            <Grid.Col span={{ base: 12, md: 4 }}>
               <Center>
                 <Button
                   component="a"
@@ -128,7 +128,7 @@ function About() {
                 </Button>
               </Center>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 6 }}>
+            <Grid.Col span={{ base: 12, md: 4 }}>
               <Center>
                 <Button
                   component="a"
