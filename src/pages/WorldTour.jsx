@@ -140,6 +140,12 @@ function WorldTour() {
     [yearValues],
   );
 
+  const filteredToYearValues = React.useMemo(() => {
+    const selectedFromYear = Number.parseInt(fromYear, 10);
+    if (!Number.isFinite(selectedFromYear)) return yearValuesAsc;
+    return yearValuesAsc.filter((year) => year >= selectedFromYear);
+  }, [yearValuesAsc, fromYear]);
+
   React.useEffect(() => {
     if (!yearValuesAsc.length) {
       setFromYear("");
@@ -147,11 +153,26 @@ function WorldTour() {
       return;
     }
 
-    if (!fromYear || !yearValues.includes(Number.parseInt(fromYear, 10))) {
-      setFromYear(String(yearValuesAsc[0]));
+    let resolvedFromYear = fromYear;
+    if (
+      !resolvedFromYear ||
+      !yearValues.includes(Number.parseInt(resolvedFromYear, 10))
+    ) {
+      resolvedFromYear = String(yearValuesAsc[0]);
+      setFromYear(resolvedFromYear);
     }
-    if (!toYear || !yearValues.includes(Number.parseInt(toYear, 10))) {
-      setToYear(String(yearValuesAsc[yearValuesAsc.length - 1]));
+
+    const fromYearNumber = Number.parseInt(resolvedFromYear, 10);
+    const toCandidates = Number.isFinite(fromYearNumber)
+      ? yearValuesAsc.filter((year) => year >= fromYearNumber)
+      : yearValuesAsc;
+
+    if (!toYear || !toCandidates.includes(Number.parseInt(toYear, 10))) {
+      setToYear(
+        toCandidates.length
+          ? String(toCandidates[toCandidates.length - 1])
+          : "",
+      );
     }
   }, [fromYear, toYear, yearValues, yearValuesAsc]);
 
@@ -516,6 +537,11 @@ function WorldTour() {
     label: String(year),
   }));
 
+  const toYearSelectOptions = filteredToYearValues.map((year) => ({
+    value: String(year),
+    label: String(year),
+  }));
+
   return (
     <Container>
       <Stack mt="md" gap="md">
@@ -541,7 +567,7 @@ function WorldTour() {
                   <NativeSelect
                     label={t("to_year")}
                     value={toYear}
-                    data={yearSelectOptions}
+                    data={toYearSelectOptions}
                     onChange={(event) => setToYear(event.currentTarget.value)}
                   />
                 </>
