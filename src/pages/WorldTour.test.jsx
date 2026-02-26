@@ -1,6 +1,12 @@
 import React from "react";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor, userEvent } from "../../test-utils/index.js";
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  userEvent,
+} from "../../test-utils/index.js";
 import WorldTour from "./WorldTour";
 import useFlightStore from "../store";
 
@@ -42,6 +48,54 @@ const sampleFlights = [
   },
 ];
 
+const sameDayFlights = [
+  {
+    id: "early",
+    departure_date: "2024-06-01",
+    departure_time: "03:15",
+    departure_airport_iata: "BNE",
+    arrival_airport_iata: "PER",
+    departure_coordinates: [-27.3928, 153.1175],
+    arrival_coordinates: [-31.9403, 115.9669],
+  },
+  {
+    id: "late",
+    departure_date: "2024-06-01",
+    departure_time: "08:30",
+    departure_airport_iata: "SYD",
+    arrival_airport_iata: "MEL",
+    departure_coordinates: [-33.9399, 151.1753],
+    arrival_coordinates: [-37.6733, 144.8433],
+  },
+];
+
+const multiYearFlights = [
+  {
+    id: "y1",
+    departure_date: "2020-02-10",
+    departure_airport_iata: "SYD",
+    arrival_airport_iata: "MEL",
+    departure_coordinates: [-33.9399, 151.1753],
+    arrival_coordinates: [-37.6733, 144.8433],
+  },
+  {
+    id: "y2",
+    departure_date: "2024-05-21",
+    departure_airport_iata: "MEL",
+    arrival_airport_iata: "PER",
+    departure_coordinates: [-37.6733, 144.8433],
+    arrival_coordinates: [-31.9403, 115.9669],
+  },
+  {
+    id: "y3",
+    departure_date: "2025-11-05",
+    departure_airport_iata: "BNE",
+    arrival_airport_iata: "LAX",
+    departure_coordinates: [-27.3928, 153.1175],
+    arrival_coordinates: [33.9416, -118.4085],
+  },
+];
+
 describe("WorldTour", () => {
   beforeEach(() => {
     useFlightStore.setState({
@@ -71,7 +125,9 @@ describe("WorldTour", () => {
       ).toBeInTheDocument();
     });
 
-    expect(screen.getByRole("button", { name: "Start animation" })).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Start animation" }),
+    ).toBeDisabled();
   });
 
   it("keeps route label hidden before start and shows it after start", async () => {
@@ -83,12 +139,16 @@ describe("WorldTour", () => {
     render(<WorldTour />);
 
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Start animation" })).toBeEnabled();
+      expect(
+        screen.getByRole("button", { name: "Start animation" }),
+      ).toBeEnabled();
     });
 
     expect(screen.queryByText(/Route \d+\/\d+:/)).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole("button", { name: "Start animation" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Start animation" }),
+    );
 
     expect(screen.getByText(/Route 1\/\d+:/)).toBeInTheDocument();
   });
@@ -110,5 +170,47 @@ describe("WorldTour", () => {
 
     expect(screen.queryByLabelText("From year")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("To year")).not.toBeInTheDocument();
+  });
+
+  it("orders flights on the same day by departure time", async () => {
+    useFlightStore.setState({
+      allFlights: sameDayFlights,
+      filteredFlights: sameDayFlights,
+    });
+
+    render(<WorldTour />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Start animation" }),
+      ).toBeEnabled();
+    });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Start animation" }),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Route 1\/2: BNE -> PER/)).toBeInTheDocument();
+    });
+  });
+
+  it("limits To year options to years >= From year", async () => {
+    useFlightStore.setState({
+      allFlights: multiYearFlights,
+      filteredFlights: multiYearFlights,
+    });
+
+    render(<WorldTour />);
+
+    const fromSelect = await screen.findByLabelText("From year");
+    const toSelect = screen.getByLabelText("To year");
+
+    await userEvent.selectOptions(fromSelect, "2024");
+
+    await waitFor(() => {
+      const toOptions = within(toSelect).getAllByRole("option");
+      expect(toOptions.map((option) => option.value)).toEqual(["2024", "2025"]);
+    });
   });
 });
