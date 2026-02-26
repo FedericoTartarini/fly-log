@@ -104,9 +104,12 @@ self.addEventListener("fetch", (event) => {
           return fetchResponse;
         })
         .catch(() => {
-          return caches.match(event.request).then((cached) => cached || Response.error());
+          return caches
+            .match(event.request)
+            .then((cached) => cached || Response.error());
         }),
     );
+    return;
   }
   // Default: network first for other requests (no offline fallback)
   event.respondWith(
