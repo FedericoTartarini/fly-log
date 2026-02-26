@@ -13,6 +13,18 @@ import {
 import { IDS } from "../constants/MyClasses";
 import { useTranslation } from "react-i18next";
 
+const featureListStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "1.25rem",
+  width: "100%",
+};
+
+const cardWrapperStyle = {
+  width: "100%",
+  boxSizing: "border-box",
+};
+
 // Import optimized WebP images
 import mapImg from "../assets/map.webp";
 import mapImg380 from "../assets/map-380.webp";
@@ -70,18 +82,12 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
   return (
     <Framer.motion.div
       ref={ref}
+      style={cardWrapperStyle}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Card
-        shadow="sm"
-        padding="lg"
-        radius="md"
-        withBorder
-        id={id}
-        style={{ maxWidth: 430, margin: "auto" }}
-      >
+      <Card shadow="sm" padding="lg" radius="md" withBorder id={id} w={"100%"}>
         <Card.Section>
           <Image
             src={imgData.src}
@@ -199,11 +205,11 @@ const FeatureSection = () => {
   ];
 
   return (
-    <>
+    <div style={featureListStyle}>
       {features.map((f) => (
         <FeatureCard key={f.id} {...f} />
       ))}
-    </>
+    </div>
   );
 };
 
