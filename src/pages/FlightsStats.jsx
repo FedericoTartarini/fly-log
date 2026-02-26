@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState, useEffect } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -23,6 +23,8 @@ import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 import { useShallow } from "zustand/react/shallow";
+import { motion } from "framer-motion";
+import { IconChevronsUp } from "@tabler/icons-react";
 
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
@@ -45,6 +47,13 @@ const FlightsStats = () => {
   const { t } = useTranslation("flights");
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [animateChevron, setAnimateChevron] = useState(true);
+
+  // Stop the chevron animation after 15 seconds to avoid distraction
+  useEffect(() => {
+    const id = setTimeout(() => setAnimateChevron(false), 15000);
+    return () => clearTimeout(id);
+  }, []);
 
   if (isLoading) {
     return (
@@ -107,6 +116,35 @@ const FlightsStats = () => {
 
       {/* This Stack will scroll over the map */}
       <Paper radius="lg" pt="xs" style={{ position: "relative", zIndex: 1 }}>
+        {/* Small animated chevron to indicate draggable content */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <motion.div
+            initial={{ y: -2 }}
+            animate={animateChevron ? { y: [0, -6, 0] } : { y: -2 }}
+            transition={
+              animateChevron
+                ? { repeat: Infinity, duration: 1.5 }
+                : { duration: 0 }
+            }
+            aria-hidden
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IconChevronsUp
+              size={20}
+              stroke={2}
+              style={{ color: "var(--mantine-color-dimmed, #868e96)" }}
+            />
+          </motion.div>
+        </div>
         <Stack
           bg="var(--mantine-color-body)"
           gap="md"
