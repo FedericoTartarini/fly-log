@@ -4,7 +4,7 @@ import { APP_INFO } from "../constants/MyClasses.js";
 
 const AppFooter = () => (
   <footer>
-    <Container size="xs" p={0}>
+    <Container size="xs" p={0} mb="50px">
       <Group justify="center" py="md" gap="xs">
         <Text size="sm" c="dimmed">
           © {new Date().getFullYear()} {APP_INFO.APP_NAME}

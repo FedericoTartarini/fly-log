@@ -38,7 +38,7 @@
     "past": "Past Flights"
   },
   "filters": {
-    "title": "Filters",
+    "title": "Filter Flights",
     "airline": "Airline",
     "airline_placeholder": "Select airline",
     "departure_airport": "Departure airport",

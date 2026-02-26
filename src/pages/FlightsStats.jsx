@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -10,8 +10,9 @@ import {
   Loader,
   Text,
   Center,
-  Card,
-  Title,
+  Modal,
+  Button,
+  Affix,
 } from "@mantine/core";
 import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.ts";
@@ -42,6 +43,8 @@ const FlightsStats = () => {
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
 
   const { t } = useTranslation("flights");
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -85,6 +88,23 @@ const FlightsStats = () => {
         </Suspense>
       </div>
 
+      {/* Sticky filter button (Affix) that opens a modal with full filters. */}
+      <Affix position={{ bottom: 16, left: 16 }}>
+        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
+          {t("filters.title")}
+        </Button>
+      </Affix>
+
+      <Modal
+        opened={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        title={t("filters.title")}
+        size="lg"
+        overlayBlur={3}
+      >
+        <FlightFilters />
+      </Modal>
+
       {/* This Stack will scroll over the map */}
       <Paper radius="lg" pt="xs" style={{ position: "relative", zIndex: 1 }}>
         <Stack
@@ -94,13 +114,6 @@ const FlightsStats = () => {
           style={{ position: "relative", zIndex: 1 }}
         >
           <StatsSummary />
-
-          <Card shadow="sm" radius="md" withBorder>
-            <Title order={3} mb="md">
-              {t("filters.title")}
-            </Title>
-            <FlightFilters />
-          </Card>
 
           {/* Add button to open modal */}
           <Suspense fallback={<div>Loading...</div>}>
