@@ -222,10 +222,10 @@ describe("MyComponent", () => {
 
 ### Missing / Core Gaps
 
-- Offline write sync is still placeholder-only.
-- No user data export/backup workflow.
-- No search/sort controls in the flights table beyond default date ordering.
-- No duplicate detection workflow for CSV/manual imports.
+- [ ] Offline write sync is still placeholder-only.
+- [ ] No user data export/backup workflow.
+- [ ] No search/sort controls in the flights table beyond default date ordering.
+- [ ] No duplicate detection workflow for CSV/manual imports.
 
 ### High-Value, Low-Maintenance (No External API)
 

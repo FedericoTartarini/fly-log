@@ -35,6 +35,7 @@ interface FlightEntryFormProps {
   flight?: {
     id: string;
     departure_date?: unknown;
+    departure_time?: string | null;
     departure_airport_iata?: string;
     arrival_airport_iata?: string;
     airline_iata?: string;
@@ -130,7 +131,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       const depDate = parseToDate(flight.departure_date);
       form.setValues({
         departureDate: depDate,
-        departureTime: "",
+        departureTime: flight.departure_time || "",
         departureAirport: flight.departure_airport_iata || "",
         arrivalAirport: flight.arrival_airport_iata || "",
         airline: flight.airline_iata || "",
@@ -156,15 +157,19 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     });
 
     try {
-      const flightsToInsert: Array<{
+      type FlightPayload = {
         departure_date: Date | null;
+        departure_time?: string | null;
         departure_airport_iata: string;
         arrival_airport_iata: string;
         airline_iata: string;
         flight_number: string;
-      }> = [
+      };
+
+      const flightsToInsert: FlightPayload[] = [
         {
           departure_date: values.departureDate,
+          departure_time: values.departureTime || null,
           departure_airport_iata: values.departureAirport,
           arrival_airport_iata: values.arrivalAirport,
           airline_iata: values.airline,
@@ -179,7 +184,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           arrival_airport_iata: values.departureAirport,
           airline_iata: values.airline,
           flight_number: values.returnFlightNumber,
+          departure_time: values.returnTime || null,
         });
+      }
+
+      const [primaryFlight] = flightsToInsert;
+      if (!primaryFlight) {
+        throw new Error("Missing primary flight data");
       }
 
       const uid = user?.uid || null;
@@ -197,8 +208,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
       if (flight && flight.id) {
         // Editing a single flight
-        const updateData = flightsToInsert[0];
-        await updateFlightForUser(uid, flight.id, updateData);
+        await updateFlightForUser(uid, flight.id, primaryFlight);
 
         notifications.show({
           title: t("form.notifications.saving_title"),
