@@ -50,6 +50,25 @@ const isValidCoords = (coord) =>
   coord.length === 2 &&
   coord.every((n) => typeof n === "number" && Number.isFinite(n));
 
+const mergeDateWithTime = (date, time) => {
+  if (!date) return null;
+  const combined = new Date(date);
+  if (typeof time !== "string") return combined;
+
+  const normalized = time.trim();
+  if (!normalized) return combined;
+
+  const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return combined;
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return combined;
+
+  combined.setHours(hours, minutes, 0, 0);
+  return combined;
+};
+
 const getRouteMidpoint = (route) => {
   const interpolator = d3.geoInterpolate(
     [route.from[1], route.from[0]],
@@ -178,14 +197,22 @@ function WorldTour() {
           isValidCoords(flight.departure_coordinates) &&
           isValidCoords(flight.arrival_coordinates),
       )
-      .map((flight) => ({
-        id: String(flight.id),
-        from: flight.departure_coordinates,
-        to: flight.arrival_coordinates,
-        date: parseToDate(flight.departure_date),
-        fromCity: getAirportCity(flight.departure_airport_iata),
-        toCity: getAirportCity(flight.arrival_airport_iata),
-      }))
+      .map((flight) => {
+        const flightDate = parseToDate(flight.departure_date);
+        const departureDateTime = mergeDateWithTime(
+          flightDate,
+          flight.departure_time,
+        );
+
+        return {
+          id: String(flight.id),
+          from: flight.departure_coordinates,
+          to: flight.arrival_coordinates,
+          date: departureDateTime,
+          fromCity: getAirportCity(flight.departure_airport_iata),
+          toCity: getAirportCity(flight.arrival_airport_iata),
+        };
+      })
       .sort((a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0));
   }, [allFlights, scope, fromYear, toYear]);
 
