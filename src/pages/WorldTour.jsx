@@ -109,6 +109,7 @@ function WorldTour() {
   const rotateRef = React.useRef([0, 0, 0]);
   const currentRouteRef = React.useRef(null);
   const currentRouteIndexRef = React.useRef(0);
+  const scaleRef = React.useRef(1);
 
   const yearValues = React.useMemo(
     () => getYearValuesFromFlights(allFlights),
@@ -279,6 +280,9 @@ function WorldTour() {
     svg.selectAll("*").remove();
     svg.attr("viewBox", `0 0 ${width} ${height}`);
 
+    const minScale = 0.7;
+    const maxScale = 2.5;
+
     const projection = d3
       .geoOrthographic()
       .fitExtent(
@@ -291,6 +295,9 @@ function WorldTour() {
       .clipAngle(90)
       .precision(0.4)
       .rotate(rotateRef.current);
+
+    const baseScale = projection.scale();
+    projection.scale(baseScale * scaleRef.current);
 
     const path = d3.geoPath(projection);
 
@@ -402,6 +409,18 @@ function WorldTour() {
 
     svg.call(drag);
 
+    const zoom = d3
+      .zoom()
+      .scaleExtent([minScale, maxScale])
+      .on("zoom", (event) => {
+        scaleRef.current = event.transform.k;
+        projection.scale(baseScale * scaleRef.current);
+        drawBase();
+        drawActive(routes[currentRouteIndexRef.current] ?? null);
+      });
+
+    svg.call(zoom);
+
     vizRef.current = {
       svg,
       projection,
@@ -411,6 +430,7 @@ function WorldTour() {
 
     return () => {
       svg.on(".drag", null);
+      svg.on(".zoom", null);
       svg.interrupt();
       vizRef.current = null;
     };
