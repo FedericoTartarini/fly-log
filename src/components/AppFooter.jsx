@@ -27,7 +27,9 @@ const AppFooter = () => (
         >
           by {APP_INFO.AUTHOR}
         </Anchor>
-        <Text size="sm" c="dimmed"></Text>
+        <Text size="sm" c="dimmed">
+          &middot;
+        </Text>
         <Anchor
           href={APP_INFO.GITHUB_REPO}
           target="_blank"
