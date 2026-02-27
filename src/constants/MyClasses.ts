@@ -54,6 +54,6 @@ export const APP_INFO = {
   AUTHOR: "Federico Tartarini",
   BUY_ME_A_COFFEE: "https://buymeacoffee.com/federicot",
   GITHUB_REPO: "https://github.com/FedericoTartarini/fly-log",
-  PATREON: '"https://www.patreon.com/federicotartarini"',
+  PATREON: "https://www.patreon.com/federicotartarini",
   PERSONAL_WEBSITE: "https://federicotartarini.github.io/",
 } as const;

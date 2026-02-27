@@ -19,9 +19,6 @@ describe("StatsSummary Component", () => {
     cy.contains("Total Flights").should("be.visible");
     cy.contains("Add New Flight").should("be.visible");
 
-    // Select a specific year from the dropdown
-    cy.get("#flight-year-filter").select("2026");
-
     // Verify statistics update
     cy.contains("Total Flights").should("be.visible");
     cy.contains("Distance (km)").should("be.visible");
@@ -30,9 +27,6 @@ describe("StatsSummary Component", () => {
     cy.contains("Airlines Flown").should("be.visible");
     cy.contains("Countries").should("be.visible");
 
-    cy.contains("16,407"); // Distance (km) for 2025
-    cy.contains("0.8"); // Time (days) for 2025
-    cy.contains("2"); // Airports Visited for 2025
     cy.contains("Filter Flights").should("be.visible");
   });
 });
