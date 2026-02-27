@@ -69,7 +69,7 @@ const mergeDateWithTime = (date, time) => {
     return combined;
   }
 
-  combined.setHours(hours, minutes, 0, 0);
+  combined.setUTCHours(hours, minutes, 0, 0);
   return combined;
 };
 

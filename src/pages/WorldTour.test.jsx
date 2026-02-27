@@ -213,4 +213,25 @@ describe("WorldTour", () => {
       expect(toOptions.map((option) => option.value)).toEqual(["2024", "2025"]);
     });
   });
+
+  it("initialises zoom with correct scale constraints", async () => {
+    const d3 = await import("d3");
+    const mockZoomInstance = Object.assign(vi.fn(), {
+      scaleExtent: vi.fn().mockImplementation(() => mockZoomInstance),
+      on: vi.fn().mockImplementation(() => mockZoomInstance),
+    });
+    const zoomSpy = vi.spyOn(d3, "zoom").mockReturnValue(mockZoomInstance);
+
+    useFlightStore.setState({
+      allFlights: sampleFlights,
+      filteredFlights: sampleFlights,
+    });
+
+    render(<WorldTour />);
+
+    await waitFor(() => expect(zoomSpy).toHaveBeenCalled());
+    expect(mockZoomInstance.scaleExtent).toHaveBeenCalledWith([0.7, 2.5]);
+
+    zoomSpy.mockRestore();
+  });
 });

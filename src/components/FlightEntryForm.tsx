@@ -202,9 +202,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       }
 
       const [primaryFlight] = flightsToInsert;
-      if (!primaryFlight) {
-        throw new Error("Missing primary flight data");
-      }
 
       const uid = user?.uid || null;
       if (!uid) {
