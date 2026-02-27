@@ -141,8 +141,21 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         returnFlightNumber: "",
       });
       setAddReturn(false);
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error("parseToDate failed in FlightEntryForm", e);
+      // Optionally, set fallback values or trigger validation
+      form.setValues({
+        departureDate: null,
+        departureTime: "",
+        departureAirport: "",
+        arrivalAirport: "",
+        airline: "",
+        flightNumber: "",
+        returnDate: null,
+        returnTime: "",
+        returnFlightNumber: "",
+      });
+      setAddReturn(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flight]);
