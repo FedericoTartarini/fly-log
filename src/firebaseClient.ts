@@ -167,13 +167,27 @@ export const addFlightsForUser = async (
         ...f,
       };
       if (data.departure_date) {
-        try {
-          const d = new Date(data.departure_date as string);
+        let validDate: Date | null = null;
+        const input = data.departure_date;
+        if (typeof input === "string") {
+          const d = new Date(input);
           if (!isNaN(d.getTime())) {
-            data.departure_date = Timestamp.fromDate(d);
+            validDate = d;
           }
-        } catch {
-          // ignore
+        } else if (typeof input === "number") {
+          const d = new Date(input);
+          if (!isNaN(d.getTime())) {
+            validDate = d;
+          }
+        } else if (input instanceof Date) {
+          if (!isNaN(input.getTime())) {
+            validDate = input;
+          }
+        } else {
+          console.warn("Unsupported departure_date type:", typeof input, input);
+        }
+        if (validDate) {
+          data.departure_date = Timestamp.fromDate(validDate);
         }
       }
       data.created_at = serverTimestamp();
@@ -201,11 +215,21 @@ export const addFlightForUser = async (
     ...flight,
   };
   if (data.departure_date) {
-    try {
-      const d = new Date(data.departure_date as string);
-      if (!isNaN(d.getTime())) data.departure_date = Timestamp.fromDate(d);
-    } catch {
-      // ignore
+    let validDate: Date | null = null;
+    const input = data.departure_date;
+    if (typeof input === "string") {
+      const d = new Date(input);
+      if (!isNaN(d.getTime())) validDate = d;
+    } else if (typeof input === "number") {
+      const d = new Date(input);
+      if (!isNaN(d.getTime())) validDate = d;
+    } else if (input instanceof Date) {
+      if (!isNaN(input.getTime())) validDate = input;
+    } else {
+      console.warn("Unsupported departure_date type:", typeof input, input);
+    }
+    if (validDate) {
+      data.departure_date = Timestamp.fromDate(validDate);
     }
   }
   data.created_at = serverTimestamp();
