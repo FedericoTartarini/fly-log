@@ -179,10 +179,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         flight_number: string;
       };
 
+      const normalizeTime = (timeStr: string) => {
+        if (!timeStr) return null;
+        const normalized = timeStr.trim();
+        const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
+        if (!match) return null;
+        const hh = Number(match[1]);
+        const mm = Number(match[2]);
+        if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
+        if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+        return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+      };
+
       const flightsToInsert: FlightPayload[] = [
         {
           departure_date: values.departureDate,
-          departure_time: values.departureTime || null,
+          departure_time: normalizeTime(values.departureTime) ?? null,
           departure_airport_iata: values.departureAirport,
           arrival_airport_iata: values.arrivalAirport,
           airline_iata: values.airline,
@@ -197,7 +209,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           arrival_airport_iata: values.departureAirport,
           airline_iata: values.airline,
           flight_number: values.returnFlightNumber,
-          departure_time: values.returnTime || null,
+          departure_time: normalizeTime(values.returnTime) ?? null,
         });
       }
 
