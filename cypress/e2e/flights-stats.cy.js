@@ -27,6 +27,7 @@ describe("StatsSummary Component", () => {
     cy.contains("Airlines Flown").should("be.visible");
     cy.contains("Countries").should("be.visible");
 
-    cy.contains("Filter Flights").should("be.visible");
+    // Use a case-insensitive contains to reduce fragility instead of exact string match
+    cy.contains(/filter flights/i).should("be.visible");
   });
 });

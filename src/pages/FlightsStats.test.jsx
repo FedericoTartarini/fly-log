@@ -45,11 +45,10 @@ const BASE_STATE = {
 };
 
 const applyMockState = (overrides = {}) => {
-  mockedUseFlightStore.mockImplementation((selector) =>
-    typeof selector === "function"
-      ? selector({ ...BASE_STATE, ...overrides })
-      : selector,
-  );
+  mockedUseFlightStore.mockImplementation((selector) => {
+    const merged = { ...BASE_STATE, ...overrides };
+    return typeof selector === "function" ? selector(merged) : merged;
+  });
 };
 
 describe("FlightsStats", () => {
