@@ -17,7 +17,6 @@ describe("StatsSummary Component", () => {
     cy.scrollTo(0, 500);
     // Verify the presence of key statistics
     cy.contains("Total Flights").should("be.visible");
-    cy.contains("All Flights").should("be.visible");
     cy.contains("Add New Flight").should("be.visible");
 
     // Select a specific year from the dropdown
@@ -34,5 +33,6 @@ describe("StatsSummary Component", () => {
     cy.contains("16,407"); // Distance (km) for 2025
     cy.contains("0.8"); // Time (days) for 2025
     cy.contains("2"); // Airports Visited for 2025
+    cy.contains("Filter Flights").should("be.visible");
   });
 });
