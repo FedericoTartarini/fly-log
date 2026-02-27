@@ -162,33 +162,31 @@ export const addFlightsForUser = async (
     const batch = writeBatch(firestore);
     const recordsCol = collection(firestore, "flights", uid, "records");
 
+    const parseDepartureDate = (input: unknown): Date | null => {
+      if (input === null || input === undefined) return null;
+      let d: Date | null = null;
+      if (typeof input === "string") {
+        const parsed = new Date(input);
+        if (!isNaN(parsed.getTime())) d = parsed;
+      } else if (typeof input === "number") {
+        const parsed = new Date(input);
+        if (!isNaN(parsed.getTime())) d = parsed;
+      } else if (input instanceof Date) {
+        if (!isNaN(input.getTime())) d = input;
+      } else {
+        console.warn("Unsupported departure_date type:", typeof input, input);
+      }
+      return d;
+    };
+
     for (const f of chunk) {
       const data: { departure_date?: unknown } & Record<string, unknown> = {
         ...f,
       };
-      if (data.departure_date) {
-        let validDate: Date | null = null;
-        const input = data.departure_date;
-        if (typeof input === "string") {
-          const d = new Date(input);
-          if (!isNaN(d.getTime())) {
-            validDate = d;
-          }
-        } else if (typeof input === "number") {
-          const d = new Date(input);
-          if (!isNaN(d.getTime())) {
-            validDate = d;
-          }
-        } else if (input instanceof Date) {
-          if (!isNaN(input.getTime())) {
-            validDate = input;
-          }
-        } else {
-          console.warn("Unsupported departure_date type:", typeof input, input);
-        }
-        if (validDate) {
-          data.departure_date = Timestamp.fromDate(validDate);
-        }
+      const input = data.departure_date;
+      const validDate = parseDepartureDate(input);
+      if (validDate) {
+        data.departure_date = Timestamp.fromDate(validDate);
       }
       data.created_at = serverTimestamp();
       batch.set(doc(recordsCol), data);
@@ -214,23 +212,26 @@ export const addFlightForUser = async (
   const data: { departure_date?: unknown } & Record<string, unknown> = {
     ...flight,
   };
-  if (data.departure_date) {
-    let validDate: Date | null = null;
-    const input = data.departure_date;
+  const parseDepartureDate = (input: unknown): Date | null => {
+    if (input === null || input === undefined) return null;
+    let d: Date | null = null;
     if (typeof input === "string") {
-      const d = new Date(input);
-      if (!isNaN(d.getTime())) validDate = d;
+      const parsed = new Date(input);
+      if (!isNaN(parsed.getTime())) d = parsed;
     } else if (typeof input === "number") {
-      const d = new Date(input);
-      if (!isNaN(d.getTime())) validDate = d;
+      const parsed = new Date(input);
+      if (!isNaN(parsed.getTime())) d = parsed;
     } else if (input instanceof Date) {
-      if (!isNaN(input.getTime())) validDate = input;
+      if (!isNaN(input.getTime())) d = input;
     } else {
       console.warn("Unsupported departure_date type:", typeof input, input);
     }
-    if (validDate) {
-      data.departure_date = Timestamp.fromDate(validDate);
-    }
+    return d;
+  };
+
+  const validDate = parseDepartureDate(data.departure_date);
+  if (validDate) {
+    data.departure_date = Timestamp.fromDate(validDate);
   }
   data.created_at = serverTimestamp();
   return addDoc(collection(firestore, "flights", uid, "records"), data);
