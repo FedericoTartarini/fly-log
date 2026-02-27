@@ -1,6 +1,7 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MantineProvider } from "@mantine/core";
 import FlightFilters from "../FlightFilters";
 import useFlightStore from "../../store";
@@ -18,25 +19,35 @@ vi.mock("../../utils/referenceData", async () => {
 });
 
 describe("FlightsFilter", () => {
-  it("renders and can clear filters", async () => {
+  it("clears filters when the clear button is clicked", async () => {
+    const { setFilters } = useFlightStore.getState() as FlightStoreState;
+    act(() => {
+      setFilters({
+        airline: "ABC",
+        departureAirport: "JFK",
+        arrivalAirport: "LAX",
+        minDuration: 1,
+        maxDuration: 3,
+      });
+    });
+
     render(
       <MantineProvider>
         <FlightFilters />
       </MantineProvider>,
     );
 
-    const clearBtn = screen.getByRole("button", { hidden: true });
-    expect(clearBtn).toBeInTheDocument();
+    const clearBtn = screen.getByRole("button", { name: /clear/i });
+    await userEvent.click(clearBtn);
 
-    // Wait for async airports loading effect to settle.
     await waitFor(() => {
-      expect(useFlightStore.getState().setFilters).toBeTypeOf("function");
+      expect(useFlightStore.getState().filters).toEqual({
+        airline: null,
+        departureAirport: null,
+        arrivalAirport: null,
+        minDuration: null,
+        maxDuration: null,
+      });
     });
-
-    // ensure store functions exist
-    const { setFilters, clearFilters } =
-      useFlightStore.getState() as FlightStoreState;
-    expect(typeof setFilters).toBe("function");
-    expect(typeof clearFilters).toBe("function");
   });
 });

@@ -22,7 +22,7 @@ const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 function Landing() {
   const { t } = useTranslation("landing");
   return (
-    <Container size="md" mt="xl">
+    <Container size="xs" mt="xl">
       <Stack align="center" gap="xl">
         <Image
           radius="md"
@@ -41,7 +41,7 @@ function Landing() {
         <Text c="dimmed" ta="center" size="lg" maw={580}>
           {t("subtitle")}
         </Text>
-        <Group justify="center" gap="md" mt="xl">
+        <Group justify="center" gap="md">
           <Button
             component={Link}
             to={PATHS.LOGIN}
@@ -55,17 +55,15 @@ function Landing() {
             {t("learn_more")}
           </Button>
         </Group>
-        <Group justify="center" gap="md" mt="xl">
-          <Suspense
-            fallback={
-              <Center>
-                <Loader />
-              </Center>
-            }
-          >
-            <FeatureSection />
-          </Suspense>
-        </Group>
+        <Suspense
+          fallback={
+            <Center>
+              <Loader />
+            </Center>
+          }
+        >
+          <FeatureSection />
+        </Suspense>
       </Stack>
     </Container>
   );

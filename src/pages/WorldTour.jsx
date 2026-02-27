@@ -50,6 +50,29 @@ const isValidCoords = (coord) =>
   coord.length === 2 &&
   coord.every((n) => typeof n === "number" && Number.isFinite(n));
 
+const mergeDateWithTime = (date, time) => {
+  if (!date) return null;
+  const combined = new Date(date);
+  if (typeof time !== "string") return combined;
+
+  const normalized = time.trim();
+  if (!normalized) return combined;
+
+  const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return combined;
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return combined;
+
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    return combined;
+  }
+
+  combined.setHours(hours, minutes, 0, 0);
+  return combined;
+};
+
 const getRouteMidpoint = (route) => {
   const interpolator = d3.geoInterpolate(
     [route.from[1], route.from[0]],
@@ -109,6 +132,7 @@ function WorldTour() {
   const rotateRef = React.useRef([0, 0, 0]);
   const currentRouteRef = React.useRef(null);
   const currentRouteIndexRef = React.useRef(0);
+  const scaleRef = React.useRef(1);
 
   const yearValues = React.useMemo(
     () => getYearValuesFromFlights(allFlights),
@@ -120,6 +144,12 @@ function WorldTour() {
     [yearValues],
   );
 
+  const filteredToYearValues = React.useMemo(() => {
+    const selectedFromYear = Number.parseInt(fromYear, 10);
+    if (!Number.isFinite(selectedFromYear)) return yearValuesAsc;
+    return yearValuesAsc.filter((year) => year >= selectedFromYear);
+  }, [yearValuesAsc, fromYear]);
+
   React.useEffect(() => {
     if (!yearValuesAsc.length) {
       setFromYear("");
@@ -127,11 +157,26 @@ function WorldTour() {
       return;
     }
 
-    if (!fromYear || !yearValues.includes(Number.parseInt(fromYear, 10))) {
-      setFromYear(String(yearValuesAsc[0]));
+    let resolvedFromYear = fromYear;
+    if (
+      !resolvedFromYear ||
+      !yearValues.includes(Number.parseInt(resolvedFromYear, 10))
+    ) {
+      resolvedFromYear = String(yearValuesAsc[0]);
+      setFromYear(resolvedFromYear);
     }
-    if (!toYear || !yearValues.includes(Number.parseInt(toYear, 10))) {
-      setToYear(String(yearValuesAsc[yearValuesAsc.length - 1]));
+
+    const fromYearNumber = Number.parseInt(resolvedFromYear, 10);
+    const toCandidates = Number.isFinite(fromYearNumber)
+      ? yearValuesAsc.filter((year) => year >= fromYearNumber)
+      : yearValuesAsc;
+
+    if (!toYear || !toCandidates.includes(Number.parseInt(toYear, 10))) {
+      setToYear(
+        toCandidates.length
+          ? String(toCandidates[toCandidates.length - 1])
+          : "",
+      );
     }
   }, [fromYear, toYear, yearValues, yearValuesAsc]);
 
@@ -177,14 +222,22 @@ function WorldTour() {
           isValidCoords(flight.departure_coordinates) &&
           isValidCoords(flight.arrival_coordinates),
       )
-      .map((flight) => ({
-        id: String(flight.id),
-        from: flight.departure_coordinates,
-        to: flight.arrival_coordinates,
-        date: parseToDate(flight.departure_date),
-        fromCity: getAirportCity(flight.departure_airport_iata),
-        toCity: getAirportCity(flight.arrival_airport_iata),
-      }))
+      .map((flight) => {
+        const flightDate = parseToDate(flight.departure_date);
+        const departureDateTime = mergeDateWithTime(
+          flightDate,
+          flight.departure_time,
+        );
+
+        return {
+          id: String(flight.id),
+          from: flight.departure_coordinates,
+          to: flight.arrival_coordinates,
+          date: departureDateTime,
+          fromCity: getAirportCity(flight.departure_airport_iata),
+          toCity: getAirportCity(flight.arrival_airport_iata),
+        };
+      })
       .sort((a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0));
   }, [allFlights, scope, fromYear, toYear]);
 
@@ -279,6 +332,9 @@ function WorldTour() {
     svg.selectAll("*").remove();
     svg.attr("viewBox", `0 0 ${width} ${height}`);
 
+    const minScale = 0.7;
+    const maxScale = 2.5;
+
     const projection = d3
       .geoOrthographic()
       .fitExtent(
@@ -291,6 +347,9 @@ function WorldTour() {
       .clipAngle(90)
       .precision(0.4)
       .rotate(rotateRef.current);
+
+    const baseScale = projection.scale();
+    projection.scale(baseScale * scaleRef.current);
 
     const path = d3.geoPath(projection);
 
@@ -402,6 +461,18 @@ function WorldTour() {
 
     svg.call(drag);
 
+    const zoom = d3
+      .zoom()
+      .scaleExtent([minScale, maxScale])
+      .on("zoom", (event) => {
+        scaleRef.current = event.transform.k;
+        projection.scale(baseScale * scaleRef.current);
+        drawBase();
+        drawActive(routes[currentRouteIndexRef.current] ?? null);
+      });
+
+    svg.call(zoom);
+
     vizRef.current = {
       svg,
       projection,
@@ -411,6 +482,7 @@ function WorldTour() {
 
     return () => {
       svg.on(".drag", null);
+      svg.on(".zoom", null);
       svg.interrupt();
       vizRef.current = null;
     };
@@ -469,6 +541,11 @@ function WorldTour() {
     label: String(year),
   }));
 
+  const toYearSelectOptions = filteredToYearValues.map((year) => ({
+    value: String(year),
+    label: String(year),
+  }));
+
   return (
     <Container>
       <Stack mt="md" gap="md">
@@ -494,7 +571,7 @@ function WorldTour() {
                   <NativeSelect
                     label={t("to_year")}
                     value={toYear}
-                    data={yearSelectOptions}
+                    data={toYearSelectOptions}
                     onChange={(event) => setToYear(event.currentTarget.value)}
                   />
                 </>

@@ -49,9 +49,13 @@ const FlightFilters: React.FC = () => {
 
   React.useEffect(() => {
     let mounted = true;
-    loadAirportsInfo().then((data) => {
-      if (mounted) setAirportsData(data);
-    });
+    loadAirportsInfo()
+      .then((data) => {
+        if (mounted) setAirportsData(data);
+      })
+      .catch((error) => {
+        console.error("Error loading airports info:", error);
+      });
     return () => {
       mounted = false;
     };
@@ -299,7 +303,7 @@ const FlightFilters: React.FC = () => {
             step={0.25}
             value={rangeValue}
             onChange={setRangeValue}
-            label={(val) => `${val} hours`}
+            label={(val) => `${val} ${t("filters.hours")}`}
             onChangeEnd={(value) => {
               // value is [min, max]
               const [minV, maxV] = value as [number, number];
@@ -317,8 +321,14 @@ const FlightFilters: React.FC = () => {
               fontSize: 12,
             }}
           >
-            <span>{rangeValue[0]}h</span>
-            <span>{rangeValue[1]}h</span>
+            <span>
+              {rangeValue[0]}
+              {t("filters.hour_abbrev")}
+            </span>
+            <span>
+              {rangeValue[1]}
+              {t("filters.hour_abbrev")}
+            </span>
           </div>
         </Box>
         <Box style={{ display: "flex", alignItems: "flex-end" }}>

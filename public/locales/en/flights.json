@@ -32,13 +32,13 @@
     }
   },
   "filter": {
-    "label": "Filter by year",
+    "label": "Filter flights",
     "all": "All Flights",
     "upcoming": "Upcoming Flights",
     "past": "Past Flights"
   },
   "filters": {
-    "title": "Filters",
+    "title": "Filter Flights",
     "airline": "Airline",
     "airline_placeholder": "Select airline",
     "departure_airport": "Departure airport",
@@ -50,7 +50,9 @@
     "max_duration": "Max duration (hours)",
     "duration_placeholder": "e.g., 1.5",
     "no_results": "No results",
-    "clear": "Clear"
+    "clear": "Clear",
+    "hours": "hours",
+    "hour_abbrev": "h"
   },
   "actions": {
     "open_menu": "Open actions",

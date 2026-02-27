@@ -35,6 +35,7 @@ interface FlightEntryFormProps {
   flight?: {
     id: string;
     departure_date?: unknown;
+    departure_time?: string | null;
     departure_airport_iata?: string;
     arrival_airport_iata?: string;
     airline_iata?: string;
@@ -130,7 +131,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       const depDate = parseToDate(flight.departure_date);
       form.setValues({
         departureDate: depDate,
-        departureTime: "",
+        departureTime: flight.departure_time || "",
         departureAirport: flight.departure_airport_iata || "",
         arrivalAirport: flight.arrival_airport_iata || "",
         airline: flight.airline_iata || "",
@@ -140,8 +141,21 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         returnFlightNumber: "",
       });
       setAddReturn(false);
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error("parseToDate failed in FlightEntryForm", e);
+      // Optionally, set fallback values or trigger validation
+      form.setValues({
+        departureDate: null,
+        departureTime: "",
+        departureAirport: "",
+        arrivalAirport: "",
+        airline: "",
+        flightNumber: "",
+        returnDate: null,
+        returnTime: "",
+        returnFlightNumber: "",
+      });
+      setAddReturn(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flight]);
@@ -156,15 +170,31 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     });
 
     try {
-      const flightsToInsert: Array<{
+      type FlightPayload = {
         departure_date: Date | null;
+        departure_time?: string | null;
         departure_airport_iata: string;
         arrival_airport_iata: string;
         airline_iata: string;
         flight_number: string;
-      }> = [
+      };
+
+      const normalizeTime = (timeStr: string) => {
+        if (!timeStr) return null;
+        const normalized = timeStr.trim();
+        const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
+        if (!match) return null;
+        const hh = Number(match[1]);
+        const mm = Number(match[2]);
+        if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
+        if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+        return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+      };
+
+      const flightsToInsert: FlightPayload[] = [
         {
           departure_date: values.departureDate,
+          departure_time: normalizeTime(values.departureTime) ?? null,
           departure_airport_iata: values.departureAirport,
           arrival_airport_iata: values.arrivalAirport,
           airline_iata: values.airline,
@@ -179,8 +209,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           arrival_airport_iata: values.departureAirport,
           airline_iata: values.airline,
           flight_number: values.returnFlightNumber,
+          departure_time: normalizeTime(values.returnTime) ?? null,
         });
       }
+
+      const [primaryFlight] = flightsToInsert;
 
       const uid = user?.uid || null;
       if (!uid) {
@@ -197,8 +230,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
       if (flight && flight.id) {
         // Editing a single flight
-        const updateData = flightsToInsert[0];
-        await updateFlightForUser(uid, flight.id, updateData);
+        await updateFlightForUser(uid, flight.id, primaryFlight);
 
         notifications.show({
           title: t("form.notifications.saving_title"),

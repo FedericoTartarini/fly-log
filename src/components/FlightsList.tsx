@@ -162,8 +162,12 @@ const FlightsList: React.FC = () => {
                     : null;
                 let durationDistanceStr = "";
                 if (ft !== null) {
-                  const hours = Math.floor(ft);
-                  const minutes = Math.round((ft % 1) * 60);
+                  let hours = Math.floor(ft);
+                  let minutes = Math.round((ft % 1) * 60);
+                  if (minutes === 60) {
+                    hours += 1;
+                    minutes = 0;
+                  }
                   if (dist !== null) {
                     durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
                   } else {

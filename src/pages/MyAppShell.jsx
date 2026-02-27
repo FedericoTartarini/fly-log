@@ -3,6 +3,7 @@ import {
   AppShell,
   Burger,
   Container,
+  Drawer,
   Group,
   rem,
   NavLink,
@@ -16,6 +17,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import ColorSchemeToggle from "../components/ColorSchemeToggle";
+import AppFooter from "../components/AppFooter";
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
@@ -38,35 +40,79 @@ function MyAppShell() {
 
   const pinned = useHeadroom({ fixedAt: 120 });
 
+  const renderNavLinks = (onClickHandler) => (
+    <>
+      {!user && (
+        <NavLink
+          component={Link}
+          to={PATHS.LANDING}
+          label={t("nav.home")}
+          className={classes.control}
+          onClick={onClickHandler}
+        />
+      )}
+      {user && (
+        <>
+          <NavLink
+            component={Link}
+            to={PATHS.STATS}
+            label={t("nav.stats")}
+            className={classes.control}
+            onClick={onClickHandler}
+          />
+          <NavLink
+            component={Link}
+            to={PATHS.FLIGHTS}
+            label={t("nav.flights")}
+            className={classes.control}
+            onClick={onClickHandler}
+          />
+          <NavLink
+            component={Link}
+            to={PATHS.TOUR}
+            label={t("nav.tour")}
+            className={classes.control}
+            onClick={onClickHandler}
+          />
+        </>
+      )}
+      <NavLink
+        component={Link}
+        to={PATHS.ABOUT}
+        label={t("nav.about")}
+        className={classes.control}
+        onClick={onClickHandler}
+      />
+      <LanguageSwitcher />
+    </>
+  );
+
+  const SIZE_DRAWER = "xl"; // breakpoint for mobile vs desktop
+
   return (
     <AppShell
       header={{ height: 60, collapsed: !pinned, offset: false }}
       navbar={{
-        width: 175, // 75% width on mobile, 150px on sm+
-        breakpoint: "xs",
+        width: 250, // 75% width on mobile, 150px on sm+
+        breakpoint: SIZE_DRAWER,
         collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
       }}
       transitionDuration={500}
       transitionTimingFunction="ease"
-      footer={{
-        height: 60,
-        withBorder: true,
-        position: "bottom",
-      }}
     >
       <AppShell.Header zIndex={400}>
         <Group h="100%" px="md">
           <Burger
             opened={mobileOpened}
             onClick={toggleMobile}
-            hiddenFrom="sm"
+            hiddenFrom={SIZE_DRAWER}
             size="sm"
             aria-label="Open navigation menu"
           />
           <Burger
             opened={desktopOpened}
             onClick={toggleDesktop}
-            visibleFrom="sm"
+            visibleFrom={SIZE_DRAWER}
             size="sm"
             aria-label="Toggle sidebar menu"
           />
@@ -96,62 +142,32 @@ function MyAppShell() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar
+        visibleFrom={SIZE_DRAWER}
         py="md"
         px={4}
         pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
       >
-        {!user && (
-          <>
-            <NavLink
-              component={Link}
-              to={PATHS.LANDING}
-              label={t("nav.home")}
-              className={classes.control}
-              onClick={handleNavClick}
-            />
-          </>
-        )}
-        {user && (
-          <>
-            <NavLink
-              component={Link}
-              to={PATHS.STATS}
-              label={t("nav.stats")}
-              className={classes.control}
-              onClick={handleNavClick}
-            />
-            <NavLink
-              component={Link}
-              to={PATHS.FLIGHTS}
-              label={t("nav.flights")}
-              className={classes.control}
-              onClick={handleNavClick}
-            />
-            <NavLink
-              component={Link}
-              to={PATHS.TOUR}
-              label={t("nav.tour")}
-              className={classes.control}
-              onClick={handleNavClick}
-            />
-          </>
-        )}
-        <NavLink
-          component={Link}
-          to={PATHS.ABOUT}
-          label={t("nav.about")}
-          className={classes.control}
-          onClick={handleNavClick}
-        />
-        <LanguageSwitcher />
+        {renderNavLinks(handleNavClick)}
       </AppShell.Navbar>
+
+      <Drawer
+        opened={mobileOpened}
+        onClose={closeMobile}
+        position="left"
+        size="250px"
+        zIndex={500}
+        padding="md"
+        hiddenFrom={SIZE_DRAWER}
+      >
+        {renderNavLinks(handleNavClick)}
+      </Drawer>
 
       <AppShell.Main pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}>
         <Container size="lg" p={0}>
           <Outlet />
         </Container>
       </AppShell.Main>
-      {/*<AppFooter />*/}
+      <AppFooter />
     </AppShell>
   );
 }
