@@ -95,7 +95,7 @@ self.addEventListener("fetch", (event) => {
       fetch(event.request)
         .then((fetchResponse) => {
           // Firestore returns POST for most structured queries, so we only cache GET responses.
-          if (fetchResponse.status === 200 && event.request.method === "GET") {
+          if (fetchResponse.status === 200) {
             return caches.open(DYNAMIC_CACHE).then((cache) => {
               cache.put(event.request, fetchResponse.clone());
               return fetchResponse;
