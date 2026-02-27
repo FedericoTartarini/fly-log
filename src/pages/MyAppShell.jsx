@@ -143,7 +143,6 @@ function MyAppShell() {
       </AppShell.Header>
       <AppShell.Navbar
         visibleFrom={SIZE_DRAWER}
-        hidden={!desktopOpened}
         py="md"
         px={4}
         pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}

@@ -65,7 +65,7 @@ const mergeDateWithTime = (date, time) => {
   const minutes = Number(match[2]);
   if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return combined;
 
-  combined.setHours(hours, minutes, 0, 0);
+  combined.setUTCHours(hours, minutes, 0, 0);
   return combined;
 };
 
