@@ -26,7 +26,9 @@
     "max_duration": "Durata massima (ore)",
     "duration_placeholder": "es. 1.5",
     "no_results": "Nessun risultato",
-    "clear": "Azzera"
+    "clear": "Azzera",
+    "hours": "ore",
+    "hour_abbrev": "h"
   },
   "csv": {
     "title": "Carica dati volo da CSV",
@@ -47,7 +49,7 @@
     }
   },
   "filter": {
-    "label": "Filtra per anno",
+    "label": "Filtra voli",
     "all": "Tutti i voli",
     "upcoming": "Voli futuri",
     "past": "Voli passati"
