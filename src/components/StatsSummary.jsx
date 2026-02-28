@@ -6,6 +6,8 @@ import useFlightStore from "../store.ts";
 import flightImg from "../assets/flight.webp";
 import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
+import flightImg1200 from "../assets/flight-1200.webp";
+import flightImg1800 from "../assets/flight-1800.webp";
 import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
 import { useTranslation } from "react-i18next";
@@ -23,8 +25,8 @@ function StatsSummary() {
       <Card.Section>
         <Image
           src={flightImg}
-          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
-          sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
+          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg1200} 1200w, ${flightImg1800} 1800w`}
+          sizes="(max-width: 900px) 90vw, (max-width: 1400px) 1200px, 1800px"
           height={120}
           alt={t("image_alt")}
         />
