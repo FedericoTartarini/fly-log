@@ -58,7 +58,7 @@ const LanguageSwitcher = () => {
       onChange={handleChange}
       data={LANGUAGE_OPTIONS}
       renderOption={renderOption}
-      withinPortal
+      withinPortal={false}
       position="bottom"
       px="xs"
       style={{ minWidth: 110 }}
