@@ -49,6 +49,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   onSaved,
   flight,
 }) => {
+  // use mainPurple / accentRed wherever you would previously use theme.colors
   const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
   const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);

@@ -13,6 +13,7 @@ import {
   Paper,
   ThemeIcon,
   Grid,
+  Card,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import showcase from "../assets/showcase.png";
@@ -50,7 +51,7 @@ function Landing() {
             </Title>
             <Text
               ta="center"
-              c="blue.8"
+              variant="gradient"
               size="xl"
               maw={680}
               style={{ fontSize: "1.3rem", fontWeight: 600 }}
@@ -67,7 +68,6 @@ function Landing() {
             size="lg"
             radius="xl"
             style={{ fontWeight: 700, boxShadow: "0px 0.5px 8px #0ea5e911" }}
-            gradient={{ from: "blue", to: "cyan" }}
             variant="gradient"
             whileHover={{ scale: 1.06 }}
             as={motion.button}
@@ -80,6 +80,7 @@ function Landing() {
             size="lg"
             radius="xl"
             variant="light"
+            color="accent"
             style={{ fontWeight: 500 }}
           >
             {t("learn_more")}
@@ -112,24 +113,17 @@ function Landing() {
           transition={{ duration: 0.7, type: "spring" }}
           style={{ width: "100%" }}
         >
-          <Paper shadow="xl" p="md" radius="lg" bg="blue.0" withBorder w="100%">
+          <Card shadow="xl" p="md" radius="lg" withBorder w="100%">
             <Grid align="center" gutter="xl" justify="center">
               <Grid.Col span={{ base: "content" }}>
-                <ThemeIcon
-                  radius="xl"
-                  size={54}
-                  variant="gradient"
-                  gradient={{ from: "cyan", to: "blue", deg: 90 }}
-                >
+                <ThemeIcon radius="xl" size={54} variant="light" color="accent">
                   <IconRobotFace size={36} />
                 </ThemeIcon>
               </Grid.Col>
               <Grid.Col span={{ base: "auto", sm: "content" }}>
                 <Stack gap={2} maw={340}>
-                  <Title order={3} c="blue.8">
-                    {t("ai_title")}
-                  </Title>
-                  <Text size="md" c="blue.8" fw={500}>
+                  <Title order={3}>{t("ai_title")}</Title>
+                  <Text size="md" fw={500}>
                     {t("ai_body")}
                   </Text>
                 </Stack>
@@ -138,7 +132,7 @@ function Landing() {
                 {/* Animated AI Notification Demo */}
                 <motion.div
                   initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7, duration: 0.9, type: "spring" }}
                   style={{
                     flexShrink: 0,
@@ -158,7 +152,7 @@ function Landing() {
                       display: "flex",
                       alignItems: "center",
                       gap: 10,
-                      borderLeft: "6px solid #0ea5e9",
+                      borderLeft: "6px solid #8574bf",
                     }}
                   >
                     <span
@@ -169,11 +163,11 @@ function Landing() {
                     <div>
                       <Text
                         size="lg"
-                        c="blue.7"
                         fw={700}
                         style={{ marginBottom: -2 }}
+                        c="gray.9"
                       >
-                        Rome ➜ Paris
+                        Roma ➜ Paris
                       </Text>
                       <Text size="xs" c="dimmed" fw={600}>
                         AI added your flight!
@@ -183,7 +177,7 @@ function Landing() {
                 </motion.div>
               </Grid.Col>
             </Grid>
-          </Paper>
+          </Card>
         </motion.div>
         {/* SVG Angled Divider */}
         <Suspense

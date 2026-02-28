@@ -65,10 +65,7 @@ function splitPathAtAntimeridian(path) {
  */
 const getFlightsCentroid = (flights) => {
   const coords = flights
-    .flatMap((f) => [
-      f.departure_coordinates,
-      f.arrival_coordinates,
-    ])
+    .flatMap((f) => [f.departure_coordinates, f.arrival_coordinates])
     .filter(isValidCoords);
   if (coords.length === 0) return [25, 74];
 
@@ -102,10 +99,7 @@ const getFlightsCentroid = (flights) => {
  */
 const getFlightsBounds = (flights) => {
   const coords = flights
-    .flatMap((f) => [
-      f.departure_coordinates,
-      f.arrival_coordinates,
-    ])
+    .flatMap((f) => [f.departure_coordinates, f.arrival_coordinates])
     .filter(isValidCoords);
 
   if (!coords.length)
@@ -181,7 +175,9 @@ const FitMapToBounds = ({ bounds }) => {
 
 const WorldMap = () => {
   const filteredFlights = useFlightStore((s) => s.filteredFlights);
-  const computedColorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   // Use the new smart bounds logic
   const bounds = useMemo(
@@ -207,7 +203,10 @@ const WorldMap = () => {
       ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png" // Carto Dark with labels and borders
       : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"; // Esri Topo with cities and borders
 
-  const attribution = computedColorScheme === "dark" ? "&copy; OpenStreetMap &copy; CARTO" : "&copy; Esri, Garmin, FAO, NOAA, USGS";
+  const attribution =
+    computedColorScheme === "dark"
+      ? "&copy; OpenStreetMap &copy; CARTO"
+      : "&copy; Esri, Garmin, FAO, NOAA, USGS";
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
@@ -242,11 +241,11 @@ const WorldMap = () => {
         // We split the path to prevent visual artifacts
         const pathSegments = splitPathAtAntimeridian(greatCirclePath);
 
-        let flightColor = "#5d41b0";
+        let flightColor = "#C91A25";
         const departureDate = parseToDate(flight.departure_date);
         const now = new Date();
         if (departureDate && departureDate > now) {
-          flightColor = "#d80818";
+          flightColor = "#7B2EDA";
         }
 
         // We render 3 copies: Main, Left World (-360), Right World (+360)
@@ -262,7 +261,7 @@ const WorldMap = () => {
                     key={`line-${i}-${offset}`}
                     positions={shiftCoords(segment, offset)}
                     color={flightColor}
-                    weight={2}
+                    weight={1}
                   />
                 ))}
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, Modal, Text, Button, Center, ActionIcon } from "@mantine/core";
+import { ActionIcon, Button, Menu, Modal, Text } from "@mantine/core";
 import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import { deleteFlightForUser } from "../utils/flightService";
@@ -26,7 +26,6 @@ const FlightActions = ({ flight, onEdit }) => {
       return;
     }
     setIsDeleting(true);
-    const removed = flight;
     try {
       // Optimistic UI: remove from store immediately
       removeFlightById(flight.id);
@@ -47,7 +46,7 @@ const FlightActions = ({ flight, onEdit }) => {
       try {
         await fetchFlights();
       } catch {
-        restoreFlight(removed);
+        restoreFlight(flight);
       }
     } finally {
       setIsDeleting(false);
@@ -59,7 +58,7 @@ const FlightActions = ({ flight, onEdit }) => {
     <>
       <Menu withArrow>
         <Menu.Target>
-          <ActionIcon aria-label={t("actions.open_menu")}>
+          <ActionIcon aria-label={t("actions.open_menu")} variant={"subtle"}>
             <IconDotsVertical />
           </ActionIcon>
         </Menu.Target>

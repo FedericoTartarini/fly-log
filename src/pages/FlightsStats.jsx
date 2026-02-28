@@ -99,7 +99,12 @@ const FlightsStats = () => {
 
       {/* Sticky filter button (Affix) that opens a modal with full filters. */}
       <Affix position={{ bottom: 16, left: 16 }}>
-        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
+        <Button
+          radius="xl"
+          size="sm"
+          variant="gradient"
+          onClick={() => setFiltersOpen(true)}
+        >
           {t("filters.title")}
         </Button>
       </Affix>
@@ -168,14 +173,12 @@ const FlightsStats = () => {
               <FlightCard
                 flight={stats.shortestFlight}
                 title={t("stats.shortest_flight")}
-                color="orange"
               />
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <FlightCard
                 flight={stats.longestFlight}
                 title={t("stats.longest_flight")}
-                color="teal"
               />
             </Grid.Col>
           </Grid>

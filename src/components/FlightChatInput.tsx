@@ -57,8 +57,8 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   const examples = t("ai.examples", { returnObjects: true }) as string[];
 
   const missingFields: string[] = parsed
-    ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map(
-        (f) => t(FIELD_I18N_KEYS[f] ?? String(f)),
+    ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map((f) =>
+        t(FIELD_I18N_KEYS[f] ?? String(f)),
       )
     : [];
 
@@ -106,7 +106,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
     <Stack mt="sm" gap="md">
       {/* Header */}
       <Flex gap="xs">
-        <ThemeIcon size="md" variant="light" color="violet">
+        <ThemeIcon size="md" variant="light" color="accent">
           <IconRobot size={16} />
         </ThemeIcon>
         <div>
@@ -139,7 +139,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               >
                 <Text
                   size="xs"
-                  c="violet"
+                  c="accent"
                   style={{
                     textDecoration: "underline dotted",
                   }}
@@ -188,7 +188,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
       {hasAnyParsedField && parsed && (
         <Alert
           icon={<IconSparkles size={16} />}
-          color="violet"
+          color="primary"
           title={t("ai.success_title")}
           variant="light"
         >
@@ -332,7 +332,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
           {hasAnyParsedField && (
             <Button
               variant="light"
-              color="violet"
+              color="accent"
               size="xs"
               rightSection={<IconArrowRight size={14} />}
               onClick={onConfirm}
@@ -351,7 +351,6 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               loading={loading}
               disabled={!input.trim()}
               variant="gradient"
-              gradient={{ from: "violet", to: "blue" }}
             >
               {t("ai.parse_button")}
             </Button>

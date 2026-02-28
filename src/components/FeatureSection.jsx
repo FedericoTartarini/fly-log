@@ -114,9 +114,7 @@ const FeatureCard = ({
           <ActionIcon variant="default">{icon}</ActionIcon>
         </Group>
 
-        <Text size="sm" c="dimmed">
-          {description}
-        </Text>
+        <Text size="sm">{description}</Text>
       </Card>
     </Framer.motion.div>
   );
@@ -220,7 +218,10 @@ const FeatureSection = () => {
       cols={{ base: 1, xs: 2, lg: 3 }}
       spacing={{ base: "md", sm: "xl", lg: "xl" }}
       verticalSpacing={{ base: "md", sm: "xl", lg: "xl" }}
-      style={{ width: "100%" }}
+      style={{
+        width: "100%",
+        background: `linear-gradient(60deg, primary, accentRed)`,
+      }}
     >
       {features.map((f, i) => (
         <FeatureCard key={f.id} {...f} delay={i * 0.15} />

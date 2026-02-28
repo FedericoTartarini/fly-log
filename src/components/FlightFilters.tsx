@@ -297,7 +297,6 @@ const FlightFilters: React.FC = () => {
         <Box>
           <Text size="sm">{t("filters.duration_label")}</Text>
           <RangeSlider
-            color="blue"
             min={DEFAULT_MIN}
             max={DEFAULT_MAX}
             step={0.25}

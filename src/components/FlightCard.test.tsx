@@ -28,13 +28,7 @@ const mockFlight: enhancedFlight = {
 
 describe("FlightCard", () => {
   it("renders flight information", () => {
-    render(
-      <FlightCard
-        flight={mockFlight}
-        title="Test EnhancedFlight"
-        color="blue"
-      />,
-    );
+    render(<FlightCard flight={mockFlight} title="Test EnhancedFlight" />);
     expect(screen.getByText("Test EnhancedFlight"));
     expect(screen.getByText("Qantas"));
     expect(screen.getByText("SG"));

@@ -40,19 +40,16 @@ const CHART_GROUPING_CONFIG = {
 
 const VALUE_FORMATTER = (value) => (String(value) === "0" ? "" : String(value));
 
-const FlightsByChart = ({
-  filteredFlights,
-  data,
-  height,
-}) => {
-  const { timeGrouping, setTimeGrouping, grouping, setGrouping } = useFlightStore(
-    useShallow((s) => ({
-      timeGrouping: s.timeGrouping,
-      setTimeGrouping: s.setTimeGrouping,
-      grouping: s.chartGrouping,
-      setGrouping: s.setChartGrouping,
-    })),
-  );
+const FlightsByChart = ({ filteredFlights, data, height }) => {
+  const { timeGrouping, setTimeGrouping, grouping, setGrouping } =
+    useFlightStore(
+      useShallow((s) => ({
+        timeGrouping: s.timeGrouping,
+        setTimeGrouping: s.setTimeGrouping,
+        grouping: s.chartGrouping,
+        setGrouping: s.setChartGrouping,
+      })),
+    );
   const { t } = useTranslation("flights");
 
   // If data is provided, it's the old time-based chart
@@ -68,8 +65,8 @@ const FlightsByChart = ({
       },
       withXAxis: false,
       gridAxis: "none",
-      barProps: { radius: 8 },
-      series: [{ name: "flights", color: "green.6" }],
+      barProps: { radius: 8, barSize: 23 },
+      series: [{ name: "flights", color: "primary.4" }],
       withTooltip: false,
       withBarValueLabel: true,
       valueFormatter: VALUE_FORMATTER,
@@ -93,7 +90,10 @@ const FlightsByChart = ({
             value={timeGrouping}
             onChange={setTimeGrouping}
             data={[
-              { label: t("time.day_of_week"), value: TIME_GROUPING.DAY_OF_WEEK },
+              {
+                label: t("time.day_of_week"),
+                value: TIME_GROUPING.DAY_OF_WEEK,
+              },
               { label: t("time.year"), value: TIME_GROUPING.YEAR },
               { label: t("time.month"), value: TIME_GROUPING.MONTH },
             ]}
@@ -104,13 +104,16 @@ const FlightsByChart = ({
             <BarChart {...commonTimeBarProps} />
           </ScrollArea>
         )}
-        {timeGrouping !== TIME_GROUPING.YEAR && <BarChart {...commonTimeBarProps} />}
+        {timeGrouping !== TIME_GROUPING.YEAR && (
+          <BarChart {...commonTimeBarProps} />
+        )}
       </Card>
     );
   }
 
   const currentGroupingConfig =
-    CHART_GROUPING_CONFIG[grouping] || CHART_GROUPING_CONFIG[CHART_GROUPING.COUNTRY];
+    CHART_GROUPING_CONFIG[grouping] ||
+    CHART_GROUPING_CONFIG[CHART_GROUPING.COUNTRY];
   const chartData =
     !filteredFlights || !Array.isArray(filteredFlights)
       ? []
@@ -144,12 +147,17 @@ const FlightsByChart = ({
           dataKey={currentGroupingConfig.dataKey}
           orientation="vertical"
           yAxisProps={{
-            width: 110,
+            width: 100,
           }}
           withXAxis={false}
           gridAxis="none"
-          barProps={{ radius: 8 }}
-          series={[{ name: currentGroupingConfig.seriesName }]}
+          barProps={{ radius: 8, barSize: 23 }}
+          series={[
+            {
+              name: currentGroupingConfig.seriesName,
+              color: "accent.4",
+            },
+          ]}
           withTooltip={false}
         />
       </ScrollArea>

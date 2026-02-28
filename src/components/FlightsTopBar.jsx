@@ -36,7 +36,11 @@ const FlightsTopBar = ({ fullWidth = false }) => {
       {!Array.isArray(allFlights) || allFlights.length === 0 ? (
         <NoFlightsCard setFormOpened={setFormOpened} />
       ) : (
-        <Button onClick={() => setFormOpened(true)} fullWidth={fullWidth}>
+        <Button
+          variant="gradient"
+          onClick={() => setFormOpened(true)}
+          fullWidth={fullWidth}
+        >
           {t("form.add_new_flight")}
         </Button>
       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Grid, Group, Image, Button, Stack } from "@mantine/core";
+import { Card, Grid, Image, Button, Stack, SimpleGrid } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import useFlightStore from "../store.ts";
@@ -94,7 +94,7 @@ function StatsSummary() {
           </Grid.Col>
         </Grid>
 
-        <Group justify="center" mt="md">
+        <SimpleGrid justify="center" mt="md" cols={2}>
           <Button
             variant="light"
             onClick={() => navigate(PATHS.FLIGHTS)}
@@ -104,12 +104,13 @@ function StatsSummary() {
           </Button>
           <Button
             variant="light"
+            color="accent"
             onClick={() => navigate(PATHS.TOUR)}
             data-cy="view-tour-btn"
           >
             {t("stats.view_tour")}
           </Button>
-        </Group>
+        </SimpleGrid>
       </Stack>
     </Card>
   );

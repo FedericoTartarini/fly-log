@@ -110,7 +110,7 @@ function MyAppShell() {
                 size="xs"
                 variant="default"
                 onClick={handleSignOut}
-                c="red"
+                c="accent"
               >
                 {t("nav.sign_out")}
               </Button>
@@ -120,6 +120,7 @@ function MyAppShell() {
                 variant="default"
                 component={Link}
                 to={PATHS.LOGIN}
+                c="primary"
               >
                 {t("nav.login")}
               </Button>
