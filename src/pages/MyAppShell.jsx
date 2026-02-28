@@ -136,7 +136,9 @@ function MyAppShell() {
         px={4}
         pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
       >
-        <nav aria-label="Primary">{renderNavLinks(handleNavClick)}</nav>
+        <nav aria-label="Primary navigation">
+          {renderNavLinks(handleNavClick)}
+        </nav>
       </AppShell.Navbar>
 
       <Drawer
@@ -149,7 +151,9 @@ function MyAppShell() {
         padding="md"
         hiddenFrom={SIZE_DRAWER}
       >
-        <nav aria-label="Primary">{renderNavLinks(handleNavClick)}</nav>
+        <nav aria-label="Mobile navigation">
+          {renderNavLinks(handleNavClick)}
+        </nav>
       </Drawer>
 
       <AppShell.Main
