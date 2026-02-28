@@ -68,7 +68,7 @@ function MyAppShell() {
             onClick={onClickHandler}
           />
         ))}
-        <LanguageSwitcher controlSx={controlStyles} />
+        <LanguageSwitcher />
       </Stack>
     );
   };

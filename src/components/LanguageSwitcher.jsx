@@ -21,7 +21,7 @@ const normalizeLanguage = (i18n) => {
   return match ? match.value : LANGUAGE_OPTIONS[0].value;
 };
 
-const LanguageSwitcher = ({ controlSx = {} }) => {
+const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
 
   const value = normalizeLanguage(i18n);
