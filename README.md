@@ -85,11 +85,13 @@ Follow these instructions to get a local copy up and running.
     firebase login:use  # to select the project to use (run from project directory)
     ```
 3.  **Initialize Firebase in your project:**
+
     ```bash
     firebase init
     ```
 
     - Select "Hosting" and follow the prompts to set up your project.
+
 4.  **Deploy to Firebase:**
     ```bash
     firebase deploy
@@ -219,6 +221,12 @@ describe("MyComponent", () => {
 - Displays airline logos for each flight.
 - Add new flights manually through a form, using CSV upload, or by parsing natural language input with AI assistance.
 
+## Crawling & Sitemap
+
+- `public/robots.txt` currently blocks all crawling (`Disallow: /`) for private development.
+- Update `public/robots.txt` before going public, and add a sitemap URL when available.
+- Create `public/sitemap.xml` and update it before launch.
+
 ## Feature Roadmap (Suggestions)
 
 ### Missing / Core Gaps
@@ -331,5 +339,6 @@ describe("MyComponent", () => {
 - Difficulty: Medium
 
 #### 7. More visualizations
+
 - Use the vector map from Tabler to show countries visited: https://docs.tabler.io/ui/components/vector-maps
 - Difficulty: Low-Medium
