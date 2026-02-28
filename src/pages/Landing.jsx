@@ -9,6 +9,8 @@ import {
   Image,
   Loader,
   Center,
+  Paper,
+  ThemeIcon,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import flightImg from "../assets/flight.webp";
@@ -16,6 +18,7 @@ import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
 import { PATHS } from "../constants/MyClasses.ts";
 import { useTranslation } from "react-i18next";
+import { IconRobotFace } from "@tabler/icons-react";
 
 const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 
@@ -55,6 +58,26 @@ function Landing() {
             {t("learn_more")}
           </Button>
         </Group>
+        <Paper shadow="xl" p="md" radius="lg" bg="blue.0" withBorder w="100%">
+          <Group align="flex-start" justify="center" gap="lg" wrap="nowrap">
+            <ThemeIcon
+              radius="xl"
+              size={54}
+              variant="gradient"
+              gradient={{ from: "cyan", to: "blue", deg: 90 }}
+            >
+              <IconRobotFace size={36} />
+            </ThemeIcon>
+            <Stack gap={2} maw={450}>
+              <Title order={3} c="blue.8">
+                {t("ai_title")}
+              </Title>
+              <Text size="md" c="blue.8" fw={500}>
+                {t("ai_body")}
+              </Text>
+            </Stack>
+          </Group>
+        </Paper>
         <Suspense
           fallback={
             <Center>
