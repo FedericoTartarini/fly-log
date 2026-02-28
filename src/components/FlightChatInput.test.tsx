@@ -13,7 +13,7 @@
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../test-utils/index.js";
+import { render, screen, waitFor } from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 
 // ─── Mock the AI parser ───────────────────────────────────────────────────────
@@ -85,34 +85,43 @@ describe("FlightChatInput", () => {
   it("renders the textarea, parse button, and examples", () => {
     renderComponent();
 
-    expect(getTextarea()).toBeInTheDocument();
+    expect(getTextarea()).not.toBeNull();
     expect(
       screen.getByRole("button", { name: /parse with ai/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/try one of these examples/i)).toBeInTheDocument();
+    ).not.toBeNull();
+    expect(screen.getByText(/try one of these examples/i)).not.toBeNull();
   });
 
   it("parse button is disabled when textarea is empty", () => {
     renderComponent();
     expect(
-      screen.getByRole("button", { name: /parse with ai/i }),
-    ).toBeDisabled();
+      screen
+        .getByRole("button", { name: /parse with ai/i })
+        .hasAttribute("disabled"),
+    ).toBe(true);
   });
 
   it("parse button is enabled after typing in the textarea", async () => {
     renderComponent();
     await userEvent.type(getTextarea(), "SYD to SIN");
     expect(
-      screen.getByRole("button", { name: /parse with ai/i }),
-    ).toBeEnabled();
+      screen
+        .getByRole("button", { name: /parse with ai/i })
+        .hasAttribute("disabled"),
+    ).toBe(false);
   });
 
   it("clicking an example populates the textarea", async () => {
     renderComponent();
     const firstExample =
-      "I flew from Sydney to Singapore on the 10th of July 2026 with Qantas";
-    // The component renders each example wrapped in quotes: `"${example}"`
-    await userEvent.click(screen.getByText(`"${firstExample}"`));
+      "I will fly from Sydney to Singapore on the 10th of July 2026 with Qantas";
+    const exampleButton = screen
+      .getAllByRole("button")
+      .find((button: HTMLElement) =>
+        button.textContent?.includes(firstExample),
+      );
+    expect(exampleButton).toBeTruthy();
+    await userEvent.click(exampleButton as HTMLElement);
     expect(getTextarea().value).toBe(firstExample);
   });
 
@@ -128,13 +137,13 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/flight details extracted/i)).toBeInTheDocument();
+      expect(screen.getByText(/flight details extracted/i)).not.toBeNull();
     });
 
-    expect(screen.getByText("SYD")).toBeInTheDocument();
-    expect(screen.getByText("SIN")).toBeInTheDocument();
-    expect(screen.getByText("2026-07-10")).toBeInTheDocument();
-    expect(screen.getByText("QF")).toBeInTheDocument();
+    expect(screen.getByText("SYD")).not.toBeNull();
+    expect(screen.getByText("SIN")).not.toBeNull();
+    expect(screen.getByText("2026-07-10")).not.toBeNull();
+    expect(screen.getByText("QF")).not.toBeNull();
     expect(onParsed).toHaveBeenCalledWith(fullFlight);
   });
 
@@ -150,7 +159,7 @@ describe("FlightChatInput", () => {
     await waitFor(() => {
       expect(
         screen.getByRole("button", { name: /go to manual entry/i }),
-      ).toBeInTheDocument();
+      ).not.toBeNull();
     });
   });
 
@@ -185,12 +194,12 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/some details are missing/i)).toBeInTheDocument();
+      expect(screen.getByText(/some details are missing/i)).not.toBeNull();
     });
 
-    expect(screen.getByText(/Arrival Airport/)).toBeInTheDocument();
-    expect(screen.getByText(/Departure Date/)).toBeInTheDocument();
-    expect(screen.getByText(/Airline/)).toBeInTheDocument();
+    expect(screen.getByText(/Arrival Airport/)).not.toBeNull();
+    expect(screen.getByText(/Departure Date/)).not.toBeNull();
+    expect(screen.getByText(/Airline/)).not.toBeNull();
   });
 
   it("does NOT show missing-fields warning when all required fields are present", async () => {
@@ -204,9 +213,7 @@ describe("FlightChatInput", () => {
 
     await waitFor(() => screen.getByText(/flight details extracted/i));
 
-    expect(
-      screen.queryByText(/some details are missing/i),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/some details are missing/i)).toBeNull();
   });
 
   // ── Return flight section ───────────────────────────────────────────────────
@@ -221,11 +228,11 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/return flight/i)).toBeInTheDocument();
+      expect(screen.getByText(/return flight/i)).not.toBeNull();
     });
 
-    expect(screen.getByText("2026-07-20")).toBeInTheDocument();
-    expect(screen.getByText("14:30")).toBeInTheDocument();
+    expect(screen.getByText("2026-07-20")).not.toBeNull();
+    expect(screen.getByText("14:30")).not.toBeNull();
   });
 
   it("labels the first section 'Outbound flight' when a return is detected", async () => {
@@ -238,7 +245,7 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() => screen.getByText(/outbound flight/i));
-    expect(screen.getByText(/outbound flight/i)).toBeInTheDocument();
+    expect(screen.getByText(/outbound flight/i)).not.toBeNull();
   });
 
   // ── Error state ─────────────────────────────────────────────────────────────
@@ -255,12 +262,12 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/could not parse flight/i)).toBeInTheDocument();
+      expect(screen.getByText(/could not parse flight/i)).not.toBeNull();
     });
 
     expect(
       screen.getByText(/AI returned an unexpected response/i),
-    ).toBeInTheDocument();
+    ).not.toBeNull();
     expect(onParsed).not.toHaveBeenCalled();
   });
 
@@ -279,12 +286,10 @@ describe("FlightChatInput", () => {
     await userEvent.click(screen.getByRole("button", { name: /start over/i }));
 
     expect(getTextarea().value).toBe("");
-    expect(
-      screen.queryByText(/flight details extracted/i),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/flight details extracted/i)).toBeNull();
     expect(
       screen.getByRole("button", { name: /parse with ai/i }),
-    ).toBeInTheDocument();
+    ).not.toBeNull();
   });
 
   // ── Keyboard shortcut ───────────────────────────────────────────────────────

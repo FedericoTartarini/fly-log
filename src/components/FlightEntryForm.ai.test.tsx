@@ -11,7 +11,7 @@
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../test-utils/index.js";
+import { render, screen, waitFor } from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 
 // ── Mock heavy dependencies ──────────────────────────────────────────────────
@@ -87,16 +87,26 @@ describe("FlightEntryForm – AI tab integration", () => {
         airport_name: "Sydney Airport",
         city: "Sydney",
         country: "Australia",
+        lat: -33.9399,
+        lon: 151.1753,
+        iso_country: "AU",
+        iso_region: "AU-NSW",
+        elevation: 21,
       },
       {
         iata: "SIN",
         airport_name: "Changi Airport",
         city: "Singapore",
         country: "Singapore",
+        lat: 1.3644,
+        lon: 103.9915,
+        iso_country: "SG",
+        iso_region: "SG-01",
+        elevation: 7,
       },
     ]);
     vi.mocked(loadAirlinesInfo).mockResolvedValue([
-      { iata: "QF", name: "Qantas" },
+      { iata: "QF", name: "Qantas", icao: "QFA" },
     ]);
   });
 
@@ -111,19 +121,19 @@ describe("FlightEntryForm – AI tab integration", () => {
 
     expect(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
-    ).toBeInTheDocument();
+    ).not.toBeNull();
     expect(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    ).toBeInTheDocument();
+    ).not.toBeNull();
     expect(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.CSV) }),
-    ).toBeInTheDocument();
+    ).not.toBeNull();
   });
 
   it("shows Manual Entry panel by default", () => {
     render(<FlightEntryForm />);
 
-    expect(screen.getByLabelText(/departure date/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
   });
 
   it("switching to AI Chat tab shows the FlightChatInput textarea", async () => {
@@ -136,7 +146,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => {
       expect(
         screen.getByRole("button", { name: /parse with ai/i }),
-      ).toBeInTheDocument();
+      ).not.toBeNull();
     });
   });
 
@@ -165,26 +175,28 @@ describe("FlightEntryForm – AI tab integration", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
-      ).toHaveAttribute("aria-selected", "true");
+        screen
+          .getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) })
+          .getAttribute("aria-selected"),
+      ).toBe("true");
     });
     // Verify that parsed AI values populated the manual form inputs
-    const departureAirport = screen.getByRole("textbox", {
-      name: /^departure airport/i,
-      selector: "input:not([disabled])",
-    }) as HTMLInputElement;
-    const arrivalAirport = screen.getByRole("textbox", {
-      name: /^arrival airport/i,
-      selector: "input:not([disabled])",
-    }) as HTMLInputElement;
-    const airline = screen.getByRole("textbox", {
-      name: /^airline/i,
-      selector: "input:not([disabled])",
-    }) as HTMLInputElement;
+    const departureAirport = screen.getAllByLabelText(
+      /^departure airport/i,
+    )[0] as HTMLInputElement;
+    const arrivalAirport = screen.getAllByLabelText(
+      /^arrival airport/i,
+    )[0] as HTMLInputElement;
+    const airline = screen.getAllByLabelText(
+      /^airline/i,
+    )[0] as HTMLInputElement;
     const departureTime = screen.getByLabelText(
       /departure time/i,
     ) as HTMLInputElement;
 
+    expect(departureAirport.disabled).toBe(false);
+    expect(arrivalAirport.disabled).toBe(false);
+    expect(airline.disabled).toBe(false);
     expect(departureAirport.value).toMatch(/SYD/i);
     expect(arrivalAirport.value).toMatch(/SIN/i);
     expect(airline.value).toMatch(/QF/i);
@@ -216,8 +228,10 @@ describe("FlightEntryForm – AI tab integration", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
-      ).toHaveAttribute("aria-selected", "true");
+        screen
+          .getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) })
+          .getAttribute("aria-selected"),
+      ).toBe("true");
     });
   });
 
@@ -247,7 +261,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => {
       expect(
         screen.getByRole("heading", { name: /return flight/i }),
-      ).toBeInTheDocument();
+      ).not.toBeNull();
     });
   });
 
@@ -267,10 +281,10 @@ describe("FlightEntryForm – AI tab integration", () => {
 
     expect(
       screen.queryByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    ).not.toBeInTheDocument();
+    ).toBeNull();
     expect(
       screen.queryByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.CSV) }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByLabelText(/departure date/i)).toBeInTheDocument();
+    ).toBeNull();
+    expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
   });
 });
