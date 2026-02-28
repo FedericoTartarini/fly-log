@@ -164,6 +164,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
         autosize
         onKeyDown={(e) => {
           if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
             handleParse();
           }
         }}
