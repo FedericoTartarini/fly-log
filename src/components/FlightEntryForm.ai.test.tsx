@@ -171,12 +171,15 @@ describe("FlightEntryForm – AI tab integration", () => {
     // Verify that parsed AI values populated the manual form inputs
     const departureAirport = screen.getByRole("textbox", {
       name: /^departure airport/i,
+      selector: "input:not([disabled])",
     }) as HTMLInputElement;
     const arrivalAirport = screen.getByRole("textbox", {
       name: /^arrival airport/i,
+      selector: "input:not([disabled])",
     }) as HTMLInputElement;
     const airline = screen.getByRole("textbox", {
       name: /^airline/i,
+      selector: "input:not([disabled])",
     }) as HTMLInputElement;
     const departureTime = screen.getByLabelText(
       /departure time/i,
