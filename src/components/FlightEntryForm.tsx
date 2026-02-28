@@ -305,6 +305,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
   const handleAiParsed = (parsedFlight: ParsedFlight) => {
     const hasReturn = !!parsedFlight.return_date;
+    let departureDate = form.values.departureDate;
+    let returnDate = form.values.returnDate;
+    try {
+      if (parsedFlight.departure_date) {
+        departureDate = parseToDate(parsedFlight.departure_date);
+      }
+    } catch (err) {
+      // Could log error or show notification for invalid date
+    }
+    try {
+      if (parsedFlight.return_date) {
+        returnDate = parseToDate(parsedFlight.return_date);
+      }
+    } catch (err) {
+      // Could log error or show notification for invalid date
+    }
     form.setValues({
       ...form.values,
       departureAirport:
@@ -314,13 +330,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       airline: parsedFlight.airline_iata ?? form.values.airline,
       flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
       departureTime: parsedFlight.departure_time ?? form.values.departureTime,
-      departureDate: parsedFlight.departure_date
-        ? parseToDate(parsedFlight.departure_date)
-        : form.values.departureDate,
+      departureDate,
       // Return leg
-      returnDate: parsedFlight.return_date
-        ? parseToDate(parsedFlight.return_date)
-        : form.values.returnDate,
+      returnDate,
       returnTime: parsedFlight.return_time ?? form.values.returnTime,
       returnFlightNumber:
         parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
