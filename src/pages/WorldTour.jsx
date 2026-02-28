@@ -497,6 +497,7 @@ function WorldTour() {
       projection,
       drawBase,
       drawActive,
+      zoom, // expose zoom instance
     };
 
     return () => {
@@ -668,13 +669,61 @@ function WorldTour() {
               </Text>
             )}
 
-            <div ref={containerRef}>
+            <div ref={containerRef} style={{ position: "relative" }}>
               <svg
                 ref={svgRef}
                 role="img"
                 aria-label={t("map_aria")}
                 style={{ width: "100%", height: "auto", display: "block" }}
               />
+              {/* Zoom Controls */}
+              <div
+                style={{
+                  position: "absolute",
+                  right: 16,
+                  bottom: 16,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                  zIndex: 2,
+                }}
+                aria-label={t("zoom_controls")}
+              >
+                <Button
+                  size="xs"
+                  aria-label={t("zoom_in")}
+                  tabIndex={0}
+                  onClick={() => {
+                    const viz = vizRef.current;
+                    if (viz && viz.svg && viz.zoom) {
+                      viz.svg
+                        .transition()
+                        .duration(200)
+                        .call(viz.zoom.scaleBy, 1.2);
+                    }
+                  }}
+                  style={{ borderRadius: 8, marginBottom: 4 }}
+                >
+                  +
+                </Button>
+                <Button
+                  size="xs"
+                  aria-label={t("zoom_out")}
+                  tabIndex={0}
+                  onClick={() => {
+                    const viz = vizRef.current;
+                    if (viz && viz.svg && viz.zoom) {
+                      viz.svg
+                        .transition()
+                        .duration(200)
+                        .call(viz.zoom.scaleBy, 1 / 1.2);
+                    }
+                  }}
+                  style={{ borderRadius: 8 }}
+                >
+                  –
+                </Button>
+              </div>
             </div>
           </Stack>
         </Card>
