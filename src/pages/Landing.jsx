@@ -18,6 +18,10 @@ import {
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import showcase from "../assets/showcase.png";
+import showcase380 from "../assets/showcase-380.webp";
+import showcase760 from "../assets/showcase-760.webp";
+import showcase1200 from "../assets/showcase-1200.webp";
+import showcase1800 from "../assets/showcase-1800.webp";
 import { PATHS } from "../constants/MyClasses.ts";
 import { useTranslation } from "react-i18next";
 import { IconRobotFace } from "@tabler/icons-react";
@@ -105,8 +109,8 @@ function Landing() {
           <Image
             radius="md"
             src={showcase}
-            // srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
-            // sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
+            srcSet={`${showcase380} 380w, ${showcase760} 760w, ${showcase1200} 1200w, ${showcase1800} 1800w`}
+            sizes="(max-width: 900px) 90vw, (max-width: 1400px) 1200px, 1800px"
             alt={t("flight_image_alt")}
             h="600px"
             fit="contain"
