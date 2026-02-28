@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "vitest": "vitest run",
-    "vitest:watch": "vitest",
+    "vitest": "NODE_OPTIONS= vitest run",
+    "vitest:watch": "NODE_OPTIONS= vitest",
     "test:e2e": "cypress open",
     "test:e2e:headless": "cypress run"
   },
