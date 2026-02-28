@@ -5,7 +5,6 @@ import {
   Button,
   Group,
   Title,
-  Paper,
   Stack,
   Tabs,
   Switch,
@@ -301,7 +300,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const isEditing = Boolean(flight && flight.id);
 
   const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
-    FLIGHT_ENTRY_TABS.AI,
+    FLIGHT_ENTRY_TABS.MANUAL,
   );
 
   const handleAiParsed = (parsedFlight: ParsedFlight) => {
@@ -316,17 +315,17 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
       departureTime: parsedFlight.departure_time ?? form.values.departureTime,
       departureDate: parsedFlight.departure_date
-        ? new Date(parsedFlight.departure_date)
+        ? parseToDate(parsedFlight.departure_date)
         : form.values.departureDate,
       // Return leg
       returnDate: parsedFlight.return_date
-        ? new Date(parsedFlight.return_date)
+        ? parseToDate(parsedFlight.return_date)
         : form.values.returnDate,
       returnTime: parsedFlight.return_time ?? form.values.returnTime,
       returnFlightNumber:
         parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
     });
-    if (hasReturn) setAddReturn(true);
+    setAddReturn(hasReturn);
   };
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
