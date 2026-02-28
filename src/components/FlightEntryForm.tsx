@@ -18,12 +18,15 @@ import { parseToDate } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
+import FlightChatInput from "./FlightChatInput";
+import type { ParsedFlight } from "../utils/flightAiParser";
 import {
   loadAirlinesInfo,
   loadAirportsInfo,
   type AirlineInfo,
 } from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
+import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
 
 type SelectOption = {
   value: string;
@@ -297,6 +300,35 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
   const isEditing = Boolean(flight && flight.id);
 
+  const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
+    FLIGHT_ENTRY_TABS.AI,
+  );
+
+  const handleAiParsed = (parsedFlight: ParsedFlight) => {
+    const hasReturn = !!parsedFlight.return_date;
+    form.setValues({
+      ...form.values,
+      departureAirport:
+        parsedFlight.departure_airport_iata ?? form.values.departureAirport,
+      arrivalAirport:
+        parsedFlight.arrival_airport_iata ?? form.values.arrivalAirport,
+      airline: parsedFlight.airline_iata ?? form.values.airline,
+      flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
+      departureTime: parsedFlight.departure_time ?? form.values.departureTime,
+      departureDate: parsedFlight.departure_date
+        ? new Date(parsedFlight.departure_date)
+        : form.values.departureDate,
+      // Return leg
+      returnDate: parsedFlight.return_date
+        ? new Date(parsedFlight.return_date)
+        : form.values.returnDate,
+      returnTime: parsedFlight.return_time ?? form.values.returnTime,
+      returnFlightNumber:
+        parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
+    });
+    if (hasReturn) setAddReturn(true);
+  };
+
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
   const manualPanel = (
     <Stack>
@@ -455,27 +487,47 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   );
 
   return (
-    <Paper p="md" withBorder>
+    <>
       {isEditing ? (
         // When editing, render only the manual panel without the Tabs header or CSV option
         manualPanel
       ) : (
-        <Tabs defaultValue="manual">
+        <Tabs
+          value={activeTab}
+          onChange={(v) => setActiveTab(v as FlightEntryTab | null)}
+          variant={"outline"}
+        >
           <Tabs.List>
-            <Tabs.Tab value="manual">{t("form.tabs.manual")}</Tabs.Tab>
-            <Tabs.Tab value="csv">{t("form.tabs.csv")}</Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.AI}>
+              {t("form.tabs.ai")}
+            </Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.MANUAL}>
+              {t("form.tabs.manual")}
+            </Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.CSV}>
+              {t("form.tabs.csv")}
+            </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="manual" pt="xs">
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.MANUAL} pt="xs">
             {manualPanel}
           </Tabs.Panel>
 
-          <Tabs.Panel value="csv" pt="xs">
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.AI} pt="xs">
+            <FlightChatInput
+              onParsed={(parsed) => {
+                handleAiParsed(parsed);
+              }}
+              onConfirm={() => setActiveTab(FLIGHT_ENTRY_TABS.MANUAL)}
+            />
+          </Tabs.Panel>
+
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.CSV} pt="xs">
             <FlightCsvUpload onComplete={onSaved} />
           </Tabs.Panel>
         </Tabs>
       )}
-    </Paper>
+    </>
   );
 };
 

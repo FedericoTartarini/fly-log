@@ -104,6 +104,7 @@
     },
     "tabs": {
       "manual": "Inserimento manuale",
+      "ai": "✨ Chat AI",
       "csv": "Caricamento CSV"
     },
     "placeholders": {
@@ -172,5 +173,31 @@
     "airline": "Compagnia aerea",
     "airport": "Città"
   },
-  "loading": "Caricamento..."
+  "loading": "Caricamento...",
+  "ai": {
+    "title": "Descrivi il tuo volo",
+    "subtitle": "Racconta il tuo volo in italiano e compileremo il modulo per te",
+    "examples_label": "Prova uno di questi esempi:",
+    "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
+    "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
+    "parse_button": "Analizza con AI",
+    "error_title": "Impossibile analizzare il volo",
+    "error_generic": "Non è stato possibile comprendere i dettagli del volo. Prova a riformulare.",
+    "success_title": "Dettagli volo estratti!",
+    "success_subtitle": "Verifica i dettagli qui sotto, poi clicca \"Vai all'inserimento manuale\" per confermare e salvare.",
+    "missing_title": "Alcuni dettagli mancano",
+    "missing_subtitle": "Inserisci manualmente i seguenti campi nel modulo:",
+    "go_to_manual": "Vai all'inserimento manuale",
+    "reset": "Ricomincia",
+    "flight_details": "Dettagli volo",
+    "outbound_leg": "Volo di andata",
+    "return_leg": "Volo di ritorno",
+    "from": "Da",
+    "to": "A",
+    "date": "Data",
+    "time": "Ora",
+    "airline": "Compagnia",
+    "flight_number": "N° volo",
+    "powered_by": "Powered by Google Gemini via Firebase AI"
+  }
 }
