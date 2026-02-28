@@ -18,18 +18,18 @@ jobs:
       group: cleanup-ai-pr-${{ github.event.pull_request.number }}
       cancel-in-progress: true
     steps:
-      - name: Delete old AI comments
+      - name: Delete stale AI issue comments
         uses: actions/github-script@v7
         with:
           script: |
-            // Use pagination so we don't miss comments when there are many
+            // Use pagination so we don't miss comments when there are many.
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
             });
 
-            // Known bot usernames and helpful body patterns to match noisy AI reviews
+            // Known bot usernames and helpful body patterns.
             const aiBots = [
               'coderabbitai[bot]',
               'coderabbit[bot]',
@@ -52,4 +52,50 @@ jobs:
                   comment_id: comment.id,
                 });
               }
+            }
+
+      - name: Delete stale AI inline review comments
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const currentHeadSha = pr.head.sha;
+
+            // Pull request review comments are the inline comments on changed files.
+            const reviewComments = await github.paginate(github.rest.pulls.listReviewComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+
+            const aiBots = new Set([
+              'coderabbitai[bot]',
+              'coderabbit[bot]',
+              'github-copilot[bot]',
+              'github-actions[bot]',
+              'coderabbit-ai',
+            ]);
+            const noisyBodyPattern = /automated review|suggested by ai|ai suggestion|coderabbit/i;
+
+            for (const comment of reviewComments) {
+              const author = comment.user && comment.user.login;
+              const body = comment.body || '';
+              const isAi = aiBots.has(author) || noisyBodyPattern.test(body);
+
+              if (!isAi) continue;
+
+              // Keep only comments created for the current head commit.
+              // If the PR changed, older inline bot comments are stale noise.
+              const isStale = comment.commit_id !== currentHeadSha;
+              if (!isStale) continue;
+
+              console.log(
+                `Deleting stale inline comment ${comment.id} from ${author} on ${comment.path}`
+              );
+              await github.rest.pulls.deleteReviewComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: comment.id,
+              });
             }

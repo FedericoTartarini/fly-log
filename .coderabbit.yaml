@@ -1,16 +1,15 @@
 # .coderabbit.yaml
 version: "1.0"
 reviews:
-  # Keep feedback high-level and focused on actionable issues
+  # Focus on practical, high-signal findings while still allowing actionable quick wins.
   profile: "chill"
-  # Only post comments for issues with high confidence/severity
+  # Filter out low-confidence noise.
   high_threshold: true
-  # Prefer a single consolidated review over many line comments
+  # Keep review output compact.
   request_changes_only: true
-  # Collapse or group similar findings into one comment
   collapse_repeated_findings: true
-  # Limit the number of comments per run to avoid spamming the PR
-  max_comments: 8
+  # Keep comments tight and easy to process.
+  max_comments: 6
   # Only run reviews on these branches by default
   target_branches:
     - main
@@ -21,16 +20,17 @@ chat:
   auto_reply: false
 
 instructions: >
-  Do not post repetitive or minor style suggestions. Consolidate all feedback into a single
-  summary comment where possible. If a line has already been commented on in a previous
-  revision, do not post again.
+  Prioritize easy-to-implement fixes that can be completed in under 30 minutes and avoid
+  repetitive or purely stylistic suggestions. Prefer findings with concrete change steps and
+  include a minimal patch-style example when possible. Consolidate related findings into one
+  comment. If a line has already been commented on in a previous revision, do not post it again.
+  Skip advice that requires large refactors unless it is a correctness, reliability, or security risk.
 
 # Avoid commenting on generated or vendored files
 exclude_paths:
   - node_modules/**
   - dist/**
   - build/**
-  - .github/**
 
 # Treat these file patterns as non-actionable (docs/examples) unless there are security issues
 ignore_paths:
