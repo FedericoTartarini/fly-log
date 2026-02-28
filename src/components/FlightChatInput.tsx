@@ -258,24 +258,30 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
                   {t("ai.return_leg")}
                 </Text>
                 <List size="xs" spacing={4} icon={<IconPlane size={12} />}>
-                  <List.Item>
-                    {t("ai.from")}:{" "}
-                    <Badge size="xs" variant="light" color="green">
-                      {parsed.arrival_airport_iata}
-                    </Badge>
-                  </List.Item>
-                  <List.Item>
-                    {t("ai.to")}:{" "}
-                    <Badge size="xs" variant="light" color="blue">
-                      {parsed.departure_airport_iata}
-                    </Badge>
-                  </List.Item>
-                  <List.Item>
-                    {t("ai.date")}:{" "}
-                    <Badge size="xs" variant="light" color="orange">
-                      {parsed.return_date}
-                    </Badge>
-                  </List.Item>
+                  {parsed.arrival_airport_iata && (
+                    <List.Item>
+                      {t("ai.from")}:{" "}
+                      <Badge size="xs" variant="light" color="green">
+                        {parsed.arrival_airport_iata}
+                      </Badge>
+                    </List.Item>
+                  )}
+                  {parsed.departure_airport_iata && (
+                    <List.Item>
+                      {t("ai.to")}:{" "}
+                      <Badge size="xs" variant="light" color="blue">
+                        {parsed.departure_airport_iata}
+                      </Badge>
+                    </List.Item>
+                  )}
+                  {parsed.return_date && (
+                    <List.Item>
+                      {t("ai.date")}:{" "}
+                      <Badge size="xs" variant="light" color="orange">
+                        {parsed.return_date}
+                      </Badge>
+                    </List.Item>
+                  )}
                   {parsed.return_time && (
                     <List.Item>
                       {t("ai.time")}:{" "}
