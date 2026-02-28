@@ -84,9 +84,13 @@ export async function parseFlightFromText(
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
-  } catch {
+  } catch (e) {
+    console.error("Failed to parse AI response JSON:", {
+      error: e,
+      rawResponse: rawText,
+    });
     throw new Error(
-      `AI returned an unexpected response. Please try rephrasing your input.\n\nRaw response: ${rawText}`,
+      "AI returned an unexpected response. Please try rephrasing your input.",
     );
   }
 
@@ -96,26 +100,29 @@ export async function parseFlightFromText(
 
   const r = parsed as Record<string, unknown>;
 
+  const normalizeIataCode = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const normalized = value.trim().toUpperCase();
+    return normalized.length > 0 ? normalized : null;
+  };
+
+  const normalizeFlightNumber = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const digitsOnly = value.replace(/\D/g, "");
+    return digitsOnly.length > 0 ? digitsOnly : null;
+  };
+
   return {
-    departure_airport_iata:
-      typeof r.departure_airport_iata === "string"
-        ? r.departure_airport_iata
-        : null,
-    arrival_airport_iata:
-      typeof r.arrival_airport_iata === "string"
-        ? r.arrival_airport_iata
-        : null,
+    departure_airport_iata: normalizeIataCode(r.departure_airport_iata),
+    arrival_airport_iata: normalizeIataCode(r.arrival_airport_iata),
     departure_date:
       typeof r.departure_date === "string" ? r.departure_date : null,
     departure_time:
       typeof r.departure_time === "string" ? r.departure_time : null,
-    airline_iata: typeof r.airline_iata === "string" ? r.airline_iata : null,
-    flight_number: typeof r.flight_number === "string" ? r.flight_number : null,
+    airline_iata: normalizeIataCode(r.airline_iata),
+    flight_number: normalizeFlightNumber(r.flight_number),
     return_date: typeof r.return_date === "string" ? r.return_date : null,
     return_time: typeof r.return_time === "string" ? r.return_time : null,
-    return_flight_number:
-      typeof r.return_flight_number === "string"
-        ? r.return_flight_number
-        : null,
+    return_flight_number: normalizeFlightNumber(r.return_flight_number),
   };
 }

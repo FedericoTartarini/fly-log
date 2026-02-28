@@ -188,8 +188,8 @@ describe("FlightChatInput", () => {
       expect(screen.getByText(/some details are missing/i)).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/Arrival airport/)).toBeInTheDocument();
-    expect(screen.getByText(/Departure date/)).toBeInTheDocument();
+    expect(screen.getByText(/Arrival Airport/)).toBeInTheDocument();
+    expect(screen.getByText(/Departure Date/)).toBeInTheDocument();
     expect(screen.getByText(/Airline/)).toBeInTheDocument();
   });
 

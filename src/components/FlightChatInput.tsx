@@ -12,6 +12,7 @@ import {
   Divider,
   List,
   Flex,
+  UnstyledButton,
 } from "@mantine/core";
 import {
   IconRobot,
@@ -35,19 +36,12 @@ interface FlightChatInputProps {
   onConfirm: () => void;
 }
 
-const EXAMPLES = [
-  "I flew from Sydney to Singapore on the 10th of July 2026 with Qantas",
-  "London to Dubai on 15 March 2024, Emirates flight EK003 at 09:45",
-  "LAX to JFK on 2026-04-10 with Delta, flight DL405 at 08:30, returning on 2026-04-17",
-  "Flew Sydney to London with Qantas on 5 May, returning on 20 May 2024",
-];
-
-/** Human-readable label for each required field. */
-const FIELD_LABELS: Record<string, string> = {
-  departure_airport_iata: "Departure airport",
-  arrival_airport_iata: "Arrival airport",
-  departure_date: "Departure date",
-  airline_iata: "Airline",
+/** Map each required field key to its i18n key in the form labels namespace. */
+const FIELD_I18N_KEYS: Record<string, string> = {
+  departure_airport_iata: "form.labels.departure_airport",
+  arrival_airport_iata: "form.labels.arrival_airport",
+  departure_date: "form.labels.departure_date",
+  airline_iata: "form.labels.airline",
 };
 
 export const FlightChatInput: React.FC<FlightChatInputProps> = ({
@@ -60,18 +54,21 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   const [parsed, setParsed] = useState<ParsedFlight | null>(null);
   const { t } = useTranslation("flights");
 
+  const examples = t("ai.examples", { returnObjects: true }) as string[];
+
   const missingFields: string[] = parsed
     ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map(
-        (f) => FIELD_LABELS[f] ?? String(f),
+        (f) => t(FIELD_I18N_KEYS[f] ?? String(f)),
       )
     : [];
 
-  const hasAnyParsedField =
+  const hasAnyParsedField = Boolean(
     parsed &&
-    (parsed.departure_airport_iata ||
-      parsed.arrival_airport_iata ||
-      parsed.departure_date ||
-      parsed.airline_iata);
+      (parsed.departure_airport_iata ||
+        parsed.arrival_airport_iata ||
+        parsed.departure_date ||
+        parsed.airline_iata),
+  );
 
   const hasReturn = !!parsed?.return_date;
 
@@ -133,17 +130,24 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
           {t("ai.examples_label")}
         </Text>
         <Stack gap={6}>
-          {EXAMPLES.map((example) => (
-            <Text
-              key={example}
-              size="xs"
-              c="violet"
-              style={{ cursor: "pointer", textDecoration: "underline dotted" }}
-              onClick={() => handleExampleClick(example)}
-            >
-              "{example}"
-            </Text>
-          ))}
+          {Array.isArray(examples) &&
+            examples.map((example) => (
+              <UnstyledButton
+                key={example}
+                onClick={() => handleExampleClick(example)}
+                style={{ textAlign: "left" }}
+              >
+                <Text
+                  size="xs"
+                  c="violet"
+                  style={{
+                    textDecoration: "underline dotted",
+                  }}
+                >
+                  &quot;{example}&quot;
+                </Text>
+              </UnstyledButton>
+            ))}
         </Stack>
       </Paper>
 
@@ -181,7 +185,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
       )}
 
       {/* Success + parsed preview */}
-      {hasAnyParsedField && (
+      {hasAnyParsedField && parsed && (
         <Alert
           icon={<IconSparkles size={16} />}
           color="violet"
