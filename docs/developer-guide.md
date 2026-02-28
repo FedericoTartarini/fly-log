@@ -27,18 +27,30 @@ Fly Log is a React + Vite single-page app backed by Firebase Auth + Firestore. A
 
 ## Local setup
 
-1. Install dependencies
+1. Prerequisites
+
+- Node.js 18+ required.
+- Python 3.9+ required for reference data scripts.
+- Firebase project configured in the Firebase console before local setup.
+
+2. Install dependencies
 
 ```
 npm install
 ```
 
-2. Configure environment variables
+3. Configure environment variables
 
 - Copy `.env.example` to `.env.local` and populate Firebase values.
 - Required: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`.
 
-3. Run the app
+4. Generate reference data
+
+- Run `python python/create_airports_json.py` to generate `src/assets/airports.json`.
+- Run `python python/create_airlines_json.py` to generate `src/assets/airlines.json`.
+- The Vite build copies these into `/data/*.json` via `vite-plugin-static-copy` (see `vite.config.js`).
+
+5. Run the app
 
 ```
 npm run dev
@@ -95,6 +107,33 @@ npm run test:e2e
 ```
 
 ## Deployment notes
+
+**Prerequisites**
+
+- Install the Firebase CLI (`npm install -g firebase-tools`).
+- Authenticate with `firebase login`.
+
+**Build**
+
+```
+npm run build
+```
+
+**Deploy**
+
+```
+firebase deploy
+```
+
+**Environment variables**
+
+- Set production Firebase config via your hosting provider or CI secrets.
+
+**Firestore rules**
+
+- Deploy rules separately if needed: `firebase deploy --only firestore:rules`.
+
+**Notes**
 
 - Firebase hosting is configured via `firebase.json`.
 - Service worker is registered in production from `src/main.jsx`.
