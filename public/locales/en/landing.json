@@ -5,6 +5,8 @@
   "ai_title": "AI-Assisted Flight Entry",
   "ai_body": "Add new flights instantly with our integrated AI assistant. Just describe your flight and let AI handle the rest.",
   "learn_more": "Learn More",
+  "route": "Rome ➜ Paris",
+  "ai_added_flight": "AI added your flight!",
   "flight_image_alt": "Airplane flying through clouds",
   "features": {
     "where_title": "Where did you fly?",

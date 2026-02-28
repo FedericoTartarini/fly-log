@@ -4,7 +4,9 @@
   "get_started": "Inizia",
   "learn_more": "Scopri di più",
   "ai_title": "Aggiunta Volo Assistita dall’AI",
-  "ai_body": "Aggiungi nuovi voli all’istante grazie all’assistente AI integrato. Descrivi semplicemente il tuo volo e l’AI farà tutto il resto. ",
+  "ai_body": "Aggiungi nuovi voli all’istante grazie all’assistente AI integrato. Descrivi semplicemente il tuo volo e l’AI farà tutto il resto.",
+  "route": "Roma ➜ Parigi",
+  "ai_added_flight": "L’AI ha aggiunto il tuo volo!",
   "features": {
     "where_title": "Dove hai volato?",
     "where_desc": "Visualizza tutti i tuoi voli su una mappa mondiale.",

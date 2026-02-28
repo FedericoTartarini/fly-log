@@ -118,11 +118,13 @@
     },
     "validation": {
       "departure_date_required": "Departure date is required",
+      "departure_date_invalid": "Departure date is invalid",
       "departure_airport_required": "Departure airport is required",
       "arrival_airport_required": "Arrival airport is required",
       "airline_required": "Airline is required",
       "arrival_differs": "Arrival and departure airports must be different",
-      "return_date_required": "Return date is required"
+      "return_date_required": "Return date is required",
+      "return_date_invalid": "Return date is invalid"
     },
     "notifications": {
       "saving_title": "Saving",
@@ -179,7 +181,7 @@
     "subtitle": "Tell us about your flight in plain language and we'll fill in the form for you",
     "examples_label": "Try one of these examples:",
     "examples": [
-      "I flew from Sydney to Singapore on the 10th of July 2026 with Qantas",
+      "I will fly from Sydney to Singapore on the 10th of July 2026 with Qantas",
       "London to Dubai on 15 March 2024, Emirates flight EK003 at 09:45",
       "LAX to JFK on 2026-04-10 with Delta, flight DL405 at 08:30, returning on 2026-04-17",
       "Flew Sydney to London with Qantas on 5 May, returning on 20 May 2024"

@@ -118,11 +118,13 @@
     },
     "validation": {
       "departure_date_required": "La data di partenza è obbligatoria",
+      "departure_date_invalid": "La data di partenza non è valida",
       "departure_airport_required": "L'aeroporto di partenza è obbligatorio",
       "arrival_airport_required": "L'aeroporto di arrivo è obbligatorio",
       "airline_required": "La compagnia è obbligatoria",
       "arrival_differs": "L'aeroporto di arrivo deve essere diverso da quello di partenza",
-      "return_date_required": "La data di ritorno è obbligatoria"
+      "return_date_required": "La data di ritorno è obbligatoria",
+      "return_date_invalid": "La data di ritorno non è valida"
     },
     "notifications": {
       "saving_title": "Salvataggio",
@@ -182,7 +184,7 @@
       "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
       "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45",
       "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
-      "Volato da Sydney a Londra con Qantas il 5 maggio, ritorno il 20 maggio 2024"
+      "Volato da Sydney a Londra con Qantas il 5 maggio 2024, ritorno il 20 maggio 2024"
     ],
     "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
     "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
