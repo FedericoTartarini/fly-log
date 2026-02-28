@@ -2,10 +2,16 @@ import { describe, expect, it } from "vitest";
 import { filterFlightsForFacetOptions } from "./flightFilterFacets";
 import { YEAR_FILTER } from "../constants/filters";
 
+const getISODateOffset = (days: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date.toISOString().slice(0, 10);
+};
+
 const flights = [
   {
     id: "1",
-    departure_date: "2025-01-10",
+    departure_date: getISODateOffset(30),
     departure_airport_iata: "JFK",
     arrival_airport_iata: "LHR",
     airline_iata: "BA",
@@ -22,7 +28,7 @@ const flights = [
   },
   {
     id: "2",
-    departure_date: "2025-02-01",
+    departure_date: getISODateOffset(-30),
     departure_airport_iata: "LAX",
     arrival_airport_iata: "NRT",
     airline_iata: "JL",
@@ -54,7 +60,8 @@ describe("filterFlightsForFacetOptions year presets", () => {
       "airline",
     );
 
-    expect(out.length).toBeLessThanOrEqual(flights.length);
+    expect(out).toHaveLength(1);
+    expect(out[0]?.id).toBe("1");
   });
 
   it("filters for past flights", () => {
@@ -71,6 +78,7 @@ describe("filterFlightsForFacetOptions year presets", () => {
       "airline",
     );
 
-    expect(out.length).toBeLessThanOrEqual(flights.length);
+    expect(out).toHaveLength(1);
+    expect(out[0]?.id).toBe("2");
   });
 });

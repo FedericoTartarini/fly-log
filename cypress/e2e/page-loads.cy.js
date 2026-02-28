@@ -1,6 +1,6 @@
 /* global describe, it, cy */
 
-describe("Page loads without console errors", () => {
+describe("Page loads", () => {
   it("loads the landing page", () => {
     cy.visit("/");
     cy.contains("Welcome to Your Personal Flight Tracker").should("be.visible");

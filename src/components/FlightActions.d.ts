@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
 export interface FlightActionsProps {
@@ -5,6 +6,6 @@ export interface FlightActionsProps {
   onEdit?: (flight: enhancedFlight) => void;
 }
 
-declare const FlightActions: React.FC<FlightActionsProps>;
+declare const FlightActions: FC<FlightActionsProps>;
 
 export default FlightActions;
