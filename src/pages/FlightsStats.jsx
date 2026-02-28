@@ -114,7 +114,7 @@ const FlightsStats = () => {
         onClose={() => setFiltersOpen(false)}
         title={t("filters.title")}
         size="lg"
-        overlayBlur={3}
+        overlayProps={{ blur: 3 }}
       >
         <FlightFilters />
       </Modal>
