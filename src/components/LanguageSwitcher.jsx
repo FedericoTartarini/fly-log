@@ -1,12 +1,30 @@
 import React from "react";
 import { Select } from "@mantine/core";
 import { useTranslation } from "react-i18next";
-import classes from "../pages/MyAppShell.module.css";
 
-const LanguageSwitcher = () => {
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English" },
+  { value: "it", label: "Italiano" },
+];
+
+const normalizeLanguage = (i18n) => {
+  const current = i18n.resolvedLanguage || i18n.language;
+  if (!current) {
+    return LANGUAGE_OPTIONS[0].value;
+  }
+
+  const fallback = current.split("-")[0];
+  const match = LANGUAGE_OPTIONS.find(
+    ({ value }) => value === current || value === fallback,
+  );
+
+  return match ? match.value : LANGUAGE_OPTIONS[0].value;
+};
+
+const LanguageSwitcher = ({ controlSx = {} }) => {
   const { i18n, t } = useTranslation();
 
-  const value = i18n.language || "en";
+  const value = normalizeLanguage(i18n);
 
   const handleChange = (val) => {
     if (!val) return;
@@ -24,12 +42,19 @@ const LanguageSwitcher = () => {
       size="xs"
       value={value}
       onChange={handleChange}
-      data={[
-        { value: "en", label: "English" },
-        { value: "it", label: "Italiano" },
-      ]}
-      sx={{ minWidth: 110 }}
-      className={classes.control}
+      data={LANGUAGE_OPTIONS}
+      withinPortal
+      dropdownPosition="bottom"
+      px="xs"
+      sx={{
+        minWidth: 110,
+      }}
+      styles={() => ({
+        dropdown: {
+          zIndex: 10_000,
+        },
+      })}
+      data-cy="language-select"
     />
   );
 };

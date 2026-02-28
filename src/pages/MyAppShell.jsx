@@ -5,6 +5,7 @@ import {
   Container,
   Drawer,
   Group,
+  Stack,
   rem,
   NavLink,
   Button,
@@ -12,12 +13,17 @@ import {
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
-import classes from "./MyAppShell.module.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import ColorSchemeToggle from "../components/ColorSchemeToggle";
 import AppFooter from "../components/AppFooter";
+
+const controlStyles = {
+  display: "block",
+  borderRadius: "var(--mantine-radius-md)",
+  fontWeight: 500,
+};
 
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
@@ -40,52 +46,32 @@ function MyAppShell() {
 
   const pinned = useHeadroom({ fixedAt: 120 });
 
-  const renderNavLinks = (onClickHandler) => (
-    <>
-      {!user && (
-        <NavLink
-          component={Link}
-          to={PATHS.LANDING}
-          label={t("nav.home")}
-          className={classes.control}
-          onClick={onClickHandler}
-        />
-      )}
-      {user && (
-        <>
+  const renderNavLinks = (onClickHandler) => {
+    const navItems = [
+      !user && { to: PATHS.LANDING, label: t("nav.home"), key: "home" },
+      user && { to: PATHS.STATS, label: t("nav.stats"), key: "stats" },
+      user && { to: PATHS.FLIGHTS, label: t("nav.flights"), key: "flights" },
+      user && { to: PATHS.TOUR, label: t("nav.tour"), key: "tour" },
+      { to: PATHS.ABOUT, label: t("nav.about"), key: "about" },
+    ].filter(Boolean);
+
+    return (
+      <Stack spacing="xs" w="100%">
+        {navItems.map(({ to, label, key }) => (
           <NavLink
+            key={key}
             component={Link}
-            to={PATHS.STATS}
-            label={t("nav.stats")}
-            className={classes.control}
+            px="xs"
+            to={to}
+            label={label}
+            sx={controlStyles}
             onClick={onClickHandler}
           />
-          <NavLink
-            component={Link}
-            to={PATHS.FLIGHTS}
-            label={t("nav.flights")}
-            className={classes.control}
-            onClick={onClickHandler}
-          />
-          <NavLink
-            component={Link}
-            to={PATHS.TOUR}
-            label={t("nav.tour")}
-            className={classes.control}
-            onClick={onClickHandler}
-          />
-        </>
-      )}
-      <NavLink
-        component={Link}
-        to={PATHS.ABOUT}
-        label={t("nav.about")}
-        className={classes.control}
-        onClick={onClickHandler}
-      />
-      <LanguageSwitcher />
-    </>
-  );
+        ))}
+        <LanguageSwitcher controlSx={controlStyles} />
+      </Stack>
+    );
+  };
 
   const SIZE_DRAWER = "xl"; // breakpoint for mobile vs desktop
 

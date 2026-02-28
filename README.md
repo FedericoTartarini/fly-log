@@ -217,6 +217,7 @@ describe("MyComponent", () => {
 - Detailed flight list in a table format.
 - Filter flights by date range, airline, and airport.
 - Displays airline logos for each flight.
+- Add new flights manually through a form, using CSV upload, or by parsing natural language input with AI assistance.
 
 ## Feature Roadmap (Suggestions)
 
