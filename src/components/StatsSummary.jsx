@@ -1,11 +1,13 @@
 import React from "react";
-import { Card, Grid, Group, Image, Button, Stack } from "@mantine/core";
+import { Card, Grid, Image, Button, Stack, SimpleGrid } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import useFlightStore from "../store.ts";
 import flightImg from "../assets/flight.webp";
 import flightImg380 from "../assets/flight-380.webp";
 import flightImg760 from "../assets/flight-760.webp";
+import flightImg1200 from "../assets/flight-1200.webp";
+import flightImg1800 from "../assets/flight-1800.webp";
 import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
 import { useTranslation } from "react-i18next";
@@ -23,8 +25,8 @@ function StatsSummary() {
       <Card.Section>
         <Image
           src={flightImg}
-          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg} 1920w`}
-          sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
+          srcSet={`${flightImg380} 380w, ${flightImg760} 760w, ${flightImg1200} 1200w, ${flightImg1800} 1800w`}
+          sizes="(max-width: 900px) 90vw, (max-width: 1400px) 1200px, 1800px"
           height={120}
           alt={t("image_alt")}
         />
@@ -94,14 +96,23 @@ function StatsSummary() {
           </Grid.Col>
         </Grid>
 
-        <Group justify="center" mt="md">
-          <Button variant="light" onClick={() => navigate(PATHS.FLIGHTS)}>
+        <SimpleGrid justify="center" mt="md" cols={2}>
+          <Button
+            variant="light"
+            onClick={() => navigate(PATHS.FLIGHTS)}
+            data-cy="view-flights-btn"
+          >
             {t("stats.view_flights")}
           </Button>
-          <Button variant="light" onClick={() => navigate(PATHS.TOUR)}>
+          <Button
+            variant="light"
+            color="accent"
+            onClick={() => navigate(PATHS.TOUR)}
+            data-cy="view-tour-btn"
+          >
             {t("stats.view_tour")}
           </Button>
-        </Group>
+        </SimpleGrid>
       </Stack>
     </Card>
   );

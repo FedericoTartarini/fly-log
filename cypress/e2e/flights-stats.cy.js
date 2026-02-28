@@ -7,27 +7,41 @@ describe("StatsSummary Component", () => {
     const password = Cypress.env("CY_TEST_PASSWORD");
 
     cy.visit("/login");
-    cy.get('input[name="email"]').type(email, { log: false });
-    cy.get('input[name="password"]').type(password, { log: false });
-    cy.get('button[type="submit"]').click();
+    cy.wait(500); // Allow React/Mantine hydration to fully complete
+    cy.get('[data-cy="login-email"]')
+      .should("exist")
+      .should("be.visible")
+      .should("not.be.disabled");
+    cy.get('[data-cy="login-email"]').type(email, { log: false });
+
+    cy.get('[data-cy="login-password"]')
+      .should("exist")
+      .should("be.visible")
+      .should("not.be.disabled");
+    cy.get('[data-cy="login-password"]').type(password, { log: false });
+
+    cy.get('[data-cy="login-submit"]').click();
     cy.location("pathname").should("eq", "/stats");
   });
 
   it("should display the correct statistics for all flights", () => {
+    cy.wait(500);
     cy.scrollTo(0, 500);
-    // Verify the presence of key statistics
-    cy.contains("Total Flights").should("be.visible");
-    cy.contains("Add New Flight").should("be.visible");
+    // Verify the presence of key statistics robustly by data-cy selectors
+    cy.get('[data-cy="total-flights-value"]').should("be.visible");
+    cy.get('[data-cy="total-flights-label"]').should("be.visible");
+    cy.get('[data-cy="total-distance-value"]').should("be.visible");
+    cy.get('[data-cy="total-distance-label"]').should("be.visible");
+    cy.get('[data-cy="total-time-value"]').should("be.visible");
+    cy.get('[data-cy="total-time-label"]').should("be.visible");
+    cy.get('[data-cy="airports-visited-value"]').should("be.visible");
+    cy.get('[data-cy="airports-visited-label"]').should("be.visible");
+    cy.get('[data-cy="airlines-flown-value"]').should("be.visible");
+    cy.get('[data-cy="airlines-flown-label"]').should("be.visible");
+    cy.get('[data-cy="countries-visited-value"]').should("be.visible");
+    cy.get('[data-cy="countries-visited-label"]').should("be.visible");
 
-    // Verify statistics update
-    cy.contains("Total Flights").should("be.visible");
-    cy.contains("Distance (km)").should("be.visible");
-    cy.contains("Time (days)").should("be.visible");
-    cy.contains("Airports Visited").should("be.visible");
-    cy.contains("Airlines Flown").should("be.visible");
-    cy.contains("Countries").should("be.visible");
-
-    // Use a case-insensitive contains to reduce fragility instead of exact string match
+    // Prefer robust selectors if available, but keep visible text for feature sections as backup
     cy.contains(/filter flights/i).should("be.visible");
   });
 });

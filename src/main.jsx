@@ -1,7 +1,11 @@
 // src/main.jsx
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
@@ -21,10 +25,10 @@ const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute.jsx"));
+const MyAppShell = lazy(() => import("./pages/MyAppShell.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
-import MyAppShell from "./pages/MyAppShell.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +80,38 @@ const router = createBrowserRouter([
 ]);
 
 const theme = createTheme({
+  primaryColor: "primary",
+  colors: {
+    accent: [
+      "#f3f0ff",
+      "#e3def3",
+      "#c3bae0",
+      "#a294ce",
+      "#8574bf",
+      "#735fb6",
+      "#6a55b3",
+      "#554295",
+      "#4f3d8e",
+      "#44347e",
+    ],
+    primary: [
+      "#ffe8ea",
+      "#ffcfd2",
+      "#ff9ca1",
+      "#fe656e",
+      "#fd3942",
+      "#fe1e27",
+      "#fe0f18",
+      "#e6000d",
+      "#cb0009",
+      "#b10004",
+    ],
+  },
+  defaultGradient: {
+    from: "primary.6",
+    to: "accent.6",
+    deg: 75,
+  },
   headings: {
     fontFamily: "Roboto, sans-serif",
   },
@@ -84,7 +120,11 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ColorSchemeScript defaultColorScheme="auto" />
-    <MantineProvider theme={theme} defaultColorScheme="auto">
+    <MantineProvider
+      theme={theme}
+      defaultColorScheme="auto"
+      // cssVariablesResolver={resolver}
+    >
       <Notifications />
       <AuthProvider>
         <Suspense
@@ -102,7 +142,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 
 // Register service worker
-if ("serviceWorker" in navigator) {
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     let hasRefreshedForNewWorker = false;
 

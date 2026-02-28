@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signOutUser } from "../firebaseClient";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const AuthContext = createContext({});
 
@@ -9,21 +8,62 @@ export const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const firebaseRef = useRef({ onAuthStateChanged: null, signOutUser: null });
 
   useEffect(() => {
+    let mounted = true;
+    let unsubscribe = () => {};
     setLoading(true);
-    const unsubscribe = onAuthStateChanged((firebaseUser) => {
-      setUser(firebaseUser ?? null);
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+    const initAuth = async () => {
+      try {
+        const firebase = await import("../firebaseClient");
+        if (!mounted) return;
+
+        firebaseRef.current = {
+          onAuthStateChanged: firebase.onAuthStateChanged,
+          signOutUser: firebase.signOutUser,
+        };
+
+        unsubscribe = firebase.onAuthStateChanged((firebaseUser) => {
+          setUser(firebaseUser ?? null);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.warn("Firebase auth init failed:", error);
+        if (mounted) {
+          setUser(null);
+          setLoading(false);
+        }
+      }
+    };
+
+    initAuth();
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, []);
+
+  const signOut = async () => {
+    try {
+      if (!firebaseRef.current.signOutUser) {
+        const firebase = await import("../firebaseClient");
+        firebaseRef.current.signOutUser = firebase.signOutUser;
+      }
+
+      return await firebaseRef.current.signOutUser();
+    } catch (error) {
+      console.error("Firebase signOut failed:", error);
+      throw error;
+    }
+  };
 
   const value = {
     user,
     loading, // Expose loading state
-    signOut: () => signOutUser(),
+    signOut,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -3,10 +3,10 @@ import { Title, Text, Stack } from "@mantine/core";
 
 const StatDisplay = ({ label, value, id }) => (
   <Stack align="center" justify="center" gap="xs">
-    <Title order={2} id={id} ta="center">
+    <Title order={2} id={id} ta="center" data-cy={`${id}-value`}>
       {value}
     </Title>
-    <Text size="md" c="dimmed" ta="center">
+    <Text size="md" c="dimmed" ta="center" data-cy={`${id}-label`}>
       {label}
     </Text>
   </Stack>

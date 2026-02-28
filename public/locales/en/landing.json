@@ -1,8 +1,12 @@
 {
   "title": "Welcome to Your Personal Flight Tracker",
-  "subtitle": "Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map. Sign in to get started.",
+  "subtitle": "Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map.",
   "get_started": "Get Started",
+  "ai_title": "AI-Assisted Flight Entry",
+  "ai_body": "Add new flights instantly with our integrated AI assistant. Just describe your flight and let AI handle the rest.",
   "learn_more": "Learn More",
+  "route": "Rome ➜ Paris",
+  "ai_added_flight": "AI added your flight!",
   "flight_image_alt": "Airplane flying through clouds",
   "features": {
     "where_title": "Where did you fly?",

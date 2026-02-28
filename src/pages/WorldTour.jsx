@@ -393,7 +393,7 @@ function WorldTour() {
         .data(routes, (d) => d.id)
         .join("path")
         .attr("fill", "none")
-        .attr("stroke", "#5d41b0")
+        .attr("stroke", "#C91A25")
         .attr("stroke-opacity", 0.33)
         .attr("stroke-width", 1.5)
         .attr("d", (route) =>
@@ -431,7 +431,7 @@ function WorldTour() {
       const points = route
         ? [
             { id: "from", coords: route.from, color: "#22c55e" },
-            { id: "to", coords: route.to, color: "#f97316" },
+            { id: "to", coords: route.to, color: "#ef4444" },
           ]
         : [];
 
@@ -591,6 +591,7 @@ function WorldTour() {
               <Button
                 onClick={handleStart}
                 disabled={!routes.length || isPlaying}
+                variant="gradient"
               >
                 {t("start")}
               </Button>

@@ -1,0 +1,39 @@
+# .coderabbit.yaml
+version: "1.0"
+reviews:
+  # Focus on practical, high-signal findings while still allowing actionable quick wins.
+  profile: "chill"
+  # Filter out low-confidence noise.
+  high_threshold: true
+  # Keep review output compact.
+  request_changes_only: true
+  collapse_repeated_findings: true
+  # Keep comments tight and easy to process.
+  max_comments: 6
+  # Only run reviews on these branches by default
+  target_branches:
+    - main
+    - master
+
+chat:
+  # Prevents the bot from auto-responding to every commit
+  auto_reply: false
+
+instructions: >
+  Prioritize easy-to-implement fixes that can be completed in under 30 minutes and avoid
+  repetitive or purely stylistic suggestions. Prefer findings with concrete change steps and
+  include a minimal patch-style example when possible. Consolidate related findings into one
+  comment. If a line has already been commented on in a previous revision, do not post it again.
+  Skip advice that requires large refactors unless it is a correctness, reliability, or security risk.
+
+# Avoid commenting on generated or vendored files
+exclude_paths:
+  - node_modules/**
+  - dist/**
+  - build/**
+
+# Treat these file patterns as non-actionable (docs/examples) unless there are security issues
+ignore_paths:
+  - "**/*.md"
+  - "docs/**"
+# If you prefer stricter reviews for sensitive areas, add path-based overrides later

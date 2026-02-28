@@ -1,15 +1,15 @@
 {
   "name": "fly-log",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "vitest": "vitest run",
-    "vitest:watch": "vitest",
+    "vitest": "NODE_OPTIONS= vitest run",
+    "vitest:watch": "NODE_OPTIONS= vitest",
     "test:e2e": "cypress open",
     "test:e2e:headless": "cypress run"
   },
@@ -23,7 +23,7 @@
     "@tabler/icons-react": "^3.34.1",
     "d3": "^7.9.0",
     "firebase": "^12.5.0",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^12.34.3",
     "geodesy": "^2.4.0",
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",

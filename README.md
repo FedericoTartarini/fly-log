@@ -71,6 +71,14 @@ Follow these instructions to get a local copy up and running.
     npm run build
     ```
 
+## Asset Optimization
+
+The ImageMagick helper script in `scripts/optimize-assets.sh` generates responsive WebP variants for images in `src/assets`. It creates `-380.webp`, `-760.webp`, `-1200.webp`, and `-1800.webp` sizes for each image, and includes explicit handling for the landing showcase image so it stays up to date whenever you replace it.
+
+```bash
+./scripts/optimize-assets.sh
+```
+
 ## Firebase Deployment
 
 1.  **Install Firebase CLI:**
@@ -85,11 +93,13 @@ Follow these instructions to get a local copy up and running.
     firebase login:use  # to select the project to use (run from project directory)
     ```
 3.  **Initialize Firebase in your project:**
+
     ```bash
     firebase init
     ```
 
     - Select "Hosting" and follow the prompts to set up your project.
+
 4.  **Deploy to Firebase:**
     ```bash
     firebase deploy
@@ -217,6 +227,13 @@ describe("MyComponent", () => {
 - Detailed flight list in a table format.
 - Filter flights by date range, airline, and airport.
 - Displays airline logos for each flight.
+- Add new flights manually through a form, using CSV upload, or by parsing natural language input with AI assistance.
+
+## Crawling & Sitemap
+
+- `public/robots.txt` currently blocks all crawling (`Disallow: /`) for private development.
+- Update `public/robots.txt` before going public, and add a sitemap URL when available.
+- Create `public/sitemap.xml` and update it before launch.
 
 ## Feature Roadmap (Suggestions)
 
@@ -330,5 +347,6 @@ describe("MyComponent", () => {
 - Difficulty: Medium
 
 #### 7. More visualizations
+
 - Use the vector map from Tabler to show countries visited: https://docs.tabler.io/ui/components/vector-maps
 - Difficulty: Low-Medium

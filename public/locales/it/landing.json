@@ -1,8 +1,12 @@
 {
   "title": "Benvenuto nel tuo Flight Tracker personale",
-  "subtitle": "Tieni un registro dettagliato di tutti i tuoi voli, esplora le tue statistiche di viaggio e visualizza i tuoi percorsi su una mappa mondiale. Accedi per iniziare.",
+  "subtitle": "Tieni un registro dettagliato di tutti i tuoi voli, esplora le tue statistiche di viaggio e visualizza i tuoi percorsi su una mappa mondiale.",
   "get_started": "Inizia",
   "learn_more": "Scopri di più",
+  "ai_title": "Aggiunta Volo Assistita dall’AI",
+  "ai_body": "Aggiungi nuovi voli all’istante grazie all’assistente AI integrato. Descrivi semplicemente il tuo volo e l’AI farà tutto il resto.",
+  "route": "Roma ➜ Parigi",
+  "ai_added_flight": "L’AI ha aggiunto il tuo volo!",
   "features": {
     "where_title": "Dove hai volato?",
     "where_desc": "Visualizza tutti i tuoi voli su una mappa mondiale.",
@@ -18,4 +22,3 @@
     "detail_desc": "Visualizza informazioni dettagliate del volo come aeroporti di partenza/arrivo, compagnia e numero di volo."
   }
 }
-

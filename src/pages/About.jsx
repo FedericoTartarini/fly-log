@@ -33,7 +33,7 @@ function About() {
           <Title order={2} ta="center" mb="lg">
             {t("title")}
           </Title>
-          <Text size="lg" ta="center" c="dimmed" mb="xl">
+          <Text size="lg" ta="center" c={"primary"} mb="xl">
             {t("subtitle")}
           </Text>
         </div>
@@ -121,7 +121,7 @@ function About() {
                   href={APP_INFO.PATREON}
                   target="_blank"
                   color="red"
-                  variant="filled"
+                  variant="gradient"
                   leftSection={<IconHeart size={14} />}
                 >
                   Support on Patreon

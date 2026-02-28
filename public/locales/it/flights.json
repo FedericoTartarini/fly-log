@@ -81,7 +81,7 @@
     "international_flights": "Voli internazionali",
     "long_haul_flights": "A lungo raggio",
     "west_bound_flights": "Voli verso ovest",
-    "view_flights": "Visualizza voli individuali",
+    "view_flights": "Visualizza voli",
     "shortest_flight": "Volo più corto",
     "longest_flight": "Volo più lungo",
     "view_tour": "Visualizza le tue rotte"
@@ -104,6 +104,7 @@
     },
     "tabs": {
       "manual": "Inserimento manuale",
+      "ai": "✨ Chat AI",
       "csv": "Caricamento CSV"
     },
     "placeholders": {
@@ -117,11 +118,13 @@
     },
     "validation": {
       "departure_date_required": "La data di partenza è obbligatoria",
+      "departure_date_invalid": "La data di partenza non è valida",
       "departure_airport_required": "L'aeroporto di partenza è obbligatorio",
       "arrival_airport_required": "L'aeroporto di arrivo è obbligatorio",
       "airline_required": "La compagnia è obbligatoria",
       "arrival_differs": "L'aeroporto di arrivo deve essere diverso da quello di partenza",
-      "return_date_required": "La data di ritorno è obbligatoria"
+      "return_date_required": "La data di ritorno è obbligatoria",
+      "return_date_invalid": "La data di ritorno non è valida"
     },
     "notifications": {
       "saving_title": "Salvataggio",
@@ -172,5 +175,37 @@
     "airline": "Compagnia aerea",
     "airport": "Città"
   },
-  "loading": "Caricamento..."
+  "loading": "Caricamento...",
+  "ai": {
+    "title": "Descrivi il tuo volo",
+    "subtitle": "Racconta il tuo volo in italiano e compileremo il modulo per te",
+    "examples_label": "Prova uno di questi esempi:",
+    "examples": [
+      "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
+      "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45",
+      "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
+      "Volato da Sydney a Londra con Qantas il 5 maggio 2024, ritorno il 20 maggio 2024"
+    ],
+    "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
+    "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
+    "parse_button": "Analizza con AI",
+    "error_title": "Impossibile analizzare il volo",
+    "error_generic": "Non è stato possibile comprendere i dettagli del volo. Prova a riformulare.",
+    "success_title": "Dettagli volo estratti!",
+    "success_subtitle": "Verifica i dettagli qui sotto, poi clicca \"Vai all'inserimento manuale\" per confermare e salvare.",
+    "missing_title": "Alcuni dettagli mancano",
+    "missing_subtitle": "Inserisci manualmente i seguenti campi nel modulo:",
+    "go_to_manual": "Vai all'inserimento manuale",
+    "reset": "Ricomincia",
+    "flight_details": "Dettagli volo",
+    "outbound_leg": "Volo di andata",
+    "return_leg": "Volo di ritorno",
+    "from": "Da",
+    "to": "A",
+    "date": "Data",
+    "time": "Ora",
+    "airline": "Compagnia",
+    "flight_number": "N° volo",
+    "powered_by": "Powered by Google Gemini via Firebase AI"
+  }
 }

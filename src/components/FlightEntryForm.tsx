@@ -5,7 +5,6 @@ import {
   Button,
   Group,
   Title,
-  Paper,
   Stack,
   Tabs,
   Switch,
@@ -18,12 +17,15 @@ import { parseToDate } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
+import FlightChatInput from "./FlightChatInput";
+import type { ParsedFlight } from "../utils/flightAiParser";
 import {
   loadAirlinesInfo,
   loadAirportsInfo,
   type AirlineInfo,
 } from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
+import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
 
 type SelectOption = {
   value: string;
@@ -47,6 +49,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   onSaved,
   flight,
 }) => {
+  // use mainPurple / accentRed wherever you would previously use theme.colors
   const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
   const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);
@@ -214,6 +217,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       }
 
       const [primaryFlight] = flightsToInsert;
+      if (!primaryFlight) {
+        throw new Error("No flight details available to save.");
+      }
 
       const uid = user?.uid || null;
       if (!uid) {
@@ -296,6 +302,73 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   });
 
   const isEditing = Boolean(flight && flight.id);
+
+  const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
+    FLIGHT_ENTRY_TABS.MANUAL,
+  );
+
+  const handleAiParsed = (parsedFlight: ParsedFlight) => {
+    const hasReturn = !!parsedFlight.return_date;
+    let departureDate = form.values.departureDate;
+    let returnDate = form.values.returnDate;
+    try {
+      if (parsedFlight.departure_date) {
+        departureDate = parseToDate(parsedFlight.departure_date);
+      }
+    } catch (err) {
+      console.error("parseToDate failed for departure_date", {
+        error: err,
+        value: parsedFlight.departure_date,
+      });
+      departureDate = null;
+      form.setFieldError(
+        "departureDate",
+        t("form.validation.departure_date_invalid"),
+      );
+      notifications.show({
+        title: t("form.notifications.validation_error_title"),
+        message: t("form.validation.departure_date_invalid"),
+        color: "red",
+      });
+    }
+    try {
+      if (parsedFlight.return_date) {
+        returnDate = parseToDate(parsedFlight.return_date);
+      }
+    } catch (err) {
+      console.error("parseToDate failed for return_date", {
+        error: err,
+        value: parsedFlight.return_date,
+      });
+      returnDate = null;
+      form.setFieldError(
+        "returnDate",
+        t("form.validation.return_date_invalid"),
+      );
+      notifications.show({
+        title: t("form.notifications.validation_error_title"),
+        message: t("form.validation.return_date_invalid"),
+        color: "red",
+      });
+    }
+    form.setValues({
+      ...form.values,
+      departureAirport:
+        parsedFlight.departure_airport_iata ?? form.values.departureAirport,
+      arrivalAirport:
+        parsedFlight.arrival_airport_iata ?? form.values.arrivalAirport,
+      airline: parsedFlight.airline_iata ?? form.values.airline,
+      flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
+      departureTime: parsedFlight.departure_time ?? form.values.departureTime,
+      departureDate,
+      // Return leg
+      returnDate,
+      returnTime: parsedFlight.return_time ?? form.values.returnTime,
+      returnFlightNumber:
+        parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
+    });
+    setAddReturn(hasReturn);
+  };
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
   const manualPanel = (
@@ -455,27 +528,47 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   );
 
   return (
-    <Paper p="md" withBorder>
+    <>
       {isEditing ? (
         // When editing, render only the manual panel without the Tabs header or CSV option
         manualPanel
       ) : (
-        <Tabs defaultValue="manual">
+        <Tabs
+          value={activeTab}
+          onChange={(v) => setActiveTab(v as FlightEntryTab | null)}
+          variant={"outline"}
+        >
           <Tabs.List>
-            <Tabs.Tab value="manual">{t("form.tabs.manual")}</Tabs.Tab>
-            <Tabs.Tab value="csv">{t("form.tabs.csv")}</Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.AI}>
+              {t("form.tabs.ai")}
+            </Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.MANUAL}>
+              {t("form.tabs.manual")}
+            </Tabs.Tab>
+            <Tabs.Tab value={FLIGHT_ENTRY_TABS.CSV}>
+              {t("form.tabs.csv")}
+            </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="manual" pt="xs">
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.MANUAL} pt="xs">
             {manualPanel}
           </Tabs.Panel>
 
-          <Tabs.Panel value="csv" pt="xs">
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.AI} pt="xs">
+            <FlightChatInput
+              onParsed={(parsed) => {
+                handleAiParsed(parsed);
+              }}
+              onConfirm={() => setActiveTab(FLIGHT_ENTRY_TABS.MANUAL)}
+            />
+          </Tabs.Panel>
+
+          <Tabs.Panel value={FLIGHT_ENTRY_TABS.CSV} pt="xs">
             <FlightCsvUpload onComplete={onSaved} />
           </Tabs.Panel>
         </Tabs>
       )}
-    </Paper>
+    </>
   );
 };
 

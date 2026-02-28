@@ -5,17 +5,17 @@ import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
 import { formatDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
+import { getAirportCity } from "../utils/airportUtils";
 
 interface FlightCardProps {
   flight: enhancedFlight;
   title: string;
-  color: string;
 }
 
 /**
  * Displays flight information in a styled card.
  */
-const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
+const FlightCard: React.FC<FlightCardProps> = ({ flight, title }) => {
   const { t } = useTranslation(["flights"]);
 
   if (!flight) return null;
@@ -24,9 +24,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
     <Card shadow="sm" radius="md" withBorder>
       <Stack gap="xs">
         <Group justify="space-between">
-          <Title order={4} c={color}>
-            {title}
-          </Title>
+          <Title order={4}>{title}</Title>
           <Text size="sm">
             <Text span fw={500}>
               {t("airline_label")}
@@ -35,27 +33,30 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title, color }) => {
           </Text>
         </Group>
 
-        <Group justify="space-between">
+        <Group justify="space-between" grow preventGrowOverflow={false}>
           <Text fw={500} size="lg">
-            {flight.departure_airport_iata} {t("to", { defaultValue: "→" })}{" "}
-            {flight.arrival_airport_iata}
+            {getAirportCity(flight.departure_airport_iata) ??
+              flight.departure_airport_iata}{" "}
+            {t("to", { defaultValue: "→" })}{" "}
+            {getAirportCity(flight.arrival_airport_iata) ??
+              flight.arrival_airport_iata}
           </Text>
-          <Badge color={color} variant="light">
+          <Badge variant="light">
             {t("km", {
-              value: Math.round(flight.distance_km),
+              value: Math.round(flight.distance_km ?? 0),
             })}
           </Badge>
         </Group>
 
         <Group justify="space-between">
           <Group gap="xs">
-            <Badge size="sm" variant="outline">
+            <Badge size="sm" variant="light" color={"accent"}>
               {flight.departure_country}
             </Badge>
             <Text size="xs" c="dimmed">
               {t("to", { defaultValue: "→" })}
             </Text>
-            <Badge size="sm" variant="outline">
+            <Badge size="sm" variant="light" color={"accent"}>
               {flight.arrival_country}
             </Badge>
           </Group>

@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 import { useShallow } from "zustand/react/shallow";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div;
 import { IconChevronsUp } from "@tabler/icons-react";
 
 const FlightsStats = () => {
@@ -99,7 +100,12 @@ const FlightsStats = () => {
 
       {/* Sticky filter button (Affix) that opens a modal with full filters. */}
       <Affix position={{ bottom: 16, left: 16 }}>
-        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
+        <Button
+          radius="xl"
+          size="sm"
+          variant="gradient"
+          onClick={() => setFiltersOpen(true)}
+        >
           {t("filters.title")}
         </Button>
       </Affix>
@@ -109,7 +115,7 @@ const FlightsStats = () => {
         onClose={() => setFiltersOpen(false)}
         title={t("filters.title")}
         size="lg"
-        overlayBlur={3}
+        overlayProps={{ blur: 3 }}
       >
         <FlightFilters />
       </Modal>
@@ -123,7 +129,7 @@ const FlightsStats = () => {
             justifyContent: "center",
           }}
         >
-          <motion.div
+          <MotionDiv
             initial={{ y: -2 }}
             animate={animateChevron ? { y: [0, -6, 0] } : { y: -2 }}
             transition={
@@ -143,7 +149,7 @@ const FlightsStats = () => {
               stroke={2}
               style={{ color: "var(--mantine-color-dimmed, #868e96)" }}
             />
-          </motion.div>
+          </MotionDiv>
         </div>
         <Stack
           bg="var(--mantine-color-body)"
@@ -168,14 +174,12 @@ const FlightsStats = () => {
               <FlightCard
                 flight={stats.shortestFlight}
                 title={t("stats.shortest_flight")}
-                color="orange"
               />
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <FlightCard
                 flight={stats.longestFlight}
                 title={t("stats.longest_flight")}
-                color="teal"
               />
             </Grid.Col>
           </Grid>
