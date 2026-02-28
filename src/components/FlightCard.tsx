@@ -35,13 +35,15 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title }) => {
 
         <Group justify="space-between" grow preventGrowOverflow={false}>
           <Text fw={500} size="lg">
-            {getAirportCity(flight.departure_airport_iata)}{" "}
+            {getAirportCity(flight.departure_airport_iata) ??
+              flight.departure_airport_iata}{" "}
             {t("to", { defaultValue: "→" })}{" "}
-            {getAirportCity(flight.arrival_airport_iata)}
+            {getAirportCity(flight.arrival_airport_iata) ??
+              flight.arrival_airport_iata}
           </Text>
           <Badge variant="light">
             {t("km", {
-              value: Math.round(flight.distance_km),
+              value: Math.round(flight.distance_km ?? 0),
             })}
           </Badge>
         </Group>
