@@ -27,14 +27,21 @@ create_variants() {
   done
 }
 
-create_variants "${ASSETS_DIR}/showcase.png" "showcase"
+if [ -f "${ASSETS_DIR}/showcase.png" ]; then
+  create_variants "${ASSETS_DIR}/showcase.png" "showcase"
+else
+  echo "Warning: showcase.png not found in ${ASSETS_DIR}" >&2
+fi
 
-find "${ASSETS_DIR}" -maxdepth 1 -type f \( \
-  -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" \
-\) ! -name "*-*.webp" ! -name "showcase.png" | while IFS= read -r img; do
+while IFS= read -r img; do
   filename="$(basename "${img}")"
   stem="${filename%.*}"
   create_variants "${img}" "${stem}"
-done
+done < <(
+  find "${ASSETS_DIR}" -maxdepth 1 -type f \
+    \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" \) \
+    ! -name "showcase.png" \
+    -not -regex ".*-[0-9]+\.webp"
+)
 
 echo "Asset variants generated in ${ASSETS_DIR}"
