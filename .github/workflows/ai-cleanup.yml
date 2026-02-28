@@ -1,0 +1,55 @@
+name: Cleanup AI PR Noise
+
+on:
+  pull_request:
+    # Run when a PR is opened, updated, or edited so we clean up prior AI noise
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  # Deleting PR comments uses the Issues API
+  issues: write
+  pull-requests: write
+
+jobs:
+  cleanup-comments:
+    runs-on: ubuntu-latest
+    # Ensure only one cleanup job runs per PR at a time
+    concurrency:
+      group: cleanup-ai-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - name: Delete old AI comments
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Use pagination so we don't miss comments when there are many
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+
+            // Known bot usernames and helpful body patterns to match noisy AI reviews
+            const aiBots = [
+              'coderabbitai[bot]',
+              'coderabbit[bot]',
+              'github-copilot[bot]',
+              'github-actions[bot]',
+              'coderabbit-ai',
+            ];
+
+            const noisyBodyPattern = /automated review|suggested by ai|ai suggestion|coderabbit/i;
+
+            for (const comment of comments) {
+              const author = comment.user && comment.user.login;
+              const body = comment.body || '';
+
+              if (aiBots.includes(author) || noisyBodyPattern.test(body)) {
+                console.log(`Deleting comment ${comment.id} from ${author}`);
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id,
+                });
+              }
+            }
