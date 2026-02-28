@@ -176,7 +176,7 @@
   "loading": "Loading...",
   "ai": {
     "title": "Describe your flight",
-    "subtitle": "Tell us about your flight in plain English and we'll fill in the form for you",
+    "subtitle": "Tell us about your flight in plain language and we'll fill in the form for you",
     "examples_label": "Try one of these examples:",
     "input_placeholder": "e.g. I flew from Sydney to Singapore on the 10th of July with Qantas",
     "keyboard_hint": "Press Ctrl+Enter (or ⌘+Enter on Mac) to parse",

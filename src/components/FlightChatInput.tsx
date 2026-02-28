@@ -44,10 +44,10 @@ const EXAMPLES = [
 
 /** Human-readable label for each required field. */
 const FIELD_LABELS: Record<string, string> = {
-  departure_airport_iata: "Departure airport",
-  arrival_airport_iata: "Arrival airport",
-  departure_date: "Departure date",
-  airline_iata: "Airline",
+  departure_airport_iata: "form.labels.departure_airport",
+  arrival_airport_iata: "form.labels.arrival_airport",
+  departure_date: "form.labels.departure_date",
+  airline_iata: "form.labels.airline",
 };
 
 export const FlightChatInput: React.FC<FlightChatInputProps> = ({
@@ -61,8 +61,9 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   const { t } = useTranslation("flights");
 
   const missingFields: string[] = parsed
-    ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map(
-        (f) => FIELD_LABELS[f] ?? String(f),
+    ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map((f) =>
+        // Resolve translation keys at render time so missing-field labels are localized
+        t(FIELD_LABELS[f] ?? String(f)),
       )
     : [];
 

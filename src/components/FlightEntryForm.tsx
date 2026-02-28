@@ -301,7 +301,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const isEditing = Boolean(flight && flight.id);
 
   const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
-    FLIGHT_ENTRY_TABS.AI,
+    FLIGHT_ENTRY_TABS.MANUAL,
   );
 
   const handleAiParsed = (parsedFlight: ParsedFlight) => {
@@ -316,17 +316,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
       departureTime: parsedFlight.departure_time ?? form.values.departureTime,
       departureDate: parsedFlight.departure_date
-        ? new Date(parsedFlight.departure_date)
+        ? parseToDate(parsedFlight.departure_date)
         : form.values.departureDate,
       // Return leg
       returnDate: parsedFlight.return_date
-        ? new Date(parsedFlight.return_date)
-        : form.values.returnDate,
-      returnTime: parsedFlight.return_time ?? form.values.returnTime,
+        ? parseToDate(parsedFlight.return_date)
+        : hasReturn
+          ? null
+          : null,
+      returnTime:
+        parsedFlight.return_time ?? (hasReturn ? form.values.returnTime : ""),
       returnFlightNumber:
-        parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
+        parsedFlight.return_flight_number ??
+        (hasReturn ? form.values.returnFlightNumber : ""),
     });
-    if (hasReturn) setAddReturn(true);
+    // Ensure UI matches parsed payload: enable when hasReturn, otherwise disable and clear
+    setAddReturn(hasReturn);
   };
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode

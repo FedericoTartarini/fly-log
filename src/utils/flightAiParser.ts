@@ -95,27 +95,56 @@ export async function parseFlightFromText(
   }
 
   const r = parsed as Record<string, unknown>;
+  // Helper validators / normalizers
+  const normalizeIata = (value: unknown, length: number): string | null => {
+    if (typeof value !== "string") return null;
+    const v = value.trim().toUpperCase();
+    const re = new RegExp(`^[A-Z]{${length}}$`);
+    return re.test(v) ? v : null;
+  };
+
+  const normalizeDate = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const s = value.trim();
+    // Accept explicit YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    // Fallback: try Date parse and format to YYYY-MM-DD
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return null;
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const normalizeTime = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const s = value.trim();
+    const m = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return null;
+    const hh = Number(m[1]);
+    const mm = Number(m[2]);
+    if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
+    if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+    return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+  };
+
+  const normalizeFlightNumber = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const s = value.trim();
+    const m = s.match(/^(\d+)$/);
+    return m ? m[1] : null;
+  };
 
   return {
-    departure_airport_iata:
-      typeof r.departure_airport_iata === "string"
-        ? r.departure_airport_iata
-        : null,
-    arrival_airport_iata:
-      typeof r.arrival_airport_iata === "string"
-        ? r.arrival_airport_iata
-        : null,
-    departure_date:
-      typeof r.departure_date === "string" ? r.departure_date : null,
-    departure_time:
-      typeof r.departure_time === "string" ? r.departure_time : null,
-    airline_iata: typeof r.airline_iata === "string" ? r.airline_iata : null,
-    flight_number: typeof r.flight_number === "string" ? r.flight_number : null,
-    return_date: typeof r.return_date === "string" ? r.return_date : null,
-    return_time: typeof r.return_time === "string" ? r.return_time : null,
-    return_flight_number:
-      typeof r.return_flight_number === "string"
-        ? r.return_flight_number
-        : null,
+    departure_airport_iata: normalizeIata(r.departure_airport_iata, 3),
+    arrival_airport_iata: normalizeIata(r.arrival_airport_iata, 3),
+    departure_date: normalizeDate(r.departure_date),
+    departure_time: normalizeTime(r.departure_time),
+    airline_iata: normalizeIata(r.airline_iata, 2),
+    flight_number: normalizeFlightNumber(r.flight_number),
+    return_date: normalizeDate(r.return_date),
+    return_time: normalizeTime(r.return_time),
+    return_flight_number: normalizeFlightNumber(r.return_flight_number),
   };
 }

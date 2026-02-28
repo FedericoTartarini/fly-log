@@ -300,4 +300,16 @@ describe("FlightChatInput", () => {
       expect(mockParseFlightFromText).toHaveBeenCalledOnce();
     });
   });
+
+  it("Cmd+Enter triggers parse without clicking the button (macOS)", async () => {
+    mockParseFlightFromText.mockResolvedValue(fullFlight);
+    renderComponent();
+
+    await userEvent.type(getTextarea(), "SYD to SIN");
+    await userEvent.keyboard("{Meta>}{Enter}{/Meta}");
+
+    await waitFor(() => {
+      expect(mockParseFlightFromText).toHaveBeenCalledOnce();
+    });
+  });
 });

@@ -150,7 +150,22 @@ describe("FlightEntryForm – AI tab integration", () => {
         screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
       ).toHaveAttribute("aria-selected", "true");
     });
-    expect(screen.getByLabelText(/departure date/i)).toBeInTheDocument();
+    // Verify that parsed AI values populated the manual form inputs
+    const departureAirport = screen.getByLabelText(
+      /departure airport/i,
+    ) as HTMLInputElement;
+    const arrivalAirport = screen.getByLabelText(
+      /arrival airport/i,
+    ) as HTMLInputElement;
+    const airline = screen.getByLabelText(/airline/i) as HTMLInputElement;
+    const departureTime = screen.getByLabelText(
+      /departure time/i,
+    ) as HTMLInputElement;
+
+    expect(departureAirport.value).toMatch(/SYD/i);
+    expect(arrivalAirport.value).toMatch(/SIN/i);
+    expect(airline.value).toMatch(/QF/i);
+    expect(departureTime.value).toMatch(/09:00/);
   });
 
   // ── onConfirm switches tab ────────────────────────────────────────────────
