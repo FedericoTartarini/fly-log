@@ -112,7 +112,7 @@ function Landing() {
             srcSet={`${showcase380} 380w, ${showcase760} 760w, ${showcase1200} 1200w, ${showcase1800} 1800w`}
             sizes="(max-width: 900px) 90vw, (max-width: 1400px) 1200px, 1800px"
             alt={t("flight_image_alt")}
-            h="600px"
+            mah="60vh"
             fit="contain"
             fetchPriority="high"
           />
@@ -144,7 +144,8 @@ function Landing() {
                 {/* Animated AI Notification Demo */}
                 <motion.div
                   initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
                   transition={{ delay: 0.7, duration: 0.9, type: "spring" }}
                   style={{
                     flexShrink: 0,
