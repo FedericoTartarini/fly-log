@@ -59,11 +59,9 @@ const LanguageSwitcher = () => {
       data={LANGUAGE_OPTIONS}
       renderOption={renderOption}
       withinPortal
-      dropdownPosition="bottom"
+      position="bottom"
       px="xs"
-      sx={{
-        minWidth: 110,
-      }}
+      style={{ minWidth: 110 }}
       styles={() => ({
         dropdown: {
           zIndex: 10_000,
