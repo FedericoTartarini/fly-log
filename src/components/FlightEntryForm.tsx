@@ -217,6 +217,9 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       }
 
       const [primaryFlight] = flightsToInsert;
+      if (!primaryFlight) {
+        throw new Error("No flight details available to save.");
+      }
 
       const uid = user?.uid || null;
       if (!uid) {
@@ -313,14 +316,40 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         departureDate = parseToDate(parsedFlight.departure_date);
       }
     } catch (err) {
-      // Could log error or show notification for invalid date
+      console.error("parseToDate failed for departure_date", {
+        error: err,
+        value: parsedFlight.departure_date,
+      });
+      departureDate = null;
+      form.setFieldError(
+        "departureDate",
+        t("form.validation.departure_date_invalid"),
+      );
+      notifications.show({
+        title: t("form.notifications.validation_error_title"),
+        message: t("form.validation.departure_date_invalid"),
+        color: "red",
+      });
     }
     try {
       if (parsedFlight.return_date) {
         returnDate = parseToDate(parsedFlight.return_date);
       }
     } catch (err) {
-      // Could log error or show notification for invalid date
+      console.error("parseToDate failed for return_date", {
+        error: err,
+        value: parsedFlight.return_date,
+      });
+      returnDate = null;
+      form.setFieldError(
+        "returnDate",
+        t("form.validation.return_date_invalid"),
+      );
+      notifications.show({
+        title: t("form.notifications.validation_error_title"),
+        message: t("form.validation.return_date_invalid"),
+        color: "red",
+      });
     }
     form.setValues({
       ...form.values,
