@@ -229,10 +229,7 @@ const FeatureSection = () => {
       cols={{ base: 1, xs: 2, lg: 3 }}
       spacing={{ base: "md", sm: "xl", lg: "xl" }}
       verticalSpacing={{ base: "md", sm: "xl", lg: "xl" }}
-      style={{
-        width: "100%",
-        background: `linear-gradient(60deg, primary, accentRed)`,
-      }}
+      style={{ width: "100%" }}
     >
       {features.map((f, i) => (
         <FeatureCard key={f.id} {...f} delay={i * 0.15} />
