@@ -95,10 +95,18 @@ function StatsSummary() {
         </Grid>
 
         <Group justify="center" mt="md">
-          <Button variant="light" onClick={() => navigate(PATHS.FLIGHTS)}>
+          <Button
+            variant="light"
+            onClick={() => navigate(PATHS.FLIGHTS)}
+            data-cy="view-flights-btn"
+          >
             {t("stats.view_flights")}
           </Button>
-          <Button variant="light" onClick={() => navigate(PATHS.TOUR)}>
+          <Button
+            variant="light"
+            onClick={() => navigate(PATHS.TOUR)}
+            data-cy="view-tour-btn"
+          >
             {t("stats.view_tour")}
           </Button>
         </Group>
