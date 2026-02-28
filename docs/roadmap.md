@@ -8,7 +8,6 @@
 
 ### Missing / Core Gaps
 
-- [ ] Offline write sync is still placeholder-only.
 - [ ] No user data export/backup workflow.
 - [ ] No search/sort controls in the flights table beyond default date ordering.
 - [ ] No duplicate detection workflow for CSV/manual imports.
@@ -16,12 +15,16 @@
 
 ### User Experience Improvements
 
-* [ ] Conduct user testing to gather feedback on usability.
-* [ ] Improve Muli-language support (i18n) currently only English and Italian.
-* [ ] check what happens if the user uploads a bad csv with wrong dates, time, airport or airlines codes.
+- [ ] Conduct user testing to gather feedback on usability.
+- [ ] Improve Muli-language support (i18n) currently only English and Italian.
+- [ ] check what happens if the user uploads a bad csv with wrong dates, time, airport or airlines codes.
+- [ ] Accessibility pass: add skip link/landmarks, ARIA live error messaging, reduced-motion support.
+- [ ] Accessibility pass: add keyboard alternatives + text summaries for map visualizations.
+- [ ] Accessibility pass: verify and fix color contrast across light/dark themes.
 
 ### Maintenance and DevOps
-* [ ] Refactor state management for more complex filtering logic.
+
+- [ ] Refactor state management for more complex filtering logic.
 
 ### High-Value, Low-Maintenance (No External API)
 
@@ -37,10 +40,6 @@
 - [ ] Goals/milestones (e.g., flights, countries, distance).
 - [ ] Data quality diagnostics (unknown airport/airline, suspicious durations).
 - [ ] Public read-only share links for stats.
-
-### Nice but Significantly Harder to Maintain
-
-1. True offline-first queue with conflict resolution across devices.
 
 ### External API-Dependent Features (Highest Ongoing Maintenance)
 
@@ -84,12 +83,6 @@
 - Airports as nodes and routes as weighted edges.
 - Show hubs, most frequent routes, and network evolution by year.
 - Difficulty: Medium
-
-#### 3. Year-over-Year Comparison Page
-
-- Compare two selected years side-by-side.
-- Metrics: flights, distance, countries, top airlines/routes.
-- Difficulty: Low-Medium
 
 #### 4. Airport Profile Page
 
