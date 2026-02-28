@@ -12,6 +12,7 @@ import {
   SegmentedControl,
   SimpleGrid,
   Divider,
+  Group,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
@@ -126,6 +127,7 @@ function WorldTour() {
 
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [hasStartedAnimation, setHasStartedAnimation] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
   const [currentRouteIndex, setCurrentRouteIndex] = React.useState(0);
   const [worldData, setWorldData] = React.useState(null);
   const [loadError, setLoadError] = React.useState(null);
@@ -252,6 +254,52 @@ function WorldTour() {
 
   const currentRoute = routes[currentRouteIndex] ?? null;
 
+  // Count flights per city for density-based filtering
+  const cityCounts = React.useMemo(() => {
+    const counts = new Map();
+    routes.forEach((route) => {
+      if (route.fromCity && isValidCoords(route.from)) {
+        const key = `${route.fromCity}|${route.from[0]}|${route.from[1]}`;
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+      if (route.toCity && isValidCoords(route.to)) {
+        const key = `${route.toCity}|${route.to[0]}|${route.to[1]}`;
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    });
+    return counts;
+  }, [routes]);
+
+  // [STEP 1] Gather all unique cities from routes with counts
+  const uniqueCitiesAll = React.useMemo(() => {
+    const cityMap = new Map();
+    routes.forEach((route) => {
+      if (route.fromCity && isValidCoords(route.from)) {
+        const key = `${route.fromCity}|${route.from[0]}|${route.from[1]}`;
+        if (!cityMap.has(key)) {
+          cityMap.set(key, {
+            name: route.fromCity,
+            coords: route.from,
+            count: cityCounts.get(key) || 1,
+          });
+        }
+      }
+      if (route.toCity && isValidCoords(route.to)) {
+        const key = `${route.toCity}|${route.to[0]}|${route.to[1]}`;
+        if (!cityMap.has(key)) {
+          cityMap.set(key, {
+            name: route.toCity,
+            coords: route.to,
+            count: cityCounts.get(key) || 1,
+          });
+        }
+      }
+    });
+    return Array.from(cityMap.values());
+  }, [routes, cityCounts]);
+
+  // [REMOVED]: uniqueCities React hook. Filtering now happens per-zoom in drawBase.
+
   React.useEffect(() => {
     currentRouteRef.current = currentRoute;
   }, [currentRoute]);
@@ -303,6 +351,7 @@ function WorldTour() {
     setCurrentRouteIndex(0);
     setIsPlaying(false);
     setHasStartedAnimation(false);
+    setIsPaused(false);
   }, [scope, fromYear, toYear]);
 
   React.useEffect(() => {
@@ -316,7 +365,7 @@ function WorldTour() {
       setIsPlaying(false);
       return;
     }
-    if (!isPlaying) return;
+    if (!isPlaying || isPaused) return;
     if (!routes.length) {
       setIsPlaying(false);
       return;
@@ -335,6 +384,7 @@ function WorldTour() {
     return () => window.clearTimeout(id);
   }, [
     isPlaying,
+    isPaused,
     currentRouteIndex,
     routes.length,
     speed,
@@ -352,7 +402,7 @@ function WorldTour() {
     svg.attr("viewBox", `0 0 ${width} ${height}`);
 
     const minScale = 0.7;
-    const maxScale = 2.5;
+    const maxScale = 4.5;
 
     const projection = d3
       .geoOrthographic()
@@ -421,23 +471,164 @@ function WorldTour() {
             coordinates: buildArcCoordinates(route),
           }),
         );
+
+      // [STEP 2] Draw cities (dot and label)
+      // Remove previous
+      root.selectAll("g.city-label").remove();
+      if (hasStartedAnimation) {
+        // When animating, skip all static city labels and dots.
+        return;
+      }
+      const citiesGroup = root.append("g").attr("class", "city-label");
+
+      // --- New: Compute which cities to show and how, per zoom ---
+      const scale = scaleRef.current;
+      // Dynamic threshold as before, but done here per zoom.
+      const flightThreshold =
+        scale <= minScale + 0.2 ? 5 : scale <= maxScale - 1 ? 3 : 1;
+      // Put most visited first, then alphabetical for stable tie-break
+      const filteredCities = uniqueCitiesAll
+        .filter((city) => city.count >= flightThreshold)
+        .slice() // copy
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+      // Compute globe center using projection.rotate()
+      const rotate = projection.rotate();
+      const centerLon = -rotate[0];
+      const centerLat = -rotate[1];
+      const center = [centerLon, centerLat];
+      // All possible label offset directions
+      const labelDirections = [
+        { dx: 8, dy: -8, align: "start", base: "middle" }, // Top-right
+        { dx: -8, dy: -8, align: "end", base: "middle" }, // Top-left
+        { dx: 8, dy: 10, align: "start", base: "hanging" }, // Bottom-right, closer
+        { dx: -8, dy: 10, align: "end", base: "hanging" }, // Bottom-left, closer
+        { dx: 0, dy: -14, align: "middle", base: "baseline" }, // Top
+        { dx: 0, dy: 20, align: "middle", base: "hanging" }, // Bottom
+        { dx: 16, dy: 0, align: "start", base: "middle" }, // Right
+        { dx: -16, dy: 0, align: "end", base: "middle" }, // Left
+      ];
+      // Estimate text width (px): font size (13) * 0.65 * text length
+      function estimateTextWidth(text) {
+        return 13 * 0.65 * text.length;
+      }
+      // Simple bbox overlap check
+      function bboxesOverlap(a, b) {
+        return a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+      }
+      const placedBBoxes = [];
+      filteredCities.forEach((city) => {
+        const [lat, lon] = city.coords;
+        const dist = d3.geoDistance([lon, lat], center);
+        if (dist > Math.PI / 2) return;
+        const projected = projection([lon, lat]);
+        if (!projected) return;
+        // Draw dot
+        citiesGroup
+          .append("circle")
+          .attr("cx", projected[0])
+          .attr("cy", projected[1])
+          .attr("r", 3.5)
+          .attr("fill", "#111")
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 1.2);
+        // Prefer first direction by hash, try alternates for overlap
+        const key = city.name + city.coords.join(",");
+        let hash = 0;
+        for (let i = 0; i < key.length; ++i)
+          hash = (hash * 31 + key.charCodeAt(i)) & 0x7fffffff;
+        let pickedDir = null;
+        let labelBox = null;
+        for (let dTry = 0; dTry < labelDirections.length; dTry++) {
+          const dir = labelDirections[(hash + dTry) % labelDirections.length];
+          const x = projected[0] + dir.dx;
+          const y = projected[1] + dir.dy;
+          const width = estimateTextWidth(city.name);
+          const height = 14;
+          // Get bbox based on alignment
+          let x0, x1;
+          if (dir.align === "middle") {
+            x0 = x - width / 2;
+            x1 = x + width / 2;
+          } else if (dir.align === "end") {
+            x0 = x - width;
+            x1 = x;
+          } else {
+            x0 = x;
+            x1 = x + width;
+          }
+          let y0 = y - height / 2,
+            y1 = y + height / 2;
+          const bbox = { x0, x1, y0, y1 };
+          // Check against all placed
+          let overlap = false;
+          for (const other of placedBBoxes) {
+            if (bboxesOverlap(bbox, other)) {
+              overlap = true;
+              break;
+            }
+          }
+          if (!overlap) {
+            pickedDir = dir;
+            labelBox = bbox;
+            break;
+          }
+        }
+        // Fallback/dense: just pick hash direction
+        if (!pickedDir) {
+          const dir = labelDirections[hash % labelDirections.length];
+          const x = projected[0] + dir.dx;
+          const y = projected[1] + dir.dy;
+          const width = estimateTextWidth(city.name);
+          let x0, x1;
+          if (dir.align === "middle") {
+            x0 = x - width / 2;
+            x1 = x + width / 2;
+          } else if (dir.align === "end") {
+            x0 = x - width;
+            x1 = x;
+          } else {
+            x0 = x;
+            x1 = x + width;
+          }
+          let y0 = y - 7,
+            y1 = y + 7;
+          pickedDir = dir;
+          labelBox = { x0, x1, y0, y1 };
+        }
+        placedBBoxes.push(labelBox);
+        // Draw label (text)
+        citiesGroup
+          .append("text")
+          .attr("x", projected[0] + pickedDir.dx)
+          .attr("y", projected[1] + pickedDir.dy)
+          .attr("font-size", 13)
+          .attr("font-family", "inherit,sans-serif")
+          .attr("fill", "#111")
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 0.6)
+          .attr("paint-order", "stroke")
+          .attr("text-anchor", pickedDir.align)
+          .attr("alignment-baseline", pickedDir.base)
+          .attr("pointer-events", "none")
+          .text(city.name);
+      });
     };
 
     const drawActive = (route) => {
-      if (!hasStartedAnimation) {
-        activeLayer.selectAll("path").remove();
-        pointLayer.selectAll("circle").remove();
+      activeLayer.selectAll("path").remove();
+      pointLayer.selectAll("g").remove(); // clear previous markers/labels
+
+      if (!hasStartedAnimation || !route) {
         return;
       }
 
-      const activeData = route ? [route] : [];
-
+      const activeData = [route];
       activeLayer
         .selectAll("path")
         .data(activeData, (d) => d.id)
         .join("path")
         .attr("fill", "none")
-        .attr("stroke", "#ef4444")
+        .attr("stroke", "#6a55b3")
         .attr("stroke-width", 2.5)
         .attr("stroke-linecap", "round")
         .attr("d", (d) =>
@@ -447,23 +638,58 @@ function WorldTour() {
           }),
         );
 
-      const points = route
-        ? [
-            { id: "from", coords: route.from, color: "#22c55e" },
-            { id: "to", coords: route.to, color: "#ef4444" },
-          ]
-        : [];
+      // Points for 'from' and 'to', with their labels
+      const from = {
+        id: "from",
+        coords: route.from,
+        color: "#22c55e",
+        label: route.fromCity,
+      };
+      const to = {
+        id: "to",
+        coords: route.to,
+        color: "#ef4444",
+        label: route.toCity,
+      };
+      const points = [from, to];
 
-      pointLayer
-        .selectAll("circle")
+      // Add a group per marker so each can have dot and label
+      const marker = pointLayer
+        .selectAll("g.active-city-marker")
         .data(points, (d) => d.id)
-        .join("circle")
-        .attr("r", 4)
-        .attr("fill", (d) => d.color)
-        .attr("stroke", "#ffffff")
-        .attr("stroke-width", 1.5)
+        .join("g")
+        .attr("class", "active-city-marker");
+
+      marker
+        .append("circle")
         .attr("cx", (d) => projection([d.coords[1], d.coords[0]])?.[0] ?? -100)
-        .attr("cy", (d) => projection([d.coords[1], d.coords[0]])?.[1] ?? -100);
+        .attr("cy", (d) => projection([d.coords[1], d.coords[0]])?.[1] ?? -100)
+        .attr("r", 8)
+        .attr("fill", (d) => d.color)
+        .attr("stroke", "#3b3b3b")
+        .attr("stroke-width", 2.5)
+        .attr("filter", "drop-shadow(0 1px 4px #2228)");
+
+      // Optional: bold, shadowed label to side
+      marker
+        .append("text")
+        .attr(
+          "x",
+          (d) => (projection([d.coords[1], d.coords[0]])?.[0] ?? -100) + 14,
+        )
+        .attr(
+          "y",
+          (d) => (projection([d.coords[1], d.coords[0]])?.[1] ?? -100) + 2,
+        )
+        .text((d) => d.label)
+        .attr("font-size", 16)
+        .attr("font-family", "inherit,sans-serif")
+        .attr("font-weight", "bold")
+        // .attr("fill", (d) => d.color)
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 2.2)
+        .attr("paint-order", "stroke")
+        .attr("alignment-baseline", "middle");
     };
 
     drawBase();
@@ -559,6 +785,29 @@ function WorldTour() {
     }
     setHasStartedAnimation(true);
     setIsPlaying(true);
+    setIsPaused(false);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+    setIsPaused(true);
+  };
+
+  const handleResume = () => {
+    setIsPlaying(true);
+    setIsPaused(false);
+  };
+
+  const handleStop = () => {
+    setIsPlaying(false);
+    setIsPaused(false);
+    setHasStartedAnimation(false);
+    setCurrentRouteIndex(0);
+    // Optionally force a redraw immediately if needed
+    if (vizRef.current && vizRef.current.drawBase) {
+      vizRef.current.drawBase();
+      vizRef.current.drawActive(null);
+    }
   };
 
   const scopeOptions = [
@@ -619,22 +868,42 @@ function WorldTour() {
                 { value: SPEED.FAST, label: t("speed.fast") },
               ]}
             />
-            <SimpleGrid cols={2}>
+            <Group align="center" gap="xs" justify="space-between">
               <Button
                 onClick={handleStart}
-                disabled={!routes.length || isPlaying}
+                disabled={!routes.length || isPlaying || hasStartedAnimation}
                 variant="gradient"
               >
                 {t("start")}
               </Button>
+              {hasStartedAnimation &&
+                (isPaused ? (
+                  <Button
+                    variant="outline"
+                    color="accent"
+                    onClick={handleResume}
+                    disabled={!hasStartedAnimation || isPlaying}
+                  >
+                    {t("resume")}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    color="accent"
+                    onClick={handlePause}
+                    disabled={!hasStartedAnimation || !isPlaying}
+                  >
+                    {t("pause")}
+                  </Button>
+                ))}
               <Button
-                variant="default"
-                onClick={() => setIsPlaying(false)}
-                disabled={!isPlaying}
+                onClick={handleStop}
+                disabled={!hasStartedAnimation}
+                variant="outline"
               >
                 {t("stop")}
               </Button>
-            </SimpleGrid>
+            </Group>
 
             {loadError && (
               <Alert
@@ -666,6 +935,11 @@ function WorldTour() {
                   index: currentRouteIndex + 1,
                   total: routes.length,
                 })}
+                {isPaused && (
+                  <Text c="accent" component="span" fw={800} ml="sm">
+                    [Paused]
+                  </Text>
+                )}
               </Text>
             )}
 
