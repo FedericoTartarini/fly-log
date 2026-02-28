@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import { IconRobotFace } from "@tabler/icons-react";
 
 const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
+const MotionDiv = motion.div;
 
 function Landing() {
   const { t } = useTranslation("landing");
@@ -40,7 +41,7 @@ function Landing() {
     <Container size="md" mt="xl">
       <Stack align="center" gap="xl">
         {/* HERO SECTION */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
@@ -71,10 +72,10 @@ function Landing() {
               {t("subtitle")}
             </Text>
           </Stack>
-        </motion.div>
+        </MotionDiv>
 
         <Group justify="center" gap="md" mb="sm">
-          <motion.div whileHover={{ scale: 1.06 }}>
+          <MotionDiv whileHover={{ scale: 1.06 }}>
             <Button
               component={Link}
               to={PATHS.LOGIN}
@@ -85,7 +86,7 @@ function Landing() {
             >
               {t("get_started")}
             </Button>
-          </motion.div>
+          </MotionDiv>
           <Button
             component={Link}
             to={PATHS.ABOUT}
@@ -100,7 +101,7 @@ function Landing() {
         </Group>
 
         {/* Placeholder for HERO IMAGE/APP PREVIEW (animated) */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 1, type: "spring" }}
@@ -116,9 +117,9 @@ function Landing() {
             fit="contain"
             fetchPriority="high"
           />
-        </motion.div>
+        </MotionDiv>
         {/* AI ANIMATED CARD + NOTIFICATION DEMO */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.65 }}
@@ -142,7 +143,7 @@ function Landing() {
               </Grid.Col>
               <Grid.Col span={{ base: "content" }}>
                 {/* Animated AI Notification Demo */}
-                <motion.div
+                <MotionDiv
                   initial={{ opacity: 0, x: 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
@@ -186,11 +187,11 @@ function Landing() {
                       </Text>
                     </div>
                   </Paper>
-                </motion.div>
+                </MotionDiv>
               </Grid.Col>
             </Grid>
           </Card>
-        </motion.div>
+        </MotionDiv>
         {/* SVG Angled Divider */}
         <Suspense
           fallback={
