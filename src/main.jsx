@@ -25,10 +25,10 @@ const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute.jsx"));
+const MyAppShell = lazy(() => import("./pages/MyAppShell.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
-import MyAppShell from "./pages/MyAppShell.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
 ]);
 
 const theme = createTheme({
-  primaryColor: "primary", // purple will be the main theme color
+  primaryColor: "primary",
   colors: {
     accent: [
       "#f3f0ff",
@@ -142,7 +142,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 
 // Register service worker
-if ("serviceWorker" in navigator) {
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     let hasRefreshedForNewWorker = false;
 
