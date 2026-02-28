@@ -65,13 +65,28 @@ export async function parseFlightFromText(
     );
   }
 
+  // Validate input
+  if (!userText || userText.trim().length === 0) {
+    throw new Error(
+      "Input is empty or only whitespace for parseFlightFromText",
+    );
+  }
+
   const ai = getAI(app);
   const model = getGenerativeModel(ai, {
     model: "gemini-2.5-flash-lite",
     systemInstruction: SYSTEM_PROMPT,
   });
 
-  const result = await model.generateContent(userText);
+  let result;
+  try {
+    result = await model.generateContent(userText);
+  } catch (err) {
+    console.error("AI generation failed in parseFlightFromText:", err);
+    throw new Error(
+      `AI generation failed in parseFlightFromText: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
   const rawText = result.response.text().trim();
 
   // Strip markdown code fences if Gemini wraps the response
