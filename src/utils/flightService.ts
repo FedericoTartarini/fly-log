@@ -18,10 +18,11 @@ import {
   type AirportInfo,
 } from "./referenceData";
 import { YEAR_FILTER } from "../constants/filters";
+import { parseToDate, type DateLike } from "./dateUtils";
 
 type FirestoreFlightRecord = {
   id: string;
-  departure_date: unknown;
+  departure_date: DateLike;
   departure_airport_iata: string;
   arrival_airport_iata: string;
   airline_iata: string;
@@ -42,7 +43,7 @@ type EnrichedFlightRecord = FirestoreFlightRecord & {
 };
 
 /**
- * Calculate the great-circle distance between two points on the Earth surface.
+ * Calculate the great-circle distance between two points on Earth.
  * @param coord1 - [latitude, longitude] of the first point in decimal degrees
  * @param coord2 - [latitude, longitude] of the second point in decimal degrees
  * @returns Distance in kilometers, or null if coordinates are invalid
@@ -85,7 +86,7 @@ const estimateFlightTime = (
 };
 
 /**
- * Get airport coordinates by IATA code
+ * Get airport coordinates by IATA code.
  * @param iataCode - IATA code of the airport
  * @returns [latitude, longitude] if found, else null
  */
@@ -98,7 +99,7 @@ const getAirportCoordinates = (
 };
 
 /**
- * Get ISO country code by airport IATA code
+ * Get ISO country code by airport IATA code.
  * @param iataCode - IATA code of the airport
  * @returns ISO country code if found, else null
  */
@@ -111,8 +112,8 @@ const getIsoCountry = (
 };
 
 /**
- * Enrich flight data with additional information from airports and airlines data
- * @param flight - EnhancedFlight data from database
+ * Enrich flight data with additional information from airports and airlines data.
+ * @param flight - Flight data from Firestore
  * @returns Enriched flight data
  */
 export const enrichFlightData = (
@@ -124,7 +125,10 @@ export const enrichFlightData = (
     flight.departure_airport_iata,
     airportByIata,
   );
-  const depCountry = getIsoCountry(flight.departure_airport_iata, airportByIata);
+  const depCountry = getIsoCountry(
+    flight.departure_airport_iata,
+    airportByIata,
+  );
   const arrCoords = getAirportCoordinates(
     flight.arrival_airport_iata,
     airportByIata,
@@ -164,16 +168,21 @@ export const enrichFlightData = (
 };
 
 /**
- * Fetches flights filtered by year for the current user and enriches them with additional data
+ * Fetch flights filtered by year for the current user and enrich them.
  * @param uid - User ID
  * @param year - Year to filter by, or "all"
- * @returns Array of filtered enriched flight objects
+ * @returns Array of enriched flight objects
  */
 export const getFilteredUserFlights = async (
   uid: string,
   year: number | string,
 ): Promise<EnrichedFlightRecord[]> => {
   if (!uid) throw new Error("User id is required to fetch flights");
+  if (!firestore) {
+    throw new Error(
+      "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
+    );
+  }
   await loadReferenceMaps();
 
   const colRef = collection(firestore, "flights", uid, "records");
@@ -213,11 +222,14 @@ export const getFilteredUserFlights = async (
   }
 
   const snap = await getDocs(q);
-  const data = snap.docs.map((d) => ({
-    id: d.id,
-    ...(d.data() as Omit<FirestoreFlightRecord, "id">),
-  }));
-  return (data || []).map((flight) => enrichFlightData(flight));
+  const data = snap.docs.map(
+    (d) =>
+      ({
+        id: d.id,
+        ...(d.data() as Omit<FirestoreFlightRecord, "id">),
+      }) as FirestoreFlightRecord,
+  );
+  return data.map((flight) => enrichFlightData(flight));
 };
 
 /**
@@ -238,7 +250,7 @@ export const deleteFlightForUser = async (uid: string, flightId: string) => {
 };
 
 /**
- * Update a flight document for a given user and return the updated enriched flight
+ * Update a flight document for a given user and return the updated enriched flight.
  */
 export const updateFlightForUser = async (
   uid: string,
@@ -256,8 +268,8 @@ export const updateFlightForUser = async (
 
   const data = { ...updates };
   if (data.departure_date) {
-    const d = new Date(data.departure_date);
-    if (isNaN(d.getTime())) {
+    const d = parseToDate(data.departure_date);
+    if (!d) {
       throw new Error("Invalid departure_date");
     }
     data.departure_date = Timestamp.fromDate(d);
@@ -271,6 +283,6 @@ export const updateFlightForUser = async (
   const merged = {
     id: snap.id,
     ...(snap.data() as Omit<FirestoreFlightRecord, "id">),
-  };
+  } as FirestoreFlightRecord;
   return enrichFlightData(merged);
 };

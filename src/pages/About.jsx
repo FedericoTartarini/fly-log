@@ -24,6 +24,7 @@ import {
 import { APP_INFO } from "../constants/MyClasses.js";
 import { useTranslation } from "react-i18next";
 
+// About page with project details + contribution links.
 function About() {
   const { t } = useTranslation("about");
   return (

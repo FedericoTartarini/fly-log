@@ -59,6 +59,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
   const { t } = useTranslation("flights");
 
+  // Form defaults for manual + AI-pre-filled flights.
   const initialValues = {
     departureDate: null as Date | null,
     departureTime: "",
@@ -307,6 +308,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     FLIGHT_ENTRY_TABS.MANUAL,
   );
 
+  // Apply AI-parsed values onto the manual form fields.
   const handleAiParsed = (parsedFlight: ParsedFlight) => {
     const hasReturn = !!parsedFlight.return_date;
     let departureDate = form.values.departureDate;

@@ -27,6 +27,7 @@ import { motion } from "framer-motion";
 const MotionDiv = motion.div;
 import { IconChevronsUp } from "@tabler/icons-react";
 
+// Stats dashboard with map, summaries, and charts.
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
     useFlightStore(
@@ -39,10 +40,10 @@ const FlightsStats = () => {
       })),
     );
 
-  // Move the stats calculation here to avoid conditional hook calls
+  // Calculate stats before conditional rendering to avoid hook ordering issues.
   const stats = useFlightStats(filteredFlights);
 
-  // Prepare chart data outside of the conditional rendering
+  // Prepare chart data outside conditional rendering.
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
 
   const { t } = useTranslation("flights");

@@ -22,7 +22,7 @@ import {
 } from "firebase/firestore";
 import type { Firestore } from "firebase/firestore";
 
-// Read Vite env vars
+// Read Vite env vars from import.meta.env (or process.env in tests).
 const getEnv = (key: string, fallback = ""): string => {
   // @ts-expect-error - Vite injects import.meta.env at build time
   if (typeof import.meta !== "undefined" && import.meta.env?.[key]) {
@@ -48,9 +48,9 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let firestore: Firestore | null = null;
 
-// Initialize Firebase only when a proper API key is set. This avoids errors in test
-// environments where env vars are not configured (Vitest/Node). Callers should mock
-// the exported functions in tests.
+// Initialize Firebase only when a proper API key is set.
+// This avoids errors in test environments where env vars are not configured.
+// Callers should mock the exported functions in tests.
 if (firebaseConfig.apiKey) {
   app = initializeApp(firebaseConfig);
   // Lazily import auth and firestore SDKs

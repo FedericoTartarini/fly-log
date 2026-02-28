@@ -29,6 +29,7 @@ import { IconRobotFace } from "@tabler/icons-react";
 const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 const MotionDiv = motion.div;
 
+// Public landing page with hero, feature highlights, and CTA.
 function Landing() {
   const { t } = useTranslation("landing");
   const theme = useMantineTheme();

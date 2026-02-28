@@ -1,15 +1,15 @@
 /**
- * Represents a airportInfo record.
+ * Represents an airline record.
  */
-interface airlineInfo {
+interface AirlineInfo {
   // Basic airline information
   iata: string; // IATA code
   name: string; // Full airline name
-  icao: string; // ICAO code
+  icao: string | null; // ICAO code
 }
 
-// Ensure airportsInfoData is typed
+// Ensure airlinesInfoData is typed
 import airlinesInfoData from "../assets/airlines.json" with { type: "json" };
 
-export let airlinesInfo: airlineInfo[];
+export let airlinesInfo: AirlineInfo[];
 airlinesInfo = airlinesInfoData;

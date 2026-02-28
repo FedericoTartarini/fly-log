@@ -5,6 +5,7 @@ export type SelectOption = { value: string; label: string };
 
 type AirportKey = "departure_airport_iata" | "arrival_airport_iata";
 
+// Build unique airline select options from current flights.
 export const buildAirlineOptions = (
   flights: enhancedFlight[],
 ): SelectOption[] => {
@@ -29,10 +30,12 @@ export const buildAirlineOptions = (
     .sort((a, b) => a.label.localeCompare(b.label));
 };
 
+// Build an airport label for filter dropdowns.
 const buildAirportLabel = (airport: AirportInfo): string => {
   return `${airport.iata} - ${airport.airport_name}, ${airport.city}, ${airport.country}`;
 };
 
+// Build unique airport select options from current flights.
 export const buildAirportOptions = (
   flights: enhancedFlight[],
   airportsData: AirportInfo[],

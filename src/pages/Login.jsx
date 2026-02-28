@@ -18,6 +18,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
 
+// Email/password auth page (sign in + sign up).
 function Login() {
   const { user } = useAuth();
   const { t } = useTranslation("login");

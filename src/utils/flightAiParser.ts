@@ -56,6 +56,7 @@ Return ONLY the JSON object with no explanation, no markdown, no code fences.`;
  * Uses Firebase AI (Gemini) to parse a natural-language flight description
  * into a structured ParsedFlight object.
  */
+// Parse natural language into a normalized ParsedFlight object.
 export async function parseFlightFromText(
   userText: string,
 ): Promise<ParsedFlight> {

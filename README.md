@@ -15,6 +15,7 @@ This project analyzes personal flight history using Python and visualizes the da
   - [Test Structure](#test-structure)
   - [Writing Tests](#writing-tests)
 - [Current Features](#current-features)
+- [Developer Guide](#developer-guide)
 
 ## Project Overview
 
@@ -228,6 +229,10 @@ describe("MyComponent", () => {
 - Filter flights by date range, airline, and airport.
 - Displays airline logos for each flight.
 - Add new flights manually through a form, using CSV upload, or by parsing natural language input with AI assistance.
+
+## Developer Guide
+
+See `docs/developer-guide.md` for the internal architecture map, data flow, and key module notes.
 
 ## Crawling & Sitemap
 

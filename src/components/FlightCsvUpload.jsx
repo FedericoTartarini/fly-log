@@ -117,7 +117,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           const flightData = results.data;
 
-          // todo I should check that the airport exists in the database otherwise throw error
+          // TODO: validate airports against the reference dataset.
 
           // Validate and normalize IATA codes against local assets
           const { errors: iataErrors, normalizedRows } =

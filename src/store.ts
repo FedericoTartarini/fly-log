@@ -13,9 +13,11 @@ import {
 } from "./constants/filters";
 import type { enhancedFlight } from "./types/enhancedFlight";
 
+// Current auth subscription + user id used for fetching flights.
 let authUnsubscribe: Unsubscribe | null = null;
 let currentUid: string | null = null;
 
+// Stop the Firebase auth listener and reset cached user id.
 export const clearAuthListener = () => {
   if (authUnsubscribe) {
     authUnsubscribe();
@@ -53,6 +55,7 @@ export interface FlightStoreState {
   restoreFlight: (flight: enhancedFlight) => void;
 }
 
+// Reduce flights based on the selected year preset or explicit year.
 const filterByYear = (flights: enhancedFlight[], year: string) => {
   if (!year || year === YEAR_FILTER.ALL) return flights;
 
@@ -80,6 +83,7 @@ const filterByYear = (flights: enhancedFlight[], year: string) => {
   });
 };
 
+// Apply year + facet filters to produce the UI-facing subset.
 const applyFilters = (
   flights: enhancedFlight[],
   year: string,
@@ -135,6 +139,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   isLoading: true,
   error: null,
 
+  // Pull all flights from Firestore, then apply in-memory filters.
   fetchFlights: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -163,6 +168,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     }
   },
 
+  // Update the year filter and recompute the filtered list in memory.
   setSelectedYear: async (year: string) => {
     // Update selectedYear synchronously without toggling a loading state
     set({ selectedYear: year, error: null });
@@ -185,6 +191,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     set({ chartGrouping: grouping });
   },
 
+  // Patch filters and recompute filteredFlights without refetching.
   setFilters: (filters: Partial<StoreFlightFilters>) => {
     set((state) => {
       const nextFilters = { ...state.filters, ...filters };
@@ -199,6 +206,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     });
   },
 
+  // Clear filters and recompute filteredFlights.
   clearFilters: () => {
     set((state) => {
       const cleared: StoreFlightFilters = {

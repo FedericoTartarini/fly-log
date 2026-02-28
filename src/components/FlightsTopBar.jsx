@@ -6,6 +6,7 @@ import FlightEntryForm from "./FlightEntryForm.tsx";
 import NoFlightsCard from "./NoFlightsCard.jsx";
 import { useShallow } from "zustand/react/shallow";
 
+// CTA bar for creating flights or showing the empty state.
 const FlightsTopBar = ({ fullWidth = false }) => {
   const { allFlights, fetchFlights } = useFlightStore(
     useShallow((s) => ({

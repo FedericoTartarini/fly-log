@@ -95,6 +95,7 @@ export function formatDate(
 /**
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
+// Convert date-like inputs into a JS Date (or null on invalid input).
 export function parseToDate(value: unknown): Date | null {
   try {
     if (value === null || value === undefined) {

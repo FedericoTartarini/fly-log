@@ -173,6 +173,7 @@ const FitMapToBounds = ({ bounds }) => {
   return null;
 };
 
+// Leaflet map rendering flight paths and markers.
 const WorldMap = () => {
   const filteredFlights = useFlightStore((s) => s.filteredFlights);
   const computedColorScheme = useComputedColorScheme("light", {

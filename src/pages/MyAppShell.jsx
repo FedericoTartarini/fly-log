@@ -25,6 +25,7 @@ const controlStyles = {
   fontWeight: 500,
 };
 
+// App layout shell with nav, drawer, and routed content.
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
     useDisclosure();

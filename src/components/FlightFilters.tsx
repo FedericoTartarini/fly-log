@@ -26,6 +26,7 @@ import {
 } from "../utils/flightFilterFacets";
 import type { FlightStoreState, StoreFlightFilters } from "../store";
 
+// Filter panel for year + facets + duration range.
 const FlightFilters: React.FC = () => {
   const { t } = useTranslation("flights");
   const {

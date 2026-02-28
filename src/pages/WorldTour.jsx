@@ -25,6 +25,7 @@ import fallbackWorld from "../assets/world-fallback.json";
 const WORLD_GEOJSON_URL =
   "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
 
+// Time scope options for the route playback.
 const FILTER_SCOPE = {
   RANGE: "range",
   PAST: "past",
@@ -39,17 +40,20 @@ const SPEED = {
   NORMAL: "normal",
   FAST: "fast",
 };
+// Adjust playback step speed.
 const SPEED_MULTIPLIER = {
   [SPEED.SLOW]: 1.6,
   [SPEED.NORMAL]: 1,
   [SPEED.FAST]: 0.65,
 };
 
+// Guard against malformed coordinates.
 const isValidCoords = (coord) =>
   Array.isArray(coord) &&
   coord.length === 2 &&
   coord.every((n) => typeof n === "number" && Number.isFinite(n));
 
+// Combine flight date and optional HH:MM time for sequencing.
 const mergeDateWithTime = (date, time) => {
   if (!date) return null;
   const combined = new Date(date);
@@ -106,6 +110,7 @@ const getRoutesFocus = (routes) => {
   return [lat, lon];
 };
 
+// Animated globe tour for flights over time.
 function WorldTour() {
   const { t } = useTranslation("tour");
   const { allFlights } = useFlightStore(
