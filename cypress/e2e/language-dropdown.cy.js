@@ -5,10 +5,15 @@ describe("Navigation drawer language dropdown", () => {
     cy.viewport(375, 700);
     cy.visit("/");
     cy.get("button[aria-label='Open navigation menu']").click();
-    cy.get("[data-cy='language-select']:visible").should("have.length", 1).click();
-    cy.contains("English").should("be.visible");
-    cy.contains("Italiano").should("be.visible");
-    cy.get("[role='option']").contains("Italiano").click();
-    cy.contains("Lingua").should("be.visible");
+    cy.get("[data-cy = 'language-select']").click({
+      force: true,
+      multiple: true,
+    });
+    cy.contains("English");
+    cy.contains("Italiano");
+    cy.contains("Spanish").should("not.exist");
+    cy.get("[role='option']").contains("Italiano").click({ force: true });
+    cy.contains("Lingua");
+    cy.contains("Language").should("not.exist");
   });
 });

@@ -20,8 +20,11 @@ describe("Login Failure Scenario", () => {
       }
 
       cy.visit("/login");
-      cy.get('input[name="email"]').type(email, { log: false });
-      cy.get('input[name="password"]').type(password, { log: false });
+      cy.wait(1000);
+      cy.get('input[name="email"]').type(email);
+      cy.get('input[name="password"]').type(password, {
+        log: false,
+      });
       cy.get('button[type="submit"]').click();
     });
   });
