@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 import { useShallow } from "zustand/react/shallow";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div;
 import { IconChevronsUp } from "@tabler/icons-react";
 
 const FlightsStats = () => {
@@ -128,7 +129,7 @@ const FlightsStats = () => {
             justifyContent: "center",
           }}
         >
-          <motion.div
+          <MotionDiv
             initial={{ y: -2 }}
             animate={animateChevron ? { y: [0, -6, 0] } : { y: -2 }}
             transition={
@@ -148,7 +149,7 @@ const FlightsStats = () => {
               stroke={2}
               style={{ color: "var(--mantine-color-dimmed, #868e96)" }}
             />
-          </motion.div>
+          </MotionDiv>
         </div>
         <Stack
           bg="var(--mantine-color-body)"
