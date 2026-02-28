@@ -1,7 +1,14 @@
 import React, { useRef } from "react";
 import * as Framer from "framer-motion";
 import { useInView } from "framer-motion";
-import { Text, Card, Group, Image, ActionIcon } from "@mantine/core";
+import {
+  Text,
+  Card,
+  Group,
+  Image,
+  ActionIcon,
+  SimpleGrid,
+} from "@mantine/core";
 import {
   IconAdjustments,
   IconCalendarTime,
@@ -13,12 +20,7 @@ import {
 import { IDS } from "../constants/MyClasses";
 import { useTranslation } from "react-i18next";
 
-const featureListStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "1.25rem",
-  width: "100%",
-};
+// Removed vertical stack style in favor of responsive SimpleGrid
 
 const cardWrapperStyle = {
   width: "100%",
@@ -73,7 +75,15 @@ const imageData = {
   },
 };
 
-const FeatureCard = ({ icon, title, description, image, id, alt }) => {
+const FeatureCard = ({
+  icon,
+  title,
+  description,
+  image,
+  id,
+  alt,
+  delay = 0,
+}) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -83,18 +93,19 @@ const FeatureCard = ({ icon, title, description, image, id, alt }) => {
     <Framer.motion.div
       ref={ref}
       style={cardWrapperStyle}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut", delay }}
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder id={id} w={"100%"}>
         <Card.Section>
           <Image
-            src={imgData.src}
-            srcSet={imgData.srcSet}
+            src={imgData?.src}
+            srcSet={imgData?.srcSet}
             sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
             alt={alt}
             loading="lazy"
+            withPlaceholder={!imgData}
           />
         </Card.Section>
 
@@ -205,11 +216,16 @@ const FeatureSection = () => {
   ];
 
   return (
-    <div style={featureListStyle}>
-      {features.map((f) => (
-        <FeatureCard key={f.id} {...f} />
+    <SimpleGrid
+      cols={{ base: 1, xs: 2, lg: 3 }}
+      spacing={{ base: "md", sm: "xl", lg: "xl" }}
+      verticalSpacing={{ base: "md", sm: "xl", lg: "xl" }}
+      style={{ width: "100%" }}
+    >
+      {features.map((f, i) => (
+        <FeatureCard key={f.id} {...f} delay={i * 0.15} />
       ))}
-    </div>
+    </SimpleGrid>
   );
 };
 
