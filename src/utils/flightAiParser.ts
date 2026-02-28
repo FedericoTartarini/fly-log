@@ -84,9 +84,13 @@ export async function parseFlightFromText(
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
-  } catch {
+  } catch (e) {
+    console.error("Failed to parse AI response JSON:", {
+      error: e,
+      rawResponse: rawText,
+    });
     throw new Error(
-      `AI returned an unexpected response. Please try rephrasing your input.\n\nRaw response: ${rawText}`,
+      "AI returned an unexpected response. Please try rephrasing your input.",
     );
   }
 

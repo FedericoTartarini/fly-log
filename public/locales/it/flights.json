@@ -178,6 +178,12 @@
     "title": "Descrivi il tuo volo",
     "subtitle": "Racconta il tuo volo in italiano e compileremo il modulo per te",
     "examples_label": "Prova uno di questi esempi:",
+    "examples": [
+      "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
+      "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45",
+      "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
+      "Volato da Sydney a Londra con Qantas il 5 maggio, ritorno il 20 maggio 2024"
+    ],
     "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
     "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
     "parse_button": "Analizza con AI",

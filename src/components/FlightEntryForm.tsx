@@ -5,7 +5,6 @@ import {
   Button,
   Group,
   Title,
-  Paper,
   Stack,
   Tabs,
   Switch,
@@ -321,16 +320,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       // Return leg
       returnDate: parsedFlight.return_date
         ? parseToDate(parsedFlight.return_date)
-        : hasReturn
-          ? null
-          : null,
-      returnTime:
-        parsedFlight.return_time ?? (hasReturn ? form.values.returnTime : ""),
+        : form.values.returnDate,
+      returnTime: parsedFlight.return_time ?? form.values.returnTime,
       returnFlightNumber:
-        parsedFlight.return_flight_number ??
-        (hasReturn ? form.values.returnFlightNumber : ""),
+        parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
     });
-    // Ensure UI matches parsed payload: enable when hasReturn, otherwise disable and clear
     setAddReturn(hasReturn);
   };
 
