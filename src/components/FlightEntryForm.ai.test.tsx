@@ -11,6 +11,7 @@
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { act } from "react";
 import { render, screen, waitFor } from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 
@@ -116,8 +117,10 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── Tab visibility ───────────────────────────────────────────────────────
 
-  it("renders all three tabs: Manual Entry, AI Chat, and CSV Upload", () => {
-    render(<FlightEntryForm />);
+  it("renders all three tabs: Manual Entry, AI Chat, and CSV Upload", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     expect(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
@@ -130,14 +133,18 @@ describe("FlightEntryForm – AI tab integration", () => {
     ).not.toBeNull();
   });
 
-  it("shows Manual Entry panel by default", () => {
-    render(<FlightEntryForm />);
+  it("shows Manual Entry panel by default", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
   });
 
   it("switching to AI Chat tab shows the FlightChatInput textarea", async () => {
-    render(<FlightEntryForm />);
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     await userEvent.click(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
@@ -154,7 +161,9 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   it("pre-fills the form and switches to Manual Entry after confirming", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
-    render(<FlightEntryForm />);
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     await userEvent.click(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
@@ -207,7 +216,9 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   it("'Go to Manual Entry' makes the Manual Entry tab active", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
-    render(<FlightEntryForm />);
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     await userEvent.click(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
@@ -239,7 +250,9 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   it("enables the return flight section when AI extracts a return date", async () => {
     mockParseFlightFromText.mockResolvedValue(returnParsed);
-    render(<FlightEntryForm />);
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
 
     await userEvent.click(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
@@ -267,7 +280,7 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── Edit mode hides tabs ──────────────────────────────────────────────────
 
-  it("does not render tabs when in editing mode (flight prop provided)", () => {
+  it("does not render tabs when in editing mode (flight prop provided)", async () => {
     const existingFlight = {
       id: "abc123",
       departure_date: "2026-07-10",
@@ -277,7 +290,9 @@ describe("FlightEntryForm – AI tab integration", () => {
       flight_number: "123",
     };
 
-    render(<FlightEntryForm flight={existingFlight} />);
+    await act(async () => {
+      render(<FlightEntryForm flight={existingFlight} />);
+    });
 
     expect(
       screen.queryByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
