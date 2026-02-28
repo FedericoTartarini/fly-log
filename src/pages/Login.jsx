@@ -145,6 +145,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              data-cy="login-email"
             />
             <PasswordInput
               name="password"
@@ -153,6 +154,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              data-cy="login-password"
             />
             {mode === "signin" && (
               <div style={{ textAlign: "right" }}>
@@ -162,12 +164,17 @@ function Login() {
                   size="sm"
                   onClick={handleForgotPassword}
                   disabled={loading}
+                  data-cy="login-forgot-password"
                 >
                   {t("forgotPassword")}
                 </Anchor>
               </div>
             )}
-            {error && <div style={{ color: "red" }}>{String(error)}</div>}
+            {error && (
+              <div style={{ color: "red" }} data-cy="login-error">
+                {String(error)}
+              </div>
+            )}
 
             {mode === "signup" && (
               <PasswordInput
@@ -177,11 +184,12 @@ function Login() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                data-cy="login-confirm-password"
               />
             )}
 
             <Center>
-              <Button type="submit" loading={loading}>
+              <Button type="submit" loading={loading} data-cy="login-submit">
                 {mode === "signin" ? t("sign_in") : t("sign_up")}
               </Button>
             </Center>
@@ -193,6 +201,7 @@ function Login() {
                   type="button"
                   size="sm"
                   onClick={() => setMode("signup")}
+                  data-cy="login-to-signup"
                 >
                   {t("dont_have_account")}
                 </Anchor>
@@ -202,6 +211,7 @@ function Login() {
                   type="button"
                   size="sm"
                   onClick={() => setMode("signin")}
+                  data-cy="login-to-signin"
                 >
                   {t("already_have_account")}
                 </Anchor>

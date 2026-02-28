@@ -21,11 +21,13 @@ describe("Login Failure Scenario", () => {
 
       cy.visit("/login");
       cy.wait(1000);
-      cy.get('input[name="email"]').type(email);
-      cy.get('input[name="password"]').type(password, {
+      cy.get('[data-cy="login-email"]').type(email, {
         log: false,
       });
-      cy.get('button[type="submit"]').click();
+      cy.get('[data-cy="login-password"]').type(password, {
+        log: false,
+      });
+      cy.get('[data-cy="login-submit"]').click();
     });
   });
 
@@ -35,7 +37,7 @@ describe("Login Failure Scenario", () => {
     cy.location("pathname", { timeout: 10000 }).should("eq", "/login");
 
     // Additionally, if the app shows a visible error message (red text), assert it.
-    cy.get('div[style*="color: red"]', { timeout: 10000 })
+    cy.get('[data-cy="login-error"]', { timeout: 10000 })
       .should("exist")
       .and("be.visible");
   });
