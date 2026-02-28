@@ -39,7 +39,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title }) => {
             {t("to", { defaultValue: "→" })}{" "}
             {getAirportCity(flight.arrival_airport_iata)}
           </Text>
-          <Badge color={color} variant="light">
+          <Badge variant="light">
             {t("km", {
               value: Math.round(flight.distance_km),
             })}
