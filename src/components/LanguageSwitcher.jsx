@@ -36,6 +36,20 @@ const LanguageSwitcher = () => {
     }
   };
 
+  const renderOption = ({ option, checked }) => (
+    <div
+      data-cy={`language-option-${option.value}`}
+      style={{ display: "flex", alignItems: "center", padding: 4 }}
+    >
+      {option.label}
+      {checked && (
+        <span style={{ marginLeft: "auto", color: "#2ecc40", fontWeight: 700 }}>
+          &#10003;
+        </span>
+      )}
+    </div>
+  );
+
   return (
     <Select
       label={t("language")}
@@ -43,6 +57,7 @@ const LanguageSwitcher = () => {
       value={value}
       onChange={handleChange}
       data={LANGUAGE_OPTIONS}
+      renderOption={renderOption}
       withinPortal
       dropdownPosition="bottom"
       px="xs"

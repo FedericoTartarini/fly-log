@@ -94,6 +94,7 @@ function MyAppShell() {
             hiddenFrom={SIZE_DRAWER}
             size="sm"
             aria-label="Open navigation menu"
+            data-cy="menu-mobile-open"
           />
           <Burger
             opened={desktopOpened}
@@ -137,6 +138,7 @@ function MyAppShell() {
       </AppShell.Navbar>
 
       <Drawer
+        data-cy="drawer"
         opened={mobileOpened}
         onClose={closeMobile}
         position="left"
