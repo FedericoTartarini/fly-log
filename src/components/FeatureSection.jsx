@@ -105,7 +105,6 @@ const FeatureCard = ({
             sizes="(max-width: 600px) 380px, (max-width: 1200px) 760px, 1920px"
             alt={alt}
             loading="lazy"
-            withPlaceholder={!imgData}
           />
         </Card.Section>
 
