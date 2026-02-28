@@ -40,17 +40,31 @@ jobs:
 
             const noisyBodyPattern = /automated review|suggested by ai|ai suggestion|coderabbit/i;
 
+            const pr = context.payload.pull_request;
+            const currentHeadSha = pr.head.sha;
+            
             for (const comment of comments) {
               const author = comment.user && comment.user.login;
               const body = comment.body || '';
-
+            
               if (aiBots.includes(author) || noisyBodyPattern.test(body)) {
-                console.log(`Deleting comment ${comment.id} from ${author}`);
-                await github.rest.issues.deleteComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  comment_id: comment.id,
-                });
+                // Only delete if stale: comment body does not mention the head SHA
+                // (this assumes SHA is embedded; adjust as needed for your bot)
+                const mentionsHead = body.includes(currentHeadSha);
+                if (!mentionsHead) {
+                  try {
+                    console.log(`Deleting stale comment ${comment.id} from ${author}`);
+                    await github.rest.issues.deleteComment({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      comment_id: comment.id,
+                    });
+                  } catch (error) {
+                    console.warn(
+                      `Failed to delete issue comment ${comment.id} from ${author}:`, error,
+                    );
+                  }
+                }
               }
             }
 
@@ -82,20 +96,24 @@ jobs:
               const author = comment.user && comment.user.login;
               const body = comment.body || '';
               const isAi = aiBots.has(author) || noisyBodyPattern.test(body);
-
+            
               if (!isAi) continue;
-
+            
               // Keep only comments created for the current head commit.
               // If the PR changed, older inline bot comments are stale noise.
               const isStale = comment.commit_id !== currentHeadSha;
               if (!isStale) continue;
-
-              console.log(
-                `Deleting stale inline comment ${comment.id} from ${author} on ${comment.path}`
-              );
-              await github.rest.pulls.deleteReviewComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: comment.id,
-              });
+            
+              try {
+                console.log(`Deleting stale inline comment ${comment.id} from ${author} on ${comment.path}`);
+                await github.rest.pulls.deleteReviewComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id,
+                });
+              } catch (error) {
+                console.warn(
+                  `Failed to delete review comment ${comment.id} from ${author}:`, error,
+                );
+              }
             }
