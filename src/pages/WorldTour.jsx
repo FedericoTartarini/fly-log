@@ -130,6 +130,10 @@ function WorldTour() {
   const [worldData, setWorldData] = React.useState(null);
   const [loadError, setLoadError] = React.useState(null);
   const [containerWidth, setContainerWidth] = React.useState(960);
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const containerRef = React.useRef(null);
   const svgRef = React.useRef(null);
@@ -308,6 +312,10 @@ function WorldTour() {
   }, [routes, hasStartedAnimation]);
 
   React.useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsPlaying(false);
+      return;
+    }
     if (!isPlaying) return;
     if (!routes.length) {
       setIsPlaying(false);
@@ -325,7 +333,13 @@ function WorldTour() {
     }, stepDelay);
 
     return () => window.clearTimeout(id);
-  }, [isPlaying, currentRouteIndex, routes.length, speed]);
+  }, [
+    isPlaying,
+    currentRouteIndex,
+    routes.length,
+    speed,
+    prefersReducedMotion,
+  ]);
 
   React.useEffect(() => {
     if (!svgRef.current || !worldData) return;
@@ -506,6 +520,12 @@ function WorldTour() {
       return;
     }
 
+    if (prefersReducedMotion) {
+      viz.drawBase();
+      viz.drawActive(route);
+      return;
+    }
+
     const [midLat, midLon] = getRouteMidpoint(route);
     const startRotate = viz.projection.rotate();
     const endRotate = [-midLon, -midLat, startRotate[2] || 0];
@@ -523,7 +543,13 @@ function WorldTour() {
         viz.drawBase();
         viz.drawActive(route);
       });
-  }, [currentRouteIndex, routes, speed, hasStartedAnimation]);
+  }, [
+    currentRouteIndex,
+    routes,
+    speed,
+    hasStartedAnimation,
+    prefersReducedMotion,
+  ]);
 
   const handleStart = () => {
     if (!routes.length) return;
@@ -555,7 +581,7 @@ function WorldTour() {
     <Container>
       <Stack mt="md" gap="md">
         <Card withBorder radius="md" shadow="sm">
-          <Title order={2}>{t("title")}</Title>
+          <Title order={1}>{t("title")}</Title>
           <Stack gap="sm">
             <SimpleGrid cols={scope === FILTER_SCOPE.RANGE ? 3 : 1}>
               <NativeSelect

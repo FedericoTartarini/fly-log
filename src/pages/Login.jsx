@@ -172,7 +172,12 @@ function Login() {
               </div>
             )}
             {error && (
-              <div style={{ color: "red" }} data-cy="login-error">
+              <div
+                style={{ color: "red" }}
+                role="alert"
+                aria-live="assertive"
+                data-cy="login-error"
+              >
                 {String(error)}
               </div>
             )}

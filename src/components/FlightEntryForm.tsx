@@ -56,6 +56,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const [addReturn, setAddReturn] = useState(false);
   const { user } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const submitErrorId = "flight-entry-error";
+  const notSignedInId = "flight-entry-not-signed-in";
 
   const { t } = useTranslation("flights");
 
@@ -503,7 +505,12 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
           {!user && (
             <div style={{ marginTop: 8 }}>
-              <div style={{ color: "orange" }}>
+              <div
+                id={notSignedInId}
+                style={{ color: "orange" }}
+                role="status"
+                aria-live="polite"
+              >
                 {t("form.labels.not_signed_in")}
               </div>
             </div>
@@ -511,7 +518,14 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
           {submitError && (
             <div style={{ marginTop: 8 }}>
-              <div style={{ color: "red" }}>{submitError}</div>
+              <div
+                id={submitErrorId}
+                style={{ color: "red" }}
+                role="alert"
+                aria-live="assertive"
+              >
+                {submitError}
+              </div>
             </div>
           )}
 
@@ -566,7 +580,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           </Tabs.Panel>
 
           <Tabs.Panel value={FLIGHT_ENTRY_TABS.CSV} pt="xs">
-            <FlightCsvUpload onComplete={onSaved} />
+            {onSaved ? (
+              <FlightCsvUpload onComplete={onSaved} />
+            ) : (
+              <FlightCsvUpload />
+            )}
           </Tabs.Panel>
         </Tabs>
       )}

@@ -31,7 +31,7 @@ function About() {
     <Paper shadow="md" p="xl" radius="md">
       <Stack spacing="xl">
         <div>
-          <Title order={2} ta="center" mb="lg">
+          <Title order={1} ta="center" mb="lg">
             {t("title")}
           </Title>
           <Text size="lg" ta="center" c={"primary"} mb="xl">
@@ -107,6 +107,7 @@ function About() {
                   component="a"
                   href={APP_INFO.BUY_ME_A_COFFEE}
                   target="_blank"
+                  aria-label="Buy Me a Coffee (opens in a new tab)"
                   color="orange"
                   variant="filled"
                   leftSection={<IconCoffee size={14} />}
@@ -121,6 +122,7 @@ function About() {
                   component="a"
                   href={APP_INFO.PATREON}
                   target="_blank"
+                  aria-label="Support on Patreon (opens in a new tab)"
                   color="red"
                   variant="gradient"
                   leftSection={<IconHeart size={14} />}
@@ -135,6 +137,7 @@ function About() {
                   component="a"
                   href={APP_INFO.GITHUB_REPO}
                   target="_blank"
+                  aria-label="Star on GitHub (opens in a new tab)"
                   color="dark"
                   leftSection={<IconBrandGithub size={14} />}
                 >
@@ -171,6 +174,7 @@ function About() {
             <a
               href={APP_INFO.GITHUB_REPO}
               target="_blank"
+              aria-label="Fork the repository on GitHub (opens in a new tab)"
               rel="noopener noreferrer"
             >
               {t("contribute_link_fork")}
@@ -186,6 +190,7 @@ function About() {
             <a
               href={`${APP_INFO.GITHUB_REPO}/issues`}
               target="_blank"
+              aria-label="Report issues on GitHub (opens in a new tab)"
               rel="noopener noreferrer"
             >
               {t("contribute_link_issues")}
