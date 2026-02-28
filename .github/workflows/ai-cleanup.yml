@@ -48,10 +48,16 @@ jobs:
 
               if (aiBots.includes(author) || noisyBodyPattern.test(body)) {
                 const shaMatch = body.match(/\b[0-9a-f]{7,40}\b/i);
-                const mentionsHead = shaMatch?.[0] === currentHeadSha;
-                if (shaMatch && !mentionsHead) {
+                const mentionsHead = shaMatch
+                  ? currentHeadSha.startsWith(shaMatch[0])
+                  : false;
+                if (!shaMatch || !mentionsHead) {
                   try {
-                    console.log(`Deleting stale comment ${comment.id} from ${author}`);
+                    if (!shaMatch) {
+                      console.log(`Deleting comment ${comment.id} from ${author} (no SHA present)`);
+                    } else {
+                      console.log(`Deleting stale comment ${comment.id} from ${author}`);
+                    }
                     await github.rest.issues.deleteComment({
                       owner: context.repo.owner,
                       repo: context.repo.repo,
