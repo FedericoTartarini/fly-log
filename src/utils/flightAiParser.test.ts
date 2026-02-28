@@ -118,7 +118,7 @@ describe("parseFlightFromText", () => {
     expect(result.departure_airport_iata).toBe("SYD");
   });
 
-  it("returns null for fields that are absent from the AI response", async () => {
+  it("throws when required fields are absent from the AI response", async () => {
     const partial = {
       departure_airport_iata: "JFK",
       arrival_airport_iata: null,
@@ -134,13 +134,12 @@ describe("parseFlightFromText", () => {
       makeResponse(JSON.stringify(partial)),
     );
 
-    const result = await parseFlightFromText("vague description");
-    expect(result.arrival_airport_iata).toBeNull();
-    expect(result.departure_date).toBeNull();
-    expect(result.airline_iata).toBeNull();
+    await expect(parseFlightFromText("vague description")).rejects.toThrow(
+      /missing required fields/i,
+    );
   });
 
-  it("coerces unexpected field types to null instead of crashing", async () => {
+  it("throws when required fields are missing after normalization", async () => {
     const bad = {
       departure_airport_iata: 123, // should become null
       arrival_airport_iata: true, // should become null
@@ -154,12 +153,9 @@ describe("parseFlightFromText", () => {
     };
     mockGenerateContent.mockResolvedValue(makeResponse(JSON.stringify(bad)));
 
-    const result = await parseFlightFromText("bad types");
-    expect(result.departure_airport_iata).toBeNull();
-    expect(result.arrival_airport_iata).toBeNull();
-    // string fields pass through unchanged
-    expect(result.departure_date).toBe("2026-07-10");
-    expect(result.airline_iata).toBe("QF");
+    await expect(parseFlightFromText("bad types")).rejects.toThrow(
+      /missing required fields/i,
+    );
   });
 
   it("throws a descriptive error when the response is not valid JSON", async () => {

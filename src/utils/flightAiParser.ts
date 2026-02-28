@@ -130,9 +130,9 @@ export async function parseFlightFromText(
     // Fallback: try Date parse and format to YYYY-MM-DD
     const d = new Date(s);
     if (Number.isNaN(d.getTime())) return null;
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
+    const yyyy = d.getUTCFullYear();
+    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(d.getUTCDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   };
 
@@ -152,10 +152,10 @@ export async function parseFlightFromText(
     if (typeof value !== "string") return null;
     const s = value.trim();
     const m = s.match(/^(\d+)$/);
-    return m ? m[1] : null;
+    return m?.[1] ?? null;
   };
 
-  return {
+  const normalized: ParsedFlight = {
     departure_airport_iata: normalizeIata(r.departure_airport_iata, 3),
     arrival_airport_iata: normalizeIata(r.arrival_airport_iata, 3),
     departure_date: normalizeDate(r.departure_date),
@@ -166,4 +166,15 @@ export async function parseFlightFromText(
     return_time: normalizeTime(r.return_time),
     return_flight_number: normalizeFlightNumber(r.return_flight_number),
   };
+
+  const missingRequired = REQUIRED_FIELDS.filter(
+    (field) => normalized[field] === null,
+  );
+  if (missingRequired.length > 0) {
+    throw new Error(
+      `AI response missing required fields: ${missingRequired.join(", ")}`,
+    );
+  }
+
+  return normalized;
 }
