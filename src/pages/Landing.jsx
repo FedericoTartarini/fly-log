@@ -14,6 +14,7 @@ import {
   ThemeIcon,
   Grid,
   Card,
+  useMantineTheme,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import showcase from "../assets/showcase.png";
@@ -25,6 +26,12 @@ const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 
 function Landing() {
   const { t } = useTranslation("landing");
+  const theme = useMantineTheme();
+  const heroGradient = {
+    from: "grape",
+    to: "red",
+    deg: 60,
+  };
   return (
     <Container size="md" mt="xl">
       <Stack align="center" gap="xl">
@@ -44,7 +51,7 @@ function Landing() {
                 fontWeight: 900,
                 letterSpacing: -1,
               }}
-              gradient={{ from: "#0ea5e9", to: "#007cf0" }}
+              gradient={heroGradient}
               variant="gradient"
             >
               {t("title")}
@@ -52,6 +59,7 @@ function Landing() {
             <Text
               ta="center"
               variant="gradient"
+              gradient={heroGradient}
               size="xl"
               maw={680}
               style={{ fontSize: "1.3rem", fontWeight: 600 }}
@@ -62,18 +70,18 @@ function Landing() {
         </motion.div>
 
         <Group justify="center" gap="md" mb="sm">
-          <Button
-            component={Link}
-            to={PATHS.LOGIN}
-            size="lg"
-            radius="xl"
-            style={{ fontWeight: 700, boxShadow: "0px 0.5px 8px #0ea5e911" }}
-            variant="gradient"
-            whileHover={{ scale: 1.06 }}
-            as={motion.button}
-          >
-            {t("get_started")}
-          </Button>
+          <motion.div whileHover={{ scale: 1.06 }}>
+            <Button
+              component={Link}
+              to={PATHS.LOGIN}
+              size="lg"
+              radius="xl"
+              style={{ fontWeight: 700, boxShadow: "0px 0.5px 8px #0ea5e911" }}
+              variant="gradient"
+            >
+              {t("get_started")}
+            </Button>
+          </motion.div>
           <Button
             component={Link}
             to={PATHS.ABOUT}
@@ -144,7 +152,6 @@ function Landing() {
                     shadow="sm"
                     radius="xl"
                     p="lg"
-                    bg="white"
                     style={{
                       minWidth: 210,
                       maxWidth: 400,
@@ -152,7 +159,7 @@ function Landing() {
                       display: "flex",
                       alignItems: "center",
                       gap: 10,
-                      borderLeft: "6px solid #8574bf",
+                      borderLeft: `6px solid ${theme.colors.grape[4]}`,
                     }}
                   >
                     <span
@@ -167,10 +174,10 @@ function Landing() {
                         style={{ marginBottom: -2 }}
                         c="gray.9"
                       >
-                        Roma ➜ Paris
+                        {t("route")}
                       </Text>
                       <Text size="xs" c="dimmed" fw={600}>
-                        AI added your flight!
+                        {t("ai_added_flight")}
                       </Text>
                     </div>
                   </Paper>
