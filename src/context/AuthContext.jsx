@@ -47,15 +47,17 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const signOut = async () => {
-    if (!firebaseRef.current.signOutUser) {
-      const firebase = await import("../firebaseClient");
-      firebaseRef.current.signOutUser = firebase.signOutUser;
-      if (!firebaseRef.current.onAuthStateChanged) {
-        firebaseRef.current.onAuthStateChanged = firebase.onAuthStateChanged;
+    try {
+      if (!firebaseRef.current.signOutUser) {
+        const firebase = await import("../firebaseClient");
+        firebaseRef.current.signOutUser = firebase.signOutUser;
       }
-    }
 
-    return firebaseRef.current.signOutUser();
+      return await firebaseRef.current.signOutUser();
+    } catch (error) {
+      console.error("Firebase signOut failed:", error);
+      throw error;
+    }
   };
 
   const value = {
