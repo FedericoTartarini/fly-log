@@ -3,7 +3,7 @@ name: Cleanup AI PR Noise
 on:
   pull_request:
     # Run when a PR is opened, updated, or edited so we clean up prior AI noise
-    types: [opened, reopened, synchronize, edited]
+    types: [opened, reopened, synchronize]
 
 permissions:
   # Deleting PR comments uses the Issues API
@@ -41,20 +41,15 @@ jobs:
 
             const pr = context.payload.pull_request;
             const currentHeadSha = pr.head.sha;
-            const prUpdatedAt = new Date(pr.updated_at).getTime();
 
             for (const comment of comments) {
               const author = comment.user && comment.user.login;
               const body = comment.body || '';
 
               if (aiBots.includes(author) || noisyBodyPattern.test(body)) {
-                const commentCreatedAt = new Date(comment.created_at).getTime();
-                const isOlderThanUpdate =
-                  Number.isFinite(prUpdatedAt) && Number.isFinite(commentCreatedAt)
-                    ? commentCreatedAt < prUpdatedAt
-                    : true;
-                const mentionsHead = body.includes(currentHeadSha);
-                if (isOlderThanUpdate && !mentionsHead) {
+                const shaMatch = body.match(/\b[0-9a-f]{7,40}\b/i);
+                const mentionsHead = shaMatch?.[0] === currentHeadSha;
+                if (shaMatch && !mentionsHead) {
                   try {
                     console.log(`Deleting stale comment ${comment.id} from ${author}`);
                     await github.rest.issues.deleteComment({
