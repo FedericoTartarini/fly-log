@@ -50,6 +50,7 @@ vi.mock("../utils/flightAiParser", () => ({
 
 import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
+import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -80,6 +81,23 @@ const tabName = (tab: string) => new RegExp(tab, "i");
 describe("FlightEntryForm – AI tab integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(loadAirportsInfo).mockResolvedValue([
+      {
+        iata: "SYD",
+        airport_name: "Sydney Airport",
+        city: "Sydney",
+        country: "Australia",
+      },
+      {
+        iata: "SIN",
+        airport_name: "Changi Airport",
+        city: "Singapore",
+        country: "Singapore",
+      },
+    ]);
+    vi.mocked(loadAirlinesInfo).mockResolvedValue([
+      { iata: "QF", name: "Qantas" },
+    ]);
   });
 
   /** Find the AI chat textarea (only present when the AI tab is active) */
@@ -151,13 +169,15 @@ describe("FlightEntryForm – AI tab integration", () => {
       ).toHaveAttribute("aria-selected", "true");
     });
     // Verify that parsed AI values populated the manual form inputs
-    const departureAirport = screen.getByLabelText(
-      /departure airport/i,
-    ) as HTMLInputElement;
-    const arrivalAirport = screen.getByLabelText(
-      /arrival airport/i,
-    ) as HTMLInputElement;
-    const airline = screen.getByLabelText(/airline/i) as HTMLInputElement;
+    const departureAirport = screen.getByRole("textbox", {
+      name: /^departure airport/i,
+    }) as HTMLInputElement;
+    const arrivalAirport = screen.getByRole("textbox", {
+      name: /^arrival airport/i,
+    }) as HTMLInputElement;
+    const airline = screen.getByRole("textbox", {
+      name: /^airline/i,
+    }) as HTMLInputElement;
     const departureTime = screen.getByLabelText(
       /departure time/i,
     ) as HTMLInputElement;
