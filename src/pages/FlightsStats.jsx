@@ -23,10 +23,11 @@ import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 import { useShallow } from "zustand/react/shallow";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 const MotionDiv = motion.div;
 import { IconChevronsUp } from "@tabler/icons-react";
 
+// Stats dashboard with map, summaries, and charts.
 const FlightsStats = () => {
   const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
     useFlightStore(
@@ -39,22 +40,27 @@ const FlightsStats = () => {
       })),
     );
 
-  // Move the stats calculation here to avoid conditional hook calls
+  // Calculate stats before conditional rendering to avoid hook ordering issues.
   const stats = useFlightStats(filteredFlights);
 
-  // Prepare chart data outside of the conditional rendering
+  // Prepare chart data outside conditional rendering.
   const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
 
   const { t } = useTranslation("flights");
 
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [animateChevron, setAnimateChevron] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
 
   // Stop the chevron animation after 15 seconds to avoid distraction
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setAnimateChevron(false);
+      return;
+    }
     const id = setTimeout(() => setAnimateChevron(false), 15000);
     return () => clearTimeout(id);
-  }, []);
+  }, [shouldReduceMotion]);
 
   if (isLoading) {
     return (
@@ -131,9 +137,13 @@ const FlightsStats = () => {
         >
           <MotionDiv
             initial={{ y: -2 }}
-            animate={animateChevron ? { y: [0, -6, 0] } : { y: -2 }}
+            animate={
+              animateChevron && !shouldReduceMotion
+                ? { y: [0, -6, 0] }
+                : { y: -2 }
+            }
             transition={
-              animateChevron
+              animateChevron && !shouldReduceMotion
                 ? { repeat: Infinity, duration: 1.5 }
                 : { duration: 0 }
             }

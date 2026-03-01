@@ -7,6 +7,7 @@ import useFlightStore from "../store";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 
+// Row action menu for edit/delete operations.
 const FlightActions = ({ flight, onEdit }) => {
   const { user } = useAuth();
   const removeFlightById = useFlightStore((s) => s.removeFlightById);

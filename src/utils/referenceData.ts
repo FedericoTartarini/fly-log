@@ -74,6 +74,7 @@ const buildMaps = (
   return { airportByIata, airlineByIata };
 };
 
+// Load airport reference data once and cache it in memory.
 export const loadAirportsInfo = async (): Promise<AirportInfo[]> => {
   if (!airportsPromise) {
     airportsPromise = loadJson<AirportInfo>("/data/airports.json")
@@ -97,6 +98,7 @@ export const loadAirportsInfo = async (): Promise<AirportInfo[]> => {
   return airportsPromise;
 };
 
+// Load airline reference data once and cache it in memory.
 export const loadAirlinesInfo = async (): Promise<AirlineInfo[]> => {
   if (!airlinesPromise) {
     airlinesPromise = loadJson<AirlineInfo>("/data/airlines.json")
@@ -120,6 +122,7 @@ export const loadAirlinesInfo = async (): Promise<AirlineInfo[]> => {
   return airlinesPromise;
 };
 
+// Load both datasets and build IATA lookup maps for sync usage.
 export const loadReferenceMaps = async (): Promise<ReferenceMaps> => {
   if (!mapsPromise) {
     mapsPromise = Promise.all([loadAirportsInfo(), loadAirlinesInfo()])
@@ -139,4 +142,5 @@ export const loadReferenceMaps = async (): Promise<ReferenceMaps> => {
   return mapsPromise;
 };
 
+// Read the current lookup maps (may be empty until loadReferenceMaps resolves).
 export const getReferenceMapsSync = (): ReferenceMaps => referenceMapsCache;

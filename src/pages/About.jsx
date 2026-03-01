@@ -24,13 +24,14 @@ import {
 import { APP_INFO } from "../constants/MyClasses.js";
 import { useTranslation } from "react-i18next";
 
+// About page with project details + contribution links.
 function About() {
   const { t } = useTranslation("about");
   return (
     <Paper shadow="md" p="xl" radius="md">
       <Stack spacing="xl">
         <div>
-          <Title order={2} ta="center" mb="lg">
+          <Title order={1} ta="center" mb="lg">
             {t("title")}
           </Title>
           <Text size="lg" ta="center" c={"primary"} mb="xl">
@@ -39,7 +40,7 @@ function About() {
         </div>
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconPlane size={20} />
@@ -54,7 +55,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconCode size={20} />
@@ -69,7 +70,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconUsers size={20} />
@@ -89,7 +90,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconHeart size={20} />
@@ -106,6 +107,7 @@ function About() {
                   component="a"
                   href={APP_INFO.BUY_ME_A_COFFEE}
                   target="_blank"
+                  aria-label="Buy Me a Coffee (opens in a new tab)"
                   color="orange"
                   variant="filled"
                   leftSection={<IconCoffee size={14} />}
@@ -120,6 +122,7 @@ function About() {
                   component="a"
                   href={APP_INFO.PATREON}
                   target="_blank"
+                  aria-label="Support on Patreon (opens in a new tab)"
                   color="red"
                   variant="gradient"
                   leftSection={<IconHeart size={14} />}
@@ -134,6 +137,7 @@ function About() {
                   component="a"
                   href={APP_INFO.GITHUB_REPO}
                   target="_blank"
+                  aria-label="Star on GitHub (opens in a new tab)"
                   color="dark"
                   leftSection={<IconBrandGithub size={14} />}
                 >
@@ -150,7 +154,7 @@ function About() {
 
         <Divider />
 
-        <Title order={3} mb="md">
+        <Title order={2} mb="md">
           <Group spacing="xs">
             <ThemeIcon variant="light" size="lg">
               <IconGitPullRequest size={20} />
@@ -170,6 +174,7 @@ function About() {
             <a
               href={APP_INFO.GITHUB_REPO}
               target="_blank"
+              aria-label="Fork the repository on GitHub (opens in a new tab)"
               rel="noopener noreferrer"
             >
               {t("contribute_link_fork")}
@@ -185,6 +190,7 @@ function About() {
             <a
               href={`${APP_INFO.GITHUB_REPO}/issues`}
               target="_blank"
+              aria-label="Report issues on GitHub (opens in a new tab)"
               rel="noopener noreferrer"
             >
               {t("contribute_link_issues")}
@@ -197,7 +203,7 @@ function About() {
         </Text>
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             {t("open_source")}
           </Title>
           <Text mb="md">{t("open_source_p1")}</Text>

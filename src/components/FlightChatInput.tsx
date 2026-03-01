@@ -44,6 +44,7 @@ const FIELD_I18N_KEYS: Record<string, string> = {
   airline_iata: "form.labels.airline",
 };
 
+// AI-assisted natural language parser for flight entry.
 export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   onParsed,
   onConfirm,

@@ -26,6 +26,7 @@ import {
 } from "../utils/flightFilterFacets";
 import type { FlightStoreState, StoreFlightFilters } from "../store";
 
+// Filter panel for year + facets + duration range.
 const FlightFilters: React.FC = () => {
   const { t } = useTranslation("flights");
   const {
@@ -295,8 +296,11 @@ const FlightFilters: React.FC = () => {
           nothingFoundMessage={t("filters.no_results")}
         />
         <Box>
-          <Text size="sm">{t("filters.duration_label")}</Text>
+          <Text size="sm" id="filters-duration-label">
+            {t("filters.duration_label")}
+          </Text>
           <RangeSlider
+            aria-labelledby="filters-duration-label"
             min={DEFAULT_MIN}
             max={DEFAULT_MAX}
             step={0.25}

@@ -22,8 +22,7 @@ const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
 
 /**
- * Renders a list of flights in a table.
- * @returns {JSX.Element}
+ * Renders a paginated list of flights in a table.
  */
 const FlightsList: React.FC = () => {
   const { filteredFlights, fetchFlights } = useFlightStore(

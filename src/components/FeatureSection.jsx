@@ -98,6 +98,7 @@ const FeatureCard = ({
 }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
+  const shouldReduceMotion = Framer.useReducedMotion();
 
   const imgData = imageData[image];
 
@@ -105,9 +106,17 @@ const FeatureCard = ({
     <Framer.motion.div
       ref={ref}
       style={cardWrapperStyle}
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      initial={
+        shouldReduceMotion
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: 0, y: 40, scale: 0.95 }
+      }
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut", delay }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0 }
+          : { duration: 0.6, ease: "easeOut", delay }
+      }
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder id={id} w={"100%"}>
         <Card.Section>

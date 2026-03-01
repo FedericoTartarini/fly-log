@@ -24,6 +24,7 @@ const AppFooter = () => (
           rel="noopener noreferrer"
           size="sm"
           c="dimmed"
+          aria-label={`by ${APP_INFO.AUTHOR} (opens in a new tab)`}
         >
           by {APP_INFO.AUTHOR}
         </Anchor>
@@ -36,6 +37,7 @@ const AppFooter = () => (
           rel="noopener noreferrer"
           size="sm"
           c="dimmed"
+          aria-label="Source (opens in a new tab)"
         >
           Source
         </Anchor>

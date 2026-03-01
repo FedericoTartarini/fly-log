@@ -11,6 +11,8 @@
   "to_year": "To year",
   "start": "Start animation",
   "stop": "Stop",
+  "pause": "Pause",
+  "resume": "Resume",
   "no_routes": "No valid routes found for this filter.",
   "load_error": "Unable to load world map data. Flight routes are still available.",
   "current_route": "Route {{index}}/{{total}}: {{from}} -> {{to}}",

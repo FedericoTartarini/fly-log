@@ -1,7 +1,7 @@
 /**
- * Represents a airlineInfo record.
+ * Represents an airport record.
  */
-interface airportInfo {
+interface AirportInfo {
   // Basic airport information
   iata: string; // IATA code
   airport_name: string; // Full airport name
@@ -17,5 +17,5 @@ interface airportInfo {
 // Ensure airportsInfoData is typed
 import airportsInfoData from "../assets/airports.json" with { type: "json" };
 
-export let airportsInfo: airportInfo[];
+export let airportsInfo: AirportInfo[];
 airportsInfo = airportsInfoData;

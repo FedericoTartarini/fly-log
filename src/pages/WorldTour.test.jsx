@@ -230,7 +230,7 @@ describe("WorldTour", () => {
     render(<WorldTour />);
 
     await waitFor(() => expect(zoomSpy).toHaveBeenCalled());
-    expect(mockZoomInstance.scaleExtent).toHaveBeenCalledWith([0.7, 2.5]);
+    expect(mockZoomInstance.scaleExtent).toHaveBeenCalledWith([0.7, 4.5]);
 
     zoomSpy.mockRestore();
   });

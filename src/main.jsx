@@ -30,6 +30,7 @@ const MyAppShell = lazy(() => import("./pages/MyAppShell.jsx"));
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 
+// Route tree: MyAppShell hosts the main layout and nested pages.
 const router = createBrowserRouter([
   {
     path: PATHS.HOME,
@@ -79,6 +80,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+// Mantine theme used app-wide (colors + gradients + headings).
 const theme = createTheme({
   primaryColor: "primary",
   colors: {
@@ -141,7 +143,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </React.StrictMode>,
 );
 
-// Register service worker
+// Register service worker in production to enable offline caching.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     let hasRefreshedForNewWorker = false;

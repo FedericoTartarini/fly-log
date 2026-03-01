@@ -1,6 +1,9 @@
-declare module "./FlightCsvUpload" {
-  import type { FC } from "react";
+import type { FC } from "react";
 
-  const FlightCsvUpload: FC;
-  export default FlightCsvUpload;
+export interface FlightCsvUploadProps {
+  onComplete?: () => void;
 }
+
+declare const FlightCsvUpload: FC<FlightCsvUploadProps>;
+
+export default FlightCsvUpload;

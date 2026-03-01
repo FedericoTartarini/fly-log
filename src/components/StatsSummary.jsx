@@ -12,6 +12,7 @@ import { PATHS, IDS } from "../constants/MyClasses.ts";
 import StatDisplay from "./StatDisplay";
 import { useTranslation } from "react-i18next";
 
+// Summary cards for key stats and CTA shortcuts.
 function StatsSummary() {
   const filteredFlights = useFlightStore((s) => s.filteredFlights);
   const navigate = useNavigate();

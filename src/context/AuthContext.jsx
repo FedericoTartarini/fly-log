@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
+// AuthContext holds the current Firebase user + auth helpers.
 const AuthContext = createContext({});
 
 export const useAuth = () => useContext(AuthContext);
@@ -8,6 +9,7 @@ export const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Cache Firebase module functions after lazy import to avoid re-imports.
   const firebaseRef = useRef({ onAuthStateChanged: null, signOutUser: null });
 
   useEffect(() => {

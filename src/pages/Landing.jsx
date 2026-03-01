@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Container,
   Title,
@@ -29,9 +29,11 @@ import { IconRobotFace } from "@tabler/icons-react";
 const FeatureSection = lazy(() => import("../components/FeatureSection.jsx"));
 const MotionDiv = motion.div;
 
+// Public landing page with hero, feature highlights, and CTA.
 function Landing() {
   const { t } = useTranslation("landing");
   const theme = useMantineTheme();
+  const shouldReduceMotion = useReducedMotion();
   const heroGradient = {
     from: "grape",
     to: "red",
@@ -42,9 +44,15 @@ function Landing() {
       <Stack align="center" gap="xl">
         {/* HERO SECTION */}
         <MotionDiv
-          initial={{ opacity: 0, y: -40 }}
+          initial={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -40 }
+          }
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, type: "spring" }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.8, type: "spring" }
+          }
           style={{ width: "100%" }}
         >
           <Stack align="center" gap={6} style={{ width: "100%" }}>
@@ -75,7 +83,9 @@ function Landing() {
         </MotionDiv>
 
         <Group justify="center" gap="md" mb="sm">
-          <MotionDiv whileHover={{ scale: 1.06 }}>
+          <MotionDiv
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.06 }}
+          >
             <Button
               component={Link}
               to={PATHS.LOGIN}
@@ -102,9 +112,15 @@ function Landing() {
 
         {/* Placeholder for HERO IMAGE/APP PREVIEW (animated) */}
         <MotionDiv
-          initial={{ opacity: 0, y: 40 }}
+          initial={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }
+          }
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 1, type: "spring" }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { delay: 0.3, duration: 1, type: "spring" }
+          }
           style={{ display: "flex", justifyContent: "center", width: "100%" }}
         >
           <Image
@@ -120,10 +136,18 @@ function Landing() {
         </MotionDiv>
         {/* AI ANIMATED CARD + NOTIFICATION DEMO */}
         <MotionDiv
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }
+          }
+          whileInView={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }
+          }
           viewport={{ once: true, amount: 0.65 }}
-          transition={{ duration: 0.7, type: "spring" }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.7, type: "spring" }
+          }
           style={{ width: "100%" }}
         >
           <Card shadow="xl" p="md" radius="lg" withBorder w="100%">
@@ -144,10 +168,18 @@ function Landing() {
               <Grid.Col span={{ base: "content" }}>
                 {/* Animated AI Notification Demo */}
                 <MotionDiv
-                  initial={{ opacity: 0, x: 40 }}
+                  initial={
+                    shouldReduceMotion
+                      ? { opacity: 1, x: 0 }
+                      : { opacity: 0, x: 40 }
+                  }
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
-                  transition={{ delay: 0.7, duration: 0.9, type: "spring" }}
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0 }
+                      : { delay: 0.7, duration: 0.9, type: "spring" }
+                  }
                   style={{
                     flexShrink: 0,
                     display: "flex",

@@ -5,6 +5,7 @@ import type { StoreFlightFilters } from "../store";
 
 export type FacetKey = "airline" | "departureAirport" | "arrivalAirport";
 
+// Apply the selected year preset to a flight collection.
 const filterByYearSelection = (
   flights: enhancedFlight[],
   selectedYear: string,
@@ -34,6 +35,7 @@ const filterByYearSelection = (
   });
 };
 
+// Filter flights by min/max duration constraints.
 const filterByDuration = (
   flights: enhancedFlight[],
   filters: StoreFlightFilters,
@@ -44,10 +46,16 @@ const filterByDuration = (
 
   return flights.filter((flight) => {
     if (typeof flight.flight_time !== "number") return false;
-    if (filters.minDuration !== null && flight.flight_time < filters.minDuration) {
+    if (
+      filters.minDuration !== null &&
+      flight.flight_time < filters.minDuration
+    ) {
       return false;
     }
-    if (filters.maxDuration !== null && flight.flight_time > filters.maxDuration) {
+    if (
+      filters.maxDuration !== null &&
+      flight.flight_time > filters.maxDuration
+    ) {
       return false;
     }
     return true;

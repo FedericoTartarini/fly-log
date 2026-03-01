@@ -25,6 +25,7 @@ const controlStyles = {
   fontWeight: 500,
 };
 
+// App layout shell with nav, drawer, and routed content.
 function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
     useDisclosure();
@@ -135,7 +136,9 @@ function MyAppShell() {
         px={4}
         pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
       >
-        {renderNavLinks(handleNavClick)}
+        <nav aria-label="Primary navigation">
+          {renderNavLinks(handleNavClick)}
+        </nav>
       </AppShell.Navbar>
 
       <Drawer
@@ -148,10 +151,15 @@ function MyAppShell() {
         padding="md"
         hiddenFrom={SIZE_DRAWER}
       >
-        {renderNavLinks(handleNavClick)}
+        <nav aria-label="Mobile navigation">
+          {renderNavLinks(handleNavClick)}
+        </nav>
       </Drawer>
 
-      <AppShell.Main pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}>
+      <AppShell.Main
+        id="main-content"
+        pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
+      >
         <Container size="lg" p={0}>
           <Outlet />
         </Container>

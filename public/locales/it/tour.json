@@ -11,6 +11,8 @@
   "to_year": "Anno finale",
   "start": "Avvia animazione",
   "stop": "Stop",
+  "pause": "Pausa",
+  "resume": "Riprendi",
   "no_routes": "Nessuna rotta valida trovata per questo filtro.",
   "load_error": "Impossibile caricare la mappa del mondo. Le rotte dei voli sono comunque disponibili.",
   "current_route": "Rotta {{index}}/{{total}}: {{from}} -> {{to}}",

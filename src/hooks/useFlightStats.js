@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+// Compute summary stats for the current filtered flights collection.
 export const useFlightStats = (filteredFlights) => {
   return useMemo(() => {
     // Calculate total distance and flight time
