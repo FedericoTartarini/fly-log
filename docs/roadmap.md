@@ -16,7 +16,7 @@
 ### User Experience Improvements
 
 - [ ] Conduct user testing to gather feedback on usability.
-- [ ] Improve Muli-language support (i18n) currently only English and Italian.
+- [ ] Improve Multi-language support (i18n) currently only English and Italian.
 - [ ] check what happens if the user uploads a bad csv with wrong dates, time, airport or airlines codes.
 - [ ] Accessibility pass: add skip link/landmarks, ARIA live error messaging, reduced-motion support.
 - [ ] Accessibility pass: add keyboard alternatives + text summaries for map visualizations.
@@ -61,7 +61,7 @@
 - Difficulty: Medium
 - External API: Optional
 
-#### 4. Auto-Fix with Confidence Scores
+#### 2. Auto-Fix with Confidence Scores
 
 - During import, flag uncertain/invalid values.
 - Suggest likely corrections (airport/airline/date normalization).
@@ -84,19 +84,19 @@
 - Show hubs, most frequent routes, and network evolution by year.
 - Difficulty: Medium
 
-#### 4. Airport Profile Page
+#### 3. Airport Profile Page
 
 - Drill down into a specific airport.
 - Show arrivals/departures, connected airports, first/last visit.
 - Difficulty: Medium
 
-#### 6. Data Quality Page
+#### 4. Data Quality Page
 
 - Show missing fields, suspicious values, and possible duplicates.
 - Provide one-click suggested fixes where possible.
 - Difficulty: Medium
 
-#### 7. More visualizations
+#### 5. More visualizations
 
 - Use the vector map from Tabler to show countries visited: https://docs.tabler.io/ui/components/vector-maps
 - Difficulty: Low-Medium

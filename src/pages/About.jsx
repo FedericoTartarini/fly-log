@@ -40,7 +40,7 @@ function About() {
         </div>
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconPlane size={20} />
@@ -55,7 +55,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconCode size={20} />
@@ -70,7 +70,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconUsers size={20} />
@@ -90,7 +90,7 @@ function About() {
         <Divider />
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             <Group spacing="xs">
               <ThemeIcon variant="light" size="lg">
                 <IconHeart size={20} />
@@ -154,7 +154,7 @@ function About() {
 
         <Divider />
 
-        <Title order={3} mb="md">
+        <Title order={2} mb="md">
           <Group spacing="xs">
             <ThemeIcon variant="light" size="lg">
               <IconGitPullRequest size={20} />
@@ -203,7 +203,7 @@ function About() {
         </Text>
 
         <div>
-          <Title order={3} mb="md">
+          <Title order={2} mb="md">
             {t("open_source")}
           </Title>
           <Text mb="md">{t("open_source_p1")}</Text>

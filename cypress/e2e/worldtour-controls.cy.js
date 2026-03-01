@@ -34,9 +34,8 @@ describe("WorldTour Globe Animation Controls", () => {
     cy.get("svg").find("circle").its("length").should("be.gte", 2); // Expect at least some dots
 
     cy.contains("button", /start/i).should("be.enabled");
-    cy.contains("button", /pause/i).should("not.exist"); // Pause only appears when animating
-    cy.contains("button", /stop/i).should("not.be.enabled"); // Same logic
-
+    cy.contains("button", /pause/i).should("not.exist"); // Pause should not exist yet
+    cy.contains("button", /stop/i).should("not.be.enabled"); // Stop should not be enabled
     cy.contains("button", /start/i).click();
     cy.contains("button", /pause/i).should("be.visible").and("be.enabled");
     cy.contains("button", /stop/i).should("be.visible").and("be.enabled");
