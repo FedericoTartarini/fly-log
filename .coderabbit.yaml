@@ -8,8 +8,6 @@ reviews:
   # Keep review output compact.
   request_changes_only: true
   collapse_repeated_findings: true
-  # Keep comments tight and easy to process.
-  max_comments: 6
   # Only run reviews on these branches by default
   target_branches:
     - main
