@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /
-Sitemap: https://fly-log.netlify.app/sitemap.xml
+Sitemap: /sitemap.xml
