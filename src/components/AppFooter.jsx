@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Group, Text, Anchor } from "@mantine/core";
 import { APP_INFO } from "../constants/MyClasses.js";
+import packageJson from "../../package.json";
 
 const AppFooter = () => (
   <footer>
@@ -13,7 +14,7 @@ const AppFooter = () => (
           &middot;
         </Text>
         <Text size="sm" c="dimmed">
-          v{APP_INFO.VERSION}
+          v{packageJson.version}
         </Text>
         <Text size="sm" c="dimmed">
           &middot;
