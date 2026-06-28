@@ -140,15 +140,16 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           let lastProgress = 0;
           try {
-            await addFlightsForUser(uid, formattedFlights, (p) => {
-              if (p !== lastProgress) {
-                lastProgress = p;
-                setUploadProgress(p);
-              }
-            });
-
-            const successCount = formattedFlights.length;
-            const errorCount = 0;
+            const { successCount, errorCount } = await addFlightsForUser(
+              uid,
+              formattedFlights,
+              (p) => {
+                if (p !== lastProgress) {
+                  lastProgress = p;
+                  setUploadProgress(p);
+                }
+              },
+            );
 
             // Show completion notification
             notifications.show({

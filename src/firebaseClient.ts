@@ -21,6 +21,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import type { Firestore } from "firebase/firestore";
+import { parseToDate } from "./utils/dateUtils";
 
 // Read Vite env vars from import.meta.env (or process.env in tests).
 const getEnv = (key: string, fallback = ""): string => {
@@ -135,20 +136,29 @@ export const onAuthStateChanged = (cb: (user: User | null) => void) => {
   return fbOnAuthStateChanged(auth, cb);
 };
 
+export type AddFlightsResult = {
+  successCount: number;
+  errorCount: number;
+};
+
 /**
  * Add many flights for a given user using batched writes in chunks (max 500 per batch).
  * Each flight will get a serverTimestamp() on `created_at` and departure_date will be
  * saved as a Firestore Timestamp when possible.
  *
+ * Chunks are committed independently: if one chunk fails, the remaining chunks are
+ * still attempted and the failed rows are counted instead of aborting the whole import.
+ *
  * @param uid - user id
  * @param flights - array of flight objects
  * @param progressCb - optional callback(progressPercent:number)
+ * @returns counts of successfully written and failed flight records
  */
 export const addFlightsForUser = async (
   uid: string,
   flights: Array<{ departure_date?: unknown } & Record<string, unknown>>,
   progressCb?: (p: number) => void,
-) => {
+): Promise<AddFlightsResult> => {
   if (!uid) throw new Error("No user ID provided");
   if (!firestore)
     throw new Error(
@@ -156,35 +166,19 @@ export const addFlightsForUser = async (
     );
   const chunkSize = 450; // keep below 500 to be safe
   let processed = 0;
+  let successCount = 0;
+  let errorCount = 0;
 
   for (let i = 0; i < flights.length; i += chunkSize) {
     const chunk = flights.slice(i, i + chunkSize);
     const batch = writeBatch(firestore);
     const recordsCol = collection(firestore, "flights", uid, "records");
 
-    const parseDepartureDate = (input: unknown): Date | null => {
-      if (input === null || input === undefined) return null;
-      let d: Date | null = null;
-      if (typeof input === "string") {
-        const parsed = new Date(input);
-        if (!isNaN(parsed.getTime())) d = parsed;
-      } else if (typeof input === "number") {
-        const parsed = new Date(input);
-        if (!isNaN(parsed.getTime())) d = parsed;
-      } else if (input instanceof Date) {
-        if (!isNaN(input.getTime())) d = input;
-      } else {
-        console.warn("Unsupported departure_date type:", typeof input, input);
-      }
-      return d;
-    };
-
     for (const f of chunk) {
       const data: { departure_date?: unknown } & Record<string, unknown> = {
         ...f,
       };
-      const input = data.departure_date;
-      const validDate = parseDepartureDate(input);
+      const validDate = parseToDate(data.departure_date);
       if (validDate) {
         data.departure_date = Timestamp.fromDate(validDate);
       }
@@ -192,12 +186,21 @@ export const addFlightsForUser = async (
       batch.set(doc(recordsCol), data);
     }
 
-    await batch.commit();
+    try {
+      await batch.commit();
+      successCount += chunk.length;
+    } catch (err) {
+      errorCount += chunk.length;
+      console.error("Failed to commit flight batch:", err);
+    }
+
     processed += chunk.length;
     if (progressCb) progressCb(Math.round((processed / flights.length) * 100));
   }
 
   if (progressCb) progressCb(100);
+
+  return { successCount, errorCount };
 };
 
 export const addFlightForUser = async (
@@ -212,24 +215,7 @@ export const addFlightForUser = async (
   const data: { departure_date?: unknown } & Record<string, unknown> = {
     ...flight,
   };
-  const parseDepartureDate = (input: unknown): Date | null => {
-    if (input === null || input === undefined) return null;
-    let d: Date | null = null;
-    if (typeof input === "string") {
-      const parsed = new Date(input);
-      if (!isNaN(parsed.getTime())) d = parsed;
-    } else if (typeof input === "number") {
-      const parsed = new Date(input);
-      if (!isNaN(parsed.getTime())) d = parsed;
-    } else if (input instanceof Date) {
-      if (!isNaN(input.getTime())) d = input;
-    } else {
-      console.warn("Unsupported departure_date type:", typeof input, input);
-    }
-    return d;
-  };
-
-  const validDate = parseDepartureDate(data.departure_date);
+  const validDate = parseToDate(data.departure_date);
   if (validDate) {
     data.departure_date = Timestamp.fromDate(validDate);
   }

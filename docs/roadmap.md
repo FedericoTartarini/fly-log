@@ -1,16 +1,8 @@
-## Crawling & Sitemap
-
-- `public/robots.txt` currently blocks all crawling (`Disallow: /`) for private development.
-- Update `public/robots.txt` before going public, and add a sitemap URL when available.
-- Create `public/sitemap.xml` and update it before launch.
-
 ## Feature Roadmap (Suggestions)
 
 ### Missing / Core Gaps
 
 - [ ] No user data export/backup workflow.
-- [ ] No search/sort controls in the flights table beyond default date ordering.
-- [ ] No duplicate detection workflow for CSV/manual imports.
 - [ ] improve the email templates authentication
 
 ### User Experience Improvements
@@ -28,6 +20,7 @@
 
 ### High-Value, Low-Maintenance (No External API)
 
+- [ ] No duplicate detection workflow for CSV/manual imports.
 - [ ] Add CSV/JSON export for full or filtered flight data.
 - [ ] Add duplicate detection + skip/merge flow on import.
 - [ ] Add table search (airline/airport/flight number) + user-selectable sorting.
