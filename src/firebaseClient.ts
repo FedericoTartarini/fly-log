@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import type { FirebaseApp } from "firebase/app";
 import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+} from "firebase/app-check";
+import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
@@ -45,6 +49,13 @@ const firebaseConfig = {
   appId: getEnv("VITE_FIREBASE_APP_ID", ""),
 };
 
+const recaptchaSiteKey = getEnv("VITE_RECAPTCHA_SITE_KEY", "");
+
+const isDevMode = (): boolean => {
+  // @ts-expect-error - Vite injects import.meta.env at build time
+  return typeof import.meta !== "undefined" && !!import.meta.env?.DEV;
+};
+
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let firestore: Firestore | null = null;
@@ -54,6 +65,24 @@ let firestore: Firestore | null = null;
 // Callers should mock the exported functions in tests.
 if (firebaseConfig.apiKey) {
   app = initializeApp(firebaseConfig);
+
+  // App Check: required by Firebase AI Logic (Gemini) requests, see flightAiParser.ts.
+  // In dev, use the debug token instead of a real reCAPTCHA challenge.
+  if (isDevMode()) {
+    // @ts-expect-error - documented Firebase debug-token global
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  }
+  if (recaptchaSiteKey) {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
+      isTokenAutoRefreshEnabled: true,
+    });
+  } else if (!isDevMode()) {
+    console.warn(
+      "VITE_RECAPTCHA_SITE_KEY is not set: Firebase AI Logic requests will be rejected once App Check enforcement is on.",
+    );
+  }
+
   // Lazily import auth and firestore SDKs
   auth = getAuth(app);
   try {
