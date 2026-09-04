@@ -193,9 +193,9 @@ const WorldMap = () => {
     [filteredFlights],
   );
 
-  // Esri's World_Topo_Map now stamps a "requires an API key" watermark on
-  // unauthenticated requests, so use CartoDB for both themes (free, keyless).
-  const tileUrl = `https://{s}.basemaps.cartocdn.com/${computedColorScheme === "dark" ? "dark" : "light"}_all/{z}/{x}/{y}.png`;
+  // CARTO now requires a (free) API key on its raster tiles: https://carto.com/basemaps/apikey/
+  const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
+  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}.png?key=${cartoApiKey}`;
 
   const attribution = "&copy; OpenStreetMap &copy; CARTO";
 
