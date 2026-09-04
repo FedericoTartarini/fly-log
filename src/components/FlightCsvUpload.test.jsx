@@ -4,7 +4,9 @@ import { render } from "../../test-utils/index.js";
 
 // Mock firebaseClient
 vi.mock("../firebaseClient", () => ({
-  addFlightsForUser: vi.fn().mockResolvedValue(undefined),
+  addFlightsForUser: vi
+    .fn()
+    .mockResolvedValue({ successCount: 0, errorCount: 0 }),
   addFlightForUser: vi.fn().mockResolvedValue(undefined),
   signInWithEmail: vi.fn(),
 }));

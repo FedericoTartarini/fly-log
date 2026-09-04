@@ -13,7 +13,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { addFlightForUser } from "../firebaseClient";
 import { updateFlightForUser } from "../utils/flightService";
-import { parseToDate } from "../utils/dateUtils";
+import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
@@ -185,22 +185,10 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         flight_number: string;
       };
 
-      const normalizeTime = (timeStr: string) => {
-        if (!timeStr) return null;
-        const normalized = timeStr.trim();
-        const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
-        if (!match) return null;
-        const hh = Number(match[1]);
-        const mm = Number(match[2]);
-        if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
-        if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
-        return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
-      };
-
       const flightsToInsert: FlightPayload[] = [
         {
           departure_date: values.departureDate,
-          departure_time: normalizeTime(values.departureTime) ?? null,
+          departure_time: normalizeTimeString(values.departureTime),
           departure_airport_iata: values.departureAirport,
           arrival_airport_iata: values.arrivalAirport,
           airline_iata: values.airline,
@@ -215,7 +203,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           arrival_airport_iata: values.departureAirport,
           airline_iata: values.airline,
           flight_number: values.returnFlightNumber,
-          departure_time: normalizeTime(values.returnTime) ?? null,
+          departure_time: normalizeTimeString(values.returnTime),
         });
       }
 

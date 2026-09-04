@@ -2,43 +2,42 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Validate the shape of an incoming flight record: required fields, correct
+    // types, IATA code lengths (3-char airports, 2-3 char airline designator),
+    // and a guard against self-loop routes (departure == arrival).
+    function isValidFlight(data) {
+      return data.keys().hasAll([
+          'departure_date',
+          'departure_airport_iata',
+          'arrival_airport_iata',
+          'airline_iata'
+        ])
+        && data.departure_date is timestamp
+        && data.departure_airport_iata is string
+        && data.departure_airport_iata.size() == 3
+        && data.arrival_airport_iata is string
+        && data.arrival_airport_iata.size() == 3
+        && data.airline_iata is string
+        && data.airline_iata.size() >= 2
+        && data.airline_iata.size() <= 3
+        && data.departure_airport_iata != data.arrival_airport_iata;
+    }
+
     // Each user has a flights collection: /flights/{userId}/records/{docId}
     match /flights/{userId}/records/{docId} {
 
       // Allow read/list only for authenticated users who own the userId
       allow read, list: if request.auth != null && request.auth.uid == userId;
 
-      // Allow creating a flight doc only for the authenticated owner and require
-      // certain fields with expected types.
+      // Allow creating a flight doc only for the authenticated owner with a valid shape.
       allow create: if request.auth != null
         && request.auth.uid == userId
-        // required fields for a flight record
-        && request.resource.data.keys().hasAll([
-          'departure_date',
-          'departure_airport_iata',
-          'arrival_airport_iata',
-          'airline_iata'
-        ])
-        // basic type checks
-        && request.resource.data.departure_date is timestamp
-        && request.resource.data.departure_airport_iata is string
-        && request.resource.data.arrival_airport_iata is string
-        && request.resource.data.airline_iata is string;
+        && isValidFlight(request.resource.data);
 
-      // Allow updates only for the authenticated owner. Ensure departure_date (if present)
-      // remains a timestamp and string fields remain strings.
+      // Allow updates only for the authenticated owner with a valid shape.
       allow update: if request.auth != null
         && request.auth.uid == userId
-        && request.resource.data.keys().hasAll([
-          'departure_date',
-          'departure_airport_iata',
-          'arrival_airport_iata',
-          'airline_iata'
-        ])
-        && request.resource.data.departure_date is timestamp
-        && request.resource.data.departure_airport_iata is string
-        && request.resource.data.arrival_airport_iata is string
-        && request.resource.data.airline_iata is string;
+        && isValidFlight(request.resource.data);
 
       // Allow delete only for the authenticated owner
       allow delete: if request.auth != null && request.auth.uid == userId;

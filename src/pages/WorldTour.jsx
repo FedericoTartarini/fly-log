@@ -19,7 +19,7 @@ import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store";
 import { useTranslation } from "react-i18next";
 import { getYearValuesFromFlights } from "../utils/yearFilterOptions";
-import { getYear, parseToDate } from "../utils/dateUtils";
+import { getYear, parseToDate, parseHourMinute } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
 import fallbackWorld from "../assets/world-fallback.json";
 
@@ -58,23 +58,10 @@ const isValidCoords = (coord) =>
 const mergeDateWithTime = (date, time) => {
   if (!date) return null;
   const combined = new Date(date);
-  if (typeof time !== "string") return combined;
+  const parsed = parseHourMinute(time);
+  if (!parsed) return combined;
 
-  const normalized = time.trim();
-  if (!normalized) return combined;
-
-  const match = normalized.match(/^(\d{1,2}):(\d{2})$/);
-  if (!match) return combined;
-
-  const hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return combined;
-
-  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-    return combined;
-  }
-
-  combined.setHours(hours, minutes, 0, 0);
+  combined.setHours(parsed.hours, parsed.minutes, 0, 0);
   return combined;
 };
 

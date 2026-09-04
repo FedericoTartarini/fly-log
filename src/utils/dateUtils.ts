@@ -130,3 +130,29 @@ export function getYear(value: DateLike): number | null {
   const d = parseToDate(value);
   return d ? d.getFullYear() : null;
 }
+
+/**
+ * Parse an "HH:MM" time string into hour/minute numbers, validating ranges.
+ * @returns { hours, minutes } when valid (00:00-23:59), otherwise null.
+ */
+export function parseHourMinute(
+  time: unknown,
+): { hours: number; minutes: number } | null {
+  if (typeof time !== "string") return null;
+  const match = time.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return null;
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+  return { hours, minutes };
+}
+
+/**
+ * Normalize an "HH:MM" time string to zero-padded "HH:MM", or null if invalid.
+ */
+export function normalizeTimeString(time: unknown): string | null {
+  const parsed = parseHourMinute(time);
+  if (!parsed) return null;
+  return `${String(parsed.hours).padStart(2, "0")}:${String(parsed.minutes).padStart(2, "0")}`;
+}
