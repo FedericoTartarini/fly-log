@@ -127,6 +127,13 @@ function MyAppShell() {
               className={classes.control}
               onClick={handleNavClick}
             />
+            <NavLink
+              component={Link}
+              to={PATHS.NETWORK}
+              label={t("nav.network")}
+              className={classes.control}
+              onClick={handleNavClick}
+            />
           </>
         )}
         <NavLink

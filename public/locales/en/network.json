@@ -1,0 +1,33 @@
+{
+  "title": "Route Network",
+  "subtitle": "Observable-style force layout: airports are nodes and routes are weighted edges.",
+  "filters_hint": "This page uses the same global filters as your other pages.",
+  "controls": {
+    "min_route_frequency": "Min route frequency",
+    "max_rendered_routes": "Max rendered routes",
+    "top_n": "Top N"
+  },
+  "summary": {
+    "total_flights": "Flights in selection",
+    "airports": "Airports",
+    "routes": "Routes",
+    "top_hubs": "Top hubs",
+    "top_routes": "Top routes",
+    "no_hubs": "No hubs available",
+    "no_routes": "No routes available"
+  },
+  "graph": {
+    "title": "Network graph",
+    "empty": "No network data for the current filters.",
+    "hub_weight": "Hub weight"
+  },
+  "evolution": {
+    "title": "Network evolution by year",
+    "empty": "No yearly data available.",
+    "metrics": {
+      "flights": "Flights",
+      "airports": "Airports",
+      "routes": "Routes"
+    }
+  }
+}

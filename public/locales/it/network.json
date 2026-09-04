@@ -1,0 +1,33 @@
+{
+  "title": "Rete delle rotte",
+  "subtitle": "Layout a forze stile Observable: gli aeroporti sono nodi e le rotte archi pesati.",
+  "filters_hint": "Questa pagina usa gli stessi filtri globali delle altre pagine.",
+  "controls": {
+    "min_route_frequency": "Frequenza minima rotta",
+    "max_rendered_routes": "Rotte massime renderizzate",
+    "top_n": "Top N"
+  },
+  "summary": {
+    "total_flights": "Voli nella selezione",
+    "airports": "Aeroporti",
+    "routes": "Rotte",
+    "top_hubs": "Hub principali",
+    "top_routes": "Rotte principali",
+    "no_hubs": "Nessun hub disponibile",
+    "no_routes": "Nessuna rotta disponibile"
+  },
+  "graph": {
+    "title": "Grafo della rete",
+    "empty": "Nessun dato di rete per i filtri correnti.",
+    "hub_weight": "Peso hub"
+  },
+  "evolution": {
+    "title": "Evoluzione della rete per anno",
+    "empty": "Nessun dato annuale disponibile.",
+    "metrics": {
+      "flights": "Voli",
+      "airports": "Aeroporti",
+      "routes": "Rotte"
+    }
+  }
+}
