@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import i18n from "i18next";
-import { getFlightsByTimeGrouping, getFlightsByAirline } from "./chartUtils";
+import {
+  getFlightsByTimeGrouping,
+  getFlightsByAirline,
+  getFlightMonthMatrix,
+  getMonthMatrixStats,
+} from "./chartUtils";
 import { capitalize } from "./stringUtils";
 import { TIME_GROUPING } from "../constants/filters.ts";
 
@@ -147,5 +152,61 @@ describe("getFlightsByAirline", () => {
     expect(out).toHaveLength(1);
     expect(out[0].airline).toBe("American");
     expect(out[0].flights).toBe(1);
+  });
+});
+
+describe("getFlightMonthMatrix", () => {
+  it("returns an empty matrix for empty/nullish input", () => {
+    expect(getFlightMonthMatrix([])).toEqual({ years: [], counts: {}, max: 0 });
+    expect(getFlightMonthMatrix(null)).toEqual({
+      years: [],
+      counts: {},
+      max: 0,
+    });
+  });
+
+  it("tallies flights per UTC year/month, sorts years ascending, tracks max", () => {
+    const flights = [
+      { departure_date: "2025-03-10T08:00:00Z" }, // Mar 2025
+      { departure_date: "2025-03-20T20:00:00Z" }, // Mar 2025
+      { departure_date: { seconds: Math.floor(Date.UTC(2024, 6, 1) / 1000) } }, // Jul 2024
+      { departure_date: "2025-01-02T00:00:00Z" }, // Jan 2025
+      { departure_date: "not-a-date" },
+      {},
+    ];
+
+    const matrix = getFlightMonthMatrix(flights);
+    expect(matrix.years).toEqual([2024, 2025]);
+    expect(matrix.counts[2024][6]).toBe(1); // July
+    expect(matrix.counts[2025][2]).toBe(2); // March
+    expect(matrix.counts[2025][0]).toBe(1); // January
+    expect(matrix.max).toBe(2);
+  });
+});
+
+describe("getMonthMatrixStats", () => {
+  it("returns zeroed stats for an empty matrix", () => {
+    expect(getMonthMatrixStats({ years: [], counts: {}, max: 0 })).toEqual({
+      totalFlights: 0,
+      activeMonths: 0,
+      busiestMonth: null,
+      busiestCount: 0,
+    });
+  });
+
+  it("computes totals, active months, and the busiest month", () => {
+    const matrix = {
+      years: [2024, 2025],
+      counts: {
+        2024: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        2025: [1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      max: 3,
+    };
+    const stats = getMonthMatrixStats(matrix);
+    expect(stats.totalFlights).toBe(5);
+    expect(stats.activeMonths).toBe(3);
+    expect(stats.busiestMonth).toEqual({ year: 2025, month: 2 });
+    expect(stats.busiestCount).toBe(3);
   });
 });

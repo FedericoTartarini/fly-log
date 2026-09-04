@@ -2,6 +2,18 @@
   "title": "Statistiche dettagliate dei voli",
   "image_alt": "ala dell'aereo",
   "no_flights": "Nessun volo da visualizzare per questa selezione.",
+  "timeline": {
+    "title": "Cronologia dei voli",
+    "subtitle": "La tua attività di volo per ogni anno, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più voli — passa il mouse per il conteggio.",
+    "tooltip": "{{date}} · {{count}} voli",
+    "legend_less": "Meno",
+    "legend_more": "Più",
+    "stats": {
+      "total_flights": "Voli",
+      "active_months": "Mesi volati",
+      "busiest_month": "Mese più intenso"
+    }
+  },
   "table": {
     "icon": "Icona",
     "from_to": "Da → A",

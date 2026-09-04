@@ -2,6 +2,18 @@
   "title": "Detailed Flight Statistics",
   "image_alt": "plane wing",
   "no_flights": "No flights to display for this selection.",
+  "timeline": {
+    "title": "Flight Timeline",
+    "subtitle": "Your flight activity across every year, one row per year and one square per month. Darker squares mean more flights — hover for the count.",
+    "tooltip": "{{date}} · {{count}} flights",
+    "legend_less": "Less",
+    "legend_more": "More",
+    "stats": {
+      "total_flights": "Flights",
+      "active_months": "Months flown",
+      "busiest_month": "Busiest month"
+    }
+  },
   "table": {
     "icon": "Icon",
     "from_to": "From → To",
