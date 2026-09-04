@@ -193,21 +193,11 @@ const WorldMap = () => {
     [filteredFlights],
   );
 
-  // Current Carto (has gray borders)
-  // const tileUrl = `https://{s}.basemaps.cartocdn.com/${computedColorScheme === "dark" ? "dark" : "light"}_all/{z}/{x}/{y}.png`;
+  // Esri's World_Topo_Map now stamps a "requires an API key" watermark on
+  // unauthenticated requests, so use CartoDB for both themes (free, keyless).
+  const tileUrl = `https://{s}.basemaps.cartocdn.com/${computedColorScheme === "dark" ? "dark" : "light"}_all/{z}/{x}/{y}.png`;
 
-  // Try this: Esri World Terrain (Clean, physical look, no borders)
-  // Note: This does not automatically support dark mode efficiently,
-  // so you might need a different URL for dark mode or use CSS filters.
-  const tileUrl =
-    computedColorScheme === "dark"
-      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png" // Carto Dark with labels and borders
-      : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"; // Esri Topo with cities and borders
-
-  const attribution =
-    computedColorScheme === "dark"
-      ? "&copy; OpenStreetMap &copy; CARTO"
-      : "&copy; Esri, Garmin, FAO, NOAA, USGS";
+  const attribution = "&copy; OpenStreetMap &copy; CARTO";
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
