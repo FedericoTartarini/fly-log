@@ -11,9 +11,15 @@ import {
   getDeparturesByCountry,
   getFlightsByAirline,
   getFlightsByAirport,
+  formatCompactValue,
+  labelFitsInsideBar,
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
-import { CHART_GROUPING, TIME_GROUPING } from "../constants/filters.ts";
+import {
+  CHART_GROUPING,
+  CHART_METRIC,
+  TIME_GROUPING,
+} from "../constants/filters.ts";
 import useFlightStore from "../store.ts";
 import { useShallow } from "zustand/react/shallow";
 
@@ -38,19 +44,63 @@ const CHART_GROUPING_CONFIG = {
   },
 };
 
-const VALUE_FORMATTER = (value) => (String(value) === "0" ? "" : String(value));
+// Recharts passes each label its bar's geometry, which lets a value that would
+// not fit inside a short bar sit just outside its right-hand end instead.
+const makeBarValueLabel = (locale) =>
+  function BarValueLabel({ x, y, width, height, value }) {
+    if (!value) return null;
+    const text = formatCompactValue(value, locale);
+    const fitsInside = labelFitsInsideBar(width, text);
+    return (
+      <text
+        x={fitsInside ? x + width - 8 : x + width + 6}
+        y={y + height / 2}
+        textAnchor={fitsInside ? "end" : "start"}
+        dominantBaseline="central"
+        fontSize={12}
+        fill={fitsInside ? "white" : "var(--mantine-color-dimmed)"}
+      >
+        {text}
+      </text>
+    );
+  };
+
+// Card heading: "Flights by X" or "Kilometres flown by X".
+const titleKey = (metric) =>
+  metric === CHART_METRIC.DISTANCE ? "charts.distance_by" : "charts.flights_by";
 
 const FlightsByChart = ({ filteredFlights, data, height }) => {
-  const { timeGrouping, setTimeGrouping, grouping, setGrouping } =
-    useFlightStore(
-      useShallow((s) => ({
-        timeGrouping: s.timeGrouping,
-        setTimeGrouping: s.setTimeGrouping,
-        grouping: s.chartGrouping,
-        setGrouping: s.setChartGrouping,
-      })),
-    );
-  const { t } = useTranslation("flights");
+  const {
+    timeGrouping,
+    setTimeGrouping,
+    grouping,
+    setGrouping,
+    metric,
+    setMetric,
+  } = useFlightStore(
+    useShallow((s) => ({
+      timeGrouping: s.timeGrouping,
+      setTimeGrouping: s.setTimeGrouping,
+      grouping: s.chartGrouping,
+      setGrouping: s.setChartGrouping,
+      metric: s.chartMetric,
+      setMetric: s.setChartMetric,
+    })),
+  );
+  const { t, i18n } = useTranslation("flights");
+
+  // Both cards share one metric, so the toggle renders identically in each.
+  const metricControl = (
+    <SegmentedControl
+      value={metric}
+      onChange={setMetric}
+      data={[
+        { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
+        { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
+      ]}
+    />
+  );
+  const valueLabelProps = { content: makeBarValueLabel(i18n.language) };
 
   // If data is provided, it's the old time-based chart
   if (data) {
@@ -69,15 +119,14 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
       series: [{ name: "flights", color: "primary.4" }],
       withTooltip: false,
       withBarValueLabel: true,
-      valueFormatter: VALUE_FORMATTER,
-      valueLabelProps: { position: "inside", fill: "white" },
+      valueLabelProps,
     };
 
     return (
       <Card shadow="sm" radius="md" withBorder>
         <Stack mb="md">
           <Title order={3}>
-            {t("charts.flights_by", {
+            {t(titleKey(metric), {
               period:
                 timeGrouping === TIME_GROUPING.DAY_OF_WEEK
                   ? t("time.day_of_week")
@@ -98,6 +147,7 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
               { label: t("time.month"), value: TIME_GROUPING.MONTH },
             ]}
           />
+          {metricControl}
         </Stack>
         {timeGrouping === TIME_GROUPING.YEAR && (
           <ScrollArea h={370} scrollbars="y" offsetScrollbars>
@@ -117,13 +167,13 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
   const chartData =
     !filteredFlights || !Array.isArray(filteredFlights)
       ? []
-      : currentGroupingConfig.getData(filteredFlights);
+      : currentGroupingConfig.getData(filteredFlights, metric);
 
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack mb="md">
         <Title order={3}>
-          {t("charts.flights_by", {
+          {t(titleKey(metric), {
             period: t(currentGroupingConfig.tLabel),
           })}
         </Title>
@@ -136,14 +186,14 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
             { label: t("group.airport"), value: CHART_GROUPING.AIRPORT },
           ]}
         />
+        {metricControl}
       </Stack>
       <ScrollArea h={370} scrollbars="y" type="always" offsetScrollbars>
         <BarChart
           h={(chartData.length + 1) * 28}
           data={chartData}
           withBarValueLabel
-          valueFormatter={VALUE_FORMATTER}
-          valueLabelProps={{ position: "inside", fill: "white" }}
+          valueLabelProps={valueLabelProps}
           dataKey={currentGroupingConfig.dataKey}
           orientation="vertical"
           yAxisProps={{

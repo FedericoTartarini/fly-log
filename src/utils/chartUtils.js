@@ -4,15 +4,20 @@ import { capitalize } from "./stringUtils";
 import { getCountryName } from "./countryUtils";
 import { getAirlineName } from "./airlineUtils";
 import { getAirportCity } from "./airportUtils";
-import { TIME_GROUPING } from "../constants/filters.ts";
+import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 
-export const getDeparturesByCountry = (flights) => {
+// What one flight adds to its bucket: 1 for a flight count, or its distance in
+// whole kilometres. Unknown distances contribute nothing rather than NaN.
+const metricValue = (flight, metric) =>
+  metric === CHART_METRIC.DISTANCE ? Math.round(flight.distance_km || 0) : 1;
+
+export const getDeparturesByCountry = (flights, metric) => {
   if (!flights) return [];
   const departuresByCountry = flights.reduce((acc, flight) => {
     const countryCode = flight.departure_country;
     if (countryCode) {
       const countryName = getCountryName(countryCode) || countryCode;
-      acc[countryName] = (acc[countryName] || 0) + 1;
+      acc[countryName] = (acc[countryName] || 0) + metricValue(flight, metric);
     }
     return acc;
   }, {});
@@ -51,7 +56,7 @@ const localizedMonths = (locale) => {
   );
 };
 
-export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
+export const getFlightsByTimeGrouping = (flights, timeGrouping, metric) => {
   if (!flights) return [];
   const grouping = {};
 
@@ -87,7 +92,7 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
         key = "Unknown";
     }
 
-    grouping[key] = (grouping[key] || 0) + 1;
+    grouping[key] = (grouping[key] || 0) + metricValue(flight, metric);
   });
 
   // Build ordered list matching locale
@@ -108,14 +113,14 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping) => {
     }));
 };
 
-export const getFlightsByAirline = (flights) => {
+export const getFlightsByAirline = (flights, metric) => {
   if (!flights) return [];
   const flightsByAirline = flights.reduce((acc, flight) => {
     const airlineCode = flight.airline_iata;
     if (airlineCode) {
       const airlineName = getAirlineName(airlineCode);
       const safeKey = airlineName || airlineCode;
-      acc[safeKey] = (acc[safeKey] || 0) + 1;
+      acc[safeKey] = (acc[safeKey] || 0) + metricValue(flight, metric);
     }
     return acc;
   }, {});
@@ -128,10 +133,10 @@ export const getFlightsByAirline = (flights) => {
     .sort((a, b) => b.flights - a.flights);
 };
 
-// Build a year x month matrix of flight counts for the Timeline heatmap.
-// Returns the sorted list of years (oldest first) and a `counts` map of
-// year -> number[12] (Jan..Dec, UTC).
-export const getFlightMonthMatrix = (flights) => {
+// Build a year x month matrix for the Timeline heatmap, totalling either
+// flights or kilometres per month. Returns the sorted list of years (oldest
+// first) and a `counts` map of year -> number[12] (Jan..Dec, UTC).
+export const getFlightMonthMatrix = (flights, metric) => {
   if (!flights) return { years: [], counts: {} };
   const counts = {};
   flights.forEach((flight) => {
@@ -140,7 +145,7 @@ export const getFlightMonthMatrix = (flights) => {
     const year = d.getUTCFullYear();
     const month = d.getUTCMonth();
     if (!counts[year]) counts[year] = new Array(12).fill(0);
-    counts[year][month] += 1;
+    counts[year][month] += metricValue(flight, metric);
   });
   const years = Object.keys(counts)
     .map(Number)
@@ -149,26 +154,52 @@ export const getFlightMonthMatrix = (flights) => {
 };
 
 // Summary stats derived from a year x month matrix (see getFlightMonthMatrix).
+// `total` and `busiestValue` are in whatever unit the matrix was built with.
 export const getMonthMatrixStats = (matrix) => {
   const { years = [], counts = {} } = matrix || {};
-  let totalFlights = 0;
+  let total = 0;
   let activeMonths = 0;
   let busiestMonth = null; // { year, month } 0-based month
-  let busiestCount = 0;
+  let busiestValue = 0;
   years.forEach((year) => {
-    counts[year].forEach((count, month) => {
-      if (count <= 0) return;
-      totalFlights += count;
+    counts[year].forEach((value, month) => {
+      if (value <= 0) return;
+      total += value;
       activeMonths += 1;
       // Strictly greater, so a tie keeps the earliest month: a record belongs
       // to when it was first set and doesn't move as later months match it.
-      if (count > busiestCount) {
-        busiestCount = count;
+      if (value > busiestValue) {
+        busiestValue = value;
         busiestMonth = { year, month };
       }
     });
   });
-  return { totalFlights, activeMonths, busiestMonth, busiestCount };
+  return { total, activeMonths, busiestMonth, busiestValue };
+};
+
+// Abbreviate a bar value: 12000 -> "12K", 1500 -> "1.5K" ("1,5K" in Italian).
+// Bars are short, and the unit lives in the card title rather than on each bar.
+export const formatCompactValue = (value, locale) =>
+  new Intl.NumberFormat(locale || (i18n && i18n.language) || "en-AU", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+
+// Rough width of one character at fontSize 12, used only to decide whether a
+// bar's value label fits inside it. Being a few pixels out is harmless: the
+// label moves outside the bar instead, which is still readable.
+const CHAR_WIDTH = 7;
+
+export const labelFitsInsideBar = (barWidth, text) =>
+  barWidth > text.length * CHAR_WIDTH + 12;
+
+// Format a chart value for display. Distances carry their unit; flight counts
+// are a bare localized integer.
+export const formatMetricValue = (value, metric, locale) => {
+  const formatted = new Intl.NumberFormat(
+    locale || (i18n && i18n.language) || "en-AU",
+  ).format(value);
+  return metric === CHART_METRIC.DISTANCE ? `${formatted} km` : formatted;
 };
 
 // Localized month labels (Jan..Dec). Callers pass the active language so the
@@ -176,13 +207,13 @@ export const getMonthMatrixStats = (matrix) => {
 export const getLocalizedMonthLabels = (locale) =>
   localizedMonths(locale || (i18n && i18n.language) || "en-AU");
 
-export const getFlightsByAirport = (flights) => {
+export const getFlightsByAirport = (flights, metric) => {
   if (!flights) return [];
   const flightsByAirport = flights.reduce((acc, flight) => {
     const airportCode = flight.departure_airport_iata;
     if (airportCode) {
       const airportCity = getAirportCity(airportCode) || airportCode;
-      acc[airportCity] = (acc[airportCity] || 0) + 1;
+      acc[airportCity] = (acc[airportCity] || 0) + metricValue(flight, metric);
     }
     return acc;
   }, {});

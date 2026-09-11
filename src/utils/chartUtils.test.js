@@ -5,9 +5,12 @@ import {
   getFlightsByAirline,
   getFlightMonthMatrix,
   getMonthMatrixStats,
+  formatMetricValue,
+  formatCompactValue,
+  labelFitsInsideBar,
 } from "./chartUtils";
 import { capitalize } from "./stringUtils";
-import { TIME_GROUPING } from "../constants/filters.ts";
+import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 
 // Helper to get localized weekday/month label as used in chartUtils
 function weekdayLabel(date, locale) {
@@ -182,10 +185,10 @@ describe("getFlightMonthMatrix", () => {
 describe("getMonthMatrixStats", () => {
   it("returns zeroed stats for an empty matrix", () => {
     expect(getMonthMatrixStats({ years: [], counts: {} })).toEqual({
-      totalFlights: 0,
+      total: 0,
       activeMonths: 0,
       busiestMonth: null,
-      busiestCount: 0,
+      busiestValue: 0,
     });
   });
 
@@ -198,10 +201,10 @@ describe("getMonthMatrixStats", () => {
       },
     };
     const stats = getMonthMatrixStats(matrix);
-    expect(stats.totalFlights).toBe(5);
+    expect(stats.total).toBe(5);
     expect(stats.activeMonths).toBe(3);
     expect(stats.busiestMonth).toEqual({ year: 2025, month: 2 });
-    expect(stats.busiestCount).toBe(3);
+    expect(stats.busiestValue).toBe(3);
   });
 
   it("keeps the earliest month when several tie for busiest", () => {
@@ -214,6 +217,79 @@ describe("getMonthMatrixStats", () => {
     };
     const stats = getMonthMatrixStats(matrix);
     expect(stats.busiestMonth).toEqual({ year: 2024, month: 5 });
-    expect(stats.busiestCount).toBe(5);
+    expect(stats.busiestValue).toBe(5);
+  });
+});
+
+describe("the distance metric", () => {
+  // Two short Qantas hops against one long Emirates haul: Qantas wins on
+  // flight count, Emirates wins on distance.
+  const flights = [
+    {
+      departure_date: "2025-03-10T08:00:00Z",
+      airline_iata: "QF",
+      distance_km: 700,
+    },
+    {
+      departure_date: "2025-03-12T08:00:00Z",
+      airline_iata: "QF",
+      distance_km: 800,
+    },
+    {
+      departure_date: "2025-04-01T08:00:00Z",
+      airline_iata: "EK",
+      distance_km: 12000,
+    },
+  ];
+
+  it("counts flights by default and sums kilometres when asked", () => {
+    const byMonth = (metric) =>
+      getFlightsByTimeGrouping(flights, TIME_GROUPING.MONTH, metric);
+
+    expect(byMonth().map((d) => d.flights)).toEqual([2, 1]);
+    expect(byMonth(CHART_METRIC.DISTANCE).map((d) => d.flights)).toEqual([
+      1500, 12000,
+    ]);
+  });
+
+  it("re-ranks the bars, because the sort key is the summed value", () => {
+    expect(getFlightsByAirline(flights)[0].flights).toBe(2);
+    expect(getFlightsByAirline(flights, CHART_METRIC.DISTANCE)[0].flights).toBe(
+      12000,
+    );
+  });
+
+  it("treats a missing distance as zero rather than NaN", () => {
+    const matrix = getFlightMonthMatrix(
+      [{ departure_date: "2025-03-10T08:00:00Z" }],
+      CHART_METRIC.DISTANCE,
+    );
+    expect(matrix.counts[2025][2]).toBe(0);
+    expect(getMonthMatrixStats(matrix).total).toBe(0);
+  });
+
+  it("abbreviates bar labels to thousands, per locale", () => {
+    expect(formatCompactValue(850, "en-AU")).toBe("850");
+    expect(formatCompactValue(1500, "en-AU")).toBe("1.5K");
+    expect(formatCompactValue(12000, "en-AU")).toBe("12K");
+    expect(formatCompactValue(1500, "it")).toBe("1,5K");
+  });
+
+  it("keeps a bar label inside only when the bar is wide enough for it", () => {
+    // A 200px bar swallows "12K"; a 20px one does not, so the label moves out.
+    expect(labelFitsInsideBar(200, "12K")).toBe(true);
+    expect(labelFitsInsideBar(20, "12K")).toBe(false);
+  });
+
+  it("formats values with the locale separator, and a unit for distances", () => {
+    expect(formatMetricValue(12000, CHART_METRIC.FLIGHTS, "en-AU")).toBe(
+      "12,000",
+    );
+    expect(formatMetricValue(12000, CHART_METRIC.DISTANCE, "en-AU")).toBe(
+      "12,000 km",
+    );
+    expect(formatMetricValue(12000, CHART_METRIC.DISTANCE, "it")).toBe(
+      "12.000 km",
+    );
   });
 });

@@ -10,6 +10,7 @@ import {
   Text,
   Box,
   Tooltip,
+  SegmentedControl,
   rem,
   useMantineTheme,
   useComputedColorScheme,
@@ -22,15 +23,18 @@ import {
   getFlightMonthMatrix,
   getMonthMatrixStats,
   getLocalizedMonthLabels,
+  formatMetricValue,
 } from "../utils/chartUtils.js";
+import { CHART_METRIC } from "../constants/filters.ts";
 
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 
 // Grid template: a fixed year-label column followed by 12 equal month columns.
 const GRID_COLUMNS = `2.5rem repeat(12, 1fr)`;
 
-// Timeline page: a year x month matrix heatmap of flight activity. Each row is a
-// year, each column a month, shaded by how many flights departed that month.
+// Timeline page: a year x month matrix heatmap of flight activity. Each row is
+// a year, each column a month, shaded by either the number of flights that
+// month or the distance flown, depending on the shared chart metric.
 function Timeline() {
   const { t, i18n } = useTranslation("flights");
   const theme = useMantineTheme();
@@ -39,37 +43,48 @@ function Timeline() {
 
   // The grid's vertical axis is the year, so it always plots the complete
   // history: applying the shared year filter would collapse it to one row.
-  const { allFlights, isLoading } = useFlightStore(
+  const { allFlights, isLoading, metric, setMetric } = useFlightStore(
     useShallow((s) => ({
       allFlights: s.allFlights,
       isLoading: s.isLoading,
+      metric: s.chartMetric,
+      setMetric: s.setChartMetric,
     })),
   );
+  const isDistance = metric === CHART_METRIC.DISTANCE;
 
-  const matrix = useMemo(() => getFlightMonthMatrix(allFlights), [allFlights]);
+  const matrix = useMemo(
+    () => getFlightMonthMatrix(allFlights, metric),
+    [allFlights, metric],
+  );
   const stats = useMemo(() => getMonthMatrixStats(matrix), [matrix]);
   const monthLabels = useMemo(
     () => getLocalizedMonthLabels(i18n.language),
     [i18n.language],
   );
 
-  // Map a flight count to a cell background. Empty months use a neutral,
-  // theme-aware fill; busier months step through the brand-red shades.
-  // Falls back to Mantine's built-in red palette if the brand color is absent.
-  const cellColor = useMemo(() => {
+  // Five shades, from an empty month to the darkest. Falls back to Mantine's
+  // built-in red palette if the brand color is absent.
+  const shades = useMemo(() => {
     const reds = theme.colors?.primary ?? theme.colors.red;
     const emptyFill = isDark ? theme.colors.dark[5] : theme.colors.gray[1];
-    return (count) => {
-      if (!count) return emptyFill;
-      if (count === 1) return reds[3];
-      if (count === 2) return reds[5];
-      if (count === 3) return reds[7];
-      return reds[9];
-    };
+    return [emptyFill, reds[3], reds[5], reds[7], reds[9]];
   }, [theme, isDark]);
 
+  // Flight counts use fixed buckets, so one shade always means one number.
+  // Kilometres have no natural step size, so they scale against the busiest
+  // month instead.
+  const bucketOf = useMemo(() => {
+    if (!isDistance) return (value) => Math.min(value, 4);
+    const max = stats.busiestValue || 1;
+    return (value) => (value ? Math.ceil((value / max) * 4) : 0);
+  }, [isDistance, stats.busiestValue]);
+
+  const formatValue = (value) =>
+    formatMetricValue(value, metric, i18n.language);
+
   const busiestLabel = stats.busiestMonth
-    ? `${monthLabels[stats.busiestMonth.month]} ${stats.busiestMonth.year} (${stats.busiestCount})`
+    ? `${monthLabels[stats.busiestMonth.month]} ${stats.busiestMonth.year} (${formatValue(stats.busiestValue)})`
     : "—";
 
   if (isLoading) {
@@ -109,20 +124,25 @@ function Timeline() {
     );
   }
 
-  const renderCell = (year, count, month) => {
-    const label = t("timeline.tooltip", {
-      date: `${monthLabels[month]} ${year}`,
-      count,
-    });
+  const renderCell = (year, value, month) => {
+    const label = isDistance
+      ? t("timeline.tooltip_distance", {
+          date: `${monthLabels[month]} ${year}`,
+          value: formatValue(value),
+        })
+      : t("timeline.tooltip", {
+          date: `${monthLabels[month]} ${year}`,
+          count: value,
+        });
     return (
       <Tooltip key={month} label={label} withinPortal withArrow>
         <Box
-          role={count ? "img" : undefined}
-          aria-label={count ? label : undefined}
+          role={value ? "img" : undefined}
+          aria-label={value ? label : undefined}
           style={{
             height: rem(14),
             borderRadius: rem(3),
-            backgroundColor: cellColor(count),
+            backgroundColor: shades[bucketOf(value)],
           }}
         />
       </Tooltip>
@@ -136,16 +156,30 @@ function Timeline() {
           {t("timeline.title")}
         </Title>
         <Text size="sm" c="dimmed" ta="center">
-          {t("timeline.subtitle")}
+          {t(isDistance ? "timeline.subtitle_distance" : "timeline.subtitle")}
         </Text>
+        <Group justify="center">
+          <SegmentedControl
+            value={metric}
+            onChange={setMetric}
+            data={[
+              { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
+              { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
+            ]}
+          />
+        </Group>
 
         {matrix.years.length > 0 ? (
           <>
             <Group justify="space-around" gap="xs">
               <StatDisplay
                 id="timeline-total-flights"
-                label={t("timeline.stats.total_flights")}
-                value={stats.totalFlights}
+                label={t(
+                  isDistance
+                    ? "timeline.stats.total_distance"
+                    : "timeline.stats.total_flights",
+                )}
+                value={formatValue(stats.total)}
               />
               <StatDisplay
                 id="timeline-active-months"
@@ -154,7 +188,11 @@ function Timeline() {
               />
               <StatDisplay
                 id="timeline-busiest-month"
-                label={t("timeline.stats.busiest_month")}
+                label={t(
+                  isDistance
+                    ? "timeline.stats.busiest_month_distance"
+                    : "timeline.stats.busiest_month",
+                )}
                 value={busiestLabel}
               />
             </Group>
@@ -200,28 +238,34 @@ function Timeline() {
                 ))}
               </Box>
 
-              {/* Legend: no flights -> the busiest month in the data */}
+              {/* Legend: an empty month -> the busiest month in the data */}
               <Group gap={rem(4)} justify="flex-end" mt={rem(6)} align="center">
                 <Text size="xs" c="dimmed">
-                  {t("timeline.legend_none")}
+                  {isDistance ? formatValue(0) : t("timeline.legend_none")}
                 </Text>
-                {/* Only show swatches the data actually reaches, so the
-                    right-hand label always matches the darkest square. */}
+                {/* In flights mode the shades are fixed buckets, so hide any
+                    the data never reaches: the right-hand label must describe
+                    the darkest square shown. Distances scale to the busiest
+                    month, so every shade is always in play. */}
                 {[0, 1, 2, 3, 4]
-                  .filter((count) => count <= stats.busiestCount)
-                  .map((count) => (
+                  .filter(
+                    (bucket) => isDistance || bucket <= stats.busiestValue,
+                  )
+                  .map((bucket) => (
                     <Box
-                      key={count}
+                      key={bucket}
                       style={{
                         width: rem(10),
                         height: rem(10),
                         borderRadius: rem(2),
-                        backgroundColor: cellColor(count),
+                        backgroundColor: shades[bucket],
                       }}
                     />
                   ))}
                 <Text size="xs" c="dimmed">
-                  {t("timeline.legend_max", { count: stats.busiestCount })}
+                  {isDistance
+                    ? formatValue(stats.busiestValue)
+                    : t("timeline.legend_max", { count: stats.busiestValue })}
                 </Text>
               </Group>
             </Card>

@@ -29,22 +29,33 @@ import { IconChevronsUp } from "@tabler/icons-react";
 
 // Stats dashboard with map, summaries, and charts.
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
-    useFlightStore(
-      useShallow((s) => ({
-        filteredFlights: s.filteredFlights,
-        isLoading: s.isLoading,
-        error: s.error,
-        allFlights: s.allFlights,
-        timeGrouping: s.timeGrouping,
-      })),
-    );
+  const {
+    filteredFlights,
+    isLoading,
+    error,
+    allFlights,
+    timeGrouping,
+    chartMetric,
+  } = useFlightStore(
+    useShallow((s) => ({
+      filteredFlights: s.filteredFlights,
+      isLoading: s.isLoading,
+      error: s.error,
+      allFlights: s.allFlights,
+      timeGrouping: s.timeGrouping,
+      chartMetric: s.chartMetric,
+    })),
+  );
 
   // Calculate stats before conditional rendering to avoid hook ordering issues.
   const stats = useFlightStats(filteredFlights);
 
   // Prepare chart data outside conditional rendering.
-  const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
+  const timeChartData = getFlightsByTimeGrouping(
+    filteredFlights,
+    timeGrouping,
+    chartMetric,
+  );
 
   const { t } = useTranslation("flights");
 

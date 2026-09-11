@@ -5,15 +5,19 @@
   "timeline": {
     "title": "Cronologia dei voli",
     "subtitle": "La tua attività di volo per ogni anno, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più voli — passa il mouse per il conteggio.",
+    "subtitle_distance": "I chilometri percorsi ogni mese, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più chilometri — passa il mouse per il totale.",
     "tooltip_one": "{{date}} · {{count}} volo",
     "tooltip_other": "{{date}} · {{count}} voli",
+    "tooltip_distance": "{{date}} · {{value}}",
     "legend_none": "Nessun volo",
     "legend_max_one": "{{count}} volo",
     "legend_max_other": "{{count}} voli",
     "stats": {
       "total_flights": "Voli",
       "active_months": "Mesi volati",
-      "busiest_month": "Mese con più voli"
+      "busiest_month": "Mese con più voli",
+      "total_distance": "Chilometri",
+      "busiest_month_distance": "Mese con più km"
     }
   },
   "table": {
@@ -177,7 +181,8 @@
     "departures": "Partenze",
     "flights": "Voli",
     "departures_by_country": "Partenze per paese",
-    "flights_by": "Voli per {{period}}"
+    "flights_by": "Voli per {{period}}",
+    "distance_by": "Chilometri percorsi per {{period}}"
   },
   "time": {
     "day_of_week": "Giorno della settimana",
@@ -221,5 +226,9 @@
     "airline": "Compagnia",
     "flight_number": "N° volo",
     "powered_by": "Powered by Google Gemini via Firebase AI"
+  },
+  "metric": {
+    "flights": "Voli",
+    "distance": "Chilometri"
   }
 }

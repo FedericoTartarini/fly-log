@@ -12,12 +12,15 @@ vi.mock("../components/FlightsTopBar.jsx", () => ({
 import { render, screen, waitFor } from "../../test-utils/index.js";
 import Timeline from "./Timeline";
 import useFlightStore from "../store.ts";
+import { CHART_METRIC } from "../constants/filters.ts";
 
 const mockedUseFlightStore = useFlightStore;
 
 const BASE_STATE = {
   allFlights: [],
   isLoading: false,
+  chartMetric: CHART_METRIC.FLIGHTS,
+  setChartMetric: vi.fn(),
 };
 
 const applyMockState = (overrides = {}) => {
@@ -28,9 +31,9 @@ const applyMockState = (overrides = {}) => {
 };
 
 const flights = [
-  { id: "1", departure_date: "2025-03-10T08:00:00Z" },
-  { id: "2", departure_date: "2025-03-20T20:00:00Z" },
-  { id: "3", departure_date: "2024-07-15T09:00:00Z" },
+  { id: "1", departure_date: "2025-03-10T08:00:00Z", distance_km: 700 },
+  { id: "2", departure_date: "2025-03-20T20:00:00Z", distance_km: 800 },
+  { id: "3", departure_date: "2024-07-15T09:00:00Z", distance_km: 12000 },
 ];
 
 const cy = (id) => document.querySelector(`[data-cy="${id}-value"]`);
@@ -84,5 +87,22 @@ describe("Timeline", () => {
     // The darkest swatch shown must be the one the right-hand label describes,
     // so the label tracks the data rather than the fixed 4+ bucket.
     expect(screen.getByText("2 flights")).toBeInTheDocument();
+  });
+
+  it("switches the heatmap to kilometres", async () => {
+    applyMockState({
+      allFlights: flights,
+      chartMetric: CHART_METRIC.DISTANCE,
+    });
+    render(<Timeline />);
+
+    // Totals and the legend are in kilometres, not flight counts.
+    await waitFor(() => {
+      expect(cy("timeline-total-flights")).toHaveTextContent("13,500 km");
+    });
+    expect(screen.getByText("12,000 km")).toBeInTheDocument();
+    // Jul 2024 (12,000 km) beats Mar 2025 (1,500 km), the reverse of the
+    // flight-count ranking.
+    expect(cy("timeline-busiest-month")).toHaveTextContent("2024");
   });
 });
