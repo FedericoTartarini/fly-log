@@ -719,7 +719,9 @@ function WorldTour() {
       svg.interrupt();
       vizRef.current = null;
     };
-  }, [containerWidth, worldData, routes, hasStartedAnimation]);
+    // uniqueCitiesAll is derived from routes and changes identity only when
+    // routes does, so listing it cannot add a re-run.
+  }, [containerWidth, worldData, routes, hasStartedAnimation, uniqueCitiesAll]);
 
   React.useEffect(() => {
     const viz = vizRef.current;
