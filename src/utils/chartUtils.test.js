@@ -268,6 +268,18 @@ describe("the distance metric", () => {
     expect(getMonthMatrixStats(matrix).total).toBe(0);
   });
 
+  it("treats a non-finite distance as zero rather than NaN", () => {
+    const matrix = getFlightMonthMatrix(
+      [
+        { departure_date: "2025-03-10T08:00:00Z", distance_km: NaN },
+        { departure_date: "2025-03-12T08:00:00Z", distance_km: Infinity },
+      ],
+      CHART_METRIC.DISTANCE,
+    );
+    expect(matrix.counts[2025][2]).toBe(0);
+    expect(getMonthMatrixStats(matrix).total).toBe(0);
+  });
+
   it("abbreviates bar labels to thousands, per locale", () => {
     expect(formatCompactValue(850, "en-AU")).toBe("850");
     expect(formatCompactValue(1500, "en-AU")).toBe("1.5K");

@@ -65,4 +65,11 @@ describe("estimateCo2Kg", () => {
     expect(estimateCo2Kg(flight({ distance_km: null }))).toBe(0);
     expect(estimateCo2Kg({} as enhancedFlight)).toBe(0);
   });
+
+  it("rejects non-finite distances instead of propagating them", () => {
+    // A bad record must not poison a whole chart with NaN or Infinity.
+    expect(estimateCo2Kg(flight({ distance_km: NaN }))).toBe(0);
+    expect(estimateCo2Kg(flight({ distance_km: Infinity }))).toBe(0);
+    expect(estimateCo2Kg(flight({ distance_km: -100 }))).toBe(0);
+  });
 });

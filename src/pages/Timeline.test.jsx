@@ -19,6 +19,7 @@ const mockedUseFlightStore = useFlightStore;
 const BASE_STATE = {
   allFlights: [],
   isLoading: false,
+  error: null,
   chartMetric: CHART_METRIC.FLIGHTS,
   setChartMetric: vi.fn(),
 };
@@ -49,6 +50,15 @@ describe("Timeline", () => {
     await waitFor(() => {
       expect(document.querySelector(".mantine-Loader-root")).toBeInTheDocument();
     });
+  });
+
+  it("shows an error message instead of the empty state when the fetch failed", () => {
+    applyMockState({ allFlights: [], error: "Network error" });
+    render(<Timeline />);
+    expect(
+      screen.getByText("Error loading flight data: Network error"),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("flights-top-bar")).not.toBeInTheDocument();
   });
 
   it("shows the add-flight call to action when there are no flights", async () => {
@@ -87,6 +97,22 @@ describe("Timeline", () => {
     // The darkest swatch shown must be the one the right-hand label describes,
     // so the label tracks the data rather than the fixed 4+ bucket.
     expect(screen.getByText("2 flights")).toBeInTheDocument();
+  });
+
+  it("caps the legend at 4+ once a month passes the fixed bucket count", async () => {
+    // 5 flights in one month all clamp to the same darkest shade as a
+    // 4-flight month, so the legend must say "4+", not the exact count.
+    const busyMonth = Array.from({ length: 5 }, (_, i) => ({
+      id: `busy-${i}`,
+      departure_date: "2025-03-10T08:00:00Z",
+    }));
+    applyMockState({ allFlights: busyMonth });
+    render(<Timeline />);
+
+    await waitFor(() => {
+      expect(screen.getByText("4+ flights")).toBeInTheDocument();
+    });
+    expect(screen.queryByText("5 flights")).not.toBeInTheDocument();
   });
 
   it("switches the heatmap to kilometres", async () => {

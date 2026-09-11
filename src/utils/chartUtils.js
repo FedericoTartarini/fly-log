@@ -8,11 +8,14 @@ import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 import { estimateCo2Kg } from "./emissions.ts";
 
 // What one flight adds to its bucket: 1 for a flight count, its distance in
-// whole kilometres, or its estimated emissions in whole kg CO2e. Unknown
-// distances contribute nothing rather than NaN.
+// whole kilometres, or its estimated emissions in whole kg CO2e. Unknown or
+// non-finite distances contribute nothing rather than NaN.
 const metricValue = (flight, metric) => {
-  if (metric === CHART_METRIC.DISTANCE)
-    return Math.round(flight.distance_km || 0);
+  if (metric === CHART_METRIC.DISTANCE) {
+    return Number.isFinite(flight.distance_km)
+      ? Math.round(flight.distance_km)
+      : 0;
+  }
   if (metric === CHART_METRIC.CO2) return Math.round(estimateCo2Kg(flight));
   return 1;
 };

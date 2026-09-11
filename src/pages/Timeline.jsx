@@ -62,10 +62,11 @@ function Timeline() {
 
   // The grid's vertical axis is the year, so it always plots the complete
   // history: applying the shared year filter would collapse it to one row.
-  const { allFlights, isLoading, metric, setMetric } = useFlightStore(
+  const { allFlights, isLoading, error, metric, setMetric } = useFlightStore(
     useShallow((s) => ({
       allFlights: s.allFlights,
       isLoading: s.isLoading,
+      error: s.error,
       metric: s.chartMetric,
       setMetric: s.setChartMetric,
     })),
@@ -106,6 +107,14 @@ function Timeline() {
   const formatValue = (value) =>
     formatMetricValue(value, metric, i18n.language);
 
+  // The darkest shade is the "4 or more" bucket, so a busier month than that
+  // must be labelled 4+ rather than its own total.
+  const legendMaxLabel = !isCount
+    ? formatValue(stats.busiestValue)
+    : stats.busiestValue > 4
+      ? t("timeline.legend_max_plus", { count: 4 })
+      : t("timeline.legend_max", { count: stats.busiestValue });
+
   const busiestLabel = stats.busiestMonth
     ? `${monthLabels[stats.busiestMonth.month]} ${stats.busiestMonth.year} (${formatValue(stats.busiestValue)})`
     : "—";
@@ -121,6 +130,16 @@ function Timeline() {
             <Loader aria-label={t("loading")} />
           </Center>
         </Stack>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container mt="md">
+        <Text c="red" size="lg" ta="center">
+          {t("timeline.error", { error })}
+        </Text>
       </Container>
     );
   }
@@ -277,9 +296,7 @@ function Timeline() {
                     />
                   ))}
                 <Text size="xs" c="dimmed">
-                  {isCount
-                    ? t("timeline.legend_max", { count: stats.busiestValue })
-                    : formatValue(stats.busiestValue)}
+                  {legendMaxLabel}
                 </Text>
               </Group>
             </Card>

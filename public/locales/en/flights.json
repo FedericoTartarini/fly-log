@@ -13,6 +13,8 @@
     "legend_none": "No flights",
     "legend_max_one": "{{count}} flight",
     "legend_max_other": "{{count}} flights",
+    "legend_max_plus": "{{count}}+ flights",
+    "error": "Error loading flight data: {{error}}",
     "stats": {
       "total_flights": "Flights",
       "active_months": "Months flown",
