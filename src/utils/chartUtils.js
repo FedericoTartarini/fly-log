@@ -129,13 +129,11 @@ export const getFlightsByAirline = (flights) => {
 };
 
 // Build a year x month matrix of flight counts for the Timeline heatmap.
-// Returns the sorted list of years (oldest first), a `counts` map of
-// year -> number[12] (Jan..Dec, UTC), and the single busiest month count
-// (`max`) used to scale the color intensity.
+// Returns the sorted list of years (oldest first) and a `counts` map of
+// year -> number[12] (Jan..Dec, UTC).
 export const getFlightMonthMatrix = (flights) => {
-  if (!flights) return { years: [], counts: {}, max: 0 };
+  if (!flights) return { years: [], counts: {} };
   const counts = {};
-  let max = 0;
   flights.forEach((flight) => {
     const d = parseToDate(flight.departure_date);
     if (!d) return;
@@ -143,12 +141,11 @@ export const getFlightMonthMatrix = (flights) => {
     const month = d.getUTCMonth();
     if (!counts[year]) counts[year] = new Array(12).fill(0);
     counts[year][month] += 1;
-    if (counts[year][month] > max) max = counts[year][month];
   });
   const years = Object.keys(counts)
     .map(Number)
     .sort((a, b) => a - b);
-  return { years, counts, max };
+  return { years, counts };
 };
 
 // Summary stats derived from a year x month matrix (see getFlightMonthMatrix).
@@ -163,6 +160,8 @@ export const getMonthMatrixStats = (matrix) => {
       if (count <= 0) return;
       totalFlights += count;
       activeMonths += 1;
+      // Strictly greater, so a tie keeps the earliest month: a record belongs
+      // to when it was first set and doesn't move as later months match it.
       if (count > busiestCount) {
         busiestCount = count;
         busiestMonth = { year, month };
@@ -172,9 +171,10 @@ export const getMonthMatrixStats = (matrix) => {
   return { totalFlights, activeMonths, busiestMonth, busiestCount };
 };
 
-// Localized month labels (Jan..Dec) for the current i18n language.
-export const getLocalizedMonthLabels = () =>
-  localizedMonths((i18n && i18n.language) || "en-AU");
+// Localized month labels (Jan..Dec). Callers pass the active language so the
+// labels can be recomputed when it changes; falls back to the i18n current one.
+export const getLocalizedMonthLabels = (locale) =>
+  localizedMonths(locale || (i18n && i18n.language) || "en-AU");
 
 export const getFlightsByAirport = (flights) => {
   if (!flights) return [];

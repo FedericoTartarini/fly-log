@@ -16,7 +16,6 @@ import useFlightStore from "../store.ts";
 const mockedUseFlightStore = useFlightStore;
 
 const BASE_STATE = {
-  filteredFlights: [],
   allFlights: [],
   isLoading: false,
 };
@@ -50,7 +49,7 @@ describe("Timeline", () => {
   });
 
   it("shows the add-flight call to action when there are no flights", async () => {
-    applyMockState({ allFlights: [], filteredFlights: [] });
+    applyMockState({ allFlights: [] });
     render(<Timeline />);
     await waitFor(() => {
       expect(screen.getByTestId("flights-top-bar")).toBeInTheDocument();
@@ -58,7 +57,7 @@ describe("Timeline", () => {
   });
 
   it("renders a year row per year with matrix stats", async () => {
-    applyMockState({ allFlights: flights, filteredFlights: flights });
+    applyMockState({ allFlights: flights });
     render(<Timeline />);
 
     // One row per year present in the data.
@@ -73,5 +72,17 @@ describe("Timeline", () => {
     // Busiest month is March 2025 with 2 flights.
     expect(cy("timeline-busiest-month")).toHaveTextContent("2025");
     expect(cy("timeline-busiest-month")).toHaveTextContent("(2)");
+  });
+
+  it("labels the legend from zero up to the busiest month's count", async () => {
+    applyMockState({ allFlights: flights });
+    render(<Timeline />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No flights")).toBeInTheDocument();
+    });
+    // The darkest swatch shown must be the one the right-hand label describes,
+    // so the label tracks the data rather than the fixed 4+ bucket.
+    expect(screen.getByText("2 flights")).toBeInTheDocument();
   });
 });

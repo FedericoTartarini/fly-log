@@ -32,25 +32,26 @@ const GRID_COLUMNS = `2.5rem repeat(12, 1fr)`;
 // Timeline page: a year x month matrix heatmap of flight activity. Each row is a
 // year, each column a month, shaded by how many flights departed that month.
 function Timeline() {
-  const { t } = useTranslation("flights");
+  const { t, i18n } = useTranslation("flights");
   const theme = useMantineTheme();
   const colorScheme = useComputedColorScheme("light");
   const isDark = colorScheme === "dark";
 
-  const { filteredFlights, allFlights, isLoading } = useFlightStore(
+  // The grid's vertical axis is the year, so it always plots the complete
+  // history: applying the shared year filter would collapse it to one row.
+  const { allFlights, isLoading } = useFlightStore(
     useShallow((s) => ({
-      filteredFlights: s.filteredFlights,
       allFlights: s.allFlights,
       isLoading: s.isLoading,
     })),
   );
 
-  const matrix = useMemo(
-    () => getFlightMonthMatrix(filteredFlights),
-    [filteredFlights],
-  );
+  const matrix = useMemo(() => getFlightMonthMatrix(allFlights), [allFlights]);
   const stats = useMemo(() => getMonthMatrixStats(matrix), [matrix]);
-  const monthLabels = useMemo(() => getLocalizedMonthLabels(), []);
+  const monthLabels = useMemo(
+    () => getLocalizedMonthLabels(i18n.language),
+    [i18n.language],
+  );
 
   // Map a flight count to a cell background. Empty months use a neutral,
   // theme-aware fill; busier months step through the brand-red shades.
@@ -116,8 +117,8 @@ function Timeline() {
     return (
       <Tooltip key={month} label={label} withinPortal withArrow>
         <Box
-          role="img"
-          aria-label={label}
+          role={count ? "img" : undefined}
+          aria-label={count ? label : undefined}
           style={{
             height: rem(14),
             borderRadius: rem(3),
@@ -131,9 +132,12 @@ function Timeline() {
   return (
     <Container mt="md" size="sm">
       <Stack gap="sm">
-        <Title order={3} ta="center">
+        <Title order={2} ta="center">
           {t("timeline.title")}
         </Title>
+        <Text size="sm" c="dimmed" ta="center">
+          {t("timeline.subtitle")}
+        </Text>
 
         {matrix.years.length > 0 ? (
           <>
@@ -168,7 +172,7 @@ function Timeline() {
                 >
                   <div />
                   {monthLabels.map((month) => (
-                    <Text key={month} size="xs" c="dimmed" ta="center" style={{ fontSize: rem(9) }}>
+                    <Text key={month} size="xs" c="dimmed" ta="center">
                       {month}
                     </Text>
                   ))}
@@ -186,7 +190,7 @@ function Timeline() {
                       alignItems: "center",
                     }}
                   >
-                    <Text size="xs" fw={600} style={{ fontSize: rem(9) }}>
+                    <Text size="xs" fw={600}>
                       {year}
                     </Text>
                     {matrix.counts[year].map((count, month) =>
@@ -196,24 +200,28 @@ function Timeline() {
                 ))}
               </Box>
 
-              {/* Legend: less -> more */}
+              {/* Legend: no flights -> the busiest month in the data */}
               <Group gap={rem(4)} justify="flex-end" mt={rem(6)} align="center">
-                <Text size="xs" c="dimmed" style={{ fontSize: rem(9) }}>
-                  {t("timeline.legend_less")}
+                <Text size="xs" c="dimmed">
+                  {t("timeline.legend_none")}
                 </Text>
-                {[0, 1, 2, 3, 4].map((count) => (
-                  <Box
-                    key={count}
-                    style={{
-                      width: rem(10),
-                      height: rem(10),
-                      borderRadius: rem(2),
-                      backgroundColor: cellColor(count),
-                    }}
-                  />
-                ))}
-                <Text size="xs" c="dimmed" style={{ fontSize: rem(9) }}>
-                  {t("timeline.legend_more")}
+                {/* Only show swatches the data actually reaches, so the
+                    right-hand label always matches the darkest square. */}
+                {[0, 1, 2, 3, 4]
+                  .filter((count) => count <= stats.busiestCount)
+                  .map((count) => (
+                    <Box
+                      key={count}
+                      style={{
+                        width: rem(10),
+                        height: rem(10),
+                        borderRadius: rem(2),
+                        backgroundColor: cellColor(count),
+                      }}
+                    />
+                  ))}
+                <Text size="xs" c="dimmed">
+                  {t("timeline.legend_max", { count: stats.busiestCount })}
                 </Text>
               </Group>
             </Card>
