@@ -9,6 +9,7 @@ import {
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/charts/styles.css";
 import {
   createTheme,
   MantineProvider,
@@ -23,6 +24,7 @@ const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
+const Timeline = lazy(() => import("./pages/Timeline.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute.jsx"));
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <WorldTour />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.TIMELINE,
+        element: (
+          <ProtectedRoute>
+            <Timeline />
           </ProtectedRoute>
         ),
       },

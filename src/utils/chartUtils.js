@@ -128,6 +128,54 @@ export const getFlightsByAirline = (flights) => {
     .sort((a, b) => b.flights - a.flights);
 };
 
+// Build a year x month matrix of flight counts for the Timeline heatmap.
+// Returns the sorted list of years (oldest first) and a `counts` map of
+// year -> number[12] (Jan..Dec, UTC).
+export const getFlightMonthMatrix = (flights) => {
+  if (!flights) return { years: [], counts: {} };
+  const counts = {};
+  flights.forEach((flight) => {
+    const d = parseToDate(flight.departure_date);
+    if (!d) return;
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth();
+    if (!counts[year]) counts[year] = new Array(12).fill(0);
+    counts[year][month] += 1;
+  });
+  const years = Object.keys(counts)
+    .map(Number)
+    .sort((a, b) => a - b);
+  return { years, counts };
+};
+
+// Summary stats derived from a year x month matrix (see getFlightMonthMatrix).
+export const getMonthMatrixStats = (matrix) => {
+  const { years = [], counts = {} } = matrix || {};
+  let totalFlights = 0;
+  let activeMonths = 0;
+  let busiestMonth = null; // { year, month } 0-based month
+  let busiestCount = 0;
+  years.forEach((year) => {
+    counts[year].forEach((count, month) => {
+      if (count <= 0) return;
+      totalFlights += count;
+      activeMonths += 1;
+      // Strictly greater, so a tie keeps the earliest month: a record belongs
+      // to when it was first set and doesn't move as later months match it.
+      if (count > busiestCount) {
+        busiestCount = count;
+        busiestMonth = { year, month };
+      }
+    });
+  });
+  return { totalFlights, activeMonths, busiestMonth, busiestCount };
+};
+
+// Localized month labels (Jan..Dec). Callers pass the active language so the
+// labels can be recomputed when it changes; falls back to the i18n current one.
+export const getLocalizedMonthLabels = (locale) =>
+  localizedMonths(locale || (i18n && i18n.language) || "en-AU");
+
 export const getFlightsByAirport = (flights) => {
   if (!flights) return [];
   const flightsByAirport = flights.reduce((acc, flight) => {
