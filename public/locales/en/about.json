@@ -25,5 +25,8 @@
   "contribute_link_fork": "Fork the repository and submit a pull request",
   "contribute_link_issues": "Report bugs or request features via GitHub Issues",
   "open_source_p1": "This project is open source and welcomes contributions from the community. Whether you're interested in adding features, fixing bugs, improving documentation, or just sharing feedback, your involvement helps make this tool better for everyone.",
-  "open_source_p2": "Built with ❤️ using React, Vite, Mantine UI, Python, and lots of coffee."
+  "open_source_p2": "Built with ❤️ using React, Vite, Mantine UI, Python, and lots of coffee.",
+  "emissions_title": "How CO₂e is estimated",
+  "emissions_p1": "Emissions are an estimate, not a measurement. Each flight's distance is multiplied by a published factor for its haul type: {{domestic}} kg CO₂e per passenger-kilometre for domestic flights, {{shortHaul}} for international flights under {{threshold}} km, and {{longHaul}} above that. The figures come from the UK Government's greenhouse gas conversion factors for {{year}}.",
+  "emissions_p2": "Two assumptions are worth knowing. The factors include the radiative forcing uplift, which accounts for the warming effects of contrails and other emissions at altitude and adds roughly 70%. And because a flight record has no cabin class, economy is assumed — so anyone flying business or first is shown a figure well below their real footprint. Distances are great-circle, while real routes are longer, which makes the estimate slightly conservative."
 }

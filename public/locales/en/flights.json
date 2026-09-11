@@ -6,9 +6,10 @@
     "title": "Flight Timeline",
     "subtitle": "Your flight activity across every year, one row per year and one square per month. Darker squares mean more flights — hover for the count.",
     "subtitle_distance": "The distance you flew each month, one row per year and one square per month. Darker squares mean more kilometres — hover for the total.",
+    "subtitle_co2": "The CO₂e your flights emitted each month, one row per year and one square per month. Darker squares mean more emissions — hover for the total.",
     "tooltip_one": "{{date}} · {{count}} flight",
     "tooltip_other": "{{date}} · {{count}} flights",
-    "tooltip_distance": "{{date}} · {{value}}",
+    "tooltip_value": "{{date}} · {{value}}",
     "legend_none": "No flights",
     "legend_max_one": "{{count}} flight",
     "legend_max_other": "{{count}} flights",
@@ -17,7 +18,9 @@
       "active_months": "Months flown",
       "busiest_month": "Busiest month",
       "total_distance": "Kilometres",
-      "busiest_month_distance": "Month with most km"
+      "busiest_month_distance": "Month with most km",
+      "total_co2": "Emissions",
+      "busiest_month_co2": "Month with most CO₂e"
     }
   },
   "table": {
@@ -182,7 +185,8 @@
     "flights": "Flights",
     "departures_by_country": "Departures by Country",
     "flights_by": "Flights by {{period}}",
-    "distance_by": "Kilometres flown by {{period}}"
+    "distance_by": "Kilometres flown by {{period}}",
+    "co2_by": "CO₂e emitted by {{period}}"
   },
   "group": {
     "country": "Country",
@@ -229,6 +233,7 @@
   },
   "metric": {
     "flights": "Flights",
-    "distance": "Kilometres"
+    "distance": "Kilometres",
+    "co2": "CO₂e"
   }
 }

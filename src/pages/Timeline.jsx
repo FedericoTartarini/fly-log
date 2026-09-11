@@ -32,6 +32,25 @@ const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
 // Grid template: a fixed year-label column followed by 12 equal month columns.
 const GRID_COLUMNS = `2.5rem repeat(12, 1fr)`;
 
+// Copy differs per metric, so look the keys up rather than nesting ternaries.
+const METRIC_KEYS = {
+  [CHART_METRIC.FLIGHTS]: {
+    subtitle: "timeline.subtitle",
+    total: "timeline.stats.total_flights",
+    busiest: "timeline.stats.busiest_month",
+  },
+  [CHART_METRIC.DISTANCE]: {
+    subtitle: "timeline.subtitle_distance",
+    total: "timeline.stats.total_distance",
+    busiest: "timeline.stats.busiest_month_distance",
+  },
+  [CHART_METRIC.CO2]: {
+    subtitle: "timeline.subtitle_co2",
+    total: "timeline.stats.total_co2",
+    busiest: "timeline.stats.busiest_month_co2",
+  },
+};
+
 // Timeline page: a year x month matrix heatmap of flight activity. Each row is
 // a year, each column a month, shaded by either the number of flights that
 // month or the distance flown, depending on the shared chart metric.
@@ -51,7 +70,11 @@ function Timeline() {
       setMetric: s.setChartMetric,
     })),
   );
-  const isDistance = metric === CHART_METRIC.DISTANCE;
+  // Flight counts are small whole numbers; kilometres and kilograms are not,
+  // which is what the shading and the legend branch on.
+  const isCount =
+    metric !== CHART_METRIC.DISTANCE && metric !== CHART_METRIC.CO2;
+  const keys = METRIC_KEYS[metric] ?? METRIC_KEYS[CHART_METRIC.FLIGHTS];
 
   const matrix = useMemo(
     () => getFlightMonthMatrix(allFlights, metric),
@@ -72,13 +95,13 @@ function Timeline() {
   }, [theme, isDark]);
 
   // Flight counts use fixed buckets, so one shade always means one number.
-  // Kilometres have no natural step size, so they scale against the busiest
-  // month instead.
+  // Kilometres and kilograms have no natural step size, so they scale against
+  // the busiest month instead.
   const bucketOf = useMemo(() => {
-    if (!isDistance) return (value) => Math.min(value, 4);
+    if (isCount) return (value) => Math.min(value, 4);
     const max = stats.busiestValue || 1;
     return (value) => (value ? Math.ceil((value / max) * 4) : 0);
-  }, [isDistance, stats.busiestValue]);
+  }, [isCount, stats.busiestValue]);
 
   const formatValue = (value) =>
     formatMetricValue(value, metric, i18n.language);
@@ -125,14 +148,14 @@ function Timeline() {
   }
 
   const renderCell = (year, value, month) => {
-    const label = isDistance
-      ? t("timeline.tooltip_distance", {
-          date: `${monthLabels[month]} ${year}`,
-          value: formatValue(value),
-        })
-      : t("timeline.tooltip", {
+    const label = isCount
+      ? t("timeline.tooltip", {
           date: `${monthLabels[month]} ${year}`,
           count: value,
+        })
+      : t("timeline.tooltip_value", {
+          date: `${monthLabels[month]} ${year}`,
+          value: formatValue(value),
         });
     return (
       <Tooltip key={month} label={label} withinPortal withArrow>
@@ -156,7 +179,7 @@ function Timeline() {
           {t("timeline.title")}
         </Title>
         <Text size="sm" c="dimmed" ta="center">
-          {t(isDistance ? "timeline.subtitle_distance" : "timeline.subtitle")}
+          {t(keys.subtitle)}
         </Text>
         <Group justify="center">
           <SegmentedControl
@@ -165,6 +188,7 @@ function Timeline() {
             data={[
               { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
               { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
+              { label: t("metric.co2"), value: CHART_METRIC.CO2 },
             ]}
           />
         </Group>
@@ -174,11 +198,7 @@ function Timeline() {
             <Group justify="space-around" gap="xs">
               <StatDisplay
                 id="timeline-total-flights"
-                label={t(
-                  isDistance
-                    ? "timeline.stats.total_distance"
-                    : "timeline.stats.total_flights",
-                )}
+                label={t(keys.total)}
                 value={formatValue(stats.total)}
               />
               <StatDisplay
@@ -188,11 +208,7 @@ function Timeline() {
               />
               <StatDisplay
                 id="timeline-busiest-month"
-                label={t(
-                  isDistance
-                    ? "timeline.stats.busiest_month_distance"
-                    : "timeline.stats.busiest_month",
-                )}
+                label={t(keys.busiest)}
                 value={busiestLabel}
               />
             </Group>
@@ -241,16 +257,14 @@ function Timeline() {
               {/* Legend: an empty month -> the busiest month in the data */}
               <Group gap={rem(4)} justify="flex-end" mt={rem(6)} align="center">
                 <Text size="xs" c="dimmed">
-                  {isDistance ? formatValue(0) : t("timeline.legend_none")}
+                  {isCount ? t("timeline.legend_none") : formatValue(0)}
                 </Text>
                 {/* In flights mode the shades are fixed buckets, so hide any
                     the data never reaches: the right-hand label must describe
-                    the darkest square shown. Distances scale to the busiest
-                    month, so every shade is always in play. */}
+                    the darkest square shown. The other metrics scale to the
+                    busiest month, so every shade is always in play. */}
                 {[0, 1, 2, 3, 4]
-                  .filter(
-                    (bucket) => isDistance || bucket <= stats.busiestValue,
-                  )
+                  .filter((bucket) => !isCount || bucket <= stats.busiestValue)
                   .map((bucket) => (
                     <Box
                       key={bucket}
@@ -263,9 +277,9 @@ function Timeline() {
                     />
                   ))}
                 <Text size="xs" c="dimmed">
-                  {isDistance
-                    ? formatValue(stats.busiestValue)
-                    : t("timeline.legend_max", { count: stats.busiestValue })}
+                  {isCount
+                    ? t("timeline.legend_max", { count: stats.busiestValue })
+                    : formatValue(stats.busiestValue)}
                 </Text>
               </Group>
             </Card>

@@ -24,11 +24,13 @@ export type ChartGrouping =
   (typeof CHART_GROUPING)[keyof typeof CHART_GROUPING];
 
 /**
- * What a chart bar measures: how many flights, or how far they went.
+ * What a chart bar measures: how many flights, how far they went, or what they
+ * emitted.
  */
 export const CHART_METRIC = {
   FLIGHTS: "flights",
   DISTANCE: "distance",
+  CO2: "co2",
 } as const;
 
 export type ChartMetric = (typeof CHART_METRIC)[keyof typeof CHART_METRIC];

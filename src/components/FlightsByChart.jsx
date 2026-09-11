@@ -65,9 +65,12 @@ const makeBarValueLabel = (locale) =>
     );
   };
 
-// Card heading: "Flights by X" or "Kilometres flown by X".
-const titleKey = (metric) =>
-  metric === CHART_METRIC.DISTANCE ? "charts.distance_by" : "charts.flights_by";
+// Card heading per metric: "Flights by X", "Kilometres flown by X", ...
+const TITLE_KEYS = {
+  [CHART_METRIC.FLIGHTS]: "charts.flights_by",
+  [CHART_METRIC.DISTANCE]: "charts.distance_by",
+  [CHART_METRIC.CO2]: "charts.co2_by",
+};
 
 const FlightsByChart = ({ filteredFlights, data, height }) => {
   const {
@@ -97,6 +100,7 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
       data={[
         { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
         { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
+        { label: t("metric.co2"), value: CHART_METRIC.CO2 },
       ]}
     />
   );
@@ -126,7 +130,7 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
       <Card shadow="sm" radius="md" withBorder>
         <Stack mb="md">
           <Title order={3}>
-            {t(titleKey(metric), {
+            {t(TITLE_KEYS[metric] ?? TITLE_KEYS[CHART_METRIC.FLIGHTS], {
               period:
                 timeGrouping === TIME_GROUPING.DAY_OF_WEEK
                   ? t("time.day_of_week")
@@ -173,7 +177,7 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
     <Card shadow="sm" radius="md" withBorder>
       <Stack mb="md">
         <Title order={3}>
-          {t(titleKey(metric), {
+          {t(TITLE_KEYS[metric] ?? TITLE_KEYS[CHART_METRIC.FLIGHTS], {
             period: t(currentGroupingConfig.tLabel),
           })}
         </Title>

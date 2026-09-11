@@ -281,6 +281,17 @@ describe("the distance metric", () => {
     expect(labelFitsInsideBar(20, "12K")).toBe(false);
   });
 
+  it("sums estimated emissions when the metric is CO2", () => {
+    // 12000 km long haul dwarfs the two short domestic hops, so the CO2 bars
+    // rank the same way the distance bars do.
+    const byAirline = getFlightsByAirline(flights, CHART_METRIC.CO2);
+    expect(byAirline[0].flights).toBeGreaterThan(byAirline[1].flights);
+    // Emissions are a fraction of the kilometres, never equal to them.
+    const km = getFlightsByAirline(flights, CHART_METRIC.DISTANCE)[0].flights;
+    expect(byAirline[0].flights).toBeLessThan(km);
+    expect(byAirline[0].flights).toBeGreaterThan(0);
+  });
+
   it("formats values with the locale separator, and a unit for distances", () => {
     expect(formatMetricValue(12000, CHART_METRIC.FLIGHTS, "en-AU")).toBe(
       "12,000",
@@ -290,6 +301,9 @@ describe("the distance metric", () => {
     );
     expect(formatMetricValue(12000, CHART_METRIC.DISTANCE, "it")).toBe(
       "12.000 km",
+    );
+    expect(formatMetricValue(1404, CHART_METRIC.CO2, "en-AU")).toBe(
+      "1,404 kg CO₂e",
     );
   });
 });
