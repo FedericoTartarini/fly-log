@@ -12,6 +12,8 @@
     "legend_none": "Nessun volo",
     "legend_max_one": "{{count}} volo",
     "legend_max_other": "{{count}} voli",
+    "legend_max_plus": "{{count}}+ voli",
+    "error": "Errore nel caricamento dei dati di volo: {{error}}",
     "stats": {
       "total_flights": "Voli",
       "active_months": "Mesi volati",

@@ -7,9 +7,12 @@ import { getAirportCity } from "./airportUtils";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 
 // What one flight adds to its bucket: 1 for a flight count, or its distance in
-// whole kilometres. Unknown distances contribute nothing rather than NaN.
-const metricValue = (flight, metric) =>
-  metric === CHART_METRIC.DISTANCE ? Math.round(flight.distance_km || 0) : 1;
+// whole kilometres. Unknown or non-finite distances contribute nothing rather
+// than NaN.
+const metricValue = (flight, metric) => {
+  if (metric !== CHART_METRIC.DISTANCE) return 1;
+  return Number.isFinite(flight.distance_km) ? Math.round(flight.distance_km) : 0;
+};
 
 export const getDeparturesByCountry = (flights, metric) => {
   if (!flights) return [];

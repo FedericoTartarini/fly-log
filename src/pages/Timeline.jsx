@@ -43,10 +43,11 @@ function Timeline() {
 
   // The grid's vertical axis is the year, so it always plots the complete
   // history: applying the shared year filter would collapse it to one row.
-  const { allFlights, isLoading, metric, setMetric } = useFlightStore(
+  const { allFlights, isLoading, error, metric, setMetric } = useFlightStore(
     useShallow((s) => ({
       allFlights: s.allFlights,
       isLoading: s.isLoading,
+      error: s.error,
       metric: s.chartMetric,
       setMetric: s.setChartMetric,
     })),
@@ -98,6 +99,16 @@ function Timeline() {
             <Loader aria-label={t("loading")} />
           </Center>
         </Stack>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container mt="md">
+        <Text c="red" size="lg" ta="center">
+          {t("timeline.error", { error })}
+        </Text>
       </Container>
     );
   }
@@ -265,7 +276,9 @@ function Timeline() {
                 <Text size="xs" c="dimmed">
                   {isDistance
                     ? formatValue(stats.busiestValue)
-                    : t("timeline.legend_max", { count: stats.busiestValue })}
+                    : stats.busiestValue > 4
+                      ? t("timeline.legend_max_plus", { count: 4 })
+                      : t("timeline.legend_max", { count: stats.busiestValue })}
                 </Text>
               </Group>
             </Card>
