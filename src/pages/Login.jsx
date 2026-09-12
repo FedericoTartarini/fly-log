@@ -9,9 +9,16 @@ import {
   Stack,
   Anchor,
   Center,
+  Divider,
 } from "@mantine/core";
+import { IconBrandGoogle } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import { signInWithEmail, signUpWithEmail, auth } from "../firebaseClient";
+import {
+  signInWithEmail,
+  signUpWithEmail,
+  signInWithGoogle,
+  auth,
+} from "../firebaseClient";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -103,10 +110,16 @@ function Login() {
   const parseFirebaseError = (err) => {
     if (!err) return { message: "Unknown error", code: undefined };
     const raw = err.message || String(err);
-    // If message contains code prefix like 'auth/invalid-password: ...'
+    // The SDK puts the code on err.code; it only appears in the message as
+    // "Firebase: Error (auth/invalid-email)." which the split below never
+    // matched, so every error fell through to the raw string.
     const parts = raw.split(":");
-    if (parts.length >= 2 && parts[0].startsWith("auth/")) {
-      const code = parts[0].trim();
+    const code =
+      err.code ||
+      (parts.length >= 2 && parts[0].startsWith("auth/")
+        ? parts[0].trim()
+        : undefined);
+    if (code) {
       const rest = parts.slice(1).join(":").trim();
       // Map a few common codes to friendly messages
       const map = {
@@ -118,10 +131,36 @@ function Login() {
         "auth/weak-password": t("weakPassword"),
         "auth/invalid-api-key": t("invalidApiKey"),
         "auth/invalid-credential": t("invalidCredentials"),
+        "auth/account-exists-with-different-credential": t(
+          "accountExistsWithPassword",
+        ),
+        "auth/popup-blocked": t("popupBlocked"),
       };
       return { message: map[code] || rest || raw, code };
     }
     return { message: raw, code: undefined };
+  };
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await signInWithGoogle();
+    } catch (e) {
+      // Closing the popup, or opening a second one, is a normal thing to do
+      // rather than an error worth shouting about.
+      const dismissed = [
+        "auth/popup-closed-by-user",
+        "auth/cancelled-popup-request",
+        "auth/user-cancelled",
+      ];
+      if (dismissed.includes(e?.code)) return;
+      console.error("signInWithGoogle failed:", e);
+      const { message } = parseFirebaseError(e);
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -199,6 +238,20 @@ function Login() {
                 {mode === "signin" ? t("sign_in") : t("sign_up")}
               </Button>
             </Center>
+
+            <Divider label={t("or")} labelPosition="center" />
+
+            <Button
+              type="button"
+              variant="default"
+              fullWidth
+              leftSection={<IconBrandGoogle size={16} />}
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              data-cy="login-google"
+            >
+              {t("continue_with_google")}
+            </Button>
 
             <div style={{ textAlign: "center" }}>
               {mode === "signin" ? (
