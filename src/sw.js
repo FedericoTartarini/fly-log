@@ -31,8 +31,12 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((cacheNames) => {
+        // This worker is the only one registered on the origin, so any cache
+        // that is not the current one is garbage. The previous filter only
+        // matched "fly-log-" names, which left 4.7 MB of precache behind from
+        // an old vite-plugin-pwa setup sitting on every existing device.
         const cachesToDelete = cacheNames.filter(
-          (cache) => cache.startsWith("fly-log-") && cache !== CACHE_NAME,
+          (cache) => cache !== CACHE_NAME,
         );
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
