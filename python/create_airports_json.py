@@ -69,16 +69,9 @@ def main():
             except (ValueError, TypeError):
                 lon = None
 
-        val = row.get("elevation_ft")
-        if val is None or val == "":
-            elev = None
-        else:
-            try:
-                elev = int(val)
-            except (ValueError, TypeError):
-                elev = None
-
-        # Build object in the exact schema expected by the app
+        # Build object in the exact schema expected by the app. Only fields the
+        # app actually reads are emitted: iso_region and elevation were carried
+        # for years and never used, and cost ~430 KB across 4507 records.
         airport_obj = {
             "iata": iata,
             "airport_name": (row.get("name") or "").strip(),
@@ -87,8 +80,6 @@ def main():
             "lat": lat,
             "lon": lon,
             "iso_country": iso_code,
-            "iso_region": (row.get("iso_region") or "").strip(),
-            "elevation": elev,
         }
 
         final_airports.append(airport_obj)

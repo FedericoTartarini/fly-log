@@ -6,8 +6,6 @@ export type AirportInfo = {
   lat: number;
   lon: number;
   iso_country: string;
-  iso_region: string;
-  elevation: number;
 };
 
 export type AirlineInfo = {
