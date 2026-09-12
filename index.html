@@ -42,27 +42,31 @@
   </head>
   <body>
     <!--
-      Static shell. React replaces this on mount, but it is what Googlebot's
-      first (non-rendering) pass indexes: before this, the crawler saw an empty
-      div, which is why Search Console reported 0 internal links and dropped
-      /landing from the index. Keep the copy in sync with locales/en/landing.json.
+      Static shell: what Googlebot's non-rendering pass indexes. Before this the
+      crawler saw an empty #root, which is why Search Console reported 0 internal
+      links and dropped /landing from the index.
+
+      Every string below is copied verbatim from public/locales/en/landing.json,
+      so the indexed copy and the hydrated Landing page say the same thing. If
+      you edit that file, edit this too.
     -->
     <div id="root">
       <main style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
-        <h1>Fly-Log — your personal flight logbook</h1>
-        <p>
-          Keep a detailed log of all your flights, explore your travel
-          statistics, and visualize your journeys on a world map.
-        </p>
+        <h1>Welcome to Your Personal Flight Tracker</h1>
+        <p>Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map.</p>
+        <h2>AI-Assisted Flight Entry</h2>
+        <p>Add new flights instantly with our integrated AI assistant. Just describe your flight and let AI handle the rest.</p>
         <ul>
-          <li>Visualize all your flights on a world map</li>
-          <li>See which countries you have visited, and when you flew most</li>
-          <li>Compare your total distance flown to the Moon and Mars</li>
-          <li>Add flights by describing them, with AI-assisted entry</li>
+          <li><strong>Where did you fly?</strong> Visualize all your flights on a world map.</li>
+          <li><strong>What are your stats?</strong> Get insights into your flight history and statistics.</li>
+          <li><strong>Which countries did you visit?</strong> See your travel history and countries visited.</li>
+          <li><strong>How far did you fly?</strong> Calculate total distance traveled across all flights and compare it with the circumference of the Earth, distance to the Moon, and Mars.</li>
+          <li><strong>When did you fly?</strong> View your flight history by year and check in which year, month, or day you flew the most.</li>
+          <li><strong>Flight Details</strong> See detailed flight information like departure/arrival airports, airline, and flight number.</li>
         </ul>
         <p>
-          <a href="/about">About the project</a> &middot;
-          <a href="/login">Sign in</a>
+          <a href="/login">Get Started</a> &middot;
+          <a href="/about">Learn More</a>
         </p>
       </main>
     </div>

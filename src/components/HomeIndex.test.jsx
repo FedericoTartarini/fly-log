@@ -1,7 +1,7 @@
 /* eslint-env vitest */
 import { test, expect, vi, beforeEach } from "vitest";
 import React from "react";
-import { render, screen } from "../../test-utils/index.js";
+import { render, screen, waitFor } from "../../test-utils/index.js";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import HomeIndex from "./HomeIndex.jsx";
 
@@ -42,9 +42,12 @@ test("sends signed-in users on to their stats", async () => {
   expect(await screen.findByText("stats page")).toBeInTheDocument();
 });
 
-test("waits for auth rather than flashing the landing page", () => {
+test("waits for auth rather than flashing the landing page", async () => {
   mockAuth.mockReturnValue({ user: null, loading: true });
   renderAt();
 
+  await waitFor(() => {
+    expect(document.querySelector(".mantine-Skeleton-root")).toBeInTheDocument();
+  });
   expect(screen.queryByText("landing page")).not.toBeInTheDocument();
 });
