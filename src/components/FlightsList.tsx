@@ -16,7 +16,6 @@ import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
-import { useShallow } from "zustand/react/shallow";
 
 const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
@@ -25,11 +24,8 @@ const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
  * Renders a paginated list of flights in a table.
  */
 const FlightsList: React.FC = () => {
-  const { filteredFlights, fetchFlights } = useFlightStore(
-    useShallow((s: FlightStoreState) => ({
-      filteredFlights: s.filteredFlights as enhancedFlight[],
-      fetchFlights: s.fetchFlights,
-    })),
+  const filteredFlights = useFlightStore(
+    (s: FlightStoreState) => s.filteredFlights as enhancedFlight[],
   );
 
   const { t } = useTranslation("flights");
@@ -234,15 +230,7 @@ const FlightsList: React.FC = () => {
           <Suspense fallback={<Loader size="sm" />}>
             <FlightEntryForm
               flight={editFlight}
-              onSaved={async () => {
-                setEditOpen(false);
-                // refresh flights list
-                try {
-                  await fetchFlights();
-                } catch (e) {
-                  console.error("Failed to refresh flights:", e);
-                }
-              }}
+              onSaved={() => setEditOpen(false)}
             />
           </Suspense>
         )}
