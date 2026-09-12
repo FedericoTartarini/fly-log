@@ -1,5 +1,3 @@
-import type { enhancedFlight } from "../types/enhancedFlight";
-
 /**
  * Where the emission factors below come from. Surfaced in the UI so the
  * estimate can be traced back to a published source.
@@ -46,9 +44,16 @@ export const LONG_HAUL_THRESHOLD_KM = 3700;
  *
  * @returns kg CO2e, or 0 when the distance is unknown or not a finite number.
  */
-export function estimateCo2Kg(flight: enhancedFlight): number {
+export function estimateCo2Kg(flight: {
+  distance_km?: number | null;
+  international?: boolean;
+  departure_country?: string | null;
+  arrival_country?: string | null;
+}): number {
   const distance = flight?.distance_km;
-  if (!Number.isFinite(distance) || (distance as number) <= 0) return 0;
+  // typeof narrows away null/undefined; isFinite rejects NaN and Infinity.
+  if (typeof distance !== "number" || !Number.isFinite(distance)) return 0;
+  if (distance <= 0) return 0;
 
   // `international` is set from the country pair when a flight is saved; fall
   // back to the countries themselves for records written before that existed.
@@ -61,5 +66,5 @@ export function estimateCo2Kg(flight: enhancedFlight): number {
       ? EMISSION_FACTORS.SHORT_HAUL
       : EMISSION_FACTORS.LONG_HAUL;
 
-  return (distance as number) * factor;
+  return distance * factor;
 }

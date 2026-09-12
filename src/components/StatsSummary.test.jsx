@@ -36,6 +36,7 @@ const enrichedFlights = [
     departure_coordinates: [37.62, -122.38],
     arrival_coordinates: [47.45, -122.31],
     distance_km: 1091,
+    co2_kg: 249.8,
     flight_time: 1.2,
   },
   {
@@ -50,6 +51,7 @@ const enrichedFlights = [
     departure_coordinates: [40.64, -73.78],
     arrival_coordinates: [33.94, -118.4],
     distance_km: 3974,
+    co2_kg: 910.0,
     flight_time: 4.4,
   },
   {
@@ -64,6 +66,7 @@ const enrichedFlights = [
     departure_coordinates: [33.94, -118.4],
     arrival_coordinates: [41.97, -87.9],
     distance_km: 2805,
+    co2_kg: 642.3,
     flight_time: 3.1,
   },
   {
@@ -78,6 +81,7 @@ const enrichedFlights = [
     departure_coordinates: [33.94, -118.4],
     arrival_coordinates: [41.97, -87.9],
     distance_km: 2801,
+    co2_kg: 641.4,
     flight_time: 3.3,
   },
 ];
@@ -108,6 +112,10 @@ describe("StatsSummary", () => {
       IDS.STATS.TOTAL_DISTANCE,
     );
     expect(totalDistanceElement).toHaveTextContent("10,671");
+
+    // Summed straight from co2_kg on each flight: 249.8+910+642.3+641.4.
+    const totalCo2Element = document.getElementById(IDS.STATS.TOTAL_CO2);
+    expect(totalCo2Element).toHaveTextContent("2,444");
 
     const totalTimeElement = document.getElementById(IDS.STATS.TOTAL_TIME);
     expect(totalTimeElement).toHaveTextContent(".5");

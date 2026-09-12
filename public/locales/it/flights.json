@@ -97,6 +97,7 @@
   "stats": {
     "total_flights": "Voli totali",
     "distance_km": "Distanza (km)",
+    "co2_kg": "CO₂e (kg)",
     "flight_time_days": "Giorni di volo",
     "airports_visited": "Aeroporti visitati",
     "airlines_flown": "Compagnie volate",

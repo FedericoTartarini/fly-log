@@ -110,6 +110,9 @@ describe("flightService", () => {
     expect(enriched.airline_name).toBe("Qantas");
     expect(enriched.airline_icon_path).toBe("QFA.png");
     expect(enriched.international).toBe(true);
+    // Emissions are computed here, once, not at render time.
+    expect(enriched.co2_kg).toBeGreaterThan(0);
+    expect(enriched.co2_kg).toBeLessThan(enriched.distance_km as number);
   });
 
   it("getFilteredUserFlights throws when Firestore is not initialized", async () => {

@@ -4,13 +4,16 @@ import { useMemo } from "react";
 export const useFlightStats = (filteredFlights) => {
   return useMemo(() => {
     // Calculate total distance and flight time
-    const { totalDistance, totalFlightTime } = filteredFlights.reduce(
+    const { totalDistance, totalFlightTime, totalCo2 } = filteredFlights.reduce(
       (acc, flight) => {
         acc.totalDistance += flight.distance_km || 0;
         acc.totalFlightTime += flight.flight_time || 0;
+        // co2_kg is set when the flight is enriched, so this is a sum, not a
+        // calculation.
+        acc.totalCo2 += flight.co2_kg || 0;
         return acc;
       },
-      { totalDistance: 0, totalFlightTime: 0 },
+      { totalDistance: 0, totalFlightTime: 0, totalCo2: 0 },
     );
 
     // Calculate unique counts
@@ -79,6 +82,7 @@ export const useFlightStats = (filteredFlights) => {
       longHaulFlights: longHaulFlights.length,
       longestFlight: longestFlight,
       shortestFlight: shortestFlight,
+      totalCo2: totalCo2,
       totalDistance: totalDistance,
       totalFlightTime: totalFlightTime,
       westBoundFlights: westBoundFlights.length,
