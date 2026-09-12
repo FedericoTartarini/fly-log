@@ -66,23 +66,6 @@ let firestore: Firestore | null = null;
 if (firebaseConfig.apiKey) {
   app = initializeApp(firebaseConfig);
 
-  // App Check: required by Firebase AI Logic (Gemini) requests, see flightAiParser.ts.
-  // In dev, use the debug token instead of a real reCAPTCHA challenge.
-  if (isDevMode()) {
-    // @ts-expect-error - documented Firebase debug-token global
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-  }
-  if (recaptchaSiteKey) {
-    initializeAppCheck(app, {
-      provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
-      isTokenAutoRefreshEnabled: true,
-    });
-  } else if (!isDevMode()) {
-    console.warn(
-      "VITE_RECAPTCHA_SITE_KEY is not set: Firebase AI Logic requests will be rejected once App Check enforcement is on.",
-    );
-  }
-
   // Lazily import auth and firestore SDKs
   auth = getAuth(app);
   try {
@@ -96,6 +79,43 @@ if (firebaseConfig.apiKey) {
 }
 
 export { auth, firestore };
+
+// App Check is only needed by Firebase AI Logic (Gemini), see flightAiParser.ts —
+// Firestore and Auth do not enforce it, and firestore.rules never reads
+// request.app. It used to run at module load, which put a third-party
+// reCAPTCHA script and a token mint on the critical path of every launch for
+// the sake of one optional feature. Call this before the first Gemini request
+// instead; repeat calls reuse the same initialization.
+let appCheckReady: Promise<void> | null = null;
+
+export const ensureAppCheck = (): Promise<void> => {
+  if (!appCheckReady) {
+    appCheckReady = (async () => {
+      if (!app) return;
+
+      // In dev, use the debug token instead of a real reCAPTCHA challenge.
+      if (isDevMode()) {
+        // @ts-expect-error - documented Firebase debug-token global
+        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+      }
+
+      if (!recaptchaSiteKey) {
+        if (!isDevMode()) {
+          console.warn(
+            "VITE_RECAPTCHA_SITE_KEY is not set: Firebase AI Logic requests will be rejected once App Check enforcement is on.",
+          );
+        }
+        return;
+      }
+
+      initializeAppCheck(app, {
+        provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
+        isTokenAutoRefreshEnabled: true,
+      });
+    })();
+  }
+  return appCheckReady;
+};
 
 const googleProvider = new GoogleAuthProvider();
 

@@ -10,6 +10,7 @@ const firestoreMocks = vi.hoisted(() => ({
   where: vi.fn((...args: unknown[]) => ({ args })),
   orderBy: vi.fn((...args: unknown[]) => ({ args })),
   getDocs: vi.fn(),
+  onSnapshot: vi.fn(() => vi.fn()),
   doc: vi.fn((...args: unknown[]) => ({ path: args })),
   deleteDoc: vi.fn(),
   updateDoc: vi.fn(),
@@ -43,6 +44,7 @@ vi.mock("./referenceData", () => ({
 import {
   enrichFlightData,
   getFilteredUserFlights,
+  subscribeToUserFlights,
   updateFlightForUser,
 } from "./flightService";
 import { YEAR_FILTER } from "../constants/filters";
@@ -182,6 +184,64 @@ describe("flightService", () => {
     const [first] = result;
     expect(first?.airline_name).toBe("British Airways");
     expect(first?.airline_icon_path).toBe("BAW.png");
+  });
+
+  it("subscribeToUserFlights emits enriched flights when the snapshot fires", async () => {
+    referenceDataMocks.getReferenceMapsSync.mockReturnValue({
+      airportByIata: new Map(),
+      airlineByIata: new Map([["BA", { iata: "BA", name: "BA", icao: "BAW" }]]),
+    });
+
+    const unsubscribeSpy = vi.fn();
+    firestoreMocks.onSnapshot.mockImplementation(
+      (_q: unknown, onNext: (snap: unknown) => void) => {
+        onNext({
+          docs: [{ id: "flight-1", data: () => ({ airline_iata: "BA" }) }],
+        });
+        return unsubscribeSpy;
+      },
+    );
+
+    const onFlights = vi.fn();
+    const onError = vi.fn();
+    const unsubscribe = subscribeToUserFlights(
+      "uid-1",
+      YEAR_FILTER.ALL,
+      onFlights,
+      onError,
+    );
+
+    // The listener attaches only once reference data resolves.
+    await vi.waitFor(() => expect(onFlights).toHaveBeenCalledOnce());
+    expect(onError).not.toHaveBeenCalled();
+    expect(onFlights.mock.calls[0]?.[0]?.[0]?.airline_name).toBe("BA");
+
+    unsubscribe();
+    expect(unsubscribeSpy).toHaveBeenCalledOnce();
+  });
+
+  it("subscribeToUserFlights does not attach if unsubscribed before reference data resolves", async () => {
+    let resolveMaps: (() => void) | undefined;
+    referenceDataMocks.loadReferenceMaps.mockReturnValue(
+      new Promise<void>((resolve) => {
+        resolveMaps = resolve;
+      }),
+    );
+
+    const onFlights = vi.fn();
+    const unsubscribe = subscribeToUserFlights(
+      "uid-1",
+      YEAR_FILTER.ALL,
+      onFlights,
+      vi.fn(),
+    );
+
+    unsubscribe();
+    resolveMaps?.();
+    await Promise.resolve();
+
+    expect(firestoreMocks.onSnapshot).not.toHaveBeenCalled();
+    expect(onFlights).not.toHaveBeenCalled();
   });
 
   it("updateFlightForUser throws on invalid departure_date", async () => {
