@@ -6,9 +6,11 @@ import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
 import {
   CHART_GROUPING,
+  CHART_METRIC,
   TIME_GROUPING,
   YEAR_FILTER,
   type ChartGrouping,
+  type ChartMetric,
   type TimeGrouping,
 } from "./constants/filters";
 import type { enhancedFlight } from "./types/enhancedFlight";
@@ -40,6 +42,7 @@ export interface FlightStoreState {
   selectedYear: string;
   timeGrouping: TimeGrouping;
   chartGrouping: ChartGrouping;
+  chartMetric: ChartMetric;
   filters: StoreFlightFilters;
   isLoading: boolean;
   error: string | null;
@@ -47,6 +50,7 @@ export interface FlightStoreState {
   setSelectedYear: (year: string) => Promise<void>;
   setTimeGrouping: (grouping: TimeGrouping) => void;
   setChartGrouping: (grouping: ChartGrouping) => void;
+  setChartMetric: (metric: ChartMetric) => void;
   setFilters: (filters: Partial<StoreFlightFilters>) => void;
   clearFilters: () => void;
   // remove a flight by id from both lists (optimistic UI)
@@ -128,6 +132,7 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   filteredFlights: [],
   selectedYear: YEAR_FILTER.ALL,
   timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
+  chartMetric: CHART_METRIC.FLIGHTS,
   chartGrouping: CHART_GROUPING.COUNTRY,
   filters: {
     airline: null,
@@ -181,6 +186,10 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
       const message = error instanceof Error ? error.message : String(error);
       set({ error: message, isLoading: false });
     }
+  },
+
+  setChartMetric: (metric: ChartMetric) => {
+    set({ chartMetric: metric });
   },
 
   setTimeGrouping: (grouping: TimeGrouping) => {
@@ -278,6 +287,7 @@ authUnsubscribe = onAuthStateChanged((user) => {
       error: null,
       selectedYear: YEAR_FILTER.ALL,
       timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
+      chartMetric: CHART_METRIC.FLIGHTS,
       chartGrouping: CHART_GROUPING.COUNTRY,
       filters: {
         airline: null,

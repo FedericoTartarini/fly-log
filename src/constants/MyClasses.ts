@@ -7,6 +7,7 @@ export const IDS = {
   STATS: {
     TOTAL_FLIGHTS: "total-flights",
     TOTAL_DISTANCE: "total-distance",
+    TOTAL_CO2: "total-co2",
     TOTAL_TIME: "total-time",
     AIRPORTS_VISITED: "airports-visited",
     AIRLINES_FLOWN: "airlines-flown",
@@ -37,6 +38,7 @@ export const PATHS = {
   FLIGHTS: "/flights",
   STATS: "/stats",
   TOUR: "/tour",
+  TIMELINE: "/timeline",
   ADD_FLIGHT: "/add-flight",
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",

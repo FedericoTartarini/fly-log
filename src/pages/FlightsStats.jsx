@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from "react";
+import React, { lazy, Suspense, useState, useEffect, useMemo } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -29,22 +29,33 @@ import { IconChevronsUp } from "@tabler/icons-react";
 
 // Stats dashboard with map, summaries, and charts.
 const FlightsStats = () => {
-  const { filteredFlights, isLoading, error, allFlights, timeGrouping } =
-    useFlightStore(
-      useShallow((s) => ({
-        filteredFlights: s.filteredFlights,
-        isLoading: s.isLoading,
-        error: s.error,
-        allFlights: s.allFlights,
-        timeGrouping: s.timeGrouping,
-      })),
-    );
+  const {
+    filteredFlights,
+    isLoading,
+    error,
+    allFlights,
+    timeGrouping,
+    chartMetric,
+  } = useFlightStore(
+    useShallow((s) => ({
+      filteredFlights: s.filteredFlights,
+      isLoading: s.isLoading,
+      error: s.error,
+      allFlights: s.allFlights,
+      timeGrouping: s.timeGrouping,
+      chartMetric: s.chartMetric,
+    })),
+  );
 
   // Calculate stats before conditional rendering to avoid hook ordering issues.
   const stats = useFlightStats(filteredFlights);
 
-  // Prepare chart data outside conditional rendering.
-  const timeChartData = getFlightsByTimeGrouping(filteredFlights, timeGrouping);
+  // Prepare chart data outside conditional rendering. Memoised because it
+  // walks every flight and is otherwise redone on each unrelated re-render.
+  const timeChartData = useMemo(
+    () => getFlightsByTimeGrouping(filteredFlights, timeGrouping, chartMetric),
+    [filteredFlights, timeGrouping, chartMetric],
+  );
 
   const { t } = useTranslation("flights");
 

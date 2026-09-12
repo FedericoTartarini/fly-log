@@ -13,9 +13,9 @@
   "developer_p2": "Questo progetto combina i miei interessi per l'aviazione, la data science e lo sviluppo web. Credo nel software open-source e nella condivisione delle conoscenze con la comunità degli sviluppatori.",
   "features_1": "Visualizzazione interattiva su globo dei percorsi di volo",
   "features_2": "Statistiche e analisi dei voli complete",
-  "features_3":"Filtri per anno e esplorazione dei dati",
-  "features_4":"Design responsive per desktop e mobile",
-  "features_5":"Interfaccia moderna",
+  "features_3": "Filtri per anno e esplorazione dei dati",
+  "features_4": "Design responsive per desktop e mobile",
+  "features_5": "Interfaccia moderna",
   "support_text_p1": "Se trovi questo progetto utile o interessante, ci sono diversi modi per mostrarci il tuo supporto e aiutarci a crescere:",
   "support_cta_buy_coffee": "Offrimi un caffè",
   "support_cta_patreon": "Supporta su Patreon",
@@ -25,5 +25,8 @@
   "contribute_link_fork": "Forka il repository e invia una pull request",
   "contribute_link_issues": "Segnala bug o richiedi funzionalità",
   "open_source_p1": "Questo progetto è open source e accoglie contributi dalla comunità. Che tu sia interessato ad aggiungere funzionalità, correggere bug, migliorare la documentazione o semplicemente condividere feedback, il tuo contributo aiuta a rendere questo strumento migliore per tutti.",
-  "open_source_p2": "Costruito con ❤️ usando React, Vite, Mantine UI, Python, e tanto caffè."
+  "open_source_p2": "Costruito con ❤️ usando React, Vite, Mantine UI, Python, e tanto caffè.",
+  "emissions_title": "Come viene stimata la CO₂e",
+  "emissions_p1": "Le emissioni sono una stima, non una misura. La distanza di ogni volo viene moltiplicata per un fattore pubblicato in base al tipo di tratta: {{domestic}} kg CO₂e per passeggero-chilometro per i voli nazionali, {{shortHaul}} per i voli internazionali sotto i {{threshold}} km e {{longHaul}} oltre. I valori provengono dai fattori di conversione dei gas serra del governo britannico per il {{year}}.",
+  "emissions_p2": "Due assunzioni sono importanti. I fattori includono il forzante radiativo, che tiene conto dell'effetto climatico delle scie di condensazione e delle altre emissioni in quota e aggiunge circa il 70%. Inoltre, poiché un volo non registra la classe di viaggio, si assume la classe economica: chi viaggia in business o in prima vede quindi un valore molto inferiore a quello reale. Le distanze sono ortodromiche, mentre le rotte reali sono più lunghe, il che rende la stima leggermente prudenziale."
 }

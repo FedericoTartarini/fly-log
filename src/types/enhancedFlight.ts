@@ -18,6 +18,8 @@ export interface enhancedFlight {
   departure_coordinates: [number, number] | null;
   arrival_coordinates: [number, number] | null;
   distance_km: number | null;
+  /** Estimated emissions in kg CO2e, computed when the flight is enriched. */
+  co2_kg?: number;
   flight_time: number | null;
   departure_country: string | null;
   arrival_country: string | null;

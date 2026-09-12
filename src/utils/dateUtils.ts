@@ -133,7 +133,7 @@ export function getYear(value: DateLike): number | null {
 
 /**
  * Parse an "HH:MM" time string into hour/minute numbers, validating ranges.
- * @returns { hours, minutes } when valid (00:00-23:59), otherwise null.
+ * @returns an object with hours and minutes when valid (00:00-23:59), otherwise null.
  */
 export function parseHourMinute(
   time: unknown,

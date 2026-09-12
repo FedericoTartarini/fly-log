@@ -6,7 +6,8 @@
     "about": "About",
     "login": "Login",
     "sign_out": "Sign Out",
-    "tour": "Tour"
+    "tour": "Tour",
+    "timeline": "Timeline"
   },
   "language": "Language"
 }

@@ -2,6 +2,29 @@
   "title": "Detailed Flight Statistics",
   "image_alt": "plane wing",
   "no_flights": "No flights to display for this selection.",
+  "timeline": {
+    "title": "Flight Timeline",
+    "subtitle": "Your flight activity across every year, one row per year and one square per month. Darker squares mean more flights — hover for the count.",
+    "subtitle_distance": "The distance you flew each month, one row per year and one square per month. Darker squares mean more kilometres — hover for the total.",
+    "subtitle_co2": "The CO₂e your flights emitted each month, one row per year and one square per month. Darker squares mean more emissions — hover for the total.",
+    "tooltip_one": "{{date}} · {{count}} flight",
+    "tooltip_other": "{{date}} · {{count}} flights",
+    "tooltip_value": "{{date}} · {{value}}",
+    "legend_none": "No flights",
+    "legend_max_one": "{{count}} flight",
+    "legend_max_other": "{{count}} flights",
+    "legend_max_plus": "{{count}}+ flights",
+    "error": "Error loading flight data: {{error}}",
+    "stats": {
+      "total_flights": "Flights",
+      "active_months": "Months flown",
+      "busiest_month": "Busiest month",
+      "total_distance": "Kilometres",
+      "busiest_month_distance": "Month with most km",
+      "total_co2": "Emissions",
+      "busiest_month_co2": "Month with most CO₂e"
+    }
+  },
   "table": {
     "icon": "Icon",
     "from_to": "From → To",
@@ -74,6 +97,7 @@
   "stats": {
     "total_flights": "Total Flights",
     "distance_km": "Distance (km)",
+    "co2_kg": "CO₂e (kg)",
     "flight_time_days": "Flight Time (days)",
     "airports_visited": "Airports Visited",
     "airlines_flown": "Airlines Flown",
@@ -163,7 +187,9 @@
     "departures": "Departures",
     "flights": "Flights",
     "departures_by_country": "Departures by Country",
-    "flights_by": "Flights by {{period}}"
+    "flights_by": "Flights by {{period}}",
+    "distance_by": "Kilometres flown by {{period}}",
+    "co2_by": "CO₂e emitted by {{period}}"
   },
   "group": {
     "country": "Country",
@@ -207,5 +233,10 @@
     "airline": "Airline",
     "flight_number": "Flight No.",
     "powered_by": "Powered by Google Gemini via Firebase AI"
+  },
+  "metric": {
+    "flights": "Flights",
+    "distance": "Kilometres",
+    "co2": "CO₂e"
   }
 }

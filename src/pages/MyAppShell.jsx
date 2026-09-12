@@ -53,6 +53,11 @@ function MyAppShell() {
       user && { to: PATHS.STATS, label: t("nav.stats"), key: "stats" },
       user && { to: PATHS.FLIGHTS, label: t("nav.flights"), key: "flights" },
       user && { to: PATHS.TOUR, label: t("nav.tour"), key: "tour" },
+      user && {
+        to: PATHS.TIMELINE,
+        label: t("nav.timeline"),
+        key: "timeline",
+      },
       { to: PATHS.ABOUT, label: t("nav.about"), key: "about" },
     ].filter(Boolean);
 
