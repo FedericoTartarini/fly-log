@@ -10,6 +10,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   getReferenceMapsSync,
@@ -181,20 +182,13 @@ export const enrichFlightData = (
  * @param year - Year to filter by, or "all"
  * @returns Array of enriched flight objects
  */
-export const getFilteredUserFlights = async (
-  uid: string,
-  year: number | string,
-): Promise<EnrichedFlightRecord[]> => {
+const buildFlightsQuery = (uid: string, year: number | string) => {
   if (!uid) throw new Error("User id is required to fetch flights");
   if (!firestore) {
     throw new Error(
       "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
     );
   }
-  // ponytail: 804 KB of reference JSON loaded on every read to enrich a few
-  // hundred flights, and it blocks the query below. Precompute at write time
-  // instead: https://github.com/FedericoTartarini/fly-log/issues/41
-  await loadReferenceMaps();
 
   const colRef = collection(firestore, "flights", uid, "records");
   const todayDate = new Date();
@@ -232,15 +226,73 @@ export const getFilteredUserFlights = async (
     );
   }
 
-  const snap = await getDocs(q);
-  const data = snap.docs.map(
-    (d) =>
-      ({
-        id: d.id,
-        ...(d.data() as Omit<FirestoreFlightRecord, "id">),
-      }) as FirestoreFlightRecord,
+  return q;
+};
+
+type FlightsSnapshot = { docs: { id: string; data: () => unknown }[] };
+
+const enrichSnapshot = (snap: FlightsSnapshot): EnrichedFlightRecord[] =>
+  snap.docs.map((d) =>
+    enrichFlightData({
+      id: d.id,
+      ...(d.data() as Omit<FirestoreFlightRecord, "id">),
+    } as FirestoreFlightRecord),
   );
-  return data.map((flight) => enrichFlightData(flight));
+
+export const getFilteredUserFlights = async (
+  uid: string,
+  year: number | string,
+): Promise<EnrichedFlightRecord[]> => {
+  const q = buildFlightsQuery(uid, year);
+  // ponytail: 804 KB of reference JSON loaded on every read to enrich a few
+  // hundred flights. Precompute at write time instead:
+  // https://github.com/FedericoTartarini/fly-log/issues/41
+  await loadReferenceMaps();
+  return enrichSnapshot(await getDocs(q));
+};
+
+/**
+ * Subscribe to the user's flights. Firestore's persistent local cache means the
+ * first callback fires synchronously from IndexedDB, before any network round
+ * trip, and a second one lands when the server replies. Local writes echo back
+ * through here immediately, so the UI updates without a refetch.
+ *
+ * @returns an unsubscribe function
+ */
+export const subscribeToUserFlights = (
+  uid: string,
+  year: number | string,
+  onFlights: (flights: EnrichedFlightRecord[]) => void,
+  onError: (error: Error) => void,
+): (() => void) => {
+  let unsubscribe: (() => void) | null = null;
+  let cancelled = false;
+
+  // Reference data must be in memory before enrichment can run, so the listener
+  // is attached once it resolves. It is fetched from the service worker cache
+  // on every launch after the first, so this is not a network wait.
+  (async () => {
+    try {
+      const q = buildFlightsQuery(uid, year);
+      await loadReferenceMaps();
+      if (cancelled) return;
+
+      unsubscribe = onSnapshot(
+        q,
+        (snap) => onFlights(enrichSnapshot(snap)),
+        (error) => onError(error),
+      );
+    } catch (error) {
+      if (!cancelled) {
+        onError(error instanceof Error ? error : new Error(String(error)));
+      }
+    }
+  })();
+
+  return () => {
+    cancelled = true;
+    unsubscribe?.();
+  };
 };
 
 /**

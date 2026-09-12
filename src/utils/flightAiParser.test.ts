@@ -21,6 +21,7 @@ vi.mock("firebase/ai", () => ({
 // Mock firebase app so the "!app" guard passes
 vi.mock("../firebaseClient", () => ({
   app: { name: "test-app" },
+  ensureAppCheck: vi.fn(() => Promise.resolve()),
 }));
 
 import { parseFlightFromText, REQUIRED_FIELDS } from "./flightAiParser";
