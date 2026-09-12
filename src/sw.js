@@ -1,8 +1,10 @@
-const CACHE_NAME = "fly-log-static-v4";
-const DYNAMIC_CACHE = "fly-log-dynamic-v4";
+// Cache name carries the build id injected by vite-plugin-static-copy at build
+// time, so every deploy lands in a fresh cache and `activate` evicts the old one.
+const CACHE_NAME = "fly-log-static-__BUILD_ID__";
 const OFFLINE_URL = "/offline.html";
 const LOCALES_PREFIX = "/locales/";
 const DATA_PREFIX = "/data/";
+const ASSETS_PREFIX = "/assets/";
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
@@ -30,10 +32,7 @@ self.addEventListener("activate", (event) => {
       .keys()
       .then((cacheNames) => {
         const cachesToDelete = cacheNames.filter(
-          (cache) =>
-            cache.startsWith("fly-log-") &&
-            cache !== CACHE_NAME &&
-            cache !== DYNAMIC_CACHE,
+          (cache) => cache.startsWith("fly-log-") && cache !== CACHE_NAME,
         );
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
@@ -48,6 +47,32 @@ self.addEventListener("message", (event) => {
   }
 });
 
+// Serve the cached copy immediately and refresh it in the background.
+const staleWhileRevalidate = async (event, fallbackToOffline = false) => {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(event.request);
+
+  const update = fetch(event.request)
+    .then((response) => {
+      if (response.ok) cache.put(event.request, response.clone());
+      return response;
+    })
+    .catch(async () => {
+      if (cached) return cached;
+      if (fallbackToOffline) {
+        return (await caches.match(OFFLINE_URL)) || Response.error();
+      }
+      return Response.error();
+    });
+
+  if (cached) {
+    // Keep the worker alive long enough to finish the refresh.
+    event.waitUntil(update.catch(() => {}));
+    return cached;
+  }
+  return update;
+};
+
 // Fetch event - cache strategy
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
@@ -59,12 +84,33 @@ self.addEventListener("fetch", (event) => {
     event.request.mode === "navigate" ||
     event.request.destination === "document";
 
+  // The app shell is not content-hashed, so it cannot be cache-first. Serving
+  // the cached copy makes an installed PWA launch without waiting on the radio;
+  // the background refresh plus the SKIP_WAITING flow in main.jsx picks up a
+  // new deploy on the following launch.
   if (isDocumentRequest && requestUrl.origin === self.location.origin) {
+    event.respondWith(staleWhileRevalidate(event, true));
+    return;
+  }
+
+  // Built assets are content-hashed, so a cached copy can never be stale: new
+  // content always means a new filename. Cache-first, no revalidation.
+  if (
+    requestUrl.origin === self.location.origin &&
+    requestUrl.pathname.startsWith(ASSETS_PREFIX)
+  ) {
     event.respondWith(
-      fetch(event.request).catch(async () => {
-        const cachedOfflinePage = await caches.match(OFFLINE_URL);
-        return cachedOfflinePage || Response.error();
-      }),
+      (async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+
+        const response = await fetch(event.request);
+        if (response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, response.clone());
+        }
+        return response;
+      })(),
     );
     return;
   }
@@ -92,53 +138,11 @@ self.addEventListener("fetch", (event) => {
 
   // Reference data (airports, airlines) is large and only changes on deploy,
   // so serve the cached copy immediately and refresh it in the background.
-  // It previously fell through to network-first and was refetched every load.
   if (requestUrl.pathname.startsWith(DATA_PREFIX)) {
-    event.respondWith(
-      (async () => {
-        const cache = await caches.open(CACHE_NAME);
-        const cached = await cache.match(event.request);
-
-        const update = fetch(event.request)
-          .then((response) => {
-            if (response.ok) cache.put(event.request, response.clone());
-            return response;
-          })
-          .catch(() => cached || Response.error());
-
-        if (cached) {
-          // Keep the worker alive long enough to finish the refresh.
-          event.waitUntil(update.catch(() => {}));
-          return cached;
-        }
-        return update;
-      })(),
-    );
+    event.respondWith(staleWhileRevalidate(event));
     return;
   }
 
-  // For Firestore requests (flight data), cache dynamically
-  if (event.request.url.includes("firestore.googleapis.com")) {
-    event.respondWith(
-      fetch(event.request)
-        .then((fetchResponse) => {
-          // Firestore returns POST for most structured queries, so we only cache GET responses.
-          if (fetchResponse.status === 200) {
-            return caches.open(DYNAMIC_CACHE).then((cache) => {
-              cache.put(event.request, fetchResponse.clone());
-              return fetchResponse;
-            });
-          }
-          return fetchResponse;
-        })
-        .catch(() => {
-          return caches
-            .match(event.request)
-            .then((cached) => cached || Response.error());
-        }),
-    );
-    return;
-  }
   // Default: network first for other requests (no offline fallback)
   event.respondWith(
     fetch(event.request).catch(async () => {
@@ -147,17 +151,3 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
-
-// Background sync for offline actions (placeholder)
-self.addEventListener("sync", (event) => {
-  if (event.tag === "background-sync") {
-    event.waitUntil(doBackgroundSync());
-  }
-});
-
-async function doBackgroundSync() {
-  // Implement syncing offline flight data here
-  console.log("Background sync triggered");
-  // Placeholder: simulate async work
-  await new Promise((resolve) => setTimeout(resolve, 1000)); // Example delay
-}

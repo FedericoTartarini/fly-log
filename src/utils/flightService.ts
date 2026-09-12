@@ -191,6 +191,9 @@ export const getFilteredUserFlights = async (
       "Firestore is not initialized. Please set Firebase config (VITE_FIREBASE_...) and initialize Firebase.",
     );
   }
+  // ponytail: 804 KB of reference JSON loaded on every read to enrich a few
+  // hundred flights, and it blocks the query below. Precompute at write time
+  // instead: https://github.com/FedericoTartarini/fly-log/issues/41
   await loadReferenceMaps();
 
   const colRef = collection(firestore, "flights", uid, "records");
