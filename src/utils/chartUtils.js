@@ -6,12 +6,20 @@ import { getAirlineName } from "./airlineUtils";
 import { getAirportCity } from "./airportUtils";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 
-// What one flight adds to its bucket: 1 for a flight count, or its distance in
-// whole kilometres. Unknown or non-finite distances contribute nothing rather
-// than NaN.
+// What one flight adds to its bucket: 1 for a flight count, its distance in
+// whole kilometres, or its emissions in whole kg CO2e. Both figures are
+// computed when the flight is enriched, so this only reads them. Unknown or
+// non-finite values contribute nothing rather than NaN.
+const METRIC_FIELDS = {
+  [CHART_METRIC.DISTANCE]: "distance_km",
+  [CHART_METRIC.CO2]: "co2_kg",
+};
+
 const metricValue = (flight, metric) => {
-  if (metric !== CHART_METRIC.DISTANCE) return 1;
-  return Number.isFinite(flight.distance_km) ? Math.round(flight.distance_km) : 0;
+  const field = METRIC_FIELDS[metric];
+  if (!field) return 1;
+  const value = flight[field];
+  return Number.isFinite(value) ? Math.round(value) : 0;
 };
 
 export const getDeparturesByCountry = (flights, metric) => {
@@ -196,13 +204,20 @@ const CHAR_WIDTH = 7;
 export const labelFitsInsideBar = (barWidth, text) =>
   barWidth > text.length * CHAR_WIDTH + 12;
 
-// Format a chart value for display. Distances carry their unit; flight counts
-// are a bare localized integer.
+// Unit shown after a formatted value. Flight counts have none.
+const METRIC_UNITS = {
+  [CHART_METRIC.DISTANCE]: "km",
+  [CHART_METRIC.CO2]: "kg CO₂e",
+};
+
+// Format a chart value for display. Distances and emissions carry their unit;
+// flight counts are a bare localized integer.
 export const formatMetricValue = (value, metric, locale) => {
   const formatted = new Intl.NumberFormat(
     locale || (i18n && i18n.language) || "en-AU",
   ).format(value);
-  return metric === CHART_METRIC.DISTANCE ? `${formatted} km` : formatted;
+  const unit = METRIC_UNITS[metric];
+  return unit ? `${formatted} ${unit}` : formatted;
 };
 
 // Localized month labels (Jan..Dec). Callers pass the active language so the

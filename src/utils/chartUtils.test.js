@@ -11,6 +11,7 @@ import {
 } from "./chartUtils";
 import { capitalize } from "./stringUtils";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
+import { estimateCo2Kg } from "./emissions";
 
 // Helper to get localized weekday/month label as used in chartUtils
 function weekdayLabel(date, locale) {
@@ -224,22 +225,29 @@ describe("getMonthMatrixStats", () => {
 describe("the distance metric", () => {
   // Two short Qantas hops against one long Emirates haul: Qantas wins on
   // flight count, Emirates wins on distance.
+  // Shaped like an enriched flight: co2_kg is set once at fetch time, so the
+  // chart code reads it rather than deriving it.
+  const enriched = (overrides) => ({
+    departure_date: "2025-03-10T08:00:00Z",
+    airline_iata: "QF",
+    international: false,
+    distance_km: 700,
+    ...overrides,
+    co2_kg: estimateCo2Kg({
+      distance_km: overrides.distance_km,
+      international: overrides.international ?? false,
+    }),
+  });
+
   const flights = [
-    {
-      departure_date: "2025-03-10T08:00:00Z",
-      airline_iata: "QF",
-      distance_km: 700,
-    },
-    {
-      departure_date: "2025-03-12T08:00:00Z",
-      airline_iata: "QF",
-      distance_km: 800,
-    },
-    {
+    enriched({ distance_km: 700 }),
+    enriched({ departure_date: "2025-03-12T08:00:00Z", distance_km: 800 }),
+    enriched({
       departure_date: "2025-04-01T08:00:00Z",
       airline_iata: "EK",
+      international: true,
       distance_km: 12000,
-    },
+    }),
   ];
 
   it("counts flights by default and sums kilometres when asked", () => {
@@ -293,6 +301,25 @@ describe("the distance metric", () => {
     expect(labelFitsInsideBar(20, "12K")).toBe(false);
   });
 
+  it("sums the co2_kg set at enrichment time", () => {
+    // 12000 km long haul dwarfs the two short domestic hops, so the CO2 bars
+    // rank the same way the distance bars do.
+    const byAirline = getFlightsByAirline(flights, CHART_METRIC.CO2);
+    expect(byAirline[0].flights).toBeGreaterThan(byAirline[1].flights);
+    // Emissions are a fraction of the kilometres, never equal to them.
+    const km = getFlightsByAirline(flights, CHART_METRIC.DISTANCE)[0].flights;
+    expect(byAirline[0].flights).toBeLessThan(km);
+    expect(byAirline[0].flights).toBeGreaterThan(0);
+  });
+
+  it("contributes nothing for a flight with no co2_kg on it", () => {
+    // A record that never went through enrichment must not become NaN.
+    const bare = [
+      { departure_date: "2025-03-10T08:00:00Z", airline_iata: "QF" },
+    ];
+    expect(getFlightsByAirline(bare, CHART_METRIC.CO2)[0].flights).toBe(0);
+  });
+
   it("formats values with the locale separator, and a unit for distances", () => {
     expect(formatMetricValue(12000, CHART_METRIC.FLIGHTS, "en-AU")).toBe(
       "12,000",
@@ -302,6 +329,9 @@ describe("the distance metric", () => {
     );
     expect(formatMetricValue(12000, CHART_METRIC.DISTANCE, "it")).toBe(
       "12.000 km",
+    );
+    expect(formatMetricValue(1404, CHART_METRIC.CO2, "en-AU")).toBe(
+      "1,404 kg CO₂e",
     );
   });
 });

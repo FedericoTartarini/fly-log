@@ -19,6 +19,7 @@ import {
 } from "./referenceData";
 import { YEAR_FILTER } from "../constants/filters";
 import { parseToDate, type DateLike } from "./dateUtils";
+import { estimateCo2Kg } from "./emissions";
 
 type FirestoreFlightRecord = {
   id: string;
@@ -40,6 +41,7 @@ type EnrichedFlightRecord = FirestoreFlightRecord & {
   airline_name: string | null;
   airline_icon_path: string | null;
   airline_icao: string | null;
+  co2_kg: number;
 };
 
 /**
@@ -161,6 +163,12 @@ export const enrichFlightData = (
     departure_country: depCountry,
     arrival_country: arrCountry,
     international: depCountry !== arrCountry,
+    // Computed here, once per fetch, so every part of the app reads the same
+    // number instead of each recomputing it at render time.
+    co2_kg: estimateCo2Kg({
+      distance_km: distance,
+      international: depCountry !== arrCountry,
+    }),
     airline_name: airlineName,
     airline_icon_path: airlineIconPath,
     airline_icao: airlineIcao,

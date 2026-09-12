@@ -12,12 +12,19 @@ import {
   Center,
 } from "@mantine/core";
 import {
+  EMISSION_FACTORS,
+  EMISSION_FACTOR_SOURCE,
+  LONG_HAUL_THRESHOLD_KM,
+} from "../utils/emissions.ts";
+import {
   IconCoffee,
   IconHeart,
   IconBrandGithub,
   IconPlane,
   IconCode,
   IconUsers,
+  IconLeaf,
+  IconExternalLink,
   IconGitPullRequest,
   IconAlertCircle,
 } from "@tabler/icons-react";
@@ -85,6 +92,39 @@ function About() {
             <List.Item>{t("features_4")}</List.Item>
             <List.Item>{t("features_5")}</List.Item>
           </List>
+        </div>
+
+        <Divider />
+
+        <div>
+          <Title order={2} mb="md">
+            <Group spacing="xs">
+              <ThemeIcon variant="light" size="lg">
+                <IconLeaf size={20} />
+              </ThemeIcon>
+              {t("emissions_title")}
+            </Group>
+          </Title>
+          <Text mb="md">
+            {t("emissions_p1", {
+              year: EMISSION_FACTOR_SOURCE.year,
+              domestic: EMISSION_FACTORS.DOMESTIC,
+              shortHaul: EMISSION_FACTORS.SHORT_HAUL,
+              longHaul: EMISSION_FACTORS.LONG_HAUL,
+              threshold: LONG_HAUL_THRESHOLD_KM,
+            })}
+          </Text>
+          <Text mb="md">{t("emissions_p2")}</Text>
+          <Button
+            component="a"
+            href={EMISSION_FACTOR_SOURCE.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="light"
+            leftSection={<IconExternalLink size={16} />}
+          >
+            {EMISSION_FACTOR_SOURCE.name}
+          </Button>
         </div>
 
         <Divider />

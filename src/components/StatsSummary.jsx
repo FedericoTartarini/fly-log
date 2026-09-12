@@ -51,6 +51,13 @@ function StatsSummary() {
           </Grid.Col>
           <Grid.Col span={{ base: 6, xs: 4 }}>
             <StatDisplay
+              value={Math.round(stats.totalCo2).toLocaleString()}
+              label={t("stats.co2_kg")}
+              id={IDS.STATS.TOTAL_CO2}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, xs: 4 }}>
+            <StatDisplay
               value={(stats.totalFlightTime / 24).toFixed(1)}
               label={t("stats.flight_time_days")}
               id={IDS.STATS.TOTAL_TIME}
