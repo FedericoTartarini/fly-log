@@ -106,7 +106,8 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping, metric) => {
   } else if (timeGrouping === TIME_GROUPING.MONTH) {
     order = localizedMonths(locale);
   } else {
-    order = Object.keys(grouping).sort();
+    // Newest year first, so the latest stats show without scrolling.
+    order = Object.keys(grouping).sort().reverse();
   }
 
   return order

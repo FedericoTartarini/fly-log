@@ -10,9 +10,10 @@ import {
   NavLink,
   Button,
 } from "@mantine/core";
-import { Outlet, useNavigate, Link } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
 import PageSkeleton from "../components/PageSkeleton.jsx";
+import ErrorBoundary from "../components/ErrorBoundary.jsx";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
@@ -33,6 +34,7 @@ function MyAppShell() {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("common");
 
   const handleSignOut = async () => {
@@ -170,9 +172,11 @@ function MyAppShell() {
           {/* Route chunks suspend here rather than at the router, so the
               header and navbar stay put instead of being torn down and
               rebuilt while a page loads. */}
-          <Suspense fallback={<PageSkeleton />}>
-            <Outlet />
-          </Suspense>
+          <ErrorBoundary resetKey={location.pathname}>
+            <Suspense fallback={<PageSkeleton />}>
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
         </Container>
       </AppShell.Main>
       <AppFooter />

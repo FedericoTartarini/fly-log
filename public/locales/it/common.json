@@ -9,5 +9,10 @@
     "tour": "Tour",
     "timeline": "Cronologia"
   },
-  "language": "Lingua"
+  "language": "Lingua",
+  "error": {
+    "title": "Si è verificato un errore",
+    "message": "Questa pagina ha riscontrato un errore imprevisto. Prova a ricaricare: i tuoi voli sono al sicuro.",
+    "reload": "Ricarica"
+  }
 }
