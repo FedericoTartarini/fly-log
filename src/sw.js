@@ -1,7 +1,8 @@
-const CACHE_NAME = "fly-log-static-v3";
-const DYNAMIC_CACHE = "fly-log-dynamic-v3";
+const CACHE_NAME = "fly-log-static-v4";
+const DYNAMIC_CACHE = "fly-log-dynamic-v4";
 const OFFLINE_URL = "/offline.html";
 const LOCALES_PREFIX = "/locales/";
+const DATA_PREFIX = "/data/";
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
@@ -85,6 +86,33 @@ self.addEventListener("fetch", (event) => {
           const cached = await caches.match(event.request);
           return cached || Response.error();
         }),
+    );
+    return;
+  }
+
+  // Reference data (airports, airlines) is large and only changes on deploy,
+  // so serve the cached copy immediately and refresh it in the background.
+  // It previously fell through to network-first and was refetched every load.
+  if (requestUrl.pathname.startsWith(DATA_PREFIX)) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(event.request);
+
+        const update = fetch(event.request)
+          .then((response) => {
+            if (response.ok) cache.put(event.request, response.clone());
+            return response;
+          })
+          .catch(() => cached || Response.error());
+
+        if (cached) {
+          // Keep the worker alive long enough to finish the refresh.
+          event.waitUntil(update.catch(() => {}));
+          return cached;
+        }
+        return update;
+      })(),
     );
     return;
   }

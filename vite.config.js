@@ -2,6 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
+// Reference data is kept pretty-printed in git so its diffs stay reviewable,
+// and minified on the way out so it is not shipped as indented JSON.
+const minifyJson = (content) => JSON.stringify(JSON.parse(content));
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -19,14 +23,17 @@ export default defineConfig({
         {
           src: "src/assets/airports.json",
           dest: "data",
+          transform: minifyJson,
         },
         {
           src: "src/assets/airlines.json",
           dest: "data",
+          transform: minifyJson,
         },
         {
           src: "src/assets/world-fallback.json",
           dest: "data",
+          transform: minifyJson,
         },
       ],
     }),

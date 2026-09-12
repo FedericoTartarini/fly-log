@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Title,
   Stack,
@@ -106,6 +106,18 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
   );
   const valueLabelProps = { content: makeBarValueLabel(i18n.language) };
 
+  const currentGroupingConfig =
+    CHART_GROUPING_CONFIG[grouping] ||
+    CHART_GROUPING_CONFIG[CHART_GROUPING.COUNTRY];
+  // Walks every flight, so only redo it when its inputs change.
+  const chartData = useMemo(
+    () =>
+      !filteredFlights || !Array.isArray(filteredFlights)
+        ? []
+        : currentGroupingConfig.getData(filteredFlights, metric),
+    [filteredFlights, currentGroupingConfig, metric],
+  );
+
   // If data is provided, it's the old time-based chart
   if (data) {
     const timeChartData = data;
@@ -164,14 +176,6 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
       </Card>
     );
   }
-
-  const currentGroupingConfig =
-    CHART_GROUPING_CONFIG[grouping] ||
-    CHART_GROUPING_CONFIG[CHART_GROUPING.COUNTRY];
-  const chartData =
-    !filteredFlights || !Array.isArray(filteredFlights)
-      ? []
-      : currentGroupingConfig.getData(filteredFlights, metric);
 
   return (
     <Card shadow="sm" radius="md" withBorder>
