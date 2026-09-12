@@ -8,7 +8,7 @@ const ErrorFallback = ({ onReload }) => {
     <Container size="sm" mt="xl">
       <Stack align="center" gap="md">
         <Title order={3}>{t("error.title")}</Title>
-        <Text c="dimmed" ta="center">
+        <Text c="dimmed" ta="center" role="alert" aria-live="assertive">
           {t("error.message")}
         </Text>
         <Button onClick={onReload}>{t("error.reload")}</Button>

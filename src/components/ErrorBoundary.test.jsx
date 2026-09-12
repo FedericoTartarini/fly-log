@@ -1,5 +1,5 @@
 /* eslint-env vitest */
-import { test, expect, vi } from "vitest";
+import { test, expect, vi, afterEach } from "vitest";
 import React from "react";
 import { render, screen } from "../../test-utils/index.js";
 import ErrorBoundary from "./ErrorBoundary";
@@ -7,6 +7,12 @@ import ErrorBoundary from "./ErrorBoundary";
 const Boom = () => {
   throw new Error("boom");
 };
+
+// componentDidCatch logs to console.error by design; each test silences it,
+// so restore afterwards or the mock leaks into later tests/suites.
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 test("shows a friendly fallback instead of crashing the app", () => {
   vi.spyOn(console, "error").mockImplementation(() => {});
