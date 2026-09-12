@@ -15,6 +15,11 @@ export default defineConfig({
         {
           src: "src/sw.js",
           dest: "",
+          // Stamp the build id into CACHE_NAME so each deploy gets a fresh
+          // cache and the activate handler evicts the previous one. Only ever
+          // compared for equality, so a timestamp is enough.
+          transform: (content) =>
+            content.replace(/__BUILD_ID__/g, String(Date.now())),
         },
         {
           src: "src/assets/logos/*",
