@@ -41,7 +41,31 @@
     <meta name="msvalidate.01" content="4B8AF8A7C60D5C0CDD039EC816B0F8E5" />
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Static shell. React replaces this on mount, but it is what Googlebot's
+      first (non-rendering) pass indexes: before this, the crawler saw an empty
+      div, which is why Search Console reported 0 internal links and dropped
+      /landing from the index. Keep the copy in sync with locales/en/landing.json.
+    -->
+    <div id="root">
+      <main style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
+        <h1>Fly-Log — your personal flight logbook</h1>
+        <p>
+          Keep a detailed log of all your flights, explore your travel
+          statistics, and visualize your journeys on a world map.
+        </p>
+        <ul>
+          <li>Visualize all your flights on a world map</li>
+          <li>See which countries you have visited, and when you flew most</li>
+          <li>Compare your total distance flown to the Moon and Mars</li>
+          <li>Add flights by describing them, with AI-assisted entry</li>
+        </ul>
+        <p>
+          <a href="/about">About the project</a> &middot;
+          <a href="/login">Sign in</a>
+        </p>
+      </main>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
