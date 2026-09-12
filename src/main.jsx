@@ -14,8 +14,6 @@ import {
   createTheme,
   MantineProvider,
   ColorSchemeScript,
-  Loader,
-  Center,
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
@@ -27,8 +25,11 @@ const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Timeline = lazy(() => import("./pages/Timeline.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
-const ProtectedRoute = lazy(() => import("./components/ProtectedRoute.jsx"));
-const MyAppShell = lazy(() => import("./pages/MyAppShell.jsx"));
+// MyAppShell and ProtectedRoute render on every route, so splitting them out
+// bought nothing and cost an extra loading state on the way in.
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import MyAppShell from "./pages/MyAppShell.jsx";
+import PageSkeleton from "./components/PageSkeleton.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 
@@ -139,13 +140,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     >
       <Notifications />
       <AuthProvider>
-        <Suspense
-          fallback={
-            <Center h="100vh">
-              <Loader />
-            </Center>
-          }
-        >
+        <Suspense fallback={<PageSkeleton />}>
           <RouterProvider router={router} />
         </Suspense>
       </AuthProvider>

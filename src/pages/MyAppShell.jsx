@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   AppShell,
   Burger,
@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../constants/MyClasses.ts";
+import PageSkeleton from "../components/PageSkeleton.jsx";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
@@ -166,7 +167,12 @@ function MyAppShell() {
         pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
       >
         <Container size="lg" p={0}>
-          <Outlet />
+          {/* Route chunks suspend here rather than at the router, so the
+              header and navbar stay put instead of being torn down and
+              rebuilt while a page loads. */}
+          <Suspense fallback={<PageSkeleton />}>
+            <Outlet />
+          </Suspense>
         </Container>
       </AppShell.Main>
       <AppFooter />

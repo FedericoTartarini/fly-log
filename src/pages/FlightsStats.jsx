@@ -7,9 +7,8 @@ import {
   Grid,
   Paper,
   Container,
-  Loader,
+  Skeleton,
   Text,
-  Center,
   Modal,
   Button,
   Affix,
@@ -22,6 +21,7 @@ import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
+import PageSkeleton from "../components/PageSkeleton.jsx";
 import { useShallow } from "zustand/react/shallow";
 import { motion, useReducedMotion } from "framer-motion";
 const MotionDiv = motion.div;
@@ -74,13 +74,7 @@ const FlightsStats = () => {
   }, [shouldReduceMotion]);
 
   if (isLoading) {
-    return (
-      <Container size="lg" mt="md">
-        <Center>
-          <Loader />
-        </Center>
-      </Container>
-    );
+    return <PageSkeleton />;
   }
 
   if (error) {
@@ -95,7 +89,7 @@ const FlightsStats = () => {
 
   if (allFlights.length === 0) {
     return (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Skeleton height={36} radius="xl" />}>
         <FlightsTopBar fullWidth={true} />
       </Suspense>
     );
@@ -104,13 +98,7 @@ const FlightsStats = () => {
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
-        <Suspense
-          fallback={
-            <Center h={200}>
-              <Loader />
-            </Center>
-          }
-        >
+        <Suspense fallback={<Skeleton height="60vh" radius={0} />}>
           <WorldMap />
         </Suspense>
       </div>
@@ -181,7 +169,7 @@ const FlightsStats = () => {
           <StatsSummary />
 
           {/* Add button to open modal */}
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Skeleton height={36} radius="xl" />}>
             <FlightsTopBar fullWidth={true} />
           </Suspense>
 
@@ -207,9 +195,7 @@ const FlightsStats = () => {
 
           <Suspense
             fallback={
-              <Center h={100}>
-                <Loader />
-              </Center>
+              <Skeleton height={(timeChartData.length + 1) * 28} radius="md" />
             }
           >
             <FlightsByChart
@@ -218,13 +204,7 @@ const FlightsStats = () => {
             />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <Center h={100}>
-                <Loader />
-              </Center>
-            }
-          >
+          <Suspense fallback={<Skeleton height={160} radius="md" />}>
             <FlightsByChart filteredFlights={filteredFlights} />
           </Suspense>
         </Stack>
