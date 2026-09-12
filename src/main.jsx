@@ -24,10 +24,10 @@ const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Timeline = lazy(() => import("./pages/Timeline.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
-const Landing = lazy(() => import("./pages/Landing.jsx"));
 // MyAppShell and ProtectedRoute render on every route, so splitting them out
 // bought nothing and cost an extra loading state on the way in.
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import HomeIndex from "./components/HomeIndex.jsx";
 import MyAppShell from "./pages/MyAppShell.jsx";
 import PageSkeleton from "./components/PageSkeleton.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
@@ -41,11 +41,13 @@ const router = createBrowserRouter([
     children: [
       {
         index: true, // Default route
-        element: <Navigate to={PATHS.STATS} replace />,
+        element: <HomeIndex />,
       },
       {
+        // Kept so the previously indexed URL and any stale bookmark still
+        // land somewhere. public/_redirects serves a 301 for real navigations.
         path: PATHS.LANDING,
-        element: <Landing />,
+        element: <Navigate to={PATHS.HOME} replace />,
       },
       {
         path: PATHS.ABOUT,

@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!user) {
-    return <Navigate to={PATHS.LANDING} replace />;
+    return <Navigate to={PATHS.HOME} replace />;
   }
 
   return children;

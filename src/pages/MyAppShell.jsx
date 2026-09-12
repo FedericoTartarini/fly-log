@@ -37,7 +37,7 @@ function MyAppShell() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate(PATHS.LANDING);
+    navigate(PATHS.HOME);
     closeMobile();
   };
 
@@ -50,7 +50,7 @@ function MyAppShell() {
 
   const renderNavLinks = (onClickHandler) => {
     const navItems = [
-      !user && { to: PATHS.LANDING, label: t("nav.home"), key: "home" },
+      !user && { to: PATHS.HOME, label: t("nav.home"), key: "home" },
       user && { to: PATHS.STATS, label: t("nav.stats"), key: "stats" },
       user && { to: PATHS.FLIGHTS, label: t("nav.flights"), key: "flights" },
       user && { to: PATHS.TOUR, label: t("nav.tour"), key: "tour" },
