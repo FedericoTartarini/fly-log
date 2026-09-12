@@ -3,6 +3,12 @@
 describe("Landing Page", () => {
   beforeEach(() => {
     cy.visit("/");
+    // index.html seeds #root with the same landing copy so crawlers can index
+    // it, which means cy.contains matches before React mounts. Scrolling then
+    // runs against a layout that is about to be thrown away, and the cards
+    // never enter the viewport for framer-motion's whileInView. Wait for a
+    // Mantine-rendered node, which only exists once Landing has hydrated.
+    cy.get(".mantine-Title-root", { timeout: 10000 }).should("exist");
   });
 
   /**
