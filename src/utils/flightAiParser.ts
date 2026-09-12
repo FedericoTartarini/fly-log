@@ -1,5 +1,5 @@
 import { getAI, getGenerativeModel } from "firebase/ai";
-import { app } from "../firebaseClient";
+import { app, ensureAppCheck } from "../firebaseClient";
 
 export interface ParsedFlight {
   departure_airport_iata: string | null;
@@ -72,6 +72,10 @@ export async function parseFlightFromText(
       "Input is empty or only whitespace for parseFlightFromText",
     );
   }
+
+  // Gemini is the only thing that needs App Check, so it is initialized here
+  // rather than at app startup.
+  await ensureAppCheck();
 
   const ai = getAI(app);
   const model = getGenerativeModel(ai, {

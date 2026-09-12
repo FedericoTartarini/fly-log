@@ -1,6 +1,6 @@
 // src/store.ts
 import { create } from "zustand";
-import { getFilteredUserFlights } from "./utils/flightService";
+import { subscribeToUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
 import { getYear, parseToDate } from "./utils/dateUtils";
@@ -18,9 +18,17 @@ import type { enhancedFlight } from "./types/enhancedFlight";
 // Current auth subscription + user id used for fetching flights.
 let authUnsubscribe: Unsubscribe | null = null;
 let currentUid: string | null = null;
+// Active Firestore listener for the signed-in user's flights.
+let flightsUnsubscribe: (() => void) | null = null;
+
+const stopFlightsListener = () => {
+  flightsUnsubscribe?.();
+  flightsUnsubscribe = null;
+};
 
 // Stop the Firebase auth listener and reset cached user id.
 export const clearAuthListener = () => {
+  stopFlightsListener();
   if (authUnsubscribe) {
     authUnsubscribe();
     authUnsubscribe = null;
@@ -144,33 +152,41 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   isLoading: true,
   error: null,
 
-  // Pull all flights from Firestore, then apply in-memory filters.
+  // Attach a live listener for the user's flights. The first callback comes
+  // straight from Firestore's persistent cache, so a returning visitor sees
+  // their flights without waiting on the network; the server result arrives
+  // moments later and re-renders with the same data in the common case.
+  //
+  // Callers that previously awaited this to refresh after a write no longer
+  // need to — a local write echoes back through the listener — but calling it
+  // again is harmless: it replaces the listener rather than stacking another.
   fetchFlights: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const uid = currentUid;
-      if (!uid) {
-        set({ allFlights: [], filteredFlights: [], isLoading: false });
-        return;
-      }
+    stopFlightsListener();
 
-      // getFilteredUserFlights(uid, ALL) should return all user flights
-      const allFlights = await getFilteredUserFlights(uid, YEAR_FILTER.ALL);
-      const filteredFlights = applyFilters(
-        allFlights,
-        get().selectedYear,
-        get().filters,
-      );
-
-      set({
-        allFlights,
-        filteredFlights,
-        isLoading: false,
-      });
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : String(error);
-      set({ error: message, isLoading: false });
+    const uid = currentUid;
+    if (!uid) {
+      set({ allFlights: [], filteredFlights: [], isLoading: false });
+      return;
     }
+
+    set({ isLoading: true, error: null });
+
+    flightsUnsubscribe = subscribeToUserFlights(
+      uid,
+      YEAR_FILTER.ALL,
+      (allFlights) => {
+        set((state) => ({
+          allFlights,
+          filteredFlights: applyFilters(
+            allFlights,
+            state.selectedYear,
+            state.filters,
+          ),
+          isLoading: false,
+        }));
+      },
+      (error) => set({ error: error.message, isLoading: false }),
+    );
   },
 
   // Update the year filter and recompute the filtered list in memory.
@@ -280,6 +296,7 @@ authUnsubscribe = onAuthStateChanged((user) => {
     useFlightStore.getState().fetchFlights();
   } else {
     currentUid = null;
+    stopFlightsListener();
     useFlightStore.setState({
       allFlights: [],
       filteredFlights: [],
