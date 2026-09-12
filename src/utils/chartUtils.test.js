@@ -107,6 +107,20 @@ describe("getFlightsByTimeGrouping", () => {
     expect(map[janLabel]).toBe(2);
     expect(map[febLabel]).toBe(1);
   });
+
+  it("groups by year newest-first, so recent stats need no scrolling", () => {
+    const flights = [
+      { departure_date: "2023-05-01T00:00:00Z" },
+      { departure_date: "2025-01-15T00:00:00Z" },
+      { departure_date: "2024-11-02T00:00:00Z" },
+      { departure_date: "2025-06-01T00:00:00Z" },
+    ];
+
+    const out = getFlightsByTimeGrouping(flights, TIME_GROUPING.YEAR);
+
+    expect(out.map((r) => r.period)).toEqual(["2025", "2024", "2023"]);
+    expect(out.map((r) => r.flights)).toEqual([2, 1, 1]);
+  });
 });
 
 describe("getFlightsByAirline", () => {
