@@ -56,16 +56,19 @@ describe("FlightsStats", () => {
     vi.clearAllMocks();
   });
 
-  it("shows a loader while flights are being fetched", async () => {
+  it("shows the page skeleton while flights are being fetched", async () => {
     applyMockState({ isLoading: true });
 
     render(<FlightsStats />);
 
     await waitFor(() => {
       expect(
-        document.querySelector(".mantine-Loader-root"),
+        document.querySelector(".mantine-Skeleton-root"),
       ).toBeInTheDocument();
     });
+    // A spinner here used to sit at a different height to the loaded page,
+    // so the content jumped when it was replaced.
+    expect(document.querySelector(".mantine-Loader-root")).toBeNull();
   });
 
   it("displays an error message when fetching fails", () => {

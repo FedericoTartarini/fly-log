@@ -54,17 +54,12 @@ export interface FlightStoreState {
   filters: StoreFlightFilters;
   isLoading: boolean;
   error: string | null;
-  fetchFlights: () => Promise<void>;
   setSelectedYear: (year: string) => Promise<void>;
   setTimeGrouping: (grouping: TimeGrouping) => void;
   setChartGrouping: (grouping: ChartGrouping) => void;
   setChartMetric: (metric: ChartMetric) => void;
   setFilters: (filters: Partial<StoreFlightFilters>) => void;
   clearFilters: () => void;
-  // remove a flight by id from both lists (optimistic UI)
-  removeFlightById: (id: string) => void;
-  // restore a flight to both lists (rollback optimistic delete)
-  restoreFlight: (flight: enhancedFlight) => void;
 }
 
 // Reduce flights based on the selected year preset or explicit year.
@@ -135,6 +130,44 @@ const applyFilters = (
   return result;
 };
 
+// Attach a live listener for the user's flights. The first callback comes
+// straight from Firestore's persistent cache, so a returning visitor sees their
+// flights without waiting on the network; the server result arrives moments
+// later. Local writes echo back through the listener too, which is why adding,
+// editing or deleting a flight needs no refetch and no optimistic bookkeeping.
+const startFlightsListener = () => {
+  stopFlightsListener();
+
+  const uid = currentUid;
+  if (!uid) {
+    useFlightStore.setState({
+      allFlights: [],
+      filteredFlights: [],
+      isLoading: false,
+    });
+    return;
+  }
+
+  useFlightStore.setState({ isLoading: true, error: null });
+
+  flightsUnsubscribe = subscribeToUserFlights(
+    uid,
+    YEAR_FILTER.ALL,
+    (allFlights) => {
+      useFlightStore.setState((state) => ({
+        allFlights,
+        filteredFlights: applyFilters(
+          allFlights,
+          state.selectedYear,
+          state.filters,
+        ),
+        isLoading: false,
+      }));
+    },
+    (error) => useFlightStore.setState({ error: error.message, isLoading: false }),
+  );
+};
+
 const useFlightStore = create<FlightStoreState>((set, get) => ({
   allFlights: [],
   filteredFlights: [],
@@ -151,43 +184,6 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   },
   isLoading: true,
   error: null,
-
-  // Attach a live listener for the user's flights. The first callback comes
-  // straight from Firestore's persistent cache, so a returning visitor sees
-  // their flights without waiting on the network; the server result arrives
-  // moments later and re-renders with the same data in the common case.
-  //
-  // Callers that previously awaited this to refresh after a write no longer
-  // need to — a local write echoes back through the listener — but calling it
-  // again is harmless: it replaces the listener rather than stacking another.
-  fetchFlights: async () => {
-    stopFlightsListener();
-
-    const uid = currentUid;
-    if (!uid) {
-      set({ allFlights: [], filteredFlights: [], isLoading: false });
-      return;
-    }
-
-    set({ isLoading: true, error: null });
-
-    flightsUnsubscribe = subscribeToUserFlights(
-      uid,
-      YEAR_FILTER.ALL,
-      (allFlights) => {
-        set((state) => ({
-          allFlights,
-          filteredFlights: applyFilters(
-            allFlights,
-            state.selectedYear,
-            state.filters,
-          ),
-          isLoading: false,
-        }));
-      },
-      (error) => set({ error: error.message, isLoading: false }),
-    );
-  },
 
   // Update the year filter and recompute the filtered list in memory.
   setSelectedYear: async (year: string) => {
@@ -252,39 +248,6 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
     });
   },
 
-  removeFlightById: (id: string) => {
-    set((state) => {
-      const newAllFlights = state.allFlights.filter(
-        (f) => String(f.id) !== String(id),
-      );
-      return {
-        allFlights: newAllFlights,
-        filteredFlights: applyFilters(
-          newAllFlights,
-          state.selectedYear,
-          state.filters,
-        ),
-      };
-    });
-  },
-
-  restoreFlight: (flight: enhancedFlight) => {
-    set((state) => {
-      const newAllFlights = [...state.allFlights, flight].sort((a, b) => {
-        const dateA = parseToDate(a.departure_date);
-        const dateB = parseToDate(b.departure_date);
-        return (dateA?.getTime() || 0) - (dateB?.getTime() || 0);
-      });
-      return {
-        allFlights: newAllFlights,
-        filteredFlights: applyFilters(
-          newAllFlights,
-          state.selectedYear,
-          state.filters,
-        ),
-      };
-    });
-  },
 }));
 
 export default useFlightStore;
@@ -293,7 +256,7 @@ export default useFlightStore;
 authUnsubscribe = onAuthStateChanged((user) => {
   if (user) {
     currentUid = user.uid;
-    useFlightStore.getState().fetchFlights();
+    startFlightsListener();
   } else {
     currentUid = null;
     stopFlightsListener();

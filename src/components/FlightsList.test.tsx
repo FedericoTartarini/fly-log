@@ -30,7 +30,6 @@ const enrichedFlight = enrichFlightData(mockFlight) as enhancedFlight;
 
 type StoreShape = {
   filteredFlights: enhancedFlight[];
-  fetchFlights: () => void;
 };
 
 describe("FlightsList", () => {
@@ -46,7 +45,6 @@ describe("FlightsList", () => {
       (selector: (state: StoreShape) => unknown) =>
         selector({
           filteredFlights: [enrichedFlight],
-          fetchFlights: vi.fn(),
         }),
     );
 
@@ -69,7 +67,6 @@ describe("FlightsList", () => {
       (selector: (state: StoreShape) => unknown) =>
         selector({
           filteredFlights: [],
-          fetchFlights: vi.fn(),
         }),
     );
 

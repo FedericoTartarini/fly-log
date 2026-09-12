@@ -43,7 +43,6 @@ vi.mock("./referenceData", () => ({
 
 import {
   enrichFlightData,
-  getFilteredUserFlights,
   subscribeToUserFlights,
   updateFlightForUser,
 } from "./flightService";
@@ -117,73 +116,16 @@ describe("flightService", () => {
     expect(enriched.co2_kg).toBeLessThan(enriched.distance_km as number);
   });
 
-  it("getFilteredUserFlights throws when Firestore is not initialized", async () => {
+  it("subscribeToUserFlights reports an error when Firestore is not initialized", async () => {
     firestoreState.instance = null;
-    await expect(
-      getFilteredUserFlights("uid-1", YEAR_FILTER.ALL),
-    ).rejects.toThrow(/Firestore is not initialized/i);
-  });
+    const onError = vi.fn();
 
-  it("getFilteredUserFlights loads, enriches, and returns flight records", async () => {
-    const airportByIata = new Map([
-      [
-        "JFK",
-        {
-          iata: "JFK",
-          airport_name: "JFK",
-          city: "New York",
-          country: "United States",
-          lat: 40.6413,
-          lon: -73.7781,
-          iso_country: "US",
-          iso_region: "US-NY",
-          elevation: 13,
-        },
-      ],
-      [
-        "LHR",
-        {
-          iata: "LHR",
-          airport_name: "Heathrow",
-          city: "London",
-          country: "United Kingdom",
-          lat: 51.47,
-          lon: -0.4543,
-          iso_country: "GB",
-          iso_region: "GB-LND",
-          elevation: 83,
-        },
-      ],
-    ]);
-    const airlineByIata = new Map([
-      ["BA", { iata: "BA", name: "British Airways", icao: "BAW" }],
-    ]);
-    referenceDataMocks.getReferenceMapsSync.mockReturnValue({
-      airportByIata,
-      airlineByIata,
-    });
+    subscribeToUserFlights("uid-1", YEAR_FILTER.ALL, vi.fn(), onError);
 
-    firestoreMocks.getDocs.mockResolvedValue({
-      docs: [
-        {
-          id: "flight-1",
-          data: () => ({
-            departure_date: "2025-01-10",
-            departure_airport_iata: "JFK",
-            arrival_airport_iata: "LHR",
-            airline_iata: "BA",
-          }),
-        },
-      ],
-    });
-
-    const result = await getFilteredUserFlights("uid-1", YEAR_FILTER.ALL);
-
-    expect(referenceDataMocks.loadReferenceMaps).toHaveBeenCalledOnce();
-    expect(result).toHaveLength(1);
-    const [first] = result;
-    expect(first?.airline_name).toBe("British Airways");
-    expect(first?.airline_icon_path).toBe("BAW.png");
+    await vi.waitFor(() => expect(onError).toHaveBeenCalledOnce());
+    expect(onError.mock.calls[0]?.[0]?.message).toMatch(
+      /Firestore is not initialized/i,
+    );
   });
 
   it("subscribeToUserFlights emits enriched flights when the snapshot fires", async () => {
