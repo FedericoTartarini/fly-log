@@ -74,33 +74,26 @@ export const getFlightsByTimeGrouping = (flights, timeGrouping, metric) => {
   // Choose locale from i18n; fallback to en-AU
   const locale = (i18n && i18n.language) || "en-AU";
 
+  // Constructing an Intl.DateTimeFormat costs roughly 100x a format() call on
+  // an existing one, so build it once for the whole run rather than per flight.
+  const formatter =
+    timeGrouping === TIME_GROUPING.DAY_OF_WEEK
+      ? new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" })
+      : timeGrouping === TIME_GROUPING.MONTH
+        ? new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" })
+        : null;
+
   flights.forEach((flight) => {
     const d = parseToDate(flight.departure_date);
     if (!d) return;
 
     let key;
-    switch (timeGrouping) {
-      case TIME_GROUPING.DAY_OF_WEEK:
-        key = capitalize(
-          new Intl.DateTimeFormat(locale, {
-            weekday: "short",
-            timeZone: "UTC",
-          }).format(d),
-        );
-        break;
-      case TIME_GROUPING.YEAR:
-        key = d.getUTCFullYear().toString();
-        break;
-      case TIME_GROUPING.MONTH:
-        key = capitalize(
-          new Intl.DateTimeFormat(locale, {
-            month: "short",
-            timeZone: "UTC",
-          }).format(d),
-        );
-        break;
-      default:
-        key = "Unknown";
+    if (timeGrouping === TIME_GROUPING.YEAR) {
+      key = d.getUTCFullYear().toString();
+    } else if (formatter) {
+      key = capitalize(formatter.format(d));
+    } else {
+      key = "Unknown";
     }
 
     grouping[key] = (grouping[key] || 0) + metricValue(flight, metric);
