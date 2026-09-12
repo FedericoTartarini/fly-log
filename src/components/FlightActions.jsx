@@ -3,16 +3,12 @@ import { ActionIcon, Button, Menu, Modal, Text } from "@mantine/core";
 import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import { deleteFlightForUser } from "../utils/flightService";
-import useFlightStore from "../store";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 
 // Row action menu for edit/delete operations.
 const FlightActions = ({ flight, onEdit }) => {
   const { user } = useAuth();
-  const removeFlightById = useFlightStore((s) => s.removeFlightById);
-  const restoreFlight = useFlightStore((s) => s.restoreFlight);
-  const fetchFlights = useFlightStore((s) => s.fetchFlights);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { t } = useTranslation("flights");
@@ -28,9 +24,8 @@ const FlightActions = ({ flight, onEdit }) => {
     }
     setIsDeleting(true);
     try {
-      // Optimistic UI: remove from store immediately
-      removeFlightById(flight.id);
-
+      // The Firestore listener removes the row as soon as the local write
+      // lands, and puts it back on its own if the write is rejected.
       await deleteFlightForUser(user.uid, flight.id);
 
       notifications.show({
@@ -44,11 +39,6 @@ const FlightActions = ({ flight, onEdit }) => {
         message: (err && err.message) || String(err),
         color: "red",
       });
-      try {
-        await fetchFlights();
-      } catch {
-        restoreFlight(flight);
-      }
     } finally {
       setIsDeleting(false);
       setConfirmOpen(false);

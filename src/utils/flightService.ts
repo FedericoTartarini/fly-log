@@ -2,7 +2,6 @@ import { firestore } from "../firebaseClient";
 import { Timestamp } from "firebase/firestore";
 import {
   collection,
-  getDocs,
   query,
   where,
   orderBy,
@@ -238,18 +237,6 @@ const enrichSnapshot = (snap: FlightsSnapshot): EnrichedFlightRecord[] =>
       ...(d.data() as Omit<FirestoreFlightRecord, "id">),
     } as FirestoreFlightRecord),
   );
-
-export const getFilteredUserFlights = async (
-  uid: string,
-  year: number | string,
-): Promise<EnrichedFlightRecord[]> => {
-  const q = buildFlightsQuery(uid, year);
-  // ponytail: 804 KB of reference JSON loaded on every read to enrich a few
-  // hundred flights. Precompute at write time instead:
-  // https://github.com/FedericoTartarini/fly-log/issues/41
-  await loadReferenceMaps();
-  return enrichSnapshot(await getDocs(q));
-};
 
 /**
  * Subscribe to the user's flights. Firestore's persistent local cache means the
