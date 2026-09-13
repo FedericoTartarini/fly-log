@@ -293,7 +293,7 @@
       },
       "terminal_regular": {
         "name": "Terminal regular",
-        "criterion": "Land at 25 different airports."
+        "criterion": "Visit 25 different airports."
       },
       "on_a_roll": {
         "name": "Six months running",

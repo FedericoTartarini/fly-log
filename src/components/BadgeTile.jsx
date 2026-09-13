@@ -5,7 +5,7 @@ import { IconMedal } from "@tabler/icons-react";
 import { BADGE_ICONS, BADGE_STYLES } from "../constants/badgeIcons.ts";
 import { DISTANCE_BADGES } from "../utils/badges.ts";
 import { barcodePattern } from "../utils/barcode.ts";
-import { formatDate } from "../utils/dateUtils";
+import { formatCalendarDate } from "../utils/dateUtils";
 import classes from "./BadgeTile.module.css";
 
 // Kilometres read better rounded and grouped; counts are already small.
@@ -25,7 +25,7 @@ const BadgeTile = ({ badge, styleName = BADGE_STYLES.PASS }) => {
   const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
   const hasProgress = typeof badge.target === "number";
   const percent = hasProgress ? (badge.current / badge.target) * 100 : 0;
-  const date = formatDate(badge.unlockedOn, "DD MMM YYYY", i18n.language);
+  const date = formatCalendarDate(badge.unlockedOn, "DD MMM YYYY", i18n.language);
 
   const header = (
     <Group gap="sm" align="flex-start" wrap="nowrap">

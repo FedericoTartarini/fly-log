@@ -293,7 +293,7 @@
       },
       "terminal_regular": {
         "name": "Habitué del terminal",
-        "criterion": "Atterra in 25 aeroporti diversi."
+        "criterion": "Visita 25 aeroporti diversi."
       },
       "on_a_roll": {
         "name": "Sei mesi di fila",

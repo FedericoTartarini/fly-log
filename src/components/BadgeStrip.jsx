@@ -21,7 +21,7 @@ import {
 } from "../utils/badges.ts";
 import { BADGE_ICONS } from "../constants/badgeIcons.ts";
 import { PATHS } from "../constants/MyClasses.ts";
-import { formatDate } from "../utils/dateUtils";
+import { formatCalendarDate } from "../utils/dateUtils";
 
 // Two recent unlocks and the one you are closest to. Kept to three so the card
 // stays one row on a phone and does not push the charts below out of view.
@@ -124,7 +124,7 @@ function BadgeStrip() {
               key={badge.id}
               badge={badge}
               onOpen={openShelf}
-              caption={formatDate(
+              caption={formatCalendarDate(
                 badge.unlockedOn,
                 "DD MMM YYYY",
                 i18n.language,

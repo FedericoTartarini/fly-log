@@ -92,6 +92,12 @@ describe("evaluateBadges", () => {
     expect(byId(gapped, "ten_years_running").current).toBe(2);
   });
 
+  it("counts both ends of a flight as airports visited", () => {
+    // Matches useFlightStats, which feeds the "Airports Visited" stat shown on
+    // the same dashboard as the badge strip.
+    expect(byId([flight("2020-01-10")], "terminal_regular").current).toBe(2);
+  });
+
   it("reports no progress for binary badges", () => {
     const badge = byId([flight("2020-01-10")], "first_flight");
     expect(badge.current).toBeUndefined();

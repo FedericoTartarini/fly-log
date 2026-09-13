@@ -150,6 +150,9 @@ export const evaluateBadges = (
     tally.flights += 1;
     tally.distance += flight.distance_km || 0;
 
+    // Both ends count, matching useFlightStats and the "Airports Visited" stat
+    // on the dashboard. The badge must not disagree with the number shown
+    // alongside it.
     if (flight.departure_airport_iata)
       tally.airports.add(flight.departure_airport_iata);
     if (flight.arrival_airport_iata)
