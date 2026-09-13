@@ -218,3 +218,34 @@ export const sortForShelf = (badges: Badge[]): Badge[] =>
       badge.target ? (badge.current ?? 0) / badge.target : -1;
     return ratio(b) - ratio(a);
   });
+
+/**
+ * The badges the stats-page strip shows: the most recent unlocks, then the one
+ * closest to being earned.
+ *
+ * At most one badge per category, so near-duplicates like "To the Moon" and
+ * "To the Moon and back" cannot sit side by side saying the same thing twice.
+ * Only the categories actually shown are blocked — counting a category while
+ * scanning would block one whose badge was then dropped by `limit`.
+ */
+export const pickStripBadges = (badges: Badge[], limit = 2): Badge[] => {
+  const shownCategories = new Set<BadgeCategory>();
+  const recent: Badge[] = [];
+  for (const badge of badges) {
+    if (recent.length >= limit) break;
+    if (!badge.unlocked || shownCategories.has(badge.category)) continue;
+    shownCategories.add(badge.category);
+    recent.push(badge);
+  }
+
+  const isCandidate = (badge: Badge) =>
+    !badge.unlocked && typeof badge.target === "number";
+  // Prefer an unshown category, but never drop the "what's next" line: for
+  // someone whose only locked badges share a category with an earned one, a
+  // repeated category beats showing nothing to aim at.
+  const next =
+    badges.find((b) => isCandidate(b) && !shownCategories.has(b.category)) ??
+    badges.find(isCandidate);
+
+  return next ? [...recent, next] : recent;
+};

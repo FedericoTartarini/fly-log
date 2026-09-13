@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { evaluateBadges, sortForShelf, BADGE_DEFS } from "./badges";
+import {
+  evaluateBadges,
+  sortForShelf,
+  pickStripBadges,
+  BADGE_DEFS,
+} from "./badges";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
 const NOW = new Date("2026-06-01T00:00:00Z");
@@ -127,5 +132,45 @@ describe("sortForShelf", () => {
     expect(locked.indexOf("five_laps")).toBeLessThan(
       locked.indexOf("to_the_moon"),
     );
+  });
+});
+
+describe("pickStripBadges", () => {
+  // A history that unlocks badges across several categories, so the strip has
+  // real choices to make rather than a single candidate.
+  const history = [
+    flight("2020-01-10", { arrival_country: "NZ", distance_km: 2_000 }),
+    flight("2021-02-10", { arrival_country: "JP", distance_km: 9_000 }),
+    flight("2024-03-10", { arrival_country: "US", distance_km: 35_000 }),
+  ];
+  const shelf = () => sortForShelf(evaluateBadges(history, NOW));
+
+  it("never shows the same category twice", () => {
+    const picked = pickStripBadges(shelf(), 2);
+    const categories = picked.map((badge) => badge.category);
+    expect(new Set(categories).size).toBe(categories.length);
+  });
+
+  it("shows the requested unlocks plus one to aim at", () => {
+    const picked = pickStripBadges(shelf(), 2);
+    expect(picked.filter((b) => b.unlocked)).toHaveLength(2);
+    expect(picked.filter((b) => !b.unlocked)).toHaveLength(1);
+  });
+
+  it("blocks only the categories actually shown, not every scanned one", () => {
+    // With a limit of 1, three of the four categories stay free, so the badge
+    // to aim at must still be found.
+    const picked = pickStripBadges(shelf(), 1);
+    expect(picked).toHaveLength(2);
+    expect(picked[1].unlocked).toBe(false);
+  });
+
+  it("repeats a category rather than showing nothing to aim at", () => {
+    // Only distance badges exist here, and one is already earned.
+    const distanceOnly = sortForShelf(evaluateBadges(history, NOW)).filter(
+      (badge) => badge.category === "distance",
+    );
+    const picked = pickStripBadges(distanceOnly, 2);
+    expect(picked.some((badge) => !badge.unlocked)).toBe(true);
   });
 });

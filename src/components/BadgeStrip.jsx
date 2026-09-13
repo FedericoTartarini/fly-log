@@ -16,6 +16,7 @@ import useFlightStore from "../store.ts";
 import {
   evaluateBadges,
   sortForShelf,
+  pickStripBadges,
   DISTANCE_BADGES,
 } from "../utils/badges.ts";
 import { BADGE_ICONS } from "../constants/badgeIcons.ts";
@@ -82,18 +83,9 @@ function BadgeStrip() {
 
   const openShelf = () => navigate(PATHS.BADGES);
 
-  // At most one badge per category: "To the Moon" and "To the Moon and back"
-  // next to each other say the same thing twice.
-  const seenCategories = new Set();
-  const recent = badges
-    .filter((b) => {
-      if (!b.unlocked || seenCategories.has(b.category)) return false;
-      seenCategories.add(b.category);
-      return true;
-    })
-    .slice(0, RECENT_SHOWN);
-  // Already sorted by how close it is, so the first locked one is the nearest.
-  const next = badges.find((b) => !b.unlocked && typeof b.target === "number");
+  const shown = pickStripBadges(badges, RECENT_SHOWN);
+  const next = shown.find((b) => !b.unlocked);
+  const recent = shown.filter((b) => b.unlocked);
 
   // Nothing earned and nothing in progress means an empty account; the stats
   // page already has a call to action for that.

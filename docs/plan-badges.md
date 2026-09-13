@@ -8,15 +8,21 @@ is in the "Not doing" section at the end — read it before adding anything back
 
 ## Shape of the work
 
-Four files touched, two created. No new dependency, no Firestore schema change,
-no new store state.
+Six files changed, eight created. No new dependency, no Firestore schema
+change, no new store state.
 
 | File | Change |
 | --- | --- |
 | `src/utils/badges.ts` | **new** — the catalogue and the pure evaluator |
 | `src/utils/badges.test.ts` | **new** — vitest over the evaluator |
+| `src/utils/barcode.ts` | **new** — per-badge decorative barcode pattern |
 | `src/pages/Badges.jsx` | **new** — the shelf |
-| `src/components/BadgeStrip.jsx` | **new** — 3 most recent unlocks, for the stats page |
+| `src/components/BadgeTile.jsx` | **new** — one badge, boarding pass or stamp |
+| `src/components/BadgeTile.module.css` | **new** — perforation, barcode, stamp |
+| `src/components/BadgeStrip.jsx` | **new** — recent unlocks, for the stats page |
+| `src/constants/badgeIcons.ts` | **new** — badge id to tabler icon |
+| `src/constants/distances.ts` | **new** — Earth/Moon/Mars reference distances |
+| `src/components/DistanceStatsCard.tsx` | imports those distances instead of its own |
 | `src/main.jsx` | route entry, lazy, wrapped in `ProtectedRoute` |
 | `src/constants/MyClasses.ts` | `PATHS.BADGES = "/badges"` |
 | `src/pages/MyAppShell.jsx` | nav item (logged-in only, after Timeline) |
