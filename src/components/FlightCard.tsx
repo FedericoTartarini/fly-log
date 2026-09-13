@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, Stack, Group, Title, Text, Badge } from "@mantine/core";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
-import { formatDate } from "../utils/dateUtils";
+import { formatCalendarDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import { getAirportCity } from "../utils/airportUtils";
 
@@ -63,7 +63,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title }) => {
 
           <Group gap="xs">
             <Text size="sm" c="dimmed">
-              {formatDate(flight.departure_date) || ""}
+              {formatCalendarDate(flight.departure_date) || ""}
             </Text>
             <Text size="sm" c="dimmed">
               {typeof flight.flight_time === "number"

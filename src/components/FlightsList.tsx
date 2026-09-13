@@ -13,7 +13,7 @@ import {
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { formatDate, parseToDate } from "../utils/dateUtils";
+import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 
@@ -143,7 +143,9 @@ const FlightsList: React.FC = () => {
             </Table.Thead>
             <Table.Tbody>
               {paginatedFlights.map((flight) => {
-                const departureDateStr = formatDate(flight.departure_date);
+                const departureDateStr = formatCalendarDate(
+                  flight.departure_date,
+                );
 
                 // Safe formatting for flight time and distance
                 const ft = flight.flight_time ?? null;

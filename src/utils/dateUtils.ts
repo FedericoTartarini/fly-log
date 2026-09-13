@@ -45,48 +45,18 @@ export function formatDate(
 ): string {
   if (value === null || value === undefined || value === "") return "";
   try {
-    let d: Date | null;
-    if (value instanceof Date) {
-      d = value;
-    } else if (isTimestampLike(value)) {
-      // Firestore Timestamp
-      d = value.toDate();
-    } else if (isSecondsLike(value)) {
-      // Firestore-like object with seconds
-      d = new Date(value.seconds * 1000);
-    } else {
-      d = new Date(String(value));
-    }
-
-    if (!d || Number.isNaN(d.getTime())) return "";
+    const d = parseToDate(value);
+    if (!d) return "";
 
     // Determine effective locale: explicit param -> i18n.language -> fallback 'en-AU'
     const effectiveLocale = locale || (i18n && i18n.language) || "en-AU";
 
-    // If no format specified, return the locale's default date string
-    if (!format) return d.toLocaleDateString(effectiveLocale);
+    // If no format specified, return the locale's default date string. Read in
+    // UTC for the same reason formatCalendarDate is: everything this app
+    // formats is a calendar date, not a genuine instant.
+    if (!format) return d.toLocaleDateString(effectiveLocale, { timeZone: "UTC" });
 
-    // Token replacements
-    const day = d.getDate();
-    const dayP = String(day).padStart(2, "0");
-    const year = d.getFullYear();
-    const year2 = String(year).slice(-2);
-    const monthShort = new Intl.DateTimeFormat(effectiveLocale, {
-      month: "short",
-    }).format(d);
-    const monthLong = new Intl.DateTimeFormat(effectiveLocale, {
-      month: "long",
-    }).format(d);
-
-    let out = format;
-    out = out.replace(/DD/g, dayP);
-    out = out.replace(/\bD\b/g, String(day));
-    out = out.replace(/MMMM/g, monthLong);
-    out = out.replace(/MMM/g, monthShort);
-    out = out.replace(/YYYY/g, String(year));
-    out = out.replace(/YY/g, year2);
-
-    return out;
+    return formatCalendarDate(d, format, effectiveLocale);
   } catch {
     return "";
   }
@@ -95,10 +65,9 @@ export function formatDate(
 /**
  * Format a date-like value as the calendar date it names, not as an instant.
  *
- * A date-only string such as "2024-03-10" parses to UTC midnight, which local
- * date getters render as the 9th for anyone west of UTC. Badge unlock dates are
- * calendar dates — the day the flight departed — so they are read in UTC and
- * the format tokens are the same as `formatDate`.
+ * Kept as a named alias for callers (badges, flight dates) that want to be
+ * explicit they're formatting a calendar date. `formatDate` itself is UTC-based
+ * for the same reason: nothing in this app formats a genuine instant.
  */
 export function formatCalendarDate(
   value: unknown,
@@ -109,18 +78,16 @@ export function formatCalendarDate(
   if (!d) return "";
 
   const effectiveLocale = locale || (i18n && i18n.language) || "en-AU";
-  const utc = { timeZone: "UTC" } as const;
-
-  const day = d.getUTCDate();
-  const year = d.getUTCFullYear();
   const monthShort = new Intl.DateTimeFormat(effectiveLocale, {
     month: "short",
-    ...utc,
+    timeZone: "UTC",
   }).format(d);
   const monthLong = new Intl.DateTimeFormat(effectiveLocale, {
     month: "long",
-    ...utc,
+    timeZone: "UTC",
   }).format(d);
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
 
   return format
     .replace(/DD/g, String(day).padStart(2, "0"))

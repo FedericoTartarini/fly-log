@@ -16,6 +16,8 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Run unit tests
+        env:
+          TZ: America/New_York
         run: npm run vitest
       - name: Build
         run: npm run build
