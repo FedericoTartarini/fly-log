@@ -70,6 +70,17 @@
         </p>
       </main>
     </div>
+    <!--
+      The shell above is the indexed copy of "/", but the SPA fallback serves
+      this same file for every route, so refreshing /stats painted the landing
+      copy until React mounted. Clear it anywhere but "/". Googlebot's
+      non-rendering pass does not run this, so the indexed copy is untouched.
+    -->
+    <script>
+      if (location.pathname !== "/") {
+        document.getElementById("root").textContent = "";
+      }
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
