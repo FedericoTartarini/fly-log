@@ -7,6 +7,7 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import "./WorldMap.css";
 import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
@@ -224,6 +225,10 @@ const WorldMap = () => {
         url={tileUrl}
         attribution={attribution}
         detectRetina
+        // CARTO's dark_all style renders land and ocean at nearly the same
+        // luminance (9 vs 38 out of 255) — this filter widens that gap so
+        // water reads as a distinct grey against near-black land.
+        className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
       />
 
       {filteredFlights.filter(isValidFlight).map((flight) => {
