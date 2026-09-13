@@ -61,6 +61,7 @@ function MyAppShell() {
         label: t("nav.timeline"),
         key: "timeline",
       },
+      user && { to: PATHS.BADGES, label: t("nav.badges"), key: "badges" },
       { to: PATHS.ABOUT, label: t("nav.about"), key: "about" },
     ].filter(Boolean);
 

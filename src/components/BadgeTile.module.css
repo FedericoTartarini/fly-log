@@ -1,0 +1,91 @@
+/* A badge as a boarding pass: a body and a torn-off stub. */
+
+.tile {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.locked {
+  border-style: dashed;
+  background: transparent;
+}
+
+/* The perforation the stub tears along. The notches are positioned against the
+ * card, not the stub, so they stay centred on the dashed line. */
+.stub {
+  position: relative;
+  border-top: 1px dashed var(--mantine-color-default-border);
+  margin: 0 calc(-1 * var(--mantine-spacing-sm));
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm) 0;
+}
+
+.stub::before,
+.stub::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
+  /* Half the notch height plus the border, so its centre sits on the dash. */
+  transform: translateY(-7px);
+}
+
+.stub::before {
+  left: -7px;
+}
+
+.stub::after {
+  right: -7px;
+}
+
+/* Decorative barcode. The bar pattern itself is generated per badge in
+ * BadgeTile, so no two badges carry the same stripes. */
+.barcode {
+  height: 22px;
+  flex: 1;
+  min-width: 72px;
+  max-width: 140px;
+  color: var(--mantine-color-text);
+  opacity: 0.55;
+}
+
+.locked .barcode {
+  opacity: 0.18;
+}
+
+/* --- passport stamp --------------------------------------------------- */
+
+/* An inked stamp pressed onto the page: double ring, sitting slightly off
+ * square the way a hand-stamped page does. */
+.stamp {
+  position: relative;
+  border: 2px solid var(--mantine-primary-color-filled);
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  transform: rotate(-1.5deg);
+  color: var(--mantine-primary-color-filled);
+  /* The second ring. Inset rather than a wrapper element, so the stamp stays
+   * one box in the layout. */
+  box-shadow: inset 0 0 0 1px var(--mantine-color-body),
+    inset 0 0 0 3px var(--mantine-primary-color-filled);
+  opacity: 0.88;
+}
+
+/* Not yet stamped: the empty place on the page where it will go. */
+.stampEmpty {
+  border-style: dashed;
+  border-color: var(--mantine-color-dimmed);
+  color: var(--mantine-color-dimmed);
+  box-shadow: none;
+  transform: none;
+  opacity: 1;
+}
+
+.stampDate {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}

@@ -93,6 +93,45 @@ export function formatDate(
 }
 
 /**
+ * Format a date-like value as the calendar date it names, not as an instant.
+ *
+ * A date-only string such as "2024-03-10" parses to UTC midnight, which local
+ * date getters render as the 9th for anyone west of UTC. Badge unlock dates are
+ * calendar dates — the day the flight departed — so they are read in UTC and
+ * the format tokens are the same as `formatDate`.
+ */
+export function formatCalendarDate(
+  value: unknown,
+  format: string = "DD MMM YY",
+  locale?: string,
+): string {
+  const d = parseToDate(value);
+  if (!d) return "";
+
+  const effectiveLocale = locale || (i18n && i18n.language) || "en-AU";
+  const utc = { timeZone: "UTC" } as const;
+
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  const monthShort = new Intl.DateTimeFormat(effectiveLocale, {
+    month: "short",
+    ...utc,
+  }).format(d);
+  const monthLong = new Intl.DateTimeFormat(effectiveLocale, {
+    month: "long",
+    ...utc,
+  }).format(d);
+
+  return format
+    .replace(/DD/g, String(day).padStart(2, "0"))
+    .replace(/\bD\b/g, String(day))
+    .replace(/MMMM/g, monthLong)
+    .replace(/MMM/g, monthShort)
+    .replace(/YYYY/g, String(year))
+    .replace(/YY/g, String(year).slice(-2));
+}
+
+/**
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
 // Convert date-like inputs into a JS Date (or null on invalid input).
