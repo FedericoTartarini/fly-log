@@ -8,6 +8,11 @@ const minifyJson = (content) => JSON.stringify(JSON.parse(content));
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Stamped into the footer so it always shows when the running build was
+  // published, instead of a version number nobody remembers to bump.
+  define: {
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   plugins: [
     react(),
     viteStaticCopy({

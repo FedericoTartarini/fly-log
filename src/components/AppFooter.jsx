@@ -1,7 +1,9 @@
 import React from "react";
 import { Container, Group, Text, Anchor } from "@mantine/core";
 import { APP_INFO } from "../constants/MyClasses.js";
-import packageJson from "../../package.json";
+
+// Stamped at build time by vite.config.js's `define`, e.g. "2026-09-13".
+/* global __BUILD_DATE__ */
 
 const AppFooter = () => (
   <footer>
@@ -14,7 +16,7 @@ const AppFooter = () => (
           &middot;
         </Text>
         <Text size="sm" c="dimmed">
-          v{packageJson.version}
+          {__BUILD_DATE__}
         </Text>
         <Text size="sm" c="dimmed">
           &middot;
