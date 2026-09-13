@@ -20,6 +20,10 @@ vi.mock("../components/DistanceStatsCard.js", () => ({
   __esModule: true,
   default: () => <div data-testid="distance-card" />,
 }));
+vi.mock("../components/BadgeStrip.jsx", () => ({
+  __esModule: true,
+  default: () => <div data-testid="badge-strip" />,
+}));
 vi.mock("../components/FlightCard.tsx", () => ({
   __esModule: true,
   default: () => <div data-testid="flight-card" />,

@@ -2,6 +2,11 @@ import React from "react";
 import { Card, Title, Grid, Stack, Group, Text } from "@mantine/core";
 import StatDisplay from "./StatDisplay.jsx";
 import { useTranslation } from "react-i18next";
+import {
+  EARTH_CIRCUMFERENCE,
+  DISTANCE_TO_MOON,
+  DISTANCE_TO_MARS,
+} from "../constants/distances";
 
 interface DistanceStatsCardProps {
   totalDistance: number;
@@ -15,9 +20,6 @@ interface ChartDataItem {
   label: string;
 }
 
-const EARTH_CIRCUMFERENCE = 40075;
-const DISTANCE_TO_MOON = 384400;
-const DISTANCE_TO_MARS = 227_940_000;
 
 const DistanceStatsCard: React.FC<DistanceStatsCardProps> = ({
   totalDistance,

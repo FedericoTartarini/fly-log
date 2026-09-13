@@ -238,5 +238,107 @@
     "flights": "Voli",
     "distance": "Chilometri",
     "co2": "CO₂e"
+  },
+  "badges": {
+    "title": "Traguardi",
+    "view_all": "Tutti i traguardi",
+    "collected": "{{count}} di {{total}} conquistati",
+    "not_yet": "Non ancora",
+    "to_go": "ne mancano {{value}}",
+    "to_go_km": "mancano {{value}} km",
+    "items": {
+      "first_flight": {
+        "name": "Primo volo",
+        "criterion": "Registra il tuo primo volo."
+      },
+      "border_crossed": {
+        "name": "Confine superato",
+        "criterion": "Vola da un Paese a un altro."
+      },
+      "long_hauler": {
+        "name": "Lungo raggio",
+        "criterion": "Un singolo volo di almeno 5.000 km."
+      },
+      "ten_up": {
+        "name": "Quota dieci",
+        "criterion": "Registra 10 voli."
+      },
+      "half_century": {
+        "name": "Mezzo secolo",
+        "criterion": "Registra 50 voli."
+      },
+      "century": {
+        "name": "Cento voli",
+        "criterion": "Registra 100 voli."
+      },
+      "once_around": {
+        "name": "Giro del mondo",
+        "criterion": "40.075 km — un giro della Terra."
+      },
+      "five_laps": {
+        "name": "Cinque giri",
+        "criterion": "200.375 km — cinque giri della Terra."
+      },
+      "to_the_moon": {
+        "name": "Fino alla Luna",
+        "criterion": "384.400 km — la distanza dalla Luna."
+      },
+      "there_and_back": {
+        "name": "Luna, andata e ritorno",
+        "criterion": "768.800 km — la Luna e ritorno."
+      },
+      "globetrotter": {
+        "name": "Giramondo",
+        "criterion": "Visita 10 Paesi diversi."
+      },
+      "terminal_regular": {
+        "name": "Habitué del terminal",
+        "criterion": "Atterra in 25 aeroporti diversi."
+      },
+      "on_a_roll": {
+        "name": "Sei mesi di fila",
+        "criterion": "Vola per sei mesi consecutivi."
+      },
+      "two_fifty": {
+        "name": "Duecentocinquanta",
+        "criterion": "Registra 250 voli."
+      },
+      "five_hundred": {
+        "name": "Cinquecento",
+        "criterion": "Registra 500 voli."
+      },
+      "million_club": {
+        "name": "Club del milione",
+        "criterion": "1.000.000 km — il milione del frequent flyer."
+      },
+      "explorer": {
+        "name": "Esploratore",
+        "criterion": "Visita 5 Paesi diversi."
+      },
+      "well_travelled": {
+        "name": "Gran viaggiatore",
+        "criterion": "Visita 25 Paesi diversi."
+      },
+      "country_collector": {
+        "name": "Collezionista di Paesi",
+        "criterion": "Visita 50 Paesi diversi."
+      },
+      "ten_years_running": {
+        "name": "Dieci anni di fila",
+        "criterion": "Vola per dieci anni consecutivi."
+      }
+    },
+    "style": {
+      "pass": "Carta d'imbarco",
+      "stamp": "Passaporto"
+    },
+    "stamp_caption": "Ammesso",
+    "categories": {
+      "flights": "Voli",
+      "distance": "Distanza",
+      "places": "Luoghi",
+      "habit": "Costanza"
+    },
+    "section_count": "{{unlocked}} di {{total}}"
   }
 }

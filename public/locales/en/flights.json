@@ -238,5 +238,107 @@
     "flights": "Flights",
     "distance": "Kilometres",
     "co2": "CO₂e"
+  },
+  "badges": {
+    "title": "Badges",
+    "view_all": "All badges",
+    "collected": "{{count}} of {{total}} collected",
+    "not_yet": "Not yet",
+    "to_go": "{{value}} to go",
+    "to_go_km": "{{value}} km to go",
+    "items": {
+      "first_flight": {
+        "name": "First flight",
+        "criterion": "Log your first flight."
+      },
+      "border_crossed": {
+        "name": "Border crossed",
+        "criterion": "Fly from one country to another."
+      },
+      "long_hauler": {
+        "name": "Long hauler",
+        "criterion": "A single flight of 5,000 km or more."
+      },
+      "ten_up": {
+        "name": "Ten up",
+        "criterion": "Log 10 flights."
+      },
+      "half_century": {
+        "name": "Half century",
+        "criterion": "Log 50 flights."
+      },
+      "century": {
+        "name": "Century",
+        "criterion": "Log 100 flights."
+      },
+      "once_around": {
+        "name": "Once around",
+        "criterion": "40,075 km — one lap of the Earth."
+      },
+      "five_laps": {
+        "name": "Five laps",
+        "criterion": "200,375 km — five times around the Earth."
+      },
+      "to_the_moon": {
+        "name": "To the Moon",
+        "criterion": "384,400 km — the distance to the Moon."
+      },
+      "there_and_back": {
+        "name": "To the Moon and back",
+        "criterion": "768,800 km — the Moon and home again."
+      },
+      "globetrotter": {
+        "name": "Globetrotter",
+        "criterion": "Visit 10 different countries."
+      },
+      "terminal_regular": {
+        "name": "Terminal regular",
+        "criterion": "Land at 25 different airports."
+      },
+      "on_a_roll": {
+        "name": "Six months running",
+        "criterion": "Fly in six consecutive months."
+      },
+      "two_fifty": {
+        "name": "Two fifty",
+        "criterion": "Log 250 flights."
+      },
+      "five_hundred": {
+        "name": "Five hundred",
+        "criterion": "Log 500 flights."
+      },
+      "million_club": {
+        "name": "Million kilometre club",
+        "criterion": "1,000,000 km — the frequent flyer's million."
+      },
+      "explorer": {
+        "name": "Explorer",
+        "criterion": "Visit 5 different countries."
+      },
+      "well_travelled": {
+        "name": "Well travelled",
+        "criterion": "Visit 25 different countries."
+      },
+      "country_collector": {
+        "name": "Country collector",
+        "criterion": "Visit 50 different countries."
+      },
+      "ten_years_running": {
+        "name": "Ten years running",
+        "criterion": "Fly in ten consecutive years."
+      }
+    },
+    "style": {
+      "pass": "Boarding pass",
+      "stamp": "Passport"
+    },
+    "stamp_caption": "Admitted",
+    "categories": {
+      "flights": "Flights",
+      "distance": "Distance",
+      "places": "Places",
+      "habit": "Habit"
+    },
+    "section_count": "{{unlocked}} of {{total}}"
   }
 }

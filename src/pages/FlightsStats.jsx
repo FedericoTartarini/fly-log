@@ -17,6 +17,7 @@ import StatsSummary from "../components/StatsSummary.jsx";
 import useFlightStore from "../store.ts";
 import FlightCard from "../components/FlightCard.tsx";
 import DistanceStatsCard from "../components/DistanceStatsCard.js";
+import BadgeStrip from "../components/BadgeStrip.jsx";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
@@ -173,10 +174,7 @@ const FlightsStats = () => {
             <FlightsTopBar fullWidth={true} />
           </Suspense>
 
-          <DistanceStatsCard
-            totalDistance={stats.totalDistance}
-            totalFlights={filteredFlights.length}
-          />
+          <BadgeStrip />
 
           <Grid>
             <Grid.Col span={{ base: 12, md: 6 }}>
@@ -207,6 +205,11 @@ const FlightsStats = () => {
           <Suspense fallback={<Skeleton height={160} radius="md" />}>
             <FlightsByChart filteredFlights={filteredFlights} />
           </Suspense>
+
+          <DistanceStatsCard
+            totalDistance={stats.totalDistance}
+            totalFlights={filteredFlights.length}
+          />
         </Stack>
       </Paper>
     </>

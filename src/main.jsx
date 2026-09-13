@@ -23,6 +23,7 @@ const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Timeline = lazy(() => import("./pages/Timeline.jsx"));
+const Badges = lazy(() => import("./pages/Badges.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 // MyAppShell and ProtectedRoute render on every route, so splitting them out
 // bought nothing and cost an extra loading state on the way in.
@@ -82,6 +83,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Timeline />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.BADGES,
+        element: (
+          <ProtectedRoute>
+            <Badges />
           </ProtectedRoute>
         ),
       },
