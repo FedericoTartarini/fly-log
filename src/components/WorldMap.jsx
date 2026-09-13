@@ -194,8 +194,10 @@ const WorldMap = () => {
   );
 
   // CARTO now requires a (free) API key on its raster tiles: https://carto.com/basemaps/apikey/
+  // {r} + detectRetina below requests @2x tiles on HiDPI screens, which is where the free
+  // rasters previously looked washed out/blurry.
   const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
-  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}.png?key=${cartoApiKey}`;
+  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png?key=${cartoApiKey}`;
 
   const attribution = "&copy; OpenStreetMap &copy; CARTO";
 
@@ -221,6 +223,7 @@ const WorldMap = () => {
         key={computedColorScheme}
         url={tileUrl}
         attribution={attribution}
+        detectRetina
       />
 
       {filteredFlights.filter(isValidFlight).map((flight) => {
