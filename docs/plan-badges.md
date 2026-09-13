@@ -34,22 +34,31 @@ change, no new store state.
 Pure. No React, no i18n — it returns ids and numbers, the page translates them.
 
 ```ts
-export type Badge = {
-  id: string;           // "once_around" — i18n key suffix and React key
-  icon: string;         // tabler icon name, resolved in the page
+export interface Badge {
+  id: string;            // "once_around" — i18n key suffix and React key
   unlocked: boolean;
-  unlockedOn?: string;  // ISO date of the flight that triggered it
-  current?: number;     // omitted for binary badges (see Q16)
+  unlockedOn?: Date;     // departure date of the flight that crossed the target
+  current?: number;      // both omitted for binary badges (see Q16)
   target?: number;
-};
+  category: BadgeCategory; // "flights" | "distance" | "places" | "habit"
+}
 
-export const evaluateBadges = (flights: enhancedFlight[]): Badge[] => { ... }
+export const evaluateBadges = (
+  flights: enhancedFlight[] | null | undefined,
+  now?: Date,
+): Badge[] => { ... }
 ```
+
+Icons are deliberately absent: they live in `src/constants/badgeIcons.ts`, so
+the evaluator stays free of UI.
 
 ### Inputs
 
 `allFlights`, filtered to **past flights only** and sorted by `departure_date`
-ascending, then replayed. Two consequences, both wanted:
+ascending, then replayed. The whole of today counts as upcoming, matching the
+PAST year filter in `store.ts` — a date-only `departure_date` parses to
+midnight, so comparing against the current time would count a flight departing
+in a few hours as already taken. Two consequences, both wanted:
 
 - A flight booked for next month unlocks nothing until it has been taken.
 - `unlockedOn` is the date of the flight that crossed the threshold, so it is

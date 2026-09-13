@@ -42,6 +42,13 @@ describe("evaluateBadges", () => {
     expect(distance.current).toBe(0);
   });
 
+  it("treats a flight departing today as still upcoming", () => {
+    // Matches the PAST year filter in store.ts, which excludes the whole of
+    // today. A date-only departure_date parses to midnight, so a naive
+    // comparison against the current time would count it as already taken.
+    expect(byId([flight("2026-06-01")], "first_flight").unlocked).toBe(false);
+  });
+
   it("stamps the badge with the flight that crossed the threshold", () => {
     const flights = [
       flight("2020-01-10", { distance_km: 30_000 }),

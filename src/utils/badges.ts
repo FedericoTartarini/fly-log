@@ -116,11 +116,18 @@ export const evaluateBadges = (
   flights: enhancedFlight[] | null | undefined,
   now: Date = new Date(),
 ): Badge[] => {
+  // The whole of today counts as upcoming, matching the PAST year filter in
+  // store.ts. A date-only departure_date parses to midnight, so comparing
+  // against the current time instead would treat a flight departing in a few
+  // hours as already taken.
+  const startOfToday = new Date(now);
+  startOfToday.setHours(0, 0, 0, 0);
+
   const past = (flights ?? [])
     .map((flight) => ({ flight, date: parseToDate(flight.departure_date) }))
     .filter(
       (entry): entry is { flight: enhancedFlight; date: Date } =>
-        entry.date !== null && entry.date.getTime() <= now.getTime(),
+        entry.date !== null && entry.date.getTime() < startOfToday.getTime(),
     )
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
