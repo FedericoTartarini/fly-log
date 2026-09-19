@@ -130,6 +130,7 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
             <Text size="xs" c="dimmed">
               {t("status.checked_at", {
                 value: new Date(flight.flight_status_checked_at).toLocaleString(),
+                interpolation: { escapeValue: false },
               })}
             </Text>
           )}
@@ -151,6 +152,7 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
             cooldown.nextCheckAt
               ? t("status.next_check_at", {
                   value: cooldown.nextCheckAt.toLocaleString(),
+                  interpolation: { escapeValue: false },
                 })
               : t("status.no_further_checks")
           }

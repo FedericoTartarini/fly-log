@@ -66,6 +66,11 @@ describe("FlightDetailsPanel", () => {
     );
 
     expect(screen.getByText("Landed")).toBeInTheDocument();
+    // Regression: i18next's default HTML-escaping turns "/" into "&#x2F;" in
+    // interpolated values. The checked-at timestamp is a locale-formatted
+    // date (e.g. "20/09/2026, ...") rendered as plain React text, not HTML,
+    // so it must never contain the escaped entity.
+    expect(document.body.textContent).not.toContain("&#x2F;");
   });
 
   it("disables the check button while the cooldown is in effect", () => {

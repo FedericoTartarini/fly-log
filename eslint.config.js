@@ -20,7 +20,7 @@ try {
 }
 
 export default defineConfig([
-  globalIgnores(["dist"]),
+  globalIgnores(["dist", ".netlify"]),
   {
     files: ["**/*.{js,jsx}"],
     extends: [
