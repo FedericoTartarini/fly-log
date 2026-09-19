@@ -87,7 +87,26 @@
     "deleted_title": "Deleted",
     "deleted_message": "Flight deleted",
     "delete_error_title": "Error deleting flight",
-    "not_signed_in": "You must be signed in to perform this action"
+    "not_signed_in": "You must be signed in to perform this action",
+    "view_details": "View details"
+  },
+  "status": {
+    "title": "Flight status",
+    "status_label": "Status:",
+    "unknown": "Unknown",
+    "no_data": "No live status checked yet.",
+    "no_flight_number": "This flight has no flight number, so status can't be looked up.",
+    "check_button": "Check status",
+    "check_success_title": "Status updated",
+    "check_error_title": "Could not check status",
+    "checked_at": "Last checked: {{value}}",
+    "next_check_at": "Available again at {{value}}",
+    "no_further_checks": "This flight has landed - no further checks needed",
+    "departure_delay": "Departure delay: {{value}} min",
+    "arrival_delay": "Arrival delay: {{value}} min",
+    "departure_gate": "Departure gate {{gate}}, terminal {{terminal}}",
+    "arrival_gate": "Arrival gate {{gate}}, terminal {{terminal}}",
+    "aircraft": "Aircraft: {{model}} ({{reg}})"
   },
   "no_flights_card": {
     "title": "Welcome",
