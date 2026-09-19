@@ -19,6 +19,7 @@ import type { FlightStoreState } from "../store";
 
 const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
+const FlightDetailsPanel = lazy(() => import("./FlightDetailsPanel"));
 
 /**
  * Renders a paginated list of flights in a table.
@@ -31,6 +32,10 @@ const FlightsList: React.FC = () => {
   const { t } = useTranslation("flights");
   const [editOpen, setEditOpen] = React.useState(false);
   const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
+    null,
+  );
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
+  const [detailsFlight, setDetailsFlight] = React.useState<enhancedFlight | null>(
     null,
   );
 
@@ -210,6 +215,10 @@ const FlightsList: React.FC = () => {
                             setEditFlight(f);
                             setEditOpen(true);
                           }}
+                          onViewDetails={(f: enhancedFlight) => {
+                            setDetailsFlight(f);
+                            setDetailsOpen(true);
+                          }}
                         />
                       </Suspense>
                     </Table.Td>
@@ -239,6 +248,18 @@ const FlightsList: React.FC = () => {
               flight={editFlight}
               onSaved={() => setEditOpen(false)}
             />
+          </Suspense>
+        )}
+      </Modal>
+
+      <Modal
+        opened={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        title={t("status.title")}
+      >
+        {detailsFlight && (
+          <Suspense fallback={<Loader size="sm" />}>
+            <FlightDetailsPanel flight={detailsFlight} />
           </Suspense>
         )}
       </Modal>

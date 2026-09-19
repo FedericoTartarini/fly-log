@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { ActionIcon, Button, Menu, Modal, Text } from "@mantine/core";
-import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
+import { IconDotsVertical, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext";
 import { deleteFlightForUser } from "../utils/flightService";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 
 // Row action menu for edit/delete operations.
-const FlightActions = ({ flight, onEdit }) => {
+const FlightActions = ({ flight, onEdit, onViewDetails }) => {
   const { user } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,6 +55,13 @@ const FlightActions = ({ flight, onEdit }) => {
         </Menu.Target>
 
         <Menu.Dropdown>
+          <Menu.Item
+            leftSection={<IconInfoCircle size={14} />}
+            onClick={() => onViewDetails && onViewDetails(flight)}
+            data-testid={`flight-actions-details-${flight.id}`}
+          >
+            {t("actions.view_details")}
+          </Menu.Item>
           <Menu.Item
             leftSection={<IconPencil size={14} />}
             onClick={() => onEdit && onEdit(flight)}

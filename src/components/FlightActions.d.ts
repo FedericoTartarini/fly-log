@@ -4,6 +4,7 @@ import type { enhancedFlight } from "../types/enhancedFlight";
 export interface FlightActionsProps {
   flight: enhancedFlight;
   onEdit?: (flight: enhancedFlight) => void;
+  onViewDetails?: (flight: enhancedFlight) => void;
 }
 
 declare const FlightActions: FC<FlightActionsProps>;
