@@ -129,7 +129,7 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
           {flight.flight_status_checked_at && (
             <Text size="xs" c="dimmed">
               {t("status.checked_at", {
-                value: flight.flight_status_checked_at,
+                value: new Date(flight.flight_status_checked_at).toLocaleString(),
               })}
             </Text>
           )}

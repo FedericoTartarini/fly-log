@@ -35,9 +35,11 @@ const FlightsList: React.FC = () => {
     null,
   );
   const [detailsOpen, setDetailsOpen] = React.useState(false);
-  const [detailsFlight, setDetailsFlight] = React.useState<enhancedFlight | null>(
+  const [detailsFlightId, setDetailsFlightId] = React.useState<string | null>(
     null,
   );
+  const detailsFlight =
+    filteredFlights.find((f) => f.id === detailsFlightId) ?? null;
 
   const PAGE_SIZE = 20;
   const [page, setPage] = React.useState(1);
@@ -216,7 +218,7 @@ const FlightsList: React.FC = () => {
                             setEditOpen(true);
                           }}
                           onViewDetails={(f: enhancedFlight) => {
-                            setDetailsFlight(f);
+                            setDetailsFlightId(f.id);
                             setDetailsOpen(true);
                           }}
                         />

@@ -61,9 +61,11 @@ export function getFlightStatusCooldown(
   }
 
   const departure = getDepartureDateTime(flight);
+  const departureMs = departure?.getTime() ?? null;
   const nearDeparture =
-    departure !== null &&
-    Math.abs(departure.getTime() - now.getTime()) <= NEAR_DEPARTURE_WINDOW_MS;
+    departureMs !== null &&
+    now.getTime() >= departureMs - NEAR_DEPARTURE_WINDOW_MS &&
+    now.getTime() <= departureMs + DEFAULT_COOLDOWN_MS;
 
   const cooldownMs = nearDeparture
     ? NEAR_DEPARTURE_COOLDOWN_MS

@@ -79,6 +79,21 @@ describe("getFlightStatusCooldown", () => {
     expect(result.allowed).toBe(true);
   });
 
+  it("stays on the 1h cooldown while in flight, past the old symmetric window", () => {
+    const flight: enhancedFlight = {
+      ...baseFlight,
+      departure_date: "2026-09-01",
+      departure_time: "12:00",
+      flight_status: { status: "EnRoute" },
+      flight_status_checked_at: "2026-09-01T14:30:00.000Z",
+    };
+    // now: 15:00 UTC, 3h after departure - outside the old +-2h window but
+    // within the new one-sided window (2h before through a day after departure)
+    const result = getFlightStatusCooldown(flight, new Date("2026-09-01T15:00:00Z"));
+    expect(result.allowed).toBe(false);
+    expect(result.nextCheckAt).toEqual(new Date("2026-09-01T15:30:00.000Z"));
+  });
+
   it("locks out further checks once a terminal status has been observed", () => {
     const flight: enhancedFlight = {
       ...baseFlight,

@@ -68,6 +68,21 @@ describe("FlightDetailsPanel", () => {
     expect(screen.getByText("Landed")).toBeInTheDocument();
   });
 
+  it("disables the check button while the cooldown is in effect", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: { status: "Expected" },
+          flight_status_checked_at: new Date().toISOString(),
+        }}
+      />,
+    );
+
+    const button = screen.getByTestId("flight-status-check-1");
+    expect(button).toBeDisabled();
+  });
+
   it("hides the check button when the flight has no flight number", () => {
     render(
       <FlightDetailsPanel flight={{ ...baseFlight, flight_number: null }} />,
