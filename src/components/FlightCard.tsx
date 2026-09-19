@@ -64,6 +64,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, title }) => {
           <Group gap="xs">
             <Text size="sm" c="dimmed">
               {formatCalendarDate(flight.departure_date) || ""}
+              {flight.departure_time ? `, ${flight.departure_time}` : ""}
             </Text>
             <Text size="sm" c="dimmed">
               {typeof flight.flight_time === "number"

@@ -192,7 +192,12 @@ const FlightsList: React.FC = () => {
                       </Text>
                     </Table.Td>
                     <Table.Td>
-                      <Text size="sm">{departureDateStr}</Text>
+                      <Text size="sm">
+                        {departureDateStr}
+                        {flight.departure_time
+                          ? `, ${flight.departure_time}`
+                          : ""}
+                      </Text>
                       <Text size="xs" c="dimmed">
                         {durationDistanceStr}
                       </Text>
