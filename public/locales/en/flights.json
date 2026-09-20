@@ -78,7 +78,6 @@
     "hour_abbrev": "h"
   },
   "actions": {
-    "open_menu": "Open actions",
     "edit": "Edit",
     "delete": "Delete",
     "confirm_delete_title": "Delete flight",
@@ -87,8 +86,7 @@
     "deleted_title": "Deleted",
     "deleted_message": "Flight deleted",
     "delete_error_title": "Error deleting flight",
-    "not_signed_in": "You must be signed in to perform this action",
-    "view_details": "View details"
+    "not_signed_in": "You must be signed in to perform this action"
   },
   "status": {
     "title": "Flight status",

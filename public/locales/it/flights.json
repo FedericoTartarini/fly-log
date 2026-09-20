@@ -78,7 +78,6 @@
     "past": "Voli passati"
   },
   "actions": {
-    "open_menu": "Apri azioni",
     "edit": "Modifica",
     "delete": "Elimina",
     "confirm_delete_title": "Elimina volo",
@@ -87,8 +86,7 @@
     "deleted_title": "Eliminato",
     "deleted_message": "Volo eliminato",
     "delete_error_title": "Errore durante l'eliminazione",
-    "not_signed_in": "Devi essere autenticato per eseguire questa azione",
-    "view_details": "Visualizza dettagli"
+    "not_signed_in": "Devi essere autenticato per eseguire questa azione"
   },
   "status": {
     "title": "Stato del volo",
