@@ -17,9 +17,8 @@ import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 
-const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
-const FlightDetailsPanel = lazy(() => import("./FlightDetailsPanel"));
+const FlightDetailsModal = lazy(() => import("./FlightDetailsModal"));
 
 /**
  * Renders a paginated list of flights in a table.
@@ -83,6 +82,11 @@ const FlightsList: React.FC = () => {
   const startIndex = (page - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
   const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
+
+  const openDetails = (flight: enhancedFlight) => {
+    setDetailsFlightId(flight.id);
+    setDetailsOpen(true);
+  };
 
   /**
    * Returns the airline icon or a fallback icon.
@@ -153,7 +157,6 @@ const FlightsList: React.FC = () => {
                 </Table.Th>
                 <Table.Th>{t("table.from_to")}</Table.Th>
                 <Table.Th>{t("table.date_duration_distance")}</Table.Th>
-                <Table.Th>{t("table.actions")}</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -189,8 +192,27 @@ const FlightsList: React.FC = () => {
                   durationDistanceStr = `${dist.toLocaleString()} km`;
                 }
 
+                const rowLabel = t("table.view_row_details", {
+                  from: flight.departure_airport_iata,
+                  to: flight.arrival_airport_iata,
+                });
+
                 return (
-                  <Table.Tr key={flight.id}>
+                  <Table.Tr
+                    key={flight.id}
+                    onClick={() => openDetails(flight)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLTableRowElement>) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openDetails(flight);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={rowLabel}
+                    style={{ cursor: "pointer" }}
+                    data-testid={`flight-row-${flight.id}`}
+                  >
                     <Table.Td p={"0.5rem"}>
                       <Center>{getAirlineIcon(flight)}</Center>
                     </Table.Td>
@@ -216,21 +238,6 @@ const FlightsList: React.FC = () => {
                       <Text size="xs" c="dimmed">
                         {durationDistanceStr}
                       </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Suspense fallback={<Loader size="sm" />}>
-                        <FlightActions
-                          flight={flight}
-                          onEdit={(f: enhancedFlight) => {
-                            setEditFlight(f);
-                            setEditOpen(true);
-                          }}
-                          onViewDetails={(f: enhancedFlight) => {
-                            setDetailsFlightId(f.id);
-                            setDetailsOpen(true);
-                          }}
-                        />
-                      </Suspense>
                     </Table.Td>
                   </Table.Tr>
                 );
@@ -265,11 +272,22 @@ const FlightsList: React.FC = () => {
       <Modal
         opened={detailsOpen}
         onClose={() => setDetailsOpen(false)}
-        title={t("status.title")}
+        title={
+          detailsFlight
+            ? `${detailsFlight.departure_airport_iata} → ${detailsFlight.arrival_airport_iata}`
+            : ""
+        }
+        size="lg"
       >
         {detailsFlight && (
           <Suspense fallback={<Loader size="sm" />}>
-            <FlightDetailsPanel flight={detailsFlight} />
+            <FlightDetailsModal
+              flight={detailsFlight}
+              onEdit={(f) => {
+                setEditFlight(f);
+                setEditOpen(true);
+              }}
+            />
           </Suspense>
         )}
       </Modal>

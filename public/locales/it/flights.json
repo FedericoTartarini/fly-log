@@ -29,7 +29,7 @@
     "icon": "Icona",
     "from_to": "Da → A",
     "date_duration_distance": "Data, Durata & Distanza",
-    "actions": "Modifica"
+    "view_row_details": "Visualizza dettagli volo: {{from}} verso {{to}}"
   },
   "airline_label": "Compagnia:",
   "aircraft_label": "Aereo:",

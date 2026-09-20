@@ -6,7 +6,7 @@ vi.mock("../store", () => {
 });
 
 import React from "react";
-import { screen } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach, type Mock } from "vitest";
 import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
@@ -77,5 +77,27 @@ describe("FlightsList", () => {
     });
 
     expect(screen.getByText(/No flights to display for this selection/));
+  });
+
+  it("opens the flight details modal when a row is clicked", async () => {
+    const mockedUseFlightStore = useFlightStore as unknown as Mock;
+    mockedUseFlightStore.mockImplementation(
+      (selector: (state: StoreShape) => unknown) =>
+        selector({
+          filteredFlights: [enrichedFlight],
+        }),
+    );
+
+    render(<FlightsList />, {
+      wrapper: ({ children }: { children: React.ReactNode }) => (
+        <MemoryRouter>{children}</MemoryRouter>
+      ),
+    });
+
+    fireEvent.click(screen.getByTestId("flight-row-1"));
+
+    expect(
+      await screen.findByTestId("flight-details-edit-1"),
+    ).toBeInTheDocument();
   });
 });
