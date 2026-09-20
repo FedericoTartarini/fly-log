@@ -112,6 +112,7 @@
     "on_time": "On time",
     "delay_late": "+{{value}} min",
     "delay_early": "-{{value}} min",
+    "scheduled_time": "Scheduled {{value}}",
     "source": "Source: AeroDataBox"
   },
   "no_flights_card": {

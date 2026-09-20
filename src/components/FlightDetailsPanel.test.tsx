@@ -67,7 +67,7 @@ describe("FlightDetailsPanel", () => {
     expect(screen.getByText("Source: AeroDataBox")).toBeInTheDocument();
   });
 
-  it("renders check-in desk and full airport names when present", () => {
+  it("renders check-in desk and the airport's own name, not its city", () => {
     render(
       <FlightDetailsPanel
         flight={{
@@ -76,13 +76,10 @@ describe("FlightDetailsPanel", () => {
             status: "Expected",
             departure: {
               checkInDesk: "12-18",
-              airport: { name: "Sydney Airport", municipalityName: "Sydney" },
+              airport: { name: "Sydney Airport", shortName: "Sydney Intl" },
             },
             arrival: {
-              airport: {
-                name: "Changi Airport",
-                municipalityName: "Singapore",
-              },
+              airport: { name: "Changi Airport" },
             },
           },
           flight_status_checked_at: "2026-09-20T12:00:00.000Z",
@@ -91,10 +88,37 @@ describe("FlightDetailsPanel", () => {
     );
 
     expect(screen.getByText(/Check-in desk: 12-18/)).toBeInTheDocument();
-    expect(screen.getByText(/Sydney Airport, Sydney/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Changi Airport, Singapore/),
-    ).toBeInTheDocument();
+    // Prefers shortName over name when both are present.
+    expect(screen.getByText("Sydney Intl")).toBeInTheDocument();
+    expect(screen.getByText("Changi Airport")).toBeInTheDocument();
+  });
+
+  it("shows the scheduled time separately when it differs from the current estimate", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:44Z",
+                local: "2026-09-20 14:44+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("Scheduled 14:30")).toBeInTheDocument();
+    expect(screen.getByText("14:44")).toBeInTheDocument();
+    expect(screen.getByText("+14 min")).toBeInTheDocument();
   });
 
   it("shows a green on-time badge when scheduled and revised times match", () => {

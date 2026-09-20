@@ -1,13 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import {
-  Button,
-  Divider,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Tooltip,
-} from "@mantine/core";
+import { Button, Group, Modal, Stack, Text, Tooltip } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { notifications } from "@mantine/notifications";
@@ -136,11 +128,7 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
     <Stack gap="md">
       <FlightCard flight={flight} title={flightNumberLabel} />
 
-      <Divider />
-
       <FlightDetailsPanel flight={flight} />
-
-      <Divider />
 
       <Group justify="flex-end">
         <Button
