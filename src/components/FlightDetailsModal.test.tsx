@@ -24,8 +24,7 @@ vi.mock("../utils/flightStatusService", async (importOriginal) => {
 
 const deleteFlightForUserMock = vi.fn();
 vi.mock("../utils/flightService", () => ({
-  deleteFlightForUser: (...args: unknown[]) =>
-    deleteFlightForUserMock(...args),
+  deleteFlightForUser: (...args: unknown[]) => deleteFlightForUserMock(...args),
 }));
 
 const baseFlight: enhancedFlight = {
@@ -56,10 +55,16 @@ describe("FlightDetailsModal", () => {
     deleteFlightForUserMock.mockReset();
   });
 
-  it("renders the flight's route and flight number", () => {
+  it("renders the saved flight route without repeating its identity", () => {
     render(<FlightDetailsModal flight={baseFlight} onEdit={vi.fn()} />);
-    expect(screen.getByText("SYD → SIN")).toBeInTheDocument();
-    expect(screen.getByText("QF1")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, element) =>
+          element?.tagName === "P" &&
+          element.textContent === "SYD (SYD) → SIN (SIN)",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("QF1")).not.toBeInTheDocument();
   });
 
   it("calls onEdit with the flight when Edit is clicked", () => {

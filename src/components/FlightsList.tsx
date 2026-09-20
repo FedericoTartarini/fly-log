@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import {
   Image,
+  Avatar,
+  Group,
   Table,
   Text,
   ActionIcon,
@@ -19,6 +21,38 @@ import type { FlightStoreState } from "../store";
 
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
 const FlightDetailsModal = lazy(() => import("./FlightDetailsModal"));
+
+const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
+  const flightNumber = flight.flight_number
+    ? `${flight.airline_iata ?? ""}${flight.flight_number}`
+    : null;
+  const identity =
+    flightNumber ??
+    flight.airline_name ??
+    `${flight.departure_airport_iata} → ${flight.arrival_airport_iata}`;
+
+  return (
+    <Group gap="xs" wrap="nowrap">
+      <Avatar
+        src={
+          flight.airline_icon_path
+            ? `/logos/${flight.airline_icon_path}`
+            : undefined
+        }
+        alt=""
+        color="accent"
+        radius="xl"
+        size="sm"
+      >
+        <IconPlaneInflight size={16} />
+      </Avatar>
+      <Text fw={600} size="lg">
+        {identity}
+        {flightNumber && flight.airline_name ? ` · ${flight.airline_name}` : ""}
+      </Text>
+    </Group>
+  );
+};
 
 /**
  * Renders a paginated list of flights in a table.
@@ -203,7 +237,9 @@ const FlightsList: React.FC = () => {
                   <Table.Tr
                     key={flight.id}
                     onClick={() => openDetails(flight)}
-                    onKeyDown={(e: React.KeyboardEvent<HTMLTableRowElement>) => {
+                    onKeyDown={(
+                      e: React.KeyboardEvent<HTMLTableRowElement>,
+                    ) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         openDetails(flight);
@@ -279,12 +315,9 @@ const FlightsList: React.FC = () => {
       <Modal
         opened={detailsOpen}
         onClose={() => setDetailsOpen(false)}
-        title={
-          detailsFlight
-            ? `${detailsFlight.departure_airport_iata} → ${detailsFlight.arrival_airport_iata}`
-            : ""
-        }
+        title={detailsFlight ? <FlightModalTitle flight={detailsFlight} /> : ""}
         size="lg"
+        zIndex={600}
       >
         {detailsFlight && (
           <Suspense fallback={<Loader size="sm" />}>

@@ -1,5 +1,13 @@
 import React from "react";
-import { Badge, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+  Badge,
+  Card,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
@@ -10,6 +18,7 @@ interface FlightDetailsPanelProps {
 type FlightLegTime = {
   scheduledTime?: { utc?: string; local?: string };
   revisedTime?: { utc?: string; local?: string };
+  actualTime?: { utc?: string; local?: string };
   terminal?: string;
   gate?: string;
   checkInDesk?: string;
@@ -32,9 +41,12 @@ const parseUtc = (value: unknown): Date | null => {
 // the original schedule and the revised one. An exact match returns 0 (not
 // null) so "on time" renders as its own badge rather than silently showing
 // nothing; null means the comparison isn't possible (one side missing).
-const getDelayMinutes = (leg: FlightLegTime | undefined): number | null => {
-  const scheduled = parseUtc(leg?.scheduledTime?.utc);
-  const revised = parseUtc(leg?.revisedTime?.utc);
+const getDelayMinutes = (
+  scheduledTime: FlightLegTime["scheduledTime"] | undefined,
+  revisedTime: FlightLegTime["revisedTime"] | undefined,
+): number | null => {
+  const scheduled = parseUtc(scheduledTime?.utc);
+  const revised = parseUtc(revisedTime?.utc);
   if (!scheduled || !revised) return null;
   return Math.round((revised.getTime() - scheduled.getTime()) / 60000);
 };
@@ -48,15 +60,16 @@ const extractLocalTime = (value: string | undefined): string | null => {
   return match?.[1] ?? null;
 };
 
-// Airport name only, not the city: the flight's own logged route (shown in
-// FlightCard above) already names the city, in our own airports reference.
-// AeroDataBox's city name sometimes disagrees with ours (e.g. Kuala Lumpur
-// airport: "Sepang" in our data, "Kuala Lumpur" in theirs) - repeating a
-// second, possibly-different city name here would confuse more than help.
-const formatAirport = (leg: FlightLegTime | undefined): string | null =>
-  leg?.airport?.shortName ?? leg?.airport?.name ?? null;
-
 type DelayTier = "green" | "yellow" | "red";
+type StatusColor = "blue" | "green" | "red" | "yellow";
+
+const getStatusColor = (status: string | undefined): StatusColor => {
+  if (/landed|arrived/i.test(status ?? "")) return "green";
+  if (/cancelled|diverted/i.test(status ?? "")) return "red";
+  if (/expected|scheduled/i.test(status ?? "")) return "yellow";
+  return "blue";
+};
+
 const getDelayColor = (delay: number): DelayTier => {
   if (delay <= 0) return "green";
   if (delay < 15) return "yellow";
@@ -69,18 +82,21 @@ const LegBlock: React.FC<{
   checkInDeskLabel?: (value: string) => string;
 }> = ({ heading, leg, checkInDeskLabel }) => {
   const { t } = useTranslation(["flights"]);
-  const airport = formatAirport(leg);
   const scheduled = extractLocalTime(leg?.scheduledTime?.local);
   const revised = extractLocalTime(leg?.revisedTime?.local);
-  const delay = getDelayMinutes(leg);
-  const primaryTime = revised ?? scheduled;
+  const actual = extractLocalTime(leg?.actualTime?.local);
+  const delay = getDelayMinutes(
+    leg?.scheduledTime,
+    leg?.actualTime ?? leg?.revisedTime,
+  );
+  const primaryTime = actual ?? revised ?? scheduled;
   // Only worth a separate line when the two actually differ - a 0-minute
   // delay means they're the same instant, just spelled out twice.
   const showScheduledSeparately =
-    delay !== null && delay !== 0 && scheduled && scheduled !== revised;
+    delay !== null && delay !== 0 && scheduled && scheduled !== primaryTime;
   const hasGateInfo = Boolean(leg?.gate || leg?.terminal);
 
-  if (!airport && !primaryTime && !hasGateInfo && !leg?.checkInDesk) {
+  if (!primaryTime && !hasGateInfo && !leg?.checkInDesk) {
     return null;
   }
 
@@ -89,7 +105,6 @@ const LegBlock: React.FC<{
       <Text size="xs" fw={700} tt="uppercase" c="dimmed">
         {heading}
       </Text>
-      {airport && <Text size="sm">{airport}</Text>}
       {showScheduledSeparately && (
         <Text size="xs" c="dimmed">
           {t("status.scheduled_time", { value: scheduled })}
@@ -130,9 +145,7 @@ const LegBlock: React.FC<{
   );
 };
 
-const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
-  flight,
-}) => {
+const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
   const { t } = useTranslation(["flights"]);
   const statusData = flight.flight_status as FlightLeg | null | undefined;
 
@@ -149,9 +162,21 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack gap="sm">
-        <Group gap="xs">
-          <Text fw={500}>{t("status.status_label")}</Text>
-          <Badge variant="light">
+        <Group justify="space-between" align="flex-start">
+          <Stack gap={0}>
+            <Title order={4}>{t("status.title")}</Title>
+            {flight.flight_status_checked_at && (
+              <Text size="xs" c="dimmed">
+                {t("status.checked_at", {
+                  value: new Date(
+                    flight.flight_status_checked_at,
+                  ).toLocaleString(),
+                  interpolation: { escapeValue: false },
+                })}
+              </Text>
+            )}
+          </Stack>
+          <Badge color={getStatusColor(statusData.status)} variant="light">
             {statusData.status ?? t("status.unknown")}
           </Badge>
         </Group>
@@ -160,9 +185,7 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
           <LegBlock
             heading={t("status.departure_heading")}
             leg={statusData.departure}
-            checkInDeskLabel={(value) =>
-              t("status.check_in_desk", { value })
-            }
+            checkInDeskLabel={(value) => t("status.check_in_desk", { value })}
           />
           <LegBlock
             heading={t("status.arrival_heading")}
@@ -181,14 +204,6 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
 
         {flight.flight_status_checked_at && (
           <Stack gap={0}>
-            <Text size="xs" c="dimmed">
-              {t("status.checked_at", {
-                value: new Date(
-                  flight.flight_status_checked_at,
-                ).toLocaleString(),
-                interpolation: { escapeValue: false },
-              })}
-            </Text>
             <Text size="xs" c="dimmed">
               {t("status.source")}
             </Text>

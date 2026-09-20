@@ -120,13 +120,9 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
   };
 
   const checkButtonDisabled = !cooldown.allowed || isChecking;
-  const flightNumberLabel = flight.flight_number
-    ? `${flight.airline_iata ?? ""}${flight.flight_number}`
-    : (flight.airline_name ?? "");
-
   return (
     <Stack gap="md">
-      <FlightCard flight={flight} title={flightNumberLabel} />
+      <FlightCard flight={flight} showAirline={false} />
 
       <FlightDetailsPanel flight={flight} />
 

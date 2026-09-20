@@ -30,9 +30,7 @@ const baseFlight: enhancedFlight = {
 describe("FlightDetailsPanel", () => {
   it("shows a placeholder message when no status has been checked", () => {
     render(<FlightDetailsPanel flight={baseFlight} />);
-    expect(
-      screen.getByText("No live status checked yet."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("No live status checked yet.")).toBeInTheDocument();
   });
 
   it("renders stored status data", () => {
@@ -67,7 +65,7 @@ describe("FlightDetailsPanel", () => {
     expect(screen.getByText("Source: AeroDataBox")).toBeInTheDocument();
   });
 
-  it("renders check-in desk and the airport's own name, not its city", () => {
+  it("renders check-in desk without repeating the route's airport names", () => {
     render(
       <FlightDetailsPanel
         flight={{
@@ -88,9 +86,8 @@ describe("FlightDetailsPanel", () => {
     );
 
     expect(screen.getByText(/Check-in desk: 12-18/)).toBeInTheDocument();
-    // Prefers shortName over name when both are present.
-    expect(screen.getByText("Sydney Intl")).toBeInTheDocument();
-    expect(screen.getByText("Changi Airport")).toBeInTheDocument();
+    expect(screen.queryByText("Sydney Intl")).not.toBeInTheDocument();
+    expect(screen.queryByText("Changi Airport")).not.toBeInTheDocument();
   });
 
   it("shows the scheduled time separately when it differs from the current estimate", () => {
@@ -172,6 +169,34 @@ describe("FlightDetailsPanel", () => {
     );
 
     expect(screen.getByText("-12 min")).toBeInTheDocument();
+  });
+
+  it("uses the actual time for a landed flight when the API supplies it", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Landed",
+            arrival: {
+              scheduledTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+              actualTime: {
+                utc: "2026-09-20 05:12Z",
+                local: "2026-09-20 15:12+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("Scheduled 15:00")).toBeInTheDocument();
+    expect(screen.getByText("15:12")).toBeInTheDocument();
+    expect(screen.getByText("+12 min")).toBeInTheDocument();
   });
 
   it("shows a red badge for a long delay", () => {

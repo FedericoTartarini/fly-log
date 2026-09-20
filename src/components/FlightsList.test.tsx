@@ -99,5 +99,6 @@ describe("FlightsList", () => {
     expect(
       await screen.findByTestId("flight-details-edit-1"),
     ).toBeInTheDocument();
+    expect(await screen.findByText("DL3")).toBeInTheDocument();
   });
 });
