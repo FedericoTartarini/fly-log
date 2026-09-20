@@ -56,6 +56,17 @@ npm install
 npm run dev
 ```
 
+Vite alone does not serve the Netlify functions in `netlify/functions/`, so
+`/.netlify/functions/*` returns 404 and the flight status checker cannot work.
+To exercise a function locally, run the app and the function server together
+on one origin:
+
+```
+npm run dev:netlify
+```
+
+This needs `RAPIDAPI_AERODATABOX_KEY` in `.env.local` (see `.env.example`).
+
 ## Data flow (flight list)
 
 1. Auth state is observed in `src/store.ts` and `src/context/AuthContext.jsx`.
