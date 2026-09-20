@@ -108,9 +108,10 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
         color: "green",
       });
     } catch (err) {
+      console.error("Deleting flight failed", err);
       notifications.show({
         title: t("actions.delete_error_title"),
-        message: err instanceof Error ? err.message : String(err),
+        message: t("actions.delete_error_message"),
         color: "red",
       });
     } finally {
@@ -187,6 +188,7 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
         withCloseButton={!isDeleting}
         title={t("actions.confirm_delete_title")}
         centered
+        zIndex={700}
       >
         <Text>{t("actions.confirm_delete_message")}</Text>
         <Group justify="flex-end" mt="md">

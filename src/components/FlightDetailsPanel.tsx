@@ -22,7 +22,6 @@ type FlightLegTime = {
   terminal?: string;
   gate?: string;
   checkInDesk?: string;
-  airport?: { name?: string; shortName?: string };
 };
 type FlightLeg = {
   status?: string;

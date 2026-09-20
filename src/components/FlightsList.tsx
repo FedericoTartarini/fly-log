@@ -11,6 +11,7 @@ import {
   Pagination,
   Loader,
   Stack,
+  ThemeIcon,
 } from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
@@ -123,14 +124,14 @@ const FlightsList: React.FC = () => {
   };
 
   /**
-   * Returns the airline icon or a fallback icon.
+   * Returns the airline logo or a non-interactive fallback icon.
    * @param {enhancedFlight} flight
    * @returns {JSX.Element}
    */
   const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
     if (failedImages.has(flight.id)) {
       return (
-        <ActionIcon
+        <ThemeIcon
           aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
           color="gray"
         >
@@ -138,7 +139,7 @@ const FlightsList: React.FC = () => {
             style={{ width: "70%", height: "70%" }}
             stroke={1.5}
           />
-        </ActionIcon>
+        </ThemeIcon>
       );
     }
 
@@ -146,7 +147,7 @@ const FlightsList: React.FC = () => {
 
     if (!sourcePath) {
       return (
-        <ActionIcon
+        <ThemeIcon
           aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
           color="gray"
         >
@@ -154,7 +155,7 @@ const FlightsList: React.FC = () => {
             style={{ width: "70%", height: "70%" }}
             stroke={1.5}
           />
-        </ActionIcon>
+        </ThemeIcon>
       );
     }
 
@@ -164,8 +165,8 @@ const FlightsList: React.FC = () => {
     return (
       <Image
         src={imageUrl}
-        alt={`${flight.airline_name ?? ""} icon`}
-        h={50}
+        alt=""
+        h={40}
         w="auto"
         fit="contain"
         loading="lazy"
@@ -236,23 +237,20 @@ const FlightsList: React.FC = () => {
                 return (
                   <Table.Tr
                     key={flight.id}
-                    onClick={() => openDetails(flight)}
-                    onKeyDown={(
-                      e: React.KeyboardEvent<HTMLTableRowElement>,
-                    ) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        openDetails(flight);
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={rowLabel}
-                    style={{ cursor: "pointer" }}
                     data-testid={`flight-row-${flight.id}`}
                   >
                     <Table.Td p={"0.5rem"}>
-                      <Center>{getAirlineIcon(flight)}</Center>
+                      <Center>
+                        <ActionIcon
+                          aria-label={rowLabel}
+                          variant="subtle"
+                          size={48}
+                          onClick={() => openDetails(flight)}
+                          data-testid={`flight-details-open-${flight.id}`}
+                        >
+                          {getAirlineIcon(flight)}
+                        </ActionIcon>
+                      </Center>
                     </Table.Td>
                     <Table.Td>
                       <Text size="sm">

@@ -86,6 +86,7 @@
     "deleted_title": "Eliminato",
     "deleted_message": "Volo eliminato",
     "delete_error_title": "Errore durante l'eliminazione",
+    "delete_error_message": "Non è stato possibile eliminare il volo. Riprova.",
     "not_signed_in": "Devi essere autenticato per eseguire questa azione"
   },
   "status": {

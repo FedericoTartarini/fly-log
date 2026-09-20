@@ -94,7 +94,12 @@ describe("FlightsList", () => {
       ),
     });
 
-    fireEvent.click(screen.getByTestId("flight-row-1"));
+    expect(screen.getByTestId("flight-row-1")).not.toHaveAttribute("role");
+    expect(screen.getByTestId("flight-details-open-1")).toHaveAttribute(
+      "aria-label",
+      "View flight details: SFO to SEA",
+    );
+    fireEvent.click(screen.getByTestId("flight-details-open-1"));
 
     expect(
       await screen.findByTestId("flight-details-edit-1"),

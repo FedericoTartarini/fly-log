@@ -86,6 +86,7 @@
     "deleted_title": "Deleted",
     "deleted_message": "Flight deleted",
     "delete_error_title": "Error deleting flight",
+    "delete_error_message": "The flight could not be deleted. Try again.",
     "not_signed_in": "You must be signed in to perform this action"
   },
   "status": {
