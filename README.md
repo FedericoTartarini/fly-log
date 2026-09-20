@@ -66,6 +66,10 @@ Follow these instructions to get a local copy up and running.
     npm run dev
     ```
 
+    - To work on anything that calls a Netlify function (the flight status
+      checker), use `npm run dev:netlify` instead. Vite on its own does not
+      serve `netlify/functions/`, so those endpoints 404 under `npm run dev`.
+
 5.  **Build for production:**
     - This command bundles the app into the `dist` directory for deployment.
     ```bash

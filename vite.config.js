@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
@@ -127,5 +128,9 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./vitest.setup.mjs",
+    // .netlify/ holds netlify dev's bundled copies of our own function
+    // source and tests - without this, vitest's default include glob picks
+    // those generated duplicates up too and fails to parse them.
+    exclude: [...configDefaults.exclude, "**/.netlify/**"],
   },
 });

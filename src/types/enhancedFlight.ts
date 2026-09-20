@@ -27,4 +27,8 @@ export interface enhancedFlight {
   airline_name: string | null;
   airline_icon_path: string | null;
   aircraft_type_name?: string | null;
+  /** Raw AeroDataBox response for the matching leg, or null if never checked. */
+  flight_status?: Record<string, unknown> | null;
+  /** ISO timestamp of the last successful status check. */
+  flight_status_checked_at?: string | null;
 }
