@@ -1,26 +1,9 @@
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { screen } from "@testing-library/react";
 import { render } from "../../test-utils";
 import FlightDetailsPanel from "./FlightDetailsPanel";
 import type { enhancedFlight } from "../types/enhancedFlight";
-
-vi.mock("../context/AuthContext", () => ({
-  useAuth: () => ({ user: { uid: "uid-1" } }),
-}));
-
-const checkFlightStatusMock = vi.fn();
-// FlightStatusError is re-exported unmocked: the component uses it in an
-// `instanceof` check to pick the user-facing message, so the class the test
-// throws must be the same one the component imports.
-vi.mock("../utils/flightStatusService", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../utils/flightStatusService")>();
-  return {
-    FlightStatusError: actual.FlightStatusError,
-    checkFlightStatus: (...args: unknown[]) => checkFlightStatusMock(...args),
-  };
-});
 
 const baseFlight: enhancedFlight = {
   id: "1",
@@ -45,21 +28,11 @@ const baseFlight: enhancedFlight = {
 };
 
 describe("FlightDetailsPanel", () => {
-  beforeEach(() => {
-    checkFlightStatusMock.mockReset();
-  });
-
-  it("shows the check button and calls checkFlightStatus on click", async () => {
-    checkFlightStatusMock.mockResolvedValue({ status: "Expected" });
+  it("shows a placeholder message when no status has been checked", () => {
     render(<FlightDetailsPanel flight={baseFlight} />);
-
-    const button = screen.getByTestId("flight-status-check-1");
-    expect(button).not.toBeDisabled();
-    fireEvent.click(button);
-
-    await waitFor(() =>
-      expect(checkFlightStatusMock).toHaveBeenCalledWith("uid-1", baseFlight),
-    );
+    expect(
+      screen.getByText("No live status checked yet."),
+    ).toBeInTheDocument();
   });
 
   it("renders stored status data", () => {
@@ -81,48 +54,33 @@ describe("FlightDetailsPanel", () => {
     expect(document.body.textContent).not.toContain("&#x2F;");
   });
 
-  it("disables the check button while the cooldown is in effect", () => {
+  it("renders check-in desk and full airport names when present", () => {
     render(
       <FlightDetailsPanel
         flight={{
           ...baseFlight,
-          flight_status: { status: "Expected" },
-          flight_status_checked_at: new Date().toISOString(),
+          flight_status: {
+            status: "Expected",
+            departure: {
+              checkInDesk: "12-18",
+              airport: { name: "Sydney Airport", municipalityName: "Sydney" },
+            },
+            arrival: {
+              airport: {
+                name: "Changi Airport",
+                municipalityName: "Singapore",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
         }}
       />,
     );
 
-    const button = screen.getByTestId("flight-status-check-1");
-    expect(button).toBeDisabled();
-  });
-
-  it("notifies with a translated message on failure, not the raw error text", async () => {
-    const { FlightStatusError } = await import("../utils/flightStatusService");
-    const { notifications } = await import("@mantine/notifications");
-    const showSpy = vi
-      .spyOn(notifications, "show")
-      .mockImplementation(() => "");
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    checkFlightStatusMock.mockRejectedValue(
-      new FlightStatusError("No matching flight found", 404),
-    );
-    render(<FlightDetailsPanel flight={baseFlight} />);
-
-    fireEvent.click(screen.getByTestId("flight-status-check-1"));
-
-    await waitFor(() => expect(showSpy).toHaveBeenCalled());
-    expect(showSpy.mock.calls[0][0]).toMatchObject({
-      color: "red",
-      message: "No matching flight was found for this date",
-    });
-  });
-
-  it("hides the check button when the flight has no flight number", () => {
-    render(
-      <FlightDetailsPanel flight={{ ...baseFlight, flight_number: null }} />,
-    );
+    expect(screen.getByText(/Check-in desk: 12-18/)).toBeInTheDocument();
+    expect(screen.getByText(/Sydney Airport, Sydney/)).toBeInTheDocument();
     expect(
-      screen.queryByTestId("flight-status-check-1"),
-    ).not.toBeInTheDocument();
+      screen.getByText(/Changi Airport, Singapore/),
+    ).toBeInTheDocument();
   });
 });

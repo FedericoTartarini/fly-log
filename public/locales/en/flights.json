@@ -110,7 +110,10 @@
     "arrival_delay": "Arrival delay: {{value}} min",
     "departure_gate": "Departure gate {{gate}}, terminal {{terminal}}",
     "arrival_gate": "Arrival gate {{gate}}, terminal {{terminal}}",
-    "aircraft": "Aircraft: {{model}} ({{reg}})"
+    "aircraft": "Aircraft: {{model}} ({{reg}})",
+    "check_in_desk": "Check-in desk: {{value}}",
+    "departure_airport": "Departing from {{value}}",
+    "arrival_airport": "Arriving at {{value}}"
   },
   "no_flights_card": {
     "title": "Welcome",
