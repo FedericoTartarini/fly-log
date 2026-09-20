@@ -54,6 +54,19 @@ describe("FlightDetailsPanel", () => {
     expect(document.body.textContent).not.toContain("&#x2F;");
   });
 
+  it("shows the source attribution once a check has happened", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: { status: "Landed" },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+    expect(screen.getByText("Source: AeroDataBox")).toBeInTheDocument();
+  });
+
   it("renders check-in desk and full airport names when present", () => {
     render(
       <FlightDetailsPanel
@@ -82,5 +95,84 @@ describe("FlightDetailsPanel", () => {
     expect(
       screen.getByText(/Changi Airport, Singapore/),
     ).toBeInTheDocument();
+  });
+
+  it("shows a green on-time badge when scheduled and revised times match", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("14:30")).toBeInTheDocument();
+    expect(screen.getByText("On time")).toBeInTheDocument();
+  });
+
+  it("shows a green early badge for a negative delay", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Arrived",
+            arrival: {
+              scheduledTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:48Z",
+                local: "2026-09-20 14:48+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("-12 min")).toBeInTheDocument();
+  });
+
+  it("shows a red badge for a long delay", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("+30 min")).toBeInTheDocument();
   });
 });

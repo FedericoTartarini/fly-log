@@ -104,14 +104,15 @@
     "error_unauthorized": "L'app non è riuscita a verificare la propria identità. Ricarica la pagina e riprova.",
     "error_quota": "Il servizio di stato dei voli non è momentaneamente disponibile. Riprova più tardi.",
     "error_generic": "Si è verificato un errore durante la verifica dello stato. Riprova più tardi.",
-    "departure_delay": "Ritardo in partenza: {{value}} min",
-    "arrival_delay": "Ritardo in arrivo: {{value}} min",
-    "departure_gate": "Gate partenza {{gate}}, terminal {{terminal}}",
-    "arrival_gate": "Gate arrivo {{gate}}, terminal {{terminal}}",
     "aircraft": "Aereo: {{model}} ({{reg}})",
     "check_in_desk": "Banco check-in: {{value}}",
-    "departure_airport": "Partenza da {{value}}",
-    "arrival_airport": "Arrivo a {{value}}"
+    "departure_heading": "Partenza",
+    "arrival_heading": "Arrivo",
+    "gate_terminal": "Gate {{gate}}, terminal {{terminal}}",
+    "on_time": "In orario",
+    "delay_late": "+{{value}} min",
+    "delay_early": "-{{value}} min",
+    "source": "Fonte: AeroDataBox"
   },
   "no_flights_card": {
     "title": "Benvenuto",

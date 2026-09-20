@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Group, Stack, Text } from "@mantine/core";
+import { Badge, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
@@ -8,8 +8,8 @@ interface FlightDetailsPanelProps {
 }
 
 type FlightLegTime = {
-  scheduledTime?: { utc?: string };
-  revisedTime?: { utc?: string };
+  scheduledTime?: { utc?: string; local?: string };
+  revisedTime?: { utc?: string; local?: string };
   terminal?: string;
   gate?: string;
   checkInDesk?: string;
@@ -29,20 +29,91 @@ const parseUtc = (value: unknown): Date | null => {
 };
 
 // AeroDataBox doesn't return a delay field directly - it's the gap between
-// the original schedule and the revised one.
+// the original schedule and the revised one. Unlike the pre-redesign version,
+// an exact match returns 0 (not null) so "on time" renders as its own badge
+// rather than silently showing nothing.
 const getDelayMinutes = (leg: FlightLegTime | undefined): number | null => {
   const scheduled = parseUtc(leg?.scheduledTime?.utc);
   const revised = parseUtc(leg?.revisedTime?.utc);
   if (!scheduled || !revised) return null;
-  const diff = Math.round((revised.getTime() - scheduled.getTime()) / 60000);
-  return diff === 0 ? null : diff;
+  return Math.round((revised.getTime() - scheduled.getTime()) / 60000);
 };
+
+// AeroDataBox's local time strings already carry the airport's own UTC
+// offset (e.g. "2026-07-01 11:51+01:00") - pulling the HH:mm out directly
+// avoids re-interpreting it in the browser's timezone.
+const extractLocalTime = (value: string | undefined): string | null => {
+  if (!value) return null;
+  const match = value.match(/\d{4}-\d{2}-\d{2} (\d{2}:\d{2})/);
+  return match?.[1] ?? null;
+};
+
+const bestLocalTime = (leg: FlightLegTime | undefined): string | null =>
+  extractLocalTime(leg?.revisedTime?.local) ??
+  extractLocalTime(leg?.scheduledTime?.local);
 
 const formatAirport = (leg: FlightLegTime | undefined): string | null => {
   const name = leg?.airport?.name;
   const city = leg?.airport?.municipalityName;
   if (name && city) return `${name}, ${city}`;
   return name ?? city ?? null;
+};
+
+type DelayTier = "green" | "yellow" | "red";
+const getDelayColor = (delay: number): DelayTier => {
+  if (delay <= 0) return "green";
+  if (delay < 15) return "yellow";
+  return "red";
+};
+
+const LegBlock: React.FC<{
+  heading: string;
+  leg: FlightLegTime | undefined;
+  checkInDeskLabel?: (value: string) => string;
+}> = ({ heading, leg, checkInDeskLabel }) => {
+  const { t } = useTranslation(["flights"]);
+  const airport = formatAirport(leg);
+  const time = bestLocalTime(leg);
+  const delay = getDelayMinutes(leg);
+  const hasGateInfo = Boolean(leg?.gate || leg?.terminal);
+
+  if (!airport && !time && !hasGateInfo && !leg?.checkInDesk) return null;
+
+  return (
+    <Stack gap={4}>
+      <Text size="xs" fw={700} tt="uppercase" c="dimmed">
+        {heading}
+      </Text>
+      {airport && <Text size="sm">{airport}</Text>}
+      {(time || delay !== null) && (
+        <Group gap="xs">
+          {time && <Text size="sm">{time}</Text>}
+          {delay !== null && (
+            <Badge color={getDelayColor(delay)} variant="light" size="sm">
+              {delay === 0
+                ? t("status.on_time")
+                : delay > 0
+                  ? t("status.delay_late", { value: delay })
+                  : t("status.delay_early", { value: Math.abs(delay) })}
+            </Badge>
+          )}
+        </Group>
+      )}
+      {hasGateInfo && (
+        <Text size="sm" c="dimmed">
+          {t("status.gate_terminal", {
+            gate: leg?.gate ?? "-",
+            terminal: leg?.terminal ?? "-",
+          })}
+        </Text>
+      )}
+      {leg?.checkInDesk && checkInDeskLabel && (
+        <Text size="sm" c="dimmed">
+          {checkInDeskLabel(leg.checkInDesk)}
+        </Text>
+      )}
+    </Stack>
+  );
 };
 
 const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
@@ -59,62 +130,29 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
     );
   }
 
-  const departureDelay = getDelayMinutes(statusData.departure);
-  const arrivalDelay = getDelayMinutes(statusData.arrival);
-  const departureAirport = formatAirport(statusData.departure);
-  const arrivalAirport = formatAirport(statusData.arrival);
-
   return (
-    <Stack gap="xs">
+    <Stack gap="sm">
       <Group gap="xs">
         <Text fw={500}>{t("status.status_label")}</Text>
         <Badge variant="light">
           {statusData.status ?? t("status.unknown")}
         </Badge>
       </Group>
-      {departureDelay !== null && (
-        <Text size="sm">
-          {t("status.departure_delay", { value: departureDelay })}
-        </Text>
-      )}
-      {arrivalDelay !== null && (
-        <Text size="sm">
-          {t("status.arrival_delay", { value: arrivalDelay })}
-        </Text>
-      )}
-      {departureAirport && (
-        <Text size="sm">
-          {t("status.departure_airport", { value: departureAirport })}
-        </Text>
-      )}
-      {(statusData.departure?.gate || statusData.departure?.terminal) && (
-        <Text size="sm">
-          {t("status.departure_gate", {
-            gate: statusData.departure?.gate ?? "-",
-            terminal: statusData.departure?.terminal ?? "-",
-          })}
-        </Text>
-      )}
-      {statusData.departure?.checkInDesk && (
-        <Text size="sm">
-          {t("status.check_in_desk", {
-            value: statusData.departure.checkInDesk,
-          })}
-        </Text>
-      )}
-      {arrivalAirport && (
-        <Text size="sm">
-          {t("status.arrival_airport", { value: arrivalAirport })}
-        </Text>
-      )}
-      {(statusData.arrival?.gate || statusData.arrival?.terminal) && (
-        <Text size="sm">
-          {t("status.arrival_gate", {
-            gate: statusData.arrival?.gate ?? "-",
-            terminal: statusData.arrival?.terminal ?? "-",
-          })}
-        </Text>
-      )}
+
+      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+        <LegBlock
+          heading={t("status.departure_heading")}
+          leg={statusData.departure}
+          checkInDeskLabel={(value) =>
+            t("status.check_in_desk", { value })
+          }
+        />
+        <LegBlock
+          heading={t("status.arrival_heading")}
+          leg={statusData.arrival}
+        />
+      </SimpleGrid>
+
       {(statusData.aircraft?.model || statusData.aircraft?.reg) && (
         <Text size="sm">
           {t("status.aircraft", {
@@ -123,15 +161,21 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({
           })}
         </Text>
       )}
+
       {flight.flight_status_checked_at && (
-        <Text size="xs" c="dimmed">
-          {t("status.checked_at", {
-            value: new Date(
-              flight.flight_status_checked_at,
-            ).toLocaleString(),
-            interpolation: { escapeValue: false },
-          })}
-        </Text>
+        <Stack gap={0}>
+          <Text size="xs" c="dimmed">
+            {t("status.checked_at", {
+              value: new Date(
+                flight.flight_status_checked_at,
+              ).toLocaleString(),
+              interpolation: { escapeValue: false },
+            })}
+          </Text>
+          <Text size="xs" c="dimmed">
+            {t("status.source")}
+          </Text>
+        </Stack>
       )}
     </Stack>
   );

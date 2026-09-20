@@ -104,14 +104,15 @@
     "error_unauthorized": "This app could not verify itself. Reload the page and try again.",
     "error_quota": "The flight status service is temporarily unavailable. Try again later.",
     "error_generic": "Something went wrong while checking the status. Try again later.",
-    "departure_delay": "Departure delay: {{value}} min",
-    "arrival_delay": "Arrival delay: {{value}} min",
-    "departure_gate": "Departure gate {{gate}}, terminal {{terminal}}",
-    "arrival_gate": "Arrival gate {{gate}}, terminal {{terminal}}",
     "aircraft": "Aircraft: {{model}} ({{reg}})",
     "check_in_desk": "Check-in desk: {{value}}",
-    "departure_airport": "Departing from {{value}}",
-    "arrival_airport": "Arriving at {{value}}"
+    "departure_heading": "Departure",
+    "arrival_heading": "Arrival",
+    "gate_terminal": "Gate {{gate}}, terminal {{terminal}}",
+    "on_time": "On time",
+    "delay_late": "+{{value}} min",
+    "delay_early": "-{{value}} min",
+    "source": "Source: AeroDataBox"
   },
   "no_flights_card": {
     "title": "Welcome",
