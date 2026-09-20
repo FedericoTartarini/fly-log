@@ -149,13 +149,15 @@ const FlightsList: React.FC = () => {
         </Text>
       ) : (
         <>
-          <Table striped highlightOnHover withTableBorder>
+          <Table striped highlightOnHover withTableBorder layout="fixed">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>
+                <Table.Th style={{ width: "4rem" }}>
                   <Center>{t("table.icon")}</Center>
                 </Table.Th>
-                <Table.Th>{t("table.from_to")}</Table.Th>
+                <Table.Th style={{ width: "38%" }}>
+                  {t("table.from_to")}
+                </Table.Th>
                 <Table.Th>{t("table.date_duration_distance")}</Table.Th>
               </Table.Tr>
             </Table.Thead>
