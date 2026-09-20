@@ -3,7 +3,9 @@ import type { FirebaseApp } from "firebase/app";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
+  getToken as getAppCheckTokenFromSdk,
 } from "firebase/app-check";
+import type { AppCheck } from "firebase/app-check";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -80,20 +82,24 @@ if (firebaseConfig.apiKey) {
 
 export { auth, firestore };
 
-// App Check is only needed by Firebase AI Logic (Gemini), see flightAiParser.ts —
-// Firestore and Auth do not enforce it, and firestore.rules never reads
-// request.app. It used to run at module load, which put a third-party
-// reCAPTCHA script and a token mint on the critical path of every launch for
-// the sake of one optional feature. Call this before the first Gemini request
-// instead; repeat calls reuse the same initialization.
-let appCheckReady: Promise<void> | null = null;
+// App Check is needed by Firebase AI Logic (Gemini), see flightAiParser.ts, and
+// by the flight-status Netlify function, which verifies the token before it
+// spends AeroDataBox quota. Firestore and Auth do not enforce it, and
+// firestore.rules never reads request.app. It used to run at module load, which
+// put a third-party reCAPTCHA script and a token mint on the critical path of
+// every launch for the sake of one optional feature. Call this before the first
+// request that needs it instead; repeat calls reuse the same initialization.
+let appCheckReady: Promise<AppCheck | null> | null = null;
 
-export const ensureAppCheck = (): Promise<void> => {
+export const ensureAppCheck = (): Promise<AppCheck | null> => {
   if (!appCheckReady) {
     appCheckReady = (async () => {
-      if (!app) return;
+      if (!app) return null;
 
       // In dev, use the debug token instead of a real reCAPTCHA challenge.
+      // Firebase exchanges a registered debug token for a genuine signed App
+      // Check token, so the server verifies dev and production identically -
+      // there is no dev-only bypass anywhere.
       if (isDevMode()) {
         // @ts-expect-error - documented Firebase debug-token global
         self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
@@ -102,19 +108,36 @@ export const ensureAppCheck = (): Promise<void> => {
       if (!recaptchaSiteKey) {
         if (!isDevMode()) {
           console.warn(
-            "VITE_RECAPTCHA_SITE_KEY is not set: Firebase AI Logic requests will be rejected once App Check enforcement is on.",
+            "VITE_RECAPTCHA_SITE_KEY is not set: Firebase AI Logic and flight status requests will be rejected.",
           );
         }
-        return;
+        return null;
       }
 
-      initializeAppCheck(app, {
+      return initializeAppCheck(app, {
         provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
         isTokenAutoRefreshEnabled: true,
       });
     })();
   }
   return appCheckReady;
+};
+
+/**
+ * Mints an App Check token for a call to our own backend, or returns null if
+ * App Check is unavailable (not configured, or the attestation failed).
+ * Callers decide whether that is fatal.
+ */
+export const getAppCheckToken = async (): Promise<string | null> => {
+  try {
+    const appCheck = await ensureAppCheck();
+    if (!appCheck) return null;
+    const { token } = await getAppCheckTokenFromSdk(appCheck);
+    return token;
+  } catch (err) {
+    console.warn("Could not obtain an App Check token", err);
+    return null;
+  }
 };
 
 const googleProvider = new GoogleAuthProvider();

@@ -1,4 +1,5 @@
 import { parseToDate } from "./dateUtils";
+import { getAppCheckToken } from "../firebaseClient";
 import { updateFlightForUser } from "./flightService";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
@@ -59,10 +60,35 @@ export async function checkFlightStatus(
     throw new FlightStatusError("Flight has no valid departure date", 400);
   }
 
+  // The proxy verifies this before it spends any AeroDataBox quota, so a
+  // request without a token is certain to come back 401 - fail here instead of
+  // making it.
+  const appCheckToken = await getAppCheckToken();
+  if (!appCheckToken) {
+    throw new FlightStatusError("App Check token unavailable", 401);
+  }
+
   const flightNumber = `${flight.airline_iata}${flight.flight_number}`;
   const response = await fetch(
     `/.netlify/functions/flight-status?flightNumber=${encodeURIComponent(flightNumber)}&date=${encodeURIComponent(date)}`,
+    { headers: { "X-Firebase-AppCheck": appCheckToken } },
   );
+
+  // Our function always answers JSON: its own failures as {error}, anything
+  // from AeroDataBox forwarded verbatim. So a body that is not JSON means the
+  // request never reached the function - a dev server with no function mounted
+  // answers index.html on 200 and a bare 404 otherwise. That is a completely
+  // different problem from "this flight does not exist", and reporting it as
+  // the latter sends you looking in the wrong place.
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    throw new FlightStatusError(
+      `Flight status proxy did not return JSON (${response.status}) - is the function running?`,
+      502,
+    );
+  }
 
   if (!response.ok) {
     throw new FlightStatusError(
@@ -71,14 +97,10 @@ export async function checkFlightStatus(
     );
   }
 
-  // The proxy forwards AeroDataBox's body verbatim, so a 2xx is not a promise
-  // that the body is the array of legs we expect. Without this guard a
-  // malformed body reaches legs.find() and surfaces a raw TypeError in a
-  // notification instead of a FlightStatusError the UI knows how to phrase.
-  const legs = await response.json();
-  if (!Array.isArray(legs)) {
+  if (!Array.isArray(body)) {
     throw new FlightStatusError("Unexpected flight status response", 502);
   }
+  const legs = body;
 
   const match = findMatchingLeg(legs as FlightLeg[], flight);
   if (!match) {

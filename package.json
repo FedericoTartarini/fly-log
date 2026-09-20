@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:netlify": "npx netlify-cli dev",
+    "dev:netlify": "npx netlify-cli dev --functions netlify/functions",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -29,6 +29,7 @@
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
+    "jose": "^6.2.9",
     "leaflet": "^1.9.4",
     "papaparse": "^5.5.3",
     "react": "^19.2.4",

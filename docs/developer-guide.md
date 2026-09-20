@@ -67,6 +67,20 @@ npm run dev:netlify
 
 This needs `RAPIDAPI_AERODATABOX_KEY` in `.env.local` (see `.env.example`).
 
+The function verifies a Firebase App Check token before it spends any
+AeroDataBox quota, so a local check also needs an App Check debug token. On
+`localhost` there is no real domain for reCAPTCHA Enterprise to attest, so
+Firebase provides a debug path: `ensureAppCheck()` sets
+`FIREBASE_APPCHECK_DEBUG_TOKEN = true` in dev, the SDK prints a UUID to the
+browser console, and you register that UUID once under Firebase Console → App
+Check → your web app → Manage debug tokens. It persists per browser profile;
+you only redo it after clearing site data or switching browser.
+
+Firebase exchanges a registered debug token for a genuine signed App Check
+token, so the function verifies dev and production traffic identically. There
+is deliberately no dev-only bypass in the function.
+
+
 ## Data flow (flight list)
 
 1. Auth state is observed in `src/store.ts` and `src/context/AuthContext.jsx`.

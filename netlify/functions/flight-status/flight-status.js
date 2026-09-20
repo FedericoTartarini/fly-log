@@ -1,3 +1,5 @@
+import { verifyAppCheckToken } from "./appCheck.js";
+
 const AERODATABOX_HOST = "aerodatabox.p.rapidapi.com";
 
 const jsonError = (statusCode, error) => ({
@@ -17,7 +19,21 @@ const jsonError = (statusCode, error) => ({
 // Thin proxy: forwards AeroDataBox's response and status code unchanged.
 // No caching, no matching logic - that lives client-side in
 // src/utils/flightStatusService.ts, which knows the flight's own airports.
+//
+// Gated on Firebase App Check. The AeroDataBox free tier is 600 units a
+// month, and the client-side cooldown protects nothing here - without this
+// gate, anyone who learns the URL can drain the quota with curl. App Check
+// answers the actual question ("did this come from the real app?") rather
+// than authorising a particular user.
 export const handler = async (event) => {
+  // First, before the API key is read or any quota is spent.
+  const appCheck = await verifyAppCheckToken(
+    event.headers?.["x-firebase-appcheck"],
+  );
+  if (!appCheck.ok) {
+    return jsonError(appCheck.status, appCheck.error);
+  }
+
   const { flightNumber, date } = event.queryStringParameters || {};
 
   if (!flightNumber || !date) {

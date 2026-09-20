@@ -4,7 +4,12 @@ const flightServiceMocks = vi.hoisted(() => ({
   updateFlightForUser: vi.fn(),
 }));
 
+const firebaseClientMocks = vi.hoisted(() => ({
+  getAppCheckToken: vi.fn(),
+}));
+
 vi.mock("./flightService", () => flightServiceMocks);
+vi.mock("../firebaseClient", () => firebaseClientMocks);
 
 import { checkFlightStatus, FlightStatusError } from "./flightStatusService";
 import type { enhancedFlight } from "../types/enhancedFlight";
@@ -33,6 +38,8 @@ describe("checkFlightStatus", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
     flightServiceMocks.updateFlightForUser.mockReset();
+    firebaseClientMocks.getAppCheckToken.mockReset();
+    firebaseClientMocks.getAppCheckToken.mockResolvedValue("appcheck-token");
   });
 
   it("fetches the matching leg and saves it to Firestore", async () => {
@@ -77,7 +84,19 @@ describe("checkFlightStatus", () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       "/.netlify/functions/flight-status?flightNumber=QF1&date=2026-09-20",
+      { headers: { "X-Firebase-AppCheck": "appcheck-token" } },
     );
+  });
+
+  it("does not call the proxy when no App Check token can be minted", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    firebaseClientMocks.getAppCheckToken.mockResolvedValue(null);
+
+    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toThrow(
+      FlightStatusError,
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("throws when no leg matches the flight's airports", async () => {
@@ -112,6 +131,23 @@ describe("checkFlightStatus", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("throws a FlightStatusError, not a SyntaxError, when the body is not JSON", async () => {
+    // What a dev server with no function mounted actually returns: 200 with
+    // the SPA shell.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.reject(new SyntaxError("Unexpected token '<'")),
+      }),
+    );
+
+    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toThrow(
+      FlightStatusError,
+    );
+    expect(flightServiceMocks.updateFlightForUser).not.toHaveBeenCalled();
+  });
+
   it("throws a FlightStatusError, not a TypeError, when the body is not an array", async () => {
     vi.stubGlobal(
       "fetch",
@@ -127,15 +163,39 @@ describe("checkFlightStatus", () => {
     expect(flightServiceMocks.updateFlightForUser).not.toHaveBeenCalled();
   });
 
-  it("throws when the proxy responds with a non-ok status", async () => {
+  it("surfaces AeroDataBox's own status when the proxy answers with JSON", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 429 }),
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 429,
+        json: () => Promise.resolve({ message: "quota exceeded" }),
+      }),
     );
 
-    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toThrow(
-      FlightStatusError,
+    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toMatchObject({
+      name: "FlightStatusError",
+      status: 429,
+    });
+    expect(flightServiceMocks.updateFlightForUser).not.toHaveBeenCalled();
+  });
+
+  it("reports a non-JSON error body as a proxy problem, not a missing flight", async () => {
+    // netlify dev with no function mounted answers a bare 404. Reporting that
+    // as 404 "no matching flight" sends you looking in the wrong place.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        json: () => Promise.reject(new SyntaxError("Unexpected token '<'")),
+      }),
     );
+
+    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toMatchObject({
+      name: "FlightStatusError",
+      status: 502,
+    });
     expect(flightServiceMocks.updateFlightForUser).not.toHaveBeenCalled();
   });
 });

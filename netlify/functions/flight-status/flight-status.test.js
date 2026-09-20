@@ -1,17 +1,62 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { handler } from "./flight-status.js";
+
+// App Check verification is exercised in appCheck.test.js; here it is stubbed
+// so these tests are about proxy behaviour, with one case pinning that an
+// unverified caller never reaches the proxy at all.
+const appCheckMocks = vi.hoisted(() => ({ verifyAppCheckToken: vi.fn() }));
+vi.mock("./appCheck.js", () => appCheckMocks);
+
+const { handler } = await import("./flight-status.js");
 
 describe("flight-status function", () => {
   const originalKey = process.env.RAPIDAPI_AERODATABOX_KEY;
 
   beforeEach(() => {
     process.env.RAPIDAPI_AERODATABOX_KEY = "test-key";
+    appCheckMocks.verifyAppCheckToken.mockResolvedValue({ ok: true });
   });
 
   afterEach(() => {
     process.env.RAPIDAPI_AERODATABOX_KEY = originalKey;
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+  });
+
+  it("rejects an unverified caller without spending any quota", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    appCheckMocks.verifyAppCheckToken.mockResolvedValue({
+      ok: false,
+      status: 401,
+      error: "Missing App Check token",
+    });
+
+    const result = await handler({
+      headers: {},
+      queryStringParameters: { flightNumber: "QF1", date: "2026-09-20" },
+    });
+
+    expect(result.statusCode).toBe(401);
+    // The point of the gate: no upstream call, so no AeroDataBox unit spent.
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("passes the App Check header through to verification", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        status: 200,
+        headers: new Headers({ "content-type": "application/json" }),
+        text: () => Promise.resolve("[]"),
+      }),
+    );
+
+    await handler({
+      headers: { "x-firebase-appcheck": "token-abc" },
+      queryStringParameters: { flightNumber: "QF1", date: "2026-09-20" },
+    });
+
+    expect(appCheckMocks.verifyAppCheckToken).toHaveBeenCalledWith("token-abc");
   });
 
   it("returns 400 when flightNumber or date is missing", async () => {

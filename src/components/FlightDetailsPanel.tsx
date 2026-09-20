@@ -74,6 +74,7 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
     if (err instanceof FlightStatusError) {
       if (err.status === 404) return t("status.error_not_found");
       if (err.status === 429) return t("status.error_quota");
+      if (err.status === 401) return t("status.error_unauthorized");
     }
     return t("status.error_generic");
   };
