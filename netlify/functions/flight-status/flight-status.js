@@ -1,5 +1,11 @@
 const AERODATABOX_HOST = "aerodatabox.p.rapidapi.com";
 
+const jsonError = (statusCode, error) => ({
+  statusCode,
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ error }),
+});
+
 // This function lives in its own directory rather than flat in
 // netlify/functions/ so that flight-status.test.js can sit next to it, as
 // every other test in this repo does. Netlify only scans the top level of the
@@ -15,34 +21,43 @@ export const handler = async (event) => {
   const { flightNumber, date } = event.queryStringParameters || {};
 
   if (!flightNumber || !date) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "flightNumber and date are required" }),
-    };
+    return jsonError(400, "flightNumber and date are required");
   }
 
   const apiKey = process.env.RAPIDAPI_AERODATABOX_KEY;
   if (!apiKey) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "AeroDataBox API key is not configured" }),
-    };
+    return jsonError(500, "AeroDataBox API key is not configured");
   }
 
   const url = `https://${AERODATABOX_HOST}/flights/number/${encodeURIComponent(flightNumber)}/${encodeURIComponent(date)}`;
 
-  const response = await fetch(url, {
-    headers: {
-      "x-rapidapi-host": AERODATABOX_HOST,
-      "x-rapidapi-key": apiKey,
-    },
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      headers: {
+        "x-rapidapi-host": AERODATABOX_HOST,
+        "x-rapidapi-key": apiKey,
+      },
+    });
+  } catch (err) {
+    // Without this, a DNS or connection failure rejects the handler and
+    // Netlify answers with an opaque non-JSON 5xx. The client only parses
+    // JSON on a 2xx, but the contract is easier to reason about if every
+    // response from this function is JSON.
+    console.error("AeroDataBox request failed", err);
+    return jsonError(502, "Could not reach the flight status provider");
+  }
 
   const body = await response.text();
 
   return {
     statusCode: response.status,
-    headers: { "content-type": "application/json" },
+    // Forward what upstream actually sent rather than asserting JSON over an
+    // error page we did not generate.
+    headers: {
+      "content-type":
+        response.headers.get("content-type") ?? "application/json",
+    },
     body,
   };
 };

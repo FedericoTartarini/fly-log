@@ -38,8 +38,16 @@ const FlightsList: React.FC = () => {
   const [detailsFlightId, setDetailsFlightId] = React.useState<string | null>(
     null,
   );
+  // Derived from the live list, not snapshotted, so a status write lands in
+  // the open modal. The flip side is that the flight can vanish underneath it
+  // (deleted, or filtered out), which would leave an empty titled modal open.
   const detailsFlight =
     filteredFlights.find((f) => f.id === detailsFlightId) ?? null;
+  React.useEffect(() => {
+    if (detailsOpen && detailsFlightId !== null && detailsFlight === null) {
+      setDetailsOpen(false);
+    }
+  }, [detailsOpen, detailsFlightId, detailsFlight]);
 
   const PAGE_SIZE = 20;
   const [page, setPage] = React.useState(1);

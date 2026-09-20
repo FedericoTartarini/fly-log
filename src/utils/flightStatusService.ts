@@ -71,8 +71,16 @@ export async function checkFlightStatus(
     );
   }
 
-  const legs = (await response.json()) as FlightLeg[];
-  const match = findMatchingLeg(legs, flight);
+  // The proxy forwards AeroDataBox's body verbatim, so a 2xx is not a promise
+  // that the body is the array of legs we expect. Without this guard a
+  // malformed body reaches legs.find() and surfaces a raw TypeError in a
+  // notification instead of a FlightStatusError the UI knows how to phrase.
+  const legs = await response.json();
+  if (!Array.isArray(legs)) {
+    throw new FlightStatusError("Unexpected flight status response", 502);
+  }
+
+  const match = findMatchingLeg(legs as FlightLeg[], flight);
   if (!match) {
     throw new FlightStatusError("No matching flight found", 404);
   }

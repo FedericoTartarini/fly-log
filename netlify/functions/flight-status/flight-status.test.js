@@ -11,6 +11,7 @@ describe("flight-status function", () => {
   afterEach(() => {
     process.env.RAPIDAPI_AERODATABOX_KEY = originalKey;
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("returns 400 when flightNumber or date is missing", async () => {
@@ -31,6 +32,7 @@ describe("flight-status function", () => {
   it("proxies AeroDataBox's response and status code unchanged", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       status: 200,
+      headers: new Headers({ "content-type": "application/json" }),
       text: () => Promise.resolve(JSON.stringify([{ status: "Expected" }])),
     });
     vi.stubGlobal("fetch", fetchMock);
@@ -50,5 +52,40 @@ describe("flight-status function", () => {
     );
     expect(result.statusCode).toBe(200);
     expect(JSON.parse(result.body)).toEqual([{ status: "Expected" }]);
+  });
+
+  it("answers 502 with a JSON body when AeroDataBox is unreachable", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new Error("getaddrinfo ENOTFOUND")),
+    );
+
+    const result = await handler({
+      queryStringParameters: { flightNumber: "QF1", date: "2026-09-20" },
+    });
+
+    expect(result.statusCode).toBe(502);
+    expect(result.headers["content-type"]).toBe("application/json");
+    expect(JSON.parse(result.body).error).toBeTruthy();
+  });
+
+  it("never echoes the API key back to the caller", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        status: 403,
+        headers: new Headers({ "content-type": "application/json" }),
+        text: () =>
+          Promise.resolve(JSON.stringify({ message: "Not subscribed" })),
+      }),
+    );
+
+    const result = await handler({
+      queryStringParameters: { flightNumber: "QF1", date: "2026-09-20" },
+    });
+
+    expect(result.statusCode).toBe(403);
+    expect(JSON.stringify(result)).not.toContain("test-key");
   });
 });

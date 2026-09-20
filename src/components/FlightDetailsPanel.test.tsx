@@ -10,9 +10,17 @@ vi.mock("../context/AuthContext", () => ({
 }));
 
 const checkFlightStatusMock = vi.fn();
-vi.mock("../utils/flightStatusService", () => ({
-  checkFlightStatus: (...args: unknown[]) => checkFlightStatusMock(...args),
-}));
+// FlightStatusError is re-exported unmocked: the component uses it in an
+// `instanceof` check to pick the user-facing message, so the class the test
+// throws must be the same one the component imports.
+vi.mock("../utils/flightStatusService", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("../utils/flightStatusService")>();
+  return {
+    FlightStatusError: actual.FlightStatusError,
+    checkFlightStatus: (...args: unknown[]) => checkFlightStatusMock(...args),
+  };
+});
 
 const baseFlight: enhancedFlight = {
   id: "1",
@@ -86,6 +94,27 @@ describe("FlightDetailsPanel", () => {
 
     const button = screen.getByTestId("flight-status-check-1");
     expect(button).toBeDisabled();
+  });
+
+  it("notifies with a translated message on failure, not the raw error text", async () => {
+    const { FlightStatusError } = await import("../utils/flightStatusService");
+    const { notifications } = await import("@mantine/notifications");
+    const showSpy = vi
+      .spyOn(notifications, "show")
+      .mockImplementation(() => "");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    checkFlightStatusMock.mockRejectedValue(
+      new FlightStatusError("No matching flight found", 404),
+    );
+    render(<FlightDetailsPanel flight={baseFlight} />);
+
+    fireEvent.click(screen.getByTestId("flight-status-check-1"));
+
+    await waitFor(() => expect(showSpy).toHaveBeenCalled());
+    expect(showSpy.mock.calls[0][0]).toMatchObject({
+      color: "red",
+      message: "No matching flight was found for this date",
+    });
   });
 
   it("hides the check button when the flight has no flight number", () => {

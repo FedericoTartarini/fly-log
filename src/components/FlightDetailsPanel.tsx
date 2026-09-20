@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Badge, Button, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/AuthContext";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { getFlightStatusCooldown } from "../utils/flightStatusCooldown";
-import { checkFlightStatus } from "../utils/flightStatusService";
+import {
+  checkFlightStatus,
+  FlightStatusError,
+} from "../utils/flightStatusService";
 
 interface FlightDetailsPanelProps {
   flight: enhancedFlight;
@@ -44,13 +47,36 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
   const { t } = useTranslation(["flights"]);
   const { user } = useAuth();
   const [isChecking, setIsChecking] = useState(false);
+  const [, recheckCooldown] = useReducer((n: number) => n + 1, 0);
 
   const statusData = flight.flight_status as FlightLeg | null | undefined;
   const cooldown = getFlightStatusCooldown(flight);
   const hasFlightNumber = Boolean(flight.flight_number);
 
+  // The cooldown is evaluated against `new Date()` at render time, so without
+  // this the button stays disabled after the cooldown expires until something
+  // else re-renders the panel. Re-render once, when it actually elapses.
+  const nextCheckMs = cooldown.nextCheckAt?.getTime() ?? null;
+  useEffect(() => {
+    if (nextCheckMs === null) return;
+    const delay = nextCheckMs - Date.now();
+    if (delay <= 0) return;
+    const timer = setTimeout(recheckCooldown, delay);
+    return () => clearTimeout(timer);
+  }, [nextCheckMs]);
+
   const departureDelay = getDelayMinutes(statusData?.departure);
   const arrivalDelay = getDelayMinutes(statusData?.arrival);
+
+  // 404 and 429 are the two failures a user can act on, so they get their own
+  // wording; everything else would only expose an internal English string.
+  const errorMessage = (err: unknown): string => {
+    if (err instanceof FlightStatusError) {
+      if (err.status === 404) return t("status.error_not_found");
+      if (err.status === 429) return t("status.error_quota");
+    }
+    return t("status.error_generic");
+  };
 
   const handleCheck = async () => {
     if (!user?.uid) {
@@ -70,9 +96,12 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
         color: "green",
       });
     } catch (err) {
+      // Keep the technical detail where a developer can find it; the user gets
+      // the translated summary.
+      console.error("Flight status check failed", err);
       notifications.show({
         title: t("status.check_error_title"),
-        message: (err instanceof Error && err.message) || String(err),
+        message: errorMessage(err),
         color: "red",
       });
     } finally {
@@ -129,7 +158,9 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
           {flight.flight_status_checked_at && (
             <Text size="xs" c="dimmed">
               {t("status.checked_at", {
-                value: new Date(flight.flight_status_checked_at).toLocaleString(),
+                value: new Date(
+                  flight.flight_status_checked_at,
+                ).toLocaleString(),
                 interpolation: { escapeValue: false },
               })}
             </Text>

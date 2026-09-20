@@ -50,7 +50,9 @@ describe("checkFlightStatus", () => {
     ];
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve(legs) }),
+      vi
+        .fn()
+        .mockResolvedValue({ ok: true, json: () => Promise.resolve(legs) }),
     );
 
     const result = await checkFlightStatus("uid-1", baseFlight);
@@ -110,8 +112,26 @@ describe("checkFlightStatus", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("throws a FlightStatusError, not a TypeError, when the body is not an array", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ message: "something else entirely" }),
+      }),
+    );
+
+    await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toThrow(
+      FlightStatusError,
+    );
+    expect(flightServiceMocks.updateFlightForUser).not.toHaveBeenCalled();
+  });
+
   it("throws when the proxy responds with a non-ok status", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 429 }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: false, status: 429 }),
+    );
 
     await expect(checkFlightStatus("uid-1", baseFlight)).rejects.toThrow(
       FlightStatusError,
