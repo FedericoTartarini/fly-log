@@ -1,24 +1,27 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { Badge, Button, Group, Stack, Text, Tooltip } from "@mantine/core";
-import { useTranslation } from "react-i18next";
-import { notifications } from "@mantine/notifications";
-import { useAuth } from "../context/AuthContext";
-import type { enhancedFlight } from "../types/enhancedFlight";
-import { getFlightStatusCooldown } from "../utils/flightStatusCooldown";
+import React from "react";
 import {
-  checkFlightStatus,
-  FlightStatusError,
-} from "../utils/flightStatusService";
+  Badge,
+  Card,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import type { enhancedFlight } from "../types/enhancedFlight";
 
 interface FlightDetailsPanelProps {
   flight: enhancedFlight;
 }
 
 type FlightLegTime = {
-  scheduledTime?: { utc?: string };
-  revisedTime?: { utc?: string };
+  scheduledTime?: { utc?: string; local?: string };
+  revisedTime?: { utc?: string; local?: string };
+  actualTime?: { utc?: string; local?: string };
   terminal?: string;
   gate?: string;
+  checkInDesk?: string;
 };
 type FlightLeg = {
   status?: string;
@@ -34,175 +37,179 @@ const parseUtc = (value: unknown): Date | null => {
 };
 
 // AeroDataBox doesn't return a delay field directly - it's the gap between
-// the original schedule and the revised one.
-const getDelayMinutes = (leg: FlightLegTime | undefined): number | null => {
-  const scheduled = parseUtc(leg?.scheduledTime?.utc);
-  const revised = parseUtc(leg?.revisedTime?.utc);
+// the original schedule and the revised one. An exact match returns 0 (not
+// null) so "on time" renders as its own badge rather than silently showing
+// nothing; null means the comparison isn't possible (one side missing).
+const getDelayMinutes = (
+  scheduledTime: FlightLegTime["scheduledTime"] | undefined,
+  revisedTime: FlightLegTime["revisedTime"] | undefined,
+): number | null => {
+  const scheduled = parseUtc(scheduledTime?.utc);
+  const revised = parseUtc(revisedTime?.utc);
   if (!scheduled || !revised) return null;
-  const diff = Math.round((revised.getTime() - scheduled.getTime()) / 60000);
-  return diff === 0 ? null : diff;
+  return Math.round((revised.getTime() - scheduled.getTime()) / 60000);
+};
+
+// AeroDataBox's local time strings already carry the airport's own UTC
+// offset (e.g. "2026-07-01 11:51+01:00") - pulling the HH:mm out directly
+// avoids re-interpreting it in the browser's timezone.
+const extractLocalTime = (value: string | undefined): string | null => {
+  if (!value) return null;
+  const match = value.match(/\d{4}-\d{2}-\d{2} (\d{2}:\d{2})/);
+  return match?.[1] ?? null;
+};
+
+type DelayTier = "green" | "yellow" | "red";
+type StatusColor = "blue" | "green" | "red" | "yellow";
+
+const getStatusColor = (status: string | undefined): StatusColor => {
+  if (/landed|arrived/i.test(status ?? "")) return "green";
+  if (/cancelled|diverted/i.test(status ?? "")) return "red";
+  if (/expected|scheduled/i.test(status ?? "")) return "yellow";
+  return "blue";
+};
+
+const getDelayColor = (delay: number): DelayTier => {
+  if (delay <= 0) return "green";
+  if (delay < 15) return "yellow";
+  return "red";
+};
+
+const LegBlock: React.FC<{
+  heading: string;
+  leg: FlightLegTime | undefined;
+  checkInDeskLabel?: (value: string) => string;
+}> = ({ heading, leg, checkInDeskLabel }) => {
+  const { t } = useTranslation(["flights"]);
+  const scheduled = extractLocalTime(leg?.scheduledTime?.local);
+  const revised = extractLocalTime(leg?.revisedTime?.local);
+  const actual = extractLocalTime(leg?.actualTime?.local);
+  const delay = getDelayMinutes(
+    leg?.scheduledTime,
+    leg?.actualTime ?? leg?.revisedTime,
+  );
+  const primaryTime = actual ?? revised ?? scheduled;
+  // Only worth a separate line when the two actually differ - a 0-minute
+  // delay means they're the same instant, just spelled out twice.
+  const showScheduledSeparately =
+    delay !== null && delay !== 0 && scheduled && scheduled !== primaryTime;
+  const hasGateInfo = Boolean(leg?.gate || leg?.terminal);
+
+  if (!primaryTime && !hasGateInfo && !leg?.checkInDesk) {
+    return null;
+  }
+
+  return (
+    <Stack gap={4}>
+      <Text size="xs" fw={700} tt="uppercase" c="dimmed">
+        {heading}
+      </Text>
+      {showScheduledSeparately && (
+        <Text size="xs" c="dimmed">
+          {t("status.scheduled_time", { value: scheduled })}
+        </Text>
+      )}
+      {(primaryTime || delay !== null) && (
+        <Group gap="xs">
+          {primaryTime && (
+            <Text size="sm" fw={500}>
+              {primaryTime}
+            </Text>
+          )}
+          {delay !== null && (
+            <Badge color={getDelayColor(delay)} variant="light" size="sm">
+              {delay === 0
+                ? t("status.on_time")
+                : delay > 0
+                  ? t("status.delay_late", { value: delay })
+                  : t("status.delay_early", { value: Math.abs(delay) })}
+            </Badge>
+          )}
+        </Group>
+      )}
+      {hasGateInfo && (
+        <Text size="sm" c="dimmed">
+          {t("status.gate_terminal", {
+            gate: leg?.gate ?? "-",
+            terminal: leg?.terminal ?? "-",
+          })}
+        </Text>
+      )}
+      {leg?.checkInDesk && checkInDeskLabel && (
+        <Text size="sm" c="dimmed">
+          {checkInDeskLabel(leg.checkInDesk)}
+        </Text>
+      )}
+    </Stack>
+  );
 };
 
 const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
   const { t } = useTranslation(["flights"]);
-  const { user } = useAuth();
-  const [isChecking, setIsChecking] = useState(false);
-  const [, recheckCooldown] = useReducer((n: number) => n + 1, 0);
-
   const statusData = flight.flight_status as FlightLeg | null | undefined;
-  const cooldown = getFlightStatusCooldown(flight);
-  const hasFlightNumber = Boolean(flight.flight_number);
 
-  // The cooldown is evaluated against `new Date()` at render time, so without
-  // this the button stays disabled after the cooldown expires until something
-  // else re-renders the panel. Re-render once, when it actually elapses.
-  const nextCheckMs = cooldown.nextCheckAt?.getTime() ?? null;
-  useEffect(() => {
-    if (nextCheckMs === null) return;
-    const delay = nextCheckMs - Date.now();
-    if (delay <= 0) return;
-    const timer = setTimeout(recheckCooldown, delay);
-    return () => clearTimeout(timer);
-  }, [nextCheckMs]);
-
-  const departureDelay = getDelayMinutes(statusData?.departure);
-  const arrivalDelay = getDelayMinutes(statusData?.arrival);
-
-  // 404 and 429 are the two failures a user can act on, so they get their own
-  // wording; everything else would only expose an internal English string.
-  const errorMessage = (err: unknown): string => {
-    if (err instanceof FlightStatusError) {
-      if (err.status === 404) return t("status.error_not_found");
-      if (err.status === 429) return t("status.error_quota");
-      if (err.status === 401) return t("status.error_unauthorized");
-    }
-    return t("status.error_generic");
-  };
-
-  const handleCheck = async () => {
-    if (!user?.uid) {
-      notifications.show({
-        title: t("actions.not_signed_in"),
-        message: "",
-        color: "red",
-      });
-      return;
-    }
-    setIsChecking(true);
-    try {
-      await checkFlightStatus(user.uid, flight);
-      notifications.show({
-        title: t("status.check_success_title"),
-        message: "",
-        color: "green",
-      });
-    } catch (err) {
-      // Keep the technical detail where a developer can find it; the user gets
-      // the translated summary.
-      console.error("Flight status check failed", err);
-      notifications.show({
-        title: t("status.check_error_title"),
-        message: errorMessage(err),
-        color: "red",
-      });
-    } finally {
-      setIsChecking(false);
-    }
-  };
-
-  const buttonDisabled = !hasFlightNumber || !cooldown.allowed || isChecking;
-
-  return (
-    <Stack gap="sm">
-      {statusData ? (
-        <Stack gap="xs">
-          <Group gap="xs">
-            <Text fw={500}>{t("status.status_label")}</Text>
-            <Badge variant="light">
-              {statusData.status ?? t("status.unknown")}
-            </Badge>
-          </Group>
-          {departureDelay !== null && (
-            <Text size="sm">
-              {t("status.departure_delay", { value: departureDelay })}
-            </Text>
-          )}
-          {arrivalDelay !== null && (
-            <Text size="sm">
-              {t("status.arrival_delay", { value: arrivalDelay })}
-            </Text>
-          )}
-          {(statusData.departure?.gate || statusData.departure?.terminal) && (
-            <Text size="sm">
-              {t("status.departure_gate", {
-                gate: statusData.departure?.gate ?? "-",
-                terminal: statusData.departure?.terminal ?? "-",
-              })}
-            </Text>
-          )}
-          {(statusData.arrival?.gate || statusData.arrival?.terminal) && (
-            <Text size="sm">
-              {t("status.arrival_gate", {
-                gate: statusData.arrival?.gate ?? "-",
-                terminal: statusData.arrival?.terminal ?? "-",
-              })}
-            </Text>
-          )}
-          {(statusData.aircraft?.model || statusData.aircraft?.reg) && (
-            <Text size="sm">
-              {t("status.aircraft", {
-                model: statusData.aircraft?.model ?? "-",
-                reg: statusData.aircraft?.reg ?? "-",
-              })}
-            </Text>
-          )}
-          {flight.flight_status_checked_at && (
-            <Text size="xs" c="dimmed">
-              {t("status.checked_at", {
-                value: new Date(
-                  flight.flight_status_checked_at,
-                ).toLocaleString(),
-                interpolation: { escapeValue: false },
-              })}
-            </Text>
-          )}
-        </Stack>
-      ) : (
+  if (!statusData) {
+    return (
+      <Card shadow="sm" radius="md" withBorder>
         <Text size="sm" c="dimmed">
           {t("status.no_data")}
         </Text>
-      )}
+      </Card>
+    );
+  }
 
-      {!hasFlightNumber ? (
-        <Text size="sm" c="dimmed">
-          {t("status.no_flight_number")}
-        </Text>
-      ) : (
-        <Tooltip
-          disabled={cooldown.allowed}
-          label={
-            cooldown.nextCheckAt
-              ? t("status.next_check_at", {
-                  value: cooldown.nextCheckAt.toLocaleString(),
+  return (
+    <Card shadow="sm" radius="md" withBorder>
+      <Stack gap="sm">
+        <Group justify="space-between" align="flex-start">
+          <Stack gap={0}>
+            <Title order={4}>{t("status.title")}</Title>
+            {flight.flight_status_checked_at && (
+              <Text size="xs" c="dimmed">
+                {t("status.checked_at", {
+                  value: new Date(
+                    flight.flight_status_checked_at,
+                  ).toLocaleString(),
                   interpolation: { escapeValue: false },
-                })
-              : t("status.no_further_checks")
-          }
-        >
-          <span>
-            <Button
-              onClick={handleCheck}
-              loading={isChecking}
-              disabled={buttonDisabled}
-              style={buttonDisabled ? { pointerEvents: "none" } : undefined}
-              data-testid={`flight-status-check-${flight.id}`}
-            >
-              {t("status.check_button")}
-            </Button>
-          </span>
-        </Tooltip>
-      )}
-    </Stack>
+                })}
+              </Text>
+            )}
+          </Stack>
+          <Badge color={getStatusColor(statusData.status)} variant="light">
+            {statusData.status ?? t("status.unknown")}
+          </Badge>
+        </Group>
+
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+          <LegBlock
+            heading={t("status.departure_heading")}
+            leg={statusData.departure}
+            checkInDeskLabel={(value) => t("status.check_in_desk", { value })}
+          />
+          <LegBlock
+            heading={t("status.arrival_heading")}
+            leg={statusData.arrival}
+          />
+        </SimpleGrid>
+
+        {(statusData.aircraft?.model || statusData.aircraft?.reg) && (
+          <Text size="sm">
+            {t("status.aircraft", {
+              model: statusData.aircraft?.model ?? "-",
+              reg: statusData.aircraft?.reg ?? "-",
+            })}
+          </Text>
+        )}
+
+        {flight.flight_status_checked_at && (
+          <Stack gap={0}>
+            <Text size="xs" c="dimmed">
+              {t("status.source")}
+            </Text>
+          </Stack>
+        )}
+      </Stack>
+    </Card>
   );
 };
 

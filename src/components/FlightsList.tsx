@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import {
   Image,
+  Avatar,
+  Group,
   Table,
   Text,
   ActionIcon,
@@ -9,6 +11,7 @@ import {
   Pagination,
   Loader,
   Stack,
+  ThemeIcon,
 } from "@mantine/core";
 import { IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
@@ -17,9 +20,40 @@ import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 
-const FlightActions = lazy(() => import("./FlightActions.jsx"));
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
-const FlightDetailsPanel = lazy(() => import("./FlightDetailsPanel"));
+const FlightDetailsModal = lazy(() => import("./FlightDetailsModal"));
+
+const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
+  const flightNumber = flight.flight_number
+    ? `${flight.airline_iata ?? ""}${flight.flight_number}`
+    : null;
+  const identity =
+    flightNumber ??
+    flight.airline_name ??
+    `${flight.departure_airport_iata} → ${flight.arrival_airport_iata}`;
+
+  return (
+    <Group gap="xs" wrap="nowrap">
+      <Avatar
+        src={
+          flight.airline_icon_path
+            ? `/logos/${flight.airline_icon_path}`
+            : undefined
+        }
+        alt=""
+        color="accent"
+        radius="xl"
+        size="sm"
+      >
+        <IconPlaneInflight size={16} />
+      </Avatar>
+      <Text fw={600} size="lg">
+        {identity}
+        {flightNumber && flight.airline_name ? ` · ${flight.airline_name}` : ""}
+      </Text>
+    </Group>
+  );
+};
 
 /**
  * Renders a paginated list of flights in a table.
@@ -84,15 +118,20 @@ const FlightsList: React.FC = () => {
   const endIndex = startIndex + PAGE_SIZE;
   const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
+  const openDetails = (flight: enhancedFlight) => {
+    setDetailsFlightId(flight.id);
+    setDetailsOpen(true);
+  };
+
   /**
-   * Returns the airline icon or a fallback icon.
+   * Returns the airline logo or a non-interactive fallback icon.
    * @param {enhancedFlight} flight
    * @returns {JSX.Element}
    */
   const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
     if (failedImages.has(flight.id)) {
       return (
-        <ActionIcon
+        <ThemeIcon
           aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
           color="gray"
         >
@@ -100,7 +139,7 @@ const FlightsList: React.FC = () => {
             style={{ width: "70%", height: "70%" }}
             stroke={1.5}
           />
-        </ActionIcon>
+        </ThemeIcon>
       );
     }
 
@@ -108,7 +147,7 @@ const FlightsList: React.FC = () => {
 
     if (!sourcePath) {
       return (
-        <ActionIcon
+        <ThemeIcon
           aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
           color="gray"
         >
@@ -116,7 +155,7 @@ const FlightsList: React.FC = () => {
             style={{ width: "70%", height: "70%" }}
             stroke={1.5}
           />
-        </ActionIcon>
+        </ThemeIcon>
       );
     }
 
@@ -126,8 +165,8 @@ const FlightsList: React.FC = () => {
     return (
       <Image
         src={imageUrl}
-        alt={`${flight.airline_name ?? ""} icon`}
-        h={50}
+        alt=""
+        h={40}
         w="auto"
         fit="contain"
         loading="lazy"
@@ -145,15 +184,16 @@ const FlightsList: React.FC = () => {
         </Text>
       ) : (
         <>
-          <Table striped highlightOnHover withTableBorder>
+          <Table striped highlightOnHover withTableBorder layout="fixed">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>
+                <Table.Th style={{ width: "4rem" }}>
                   <Center>{t("table.icon")}</Center>
                 </Table.Th>
-                <Table.Th>{t("table.from_to")}</Table.Th>
+                <Table.Th style={{ width: "38%" }}>
+                  {t("table.from_to")}
+                </Table.Th>
                 <Table.Th>{t("table.date_duration_distance")}</Table.Th>
-                <Table.Th>{t("table.actions")}</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -189,10 +229,28 @@ const FlightsList: React.FC = () => {
                   durationDistanceStr = `${dist.toLocaleString()} km`;
                 }
 
+                const rowLabel = t("table.view_row_details", {
+                  from: flight.departure_airport_iata,
+                  to: flight.arrival_airport_iata,
+                });
+
                 return (
-                  <Table.Tr key={flight.id}>
+                  <Table.Tr
+                    key={flight.id}
+                    data-testid={`flight-row-${flight.id}`}
+                  >
                     <Table.Td p={"0.5rem"}>
-                      <Center>{getAirlineIcon(flight)}</Center>
+                      <Center>
+                        <ActionIcon
+                          aria-label={rowLabel}
+                          variant="subtle"
+                          size={48}
+                          onClick={() => openDetails(flight)}
+                          data-testid={`flight-details-open-${flight.id}`}
+                        >
+                          {getAirlineIcon(flight)}
+                        </ActionIcon>
+                      </Center>
                     </Table.Td>
                     <Table.Td>
                       <Text size="sm">
@@ -217,21 +275,6 @@ const FlightsList: React.FC = () => {
                         {durationDistanceStr}
                       </Text>
                     </Table.Td>
-                    <Table.Td>
-                      <Suspense fallback={<Loader size="sm" />}>
-                        <FlightActions
-                          flight={flight}
-                          onEdit={(f: enhancedFlight) => {
-                            setEditFlight(f);
-                            setEditOpen(true);
-                          }}
-                          onViewDetails={(f: enhancedFlight) => {
-                            setDetailsFlightId(f.id);
-                            setDetailsOpen(true);
-                          }}
-                        />
-                      </Suspense>
-                    </Table.Td>
                   </Table.Tr>
                 );
               })}
@@ -251,6 +294,11 @@ const FlightsList: React.FC = () => {
         opened={editOpen}
         onClose={() => setEditOpen(false)}
         title={t("form.labels.edit_flight")}
+        // Opened from inside the details modal below, so it must stack above
+        // it regardless of DOM order - Mantine gives every Modal the same
+        // default z-index (200), and same-z-index elements paint in DOM
+        // order, which would otherwise put the later (details) modal on top.
+        zIndex={1000}
       >
         {editFlight && (
           <Suspense fallback={<Loader size="sm" />}>
@@ -265,11 +313,19 @@ const FlightsList: React.FC = () => {
       <Modal
         opened={detailsOpen}
         onClose={() => setDetailsOpen(false)}
-        title={t("status.title")}
+        title={detailsFlight ? <FlightModalTitle flight={detailsFlight} /> : ""}
+        size="lg"
+        zIndex={600}
       >
         {detailsFlight && (
           <Suspense fallback={<Loader size="sm" />}>
-            <FlightDetailsPanel flight={detailsFlight} />
+            <FlightDetailsModal
+              flight={detailsFlight}
+              onEdit={(f) => {
+                setEditFlight(f);
+                setEditOpen(true);
+              }}
+            />
           </Suspense>
         )}
       </Modal>

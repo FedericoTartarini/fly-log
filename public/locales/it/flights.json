@@ -29,7 +29,7 @@
     "icon": "Icona",
     "from_to": "Da → A",
     "date_duration_distance": "Data, Durata & Distanza",
-    "actions": "Modifica"
+    "view_row_details": "Visualizza dettagli volo: {{from}} verso {{to}}"
   },
   "airline_label": "Compagnia:",
   "aircraft_label": "Aereo:",
@@ -78,7 +78,6 @@
     "past": "Voli passati"
   },
   "actions": {
-    "open_menu": "Apri azioni",
     "edit": "Modifica",
     "delete": "Elimina",
     "confirm_delete_title": "Elimina volo",
@@ -87,8 +86,8 @@
     "deleted_title": "Eliminato",
     "deleted_message": "Volo eliminato",
     "delete_error_title": "Errore durante l'eliminazione",
-    "not_signed_in": "Devi essere autenticato per eseguire questa azione",
-    "view_details": "Visualizza dettagli"
+    "delete_error_message": "Non è stato possibile eliminare il volo. Riprova.",
+    "not_signed_in": "Devi essere autenticato per eseguire questa azione"
   },
   "status": {
     "title": "Stato del volo",
@@ -106,11 +105,16 @@
     "error_unauthorized": "L'app non è riuscita a verificare la propria identità. Ricarica la pagina e riprova.",
     "error_quota": "Il servizio di stato dei voli non è momentaneamente disponibile. Riprova più tardi.",
     "error_generic": "Si è verificato un errore durante la verifica dello stato. Riprova più tardi.",
-    "departure_delay": "Ritardo in partenza: {{value}} min",
-    "arrival_delay": "Ritardo in arrivo: {{value}} min",
-    "departure_gate": "Gate partenza {{gate}}, terminal {{terminal}}",
-    "arrival_gate": "Gate arrivo {{gate}}, terminal {{terminal}}",
-    "aircraft": "Aereo: {{model}} ({{reg}})"
+    "aircraft": "Aereo: {{model}} ({{reg}})",
+    "check_in_desk": "Banco check-in: {{value}}",
+    "departure_heading": "Partenza",
+    "arrival_heading": "Arrivo",
+    "gate_terminal": "Gate {{gate}}, terminal {{terminal}}",
+    "on_time": "In orario",
+    "delay_late": "+{{value}} min",
+    "delay_early": "-{{value}} min",
+    "scheduled_time": "Previsto {{value}}",
+    "source": "Fonte: AeroDataBox"
   },
   "no_flights_card": {
     "title": "Benvenuto",

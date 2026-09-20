@@ -1,26 +1,9 @@
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { screen } from "@testing-library/react";
 import { render } from "../../test-utils";
 import FlightDetailsPanel from "./FlightDetailsPanel";
 import type { enhancedFlight } from "../types/enhancedFlight";
-
-vi.mock("../context/AuthContext", () => ({
-  useAuth: () => ({ user: { uid: "uid-1" } }),
-}));
-
-const checkFlightStatusMock = vi.fn();
-// FlightStatusError is re-exported unmocked: the component uses it in an
-// `instanceof` check to pick the user-facing message, so the class the test
-// throws must be the same one the component imports.
-vi.mock("../utils/flightStatusService", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../utils/flightStatusService")>();
-  return {
-    FlightStatusError: actual.FlightStatusError,
-    checkFlightStatus: (...args: unknown[]) => checkFlightStatusMock(...args),
-  };
-});
 
 const baseFlight: enhancedFlight = {
   id: "1",
@@ -45,21 +28,9 @@ const baseFlight: enhancedFlight = {
 };
 
 describe("FlightDetailsPanel", () => {
-  beforeEach(() => {
-    checkFlightStatusMock.mockReset();
-  });
-
-  it("shows the check button and calls checkFlightStatus on click", async () => {
-    checkFlightStatusMock.mockResolvedValue({ status: "Expected" });
+  it("shows a placeholder message when no status has been checked", () => {
     render(<FlightDetailsPanel flight={baseFlight} />);
-
-    const button = screen.getByTestId("flight-status-check-1");
-    expect(button).not.toBeDisabled();
-    fireEvent.click(button);
-
-    await waitFor(() =>
-      expect(checkFlightStatusMock).toHaveBeenCalledWith("uid-1", baseFlight),
-    );
+    expect(screen.getByText("No live status checked yet.")).toBeInTheDocument();
   });
 
   it("renders stored status data", () => {
@@ -81,48 +52,176 @@ describe("FlightDetailsPanel", () => {
     expect(document.body.textContent).not.toContain("&#x2F;");
   });
 
-  it("disables the check button while the cooldown is in effect", () => {
+  it("shows the source attribution once a check has happened", () => {
     render(
       <FlightDetailsPanel
         flight={{
           ...baseFlight,
-          flight_status: { status: "Expected" },
-          flight_status_checked_at: new Date().toISOString(),
+          flight_status: { status: "Landed" },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+    expect(screen.getByText("Source: AeroDataBox")).toBeInTheDocument();
+  });
+
+  it("renders check-in desk without repeating the route's airport names", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              checkInDesk: "12-18",
+              airport: { name: "Sydney Airport", shortName: "Sydney Intl" },
+            },
+            arrival: {
+              airport: { name: "Changi Airport" },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
         }}
       />,
     );
 
-    const button = screen.getByTestId("flight-status-check-1");
-    expect(button).toBeDisabled();
+    expect(screen.getByText(/Check-in desk: 12-18/)).toBeInTheDocument();
+    expect(screen.queryByText("Sydney Intl")).not.toBeInTheDocument();
+    expect(screen.queryByText("Changi Airport")).not.toBeInTheDocument();
   });
 
-  it("notifies with a translated message on failure, not the raw error text", async () => {
-    const { FlightStatusError } = await import("../utils/flightStatusService");
-    const { notifications } = await import("@mantine/notifications");
-    const showSpy = vi
-      .spyOn(notifications, "show")
-      .mockImplementation(() => "");
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    checkFlightStatusMock.mockRejectedValue(
-      new FlightStatusError("No matching flight found", 404),
-    );
-    render(<FlightDetailsPanel flight={baseFlight} />);
-
-    fireEvent.click(screen.getByTestId("flight-status-check-1"));
-
-    await waitFor(() => expect(showSpy).toHaveBeenCalled());
-    expect(showSpy.mock.calls[0][0]).toMatchObject({
-      color: "red",
-      message: "No matching flight was found for this date",
-    });
-  });
-
-  it("hides the check button when the flight has no flight number", () => {
+  it("shows the scheduled time separately when it differs from the current estimate", () => {
     render(
-      <FlightDetailsPanel flight={{ ...baseFlight, flight_number: null }} />,
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:44Z",
+                local: "2026-09-20 14:44+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
     );
-    expect(
-      screen.queryByTestId("flight-status-check-1"),
-    ).not.toBeInTheDocument();
+
+    expect(screen.getByText("Scheduled 14:30")).toBeInTheDocument();
+    expect(screen.getByText("14:44")).toBeInTheDocument();
+    expect(screen.getByText("+14 min")).toBeInTheDocument();
+  });
+
+  it("shows a green on-time badge when scheduled and revised times match", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("14:30")).toBeInTheDocument();
+    expect(screen.getByText("On time")).toBeInTheDocument();
+  });
+
+  it("shows a green early badge for a negative delay", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Arrived",
+            arrival: {
+              scheduledTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 04:48Z",
+                local: "2026-09-20 14:48+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("-12 min")).toBeInTheDocument();
+  });
+
+  it("uses the actual time for a landed flight when the API supplies it", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Landed",
+            arrival: {
+              scheduledTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+              actualTime: {
+                utc: "2026-09-20 05:12Z",
+                local: "2026-09-20 15:12+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("Scheduled 15:00")).toBeInTheDocument();
+    expect(screen.getByText("15:12")).toBeInTheDocument();
+    expect(screen.getByText("+12 min")).toBeInTheDocument();
+  });
+
+  it("shows a red badge for a long delay", () => {
+    render(
+      <FlightDetailsPanel
+        flight={{
+          ...baseFlight,
+          flight_status: {
+            status: "Expected",
+            departure: {
+              scheduledTime: {
+                utc: "2026-09-20 04:30Z",
+                local: "2026-09-20 14:30+10:00",
+              },
+              revisedTime: {
+                utc: "2026-09-20 05:00Z",
+                local: "2026-09-20 15:00+10:00",
+              },
+            },
+          },
+          flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+        }}
+      />,
+    );
+
+    expect(screen.getByText("+30 min")).toBeInTheDocument();
   });
 });
