@@ -2,6 +2,7 @@
 
 Date: 2026-09-19
 Status: approved by Federico, not yet implemented — resume from here.
+Tracked as: #66
 Builds on: #64 (flight status checker, merged into this branch's history).
 Related follow-up (separate, low priority, not blocking): #65 (auto-check on
 flight import).
