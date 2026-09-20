@@ -118,7 +118,7 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
     } catch (err) {
       notifications.show({
         title: t("actions.delete_error_title"),
-        message: (err && (err as Error).message) || String(err),
+        message: err instanceof Error ? err.message : String(err),
         color: "red",
       });
     } finally {
