@@ -16,6 +16,8 @@ vi.mock("firebase/ai", () => ({
   getGenerativeModel: vi.fn(() => ({
     generateContent: mockGenerateContent,
   })),
+  // The schema only configures Gemini, so its exact shape does not matter here.
+  Schema: { object: vi.fn(), array: vi.fn(), string: vi.fn() },
 }));
 
 // Mock firebase app so the "!app" guard passes
@@ -33,17 +35,19 @@ const makeResponse = (json: string) => ({
   response: { text: () => json },
 });
 
-/** Build a complete valid payload */
-const validPayload = () => ({
+/** Wrap legs in the {"flights": [...]} object Gemini is asked for */
+const flightsResponse = (...legs: unknown[]) =>
+  makeResponse(JSON.stringify({ flights: legs }));
+
+/** Build a complete valid leg */
+const validLeg = (overrides: Record<string, unknown> = {}) => ({
   departure_airport_iata: "SYD",
   arrival_airport_iata: "SIN",
   departure_date: "2026-07-10",
   departure_time: "09:00",
   airline_iata: "QF",
   flight_number: "1",
-  return_date: null,
-  return_time: null,
-  return_flight_number: null,
+  ...overrides,
 });
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -63,100 +67,123 @@ describe("parseFlightFromText", () => {
     vi.clearAllMocks();
   });
 
-  it("parses a complete outbound-only flight correctly", async () => {
-    mockGenerateContent.mockResolvedValue(
-      makeResponse(JSON.stringify(validPayload())),
-    );
+  it("parses a single flight into a one-leg list", async () => {
+    mockGenerateContent.mockResolvedValue(flightsResponse(validLeg()));
 
     const result = await parseFlightFromText(
       "I flew from Sydney to Singapore on 10 July with Qantas",
     );
 
-    expect(result.departure_airport_iata).toBe("SYD");
-    expect(result.arrival_airport_iata).toBe("SIN");
-    expect(result.departure_date).toBe("2026-07-10");
-    expect(result.departure_time).toBe("09:00");
-    expect(result.airline_iata).toBe("QF");
-    expect(result.flight_number).toBe("1");
-    expect(result.return_date).toBeNull();
-    expect(result.return_time).toBeNull();
-    expect(result.return_flight_number).toBeNull();
+    expect(result).toEqual([validLeg()]);
   });
 
-  it("parses a round-trip flight and populates return fields", async () => {
-    const payload = {
-      ...validPayload(),
-      return_date: "2026-07-20",
-      return_time: "14:30",
-      return_flight_number: "2",
-    };
-    mockGenerateContent.mockResolvedValue(
-      makeResponse(JSON.stringify(payload)),
-    );
+  it("parses a multi-city round trip into one leg per flight, in order", async () => {
+    const legs = [
+      validLeg({
+        departure_airport_iata: "IAD",
+        arrival_airport_iata: "LAX",
+        departure_date: "2026-12-01",
+        departure_time: null,
+        airline_iata: "UA",
+        flight_number: null,
+      }),
+      validLeg({
+        departure_airport_iata: "LAX",
+        arrival_airport_iata: "SYD",
+        departure_date: "2026-12-01",
+        departure_time: null,
+        airline_iata: "UA",
+        flight_number: null,
+      }),
+      validLeg({
+        departure_airport_iata: "SYD",
+        arrival_airport_iata: "SFO",
+        departure_date: "2027-01-10",
+        departure_time: null,
+        airline_iata: "UA",
+        flight_number: null,
+      }),
+      validLeg({
+        departure_airport_iata: "SFO",
+        arrival_airport_iata: "DCA",
+        departure_date: "2027-01-10",
+        departure_time: null,
+        airline_iata: "UA",
+        flight_number: null,
+      }),
+    ];
+    mockGenerateContent.mockResolvedValue(flightsResponse(...legs));
 
     const result = await parseFlightFromText(
-      "Flew SYD to SIN on 10 July with Qantas, returning 20 July",
+      "Washington to LA to Sydney on 1 Dec with United, back on 10 Jan via San Francisco to Reagan",
     );
 
-    expect(result.return_date).toBe("2026-07-20");
-    expect(result.return_time).toBe("14:30");
-    expect(result.return_flight_number).toBe("2");
+    expect(
+      result.map(
+        (f) => `${f.departure_airport_iata}-${f.arrival_airport_iata}`,
+      ),
+    ).toEqual(["IAD-LAX", "LAX-SYD", "SYD-SFO", "SFO-DCA"]);
+    expect(result[3]?.departure_date).toBe("2027-01-10");
   });
 
-  it("strips markdown code fences that Gemini may wrap around JSON", async () => {
-    const json = `\`\`\`json\n${JSON.stringify(validPayload())}\n\`\`\``;
-    mockGenerateContent.mockResolvedValue(makeResponse(json));
-
-    const result = await parseFlightFromText("some flight");
-    expect(result.departure_airport_iata).toBe("SYD");
-  });
-
-  it("strips plain code fences (no language tag)", async () => {
-    const json = `\`\`\`\n${JSON.stringify(validPayload())}\n\`\`\``;
-    mockGenerateContent.mockResolvedValue(makeResponse(json));
-
-    const result = await parseFlightFromText("some flight");
-    expect(result.departure_airport_iata).toBe("SYD");
-  });
-
-  it("throws when required fields are absent from the AI response", async () => {
-    const partial = {
-      departure_airport_iata: "JFK",
-      arrival_airport_iata: null,
-      departure_date: null,
-      departure_time: null,
-      airline_iata: null,
-      flight_number: null,
-      return_date: null,
-      return_time: null,
-      return_flight_number: null,
-    };
+  it("normalizes each leg's fields", async () => {
     mockGenerateContent.mockResolvedValue(
-      makeResponse(JSON.stringify(partial)),
+      flightsResponse(
+        validLeg({
+          departure_airport_iata: " syd ",
+          departure_time: "9:05",
+          airline_iata: "qf",
+          flight_number: "QF1", // not digits only → null
+        }),
+      ),
+    );
+
+    const [leg] = await parseFlightFromText("some flight");
+    expect(leg?.departure_airport_iata).toBe("SYD");
+    expect(leg?.departure_time).toBe("09:05");
+    expect(leg?.airline_iata).toBe("QF");
+    expect(leg?.flight_number).toBeNull();
+  });
+
+  it("keeps legs with missing dates or airlines so the form can ask for them", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(validLeg({ departure_date: null, airline_iata: null })),
+    );
+
+    const [leg] = await parseFlightFromText("SYD to SIN sometime");
+    expect(leg?.departure_date).toBeNull();
+    expect(leg?.airline_iata).toBeNull();
+  });
+
+  it("drops legs that lack an airport and keeps the rest", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(
+        validLeg(),
+        validLeg({ arrival_airport_iata: 123 }), // invalid → dropped
+        "not a leg",
+      ),
+    );
+
+    const result = await parseFlightFromText("two flights");
+    expect(result).toHaveLength(1);
+  });
+
+  it("throws when no leg has both airports", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(validLeg({ arrival_airport_iata: null })),
     );
 
     await expect(parseFlightFromText("vague description")).rejects.toThrow(
-      /missing required fields/i,
+      /could not find any flights/i,
     );
   });
 
-  it("throws when required fields are missing after normalization", async () => {
-    const bad = {
-      departure_airport_iata: 123, // should become null
-      arrival_airport_iata: true, // should become null
-      departure_date: "2026-07-10",
-      departure_time: null,
-      airline_iata: "QF",
-      flight_number: null,
-      return_date: null,
-      return_time: null,
-      return_flight_number: null,
-    };
-    mockGenerateContent.mockResolvedValue(makeResponse(JSON.stringify(bad)));
+  it("strips markdown code fences that Gemini may wrap around JSON", async () => {
+    const json = `\`\`\`json\n${JSON.stringify({ flights: [validLeg()] })}\n\`\`\``;
+    mockGenerateContent.mockResolvedValue(makeResponse(json));
 
-    await expect(parseFlightFromText("bad types")).rejects.toThrow(
-      /missing required fields/i,
-    );
+    const [leg] = await parseFlightFromText("some flight");
+    expect(leg?.departure_airport_iata).toBe("SYD");
   });
 
   it("throws a descriptive error when the response is not valid JSON", async () => {
@@ -177,10 +204,12 @@ describe("parseFlightFromText", () => {
     );
   });
 
-  it("throws when the parsed JSON is a plain array", async () => {
-    mockGenerateContent.mockResolvedValue(makeResponse("[]"));
+  it("throws when the object has no flights array", async () => {
+    mockGenerateContent.mockResolvedValue(
+      makeResponse(JSON.stringify(validLeg())),
+    );
 
-    await expect(parseFlightFromText("edge case")).rejects.toThrow(
+    await expect(parseFlightFromText("old shape")).rejects.toThrow(
       /invalid response structure/i,
     );
   });

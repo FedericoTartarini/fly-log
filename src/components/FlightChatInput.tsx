@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next";
 
 interface FlightChatInputProps {
   /** Called as soon as parsing succeeds — pre-fills the form fields. */
-  onParsed: (flight: ParsedFlight) => void;
+  onParsed: (flights: ParsedFlight[]) => void;
   /** Called when the user clicks "Go to Manual Entry" after a successful parse. */
   onConfirm: () => void;
 }
@@ -52,26 +52,23 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [parsed, setParsed] = useState<ParsedFlight | null>(null);
+  const [parsed, setParsed] = useState<ParsedFlight[] | null>(null);
   const { t } = useTranslation("flights");
 
   const examples = t("ai.examples", { returnObjects: true }) as string[];
 
-  const missingFields: string[] = parsed
-    ? REQUIRED_FIELDS.filter((f) => !parsed[f]).map((f) =>
-        t(FIELD_I18N_KEYS[f] ?? String(f)),
-      )
-    : [];
+  const isMultiLeg = (parsed?.length ?? 0) > 1;
 
-  const hasAnyParsedField = Boolean(
-    parsed &&
-      (parsed.departure_airport_iata ||
-        parsed.arrival_airport_iata ||
-        parsed.departure_date ||
-        parsed.airline_iata),
+  // Prefix each missing field with its leg number when there are several legs.
+  const missingFields: string[] = (parsed ?? []).flatMap((leg, index) =>
+    REQUIRED_FIELDS.filter((f) => !leg[f]).map((f) => {
+      const label = t(FIELD_I18N_KEYS[f] ?? String(f));
+      return isMultiLeg ? `${t("ai.leg", { n: index + 1 })}: ${label}` : label;
+    }),
   );
 
-  const hasReturn = !!parsed?.return_date;
+  // The parser only returns legs with both airports, so any leg is enough.
+  const hasAnyParsedField = Boolean(parsed?.length);
 
   const handleParse = async () => {
     if (!input.trim()) return;
@@ -197,111 +194,65 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
           <Stack gap="xs">
             <Text size="xs">{t("ai.success_subtitle")}</Text>
 
-            {/* Outbound leg */}
-            <Text size="xs" fw={600} tt="uppercase" c="dimmed">
-              {hasReturn ? t("ai.outbound_leg") : t("ai.flight_details")}
-            </Text>
-            <List size="xs" spacing={4} icon={<IconPlane size={12} />}>
-              {parsed.departure_airport_iata && (
-                <List.Item>
-                  {t("ai.from")}:{" "}
-                  <Badge size="xs" variant="light" color="blue">
-                    {parsed.departure_airport_iata}
-                  </Badge>
-                </List.Item>
-              )}
-              {parsed.arrival_airport_iata && (
-                <List.Item>
-                  {t("ai.to")}:{" "}
-                  <Badge size="xs" variant="light" color="green">
-                    {parsed.arrival_airport_iata}
-                  </Badge>
-                </List.Item>
-              )}
-              {parsed.departure_date && (
-                <List.Item>
-                  {t("ai.date")}:{" "}
-                  <Badge size="xs" variant="light" color="orange">
-                    {parsed.departure_date}
-                  </Badge>
-                </List.Item>
-              )}
-              {parsed.departure_time && (
-                <List.Item>
-                  {t("ai.time")}:{" "}
-                  <Badge size="xs" variant="light" color="cyan">
-                    {parsed.departure_time}
-                  </Badge>
-                </List.Item>
-              )}
-              {parsed.airline_iata && (
-                <List.Item>
-                  {t("ai.airline")}:{" "}
-                  <Badge size="xs" variant="light" color="grape">
-                    {parsed.airline_iata}
-                  </Badge>
-                </List.Item>
-              )}
-              {parsed.flight_number && (
-                <List.Item>
-                  {t("ai.flight_number")}:{" "}
-                  <Badge size="xs" variant="light">
-                    {parsed.flight_number}
-                  </Badge>
-                </List.Item>
-              )}
-            </List>
-
-            {/* Return leg */}
-            {hasReturn && (
-              <>
-                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mt="xs">
-                  {t("ai.return_leg")}
+            {parsed.map((leg, index) => (
+              <React.Fragment key={index}>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed">
+                  {isMultiLeg
+                    ? t("ai.leg", { n: index + 1 })
+                    : t("ai.flight_details")}
                 </Text>
                 <List size="xs" spacing={4} icon={<IconPlane size={12} />}>
-                  {parsed.arrival_airport_iata && (
+                  {leg.departure_airport_iata && (
                     <List.Item>
                       {t("ai.from")}:{" "}
-                      <Badge size="xs" variant="light" color="green">
-                        {parsed.arrival_airport_iata}
+                      <Badge size="xs" variant="light" color="blue">
+                        {leg.departure_airport_iata}
                       </Badge>
                     </List.Item>
                   )}
-                  {parsed.departure_airport_iata && (
+                  {leg.arrival_airport_iata && (
                     <List.Item>
                       {t("ai.to")}:{" "}
-                      <Badge size="xs" variant="light" color="blue">
-                        {parsed.departure_airport_iata}
+                      <Badge size="xs" variant="light" color="green">
+                        {leg.arrival_airport_iata}
                       </Badge>
                     </List.Item>
                   )}
-                  {parsed.return_date && (
+                  {leg.departure_date && (
                     <List.Item>
                       {t("ai.date")}:{" "}
                       <Badge size="xs" variant="light" color="orange">
-                        {parsed.return_date}
+                        {leg.departure_date}
                       </Badge>
                     </List.Item>
                   )}
-                  {parsed.return_time && (
+                  {leg.departure_time && (
                     <List.Item>
                       {t("ai.time")}:{" "}
                       <Badge size="xs" variant="light" color="cyan">
-                        {parsed.return_time}
+                        {leg.departure_time}
                       </Badge>
                     </List.Item>
                   )}
-                  {parsed.return_flight_number && (
+                  {leg.airline_iata && (
+                    <List.Item>
+                      {t("ai.airline")}:{" "}
+                      <Badge size="xs" variant="light" color="grape">
+                        {leg.airline_iata}
+                      </Badge>
+                    </List.Item>
+                  )}
+                  {leg.flight_number && (
                     <List.Item>
                       {t("ai.flight_number")}:{" "}
                       <Badge size="xs" variant="light">
-                        {parsed.return_flight_number}
+                        {leg.flight_number}
                       </Badge>
                     </List.Item>
                   )}
                 </List>
-              </>
-            )}
+              </React.Fragment>
+            ))}
           </Stack>
         </Alert>
       )}

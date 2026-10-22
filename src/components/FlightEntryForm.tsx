@@ -7,10 +7,13 @@ import {
   Title,
   Stack,
   Tabs,
-  Switch,
+  Paper,
+  ActionIcon,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
+import { randomId } from "@mantine/hooks";
+import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { addFlightForUser } from "../firebaseClient";
 import { updateFlightForUser } from "../utils/flightService";
 import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
@@ -31,6 +34,31 @@ type SelectOption = {
   value: string;
   label: string;
 };
+
+/** One flight (leg) of a possibly multi-city trip, as held by the form. */
+type Leg = {
+  key: string;
+  departureDate: Date | null;
+  departureTime: string;
+  departureAirport: string;
+  arrivalAirport: string;
+  airline: string;
+  flightNumber: string;
+};
+
+const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
+  key: randomId(),
+  departureDate: null,
+  departureTime: "",
+  departureAirport: "",
+  arrivalAirport: "",
+  airline: "",
+  flightNumber: "",
+  ...overrides,
+});
+
+/** Legs index from a Mantine list path such as "legs.2.arrivalAirport". */
+const legIndex = (path: string) => Number(path.split(".")[1]);
 
 interface FlightEntryFormProps {
   onSaved?: () => void;
@@ -53,7 +81,6 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const [airportOptions, setAirportOptions] = useState<SelectOption[]>([]);
   const [airlineOptions, setAirlineOptions] = useState<SelectOption[]>([]);
   const [loading, setLoading] = useState(false);
-  const [addReturn, setAddReturn] = useState(false);
   const { user } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const submitErrorId = "flight-entry-error";
@@ -61,43 +88,27 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
   const { t } = useTranslation("flights");
 
-  // Form defaults for manual + AI-pre-filled flights.
-  const initialValues = {
-    departureDate: null as Date | null,
-    departureTime: "",
-    departureAirport: "",
-    arrivalAirport: "",
-    airline: "",
-    flightNumber: "",
-    // Return flight fields
-    returnDate: null as Date | null,
-    returnTime: "",
-    returnFlightNumber: "",
-  };
-
   const form = useForm({
-    initialValues,
+    initialValues: { legs: [newLeg()] },
     validate: {
-      departureDate: (value) =>
-        value ? null : t("form.validation.departure_date_required"),
-      departureAirport: (value) =>
-        value ? null : t("form.validation.departure_airport_required"),
-      arrivalAirport: (value, values) => {
-        if (!value) return t("form.validation.arrival_airport_required");
-        if (value === values.departureAirport)
-          return t("form.validation.arrival_differs");
-        return null;
+      legs: {
+        departureDate: (value) =>
+          value ? null : t("form.validation.departure_date_required"),
+        departureAirport: (value) =>
+          value ? null : t("form.validation.departure_airport_required"),
+        arrivalAirport: (value, values, path) => {
+          if (!value) return t("form.validation.arrival_airport_required");
+          if (value === values.legs[legIndex(path)]?.departureAirport)
+            return t("form.validation.arrival_differs");
+          return null;
+        },
+        airline: (value) =>
+          value ? null : t("form.validation.airline_required"),
       },
-      airline: (value) =>
-        value ? null : t("form.validation.airline_required"),
-      returnDate: (value) =>
-        addReturn
-          ? value
-            ? null
-            : t("form.validation.return_date_required")
-          : null,
     },
   });
+
+  const legs = form.values.legs;
 
   useEffect(() => {
     const fetchAirportsInfo = async () => {
@@ -133,41 +144,42 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   useEffect(() => {
     // If flight prop changes, update form values accordingly
     if (!flight) return;
+    let departureDate: Date | null = null;
     try {
-      const depDate = parseToDate(flight.departure_date);
-      form.setValues({
-        departureDate: depDate,
-        departureTime: flight.departure_time || "",
-        departureAirport: flight.departure_airport_iata || "",
-        arrivalAirport: flight.arrival_airport_iata || "",
-        airline: flight.airline_iata || "",
-        flightNumber: flight.flight_number || "",
-        returnDate: null,
-        returnTime: "",
-        returnFlightNumber: "",
-      });
-      setAddReturn(false);
+      departureDate = parseToDate(flight.departure_date);
     } catch (e) {
       console.error("parseToDate failed in FlightEntryForm", e);
-      // Optionally, set fallback values or trigger validation
-      form.setValues({
-        departureDate: null,
-        departureTime: "",
-        departureAirport: "",
-        arrivalAirport: "",
-        airline: "",
-        flightNumber: "",
-        returnDate: null,
-        returnTime: "",
-        returnFlightNumber: "",
-      });
-      setAddReturn(false);
     }
+    form.setValues({
+      legs: [
+        newLeg({
+          departureDate,
+          departureTime: flight.departure_time || "",
+          departureAirport: flight.departure_airport_iata || "",
+          arrivalAirport: flight.arrival_airport_iata || "",
+          airline: flight.airline_iata || "",
+          flightNumber: flight.flight_number || "",
+        }),
+      ],
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flight]);
 
   const handleSubmit = async (values: typeof form.values) => {
     setSubmitError(null);
+
+    const uid = user?.uid || null;
+    if (!uid) {
+      const msg = t("form.labels.not_signed_in");
+      setSubmitError(msg);
+      notifications.show({
+        title: t("form.notifications.error_title"),
+        message: msg,
+        color: "red",
+      });
+      return;
+    }
+
     setLoading(true);
     notifications.show({
       title: t("form.notifications.saving_title"),
@@ -176,83 +188,40 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     });
 
     try {
-      type FlightPayload = {
-        departure_date: Date | null;
-        departure_time?: string | null;
-        departure_airport_iata: string;
-        arrival_airport_iata: string;
-        airline_iata: string;
-        flight_number: string;
-      };
-
-      const flightsToInsert: FlightPayload[] = [
-        {
-          departure_date: values.departureDate,
-          departure_time: normalizeTimeString(values.departureTime),
-          departure_airport_iata: values.departureAirport,
-          arrival_airport_iata: values.arrivalAirport,
-          airline_iata: values.airline,
-          flight_number: values.flightNumber,
-        },
-      ];
-
-      if (addReturn) {
-        flightsToInsert.push({
-          departure_date: values.returnDate,
-          departure_airport_iata: values.arrivalAirport,
-          arrival_airport_iata: values.departureAirport,
-          airline_iata: values.airline,
-          flight_number: values.returnFlightNumber,
-          departure_time: normalizeTimeString(values.returnTime),
-        });
-      }
+      const flightsToInsert = values.legs.map((leg) => ({
+        departure_date: leg.departureDate,
+        departure_time: normalizeTimeString(leg.departureTime),
+        departure_airport_iata: leg.departureAirport,
+        arrival_airport_iata: leg.arrivalAirport,
+        airline_iata: leg.airline,
+        flight_number: leg.flightNumber,
+      }));
 
       const [primaryFlight] = flightsToInsert;
       if (!primaryFlight) {
         throw new Error("No flight details available to save.");
       }
 
-      const uid = user?.uid || null;
-      if (!uid) {
-        const msg = t("form.labels.not_signed_in");
-        setSubmitError(msg);
-        notifications.show({
-          title: t("form.notifications.error_title"),
-          message: msg,
-          color: "red",
-        });
-        setLoading(false);
-        return;
-      }
-
       if (flight && flight.id) {
         // Editing a single flight
         await updateFlightForUser(uid, flight.id, primaryFlight);
-
-        notifications.show({
-          title: t("form.notifications.saving_title"),
-          message: t("form.notifications.success_single"),
-          color: "green",
-        });
       } else {
-        // Create new flights
+        // Each leg is stored as its own flight document.
         for (const f of flightsToInsert) {
           await addFlightForUser(uid, f);
         }
-
-        notifications.show({
-          title: t(
-            "form.notifications.saving_title",
-          ) /* re-use saving title for brevity */,
-          message: addReturn
-            ? t("form.notifications.success_multiple")
-            : t("form.notifications.success_single"),
-          color: "green",
-        });
       }
 
+      notifications.show({
+        title: t("form.notifications.saving_title"),
+        message:
+          flightsToInsert.length > 1
+            ? t("form.notifications.success_multiple")
+            : t("form.notifications.success_single"),
+        color: "green",
+      });
+
       form.reset();
-      setAddReturn(false);
 
       if (onSaved) onSaved();
     } catch (error: unknown) {
@@ -269,28 +238,20 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     }
   };
 
-  const handleFormSubmit = form.onSubmit(async (values) => {
-    setSubmitError(null);
-    form.validate();
-    const errorMessages = Object.values(form.errors).filter(
-      Boolean,
-    ) as string[];
-    const hasErrors = errorMessages.length > 0;
-    if (hasErrors) {
-      const msg =
-        errorMessages.join("; ") ||
-        t("form.notifications.validation_error_generic");
-      setSubmitError(msg);
-      notifications.show({
-        title: t("form.notifications.validation_error_title"),
-        message: msg,
-        color: "red",
-      });
-      return;
-    }
-
-    await handleSubmit(values);
-  });
+  const handleValidationErrors = (errors: typeof form.errors) => {
+    const errorMessages = [
+      ...new Set(Object.values(errors).filter(Boolean) as string[]),
+    ];
+    const msg =
+      errorMessages.join("; ") ||
+      t("form.notifications.validation_error_generic");
+    setSubmitError(msg);
+    notifications.show({
+      title: t("form.notifications.validation_error_title"),
+      message: msg,
+      color: "red",
+    });
+  };
 
   const isEditing = Boolean(flight && flight.id);
 
@@ -298,197 +259,185 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     FLIGHT_ENTRY_TABS.MANUAL,
   );
 
-  // Apply AI-parsed values onto the manual form fields.
-  const handleAiParsed = (parsedFlight: ParsedFlight) => {
-    const hasReturn = !!parsedFlight.return_date;
-    let departureDate = form.values.departureDate;
-    let returnDate = form.values.returnDate;
-    try {
-      if (parsedFlight.departure_date) {
-        departureDate = parseToDate(parsedFlight.departure_date);
+  const lastLeg = legs[legs.length - 1];
+  const firstLeg = legs[0];
+  // Once the trip ends where it started, a return has already been added.
+  const isRoundTrip =
+    legs.length > 1 &&
+    !!lastLeg?.arrivalAirport &&
+    lastLeg.arrivalAirport === firstLeg?.departureAirport;
+
+  // The next leg starts where the last one landed, usually on the same airline.
+  const addNextLeg = () =>
+    form.insertListItem(
+      "legs",
+      newLeg({
+        departureAirport: lastLeg?.arrivalAirport ?? "",
+        airline: lastLeg?.airline ?? "",
+      }),
+    );
+
+  // Append the current legs reversed, e.g. SYD→SIN→LHR adds LHR→SIN→SYD.
+  const addReturnTrip = () =>
+    form.setFieldValue("legs", [
+      ...legs,
+      ...[...legs].reverse().map((leg) =>
+        newLeg({
+          departureAirport: leg.arrivalAirport,
+          arrivalAirport: leg.departureAirport,
+          airline: leg.airline,
+        }),
+      ),
+    ]);
+
+  // Replace the form legs with the AI-parsed legs.
+  const handleAiParsed = (parsedFlights: ParsedFlight[]) => {
+    let hasInvalidDate = false;
+    const parsedLegs = parsedFlights.map((parsed) => {
+      let departureDate: Date | null = null;
+      try {
+        if (parsed.departure_date) {
+          departureDate = parseToDate(parsed.departure_date);
+        }
+      } catch (err) {
+        console.error("parseToDate failed for departure_date", {
+          error: err,
+          value: parsed.departure_date,
+        });
+        hasInvalidDate = true;
       }
-    } catch (err) {
-      console.error("parseToDate failed for departure_date", {
-        error: err,
-        value: parsedFlight.departure_date,
+      return newLeg({
+        departureDate,
+        departureTime: parsed.departure_time ?? "",
+        departureAirport: parsed.departure_airport_iata ?? "",
+        arrivalAirport: parsed.arrival_airport_iata ?? "",
+        airline: parsed.airline_iata ?? "",
+        flightNumber: parsed.flight_number ?? "",
       });
-      departureDate = null;
-      form.setFieldError(
-        "departureDate",
-        t("form.validation.departure_date_invalid"),
-      );
+    });
+    form.setValues({ legs: parsedLegs.length ? parsedLegs : [newLeg()] });
+    if (hasInvalidDate) {
       notifications.show({
         title: t("form.notifications.validation_error_title"),
         message: t("form.validation.departure_date_invalid"),
         color: "red",
       });
     }
-    try {
-      if (parsedFlight.return_date) {
-        returnDate = parseToDate(parsedFlight.return_date);
-      }
-    } catch (err) {
-      console.error("parseToDate failed for return_date", {
-        error: err,
-        value: parsedFlight.return_date,
-      });
-      returnDate = null;
-      form.setFieldError(
-        "returnDate",
-        t("form.validation.return_date_invalid"),
-      );
-      notifications.show({
-        title: t("form.notifications.validation_error_title"),
-        message: t("form.validation.return_date_invalid"),
-        color: "red",
-      });
-    }
-    form.setValues({
-      ...form.values,
-      departureAirport:
-        parsedFlight.departure_airport_iata ?? form.values.departureAirport,
-      arrivalAirport:
-        parsedFlight.arrival_airport_iata ?? form.values.arrivalAirport,
-      airline: parsedFlight.airline_iata ?? form.values.airline,
-      flightNumber: parsedFlight.flight_number ?? form.values.flightNumber,
-      departureTime: parsedFlight.departure_time ?? form.values.departureTime,
-      departureDate,
-      // Return leg
-      returnDate,
-      returnTime: parsedFlight.return_time ?? form.values.returnTime,
-      returnFlightNumber:
-        parsedFlight.return_flight_number ?? form.values.returnFlightNumber,
-    });
-    setAddReturn(hasReturn);
   };
+
+  const legFields = (index: number) => (
+    <Stack>
+      <Group grow>
+        <DatePickerInput
+          label={t("form.labels.departure_date")}
+          placeholder={t("form.placeholders.select_date")}
+          required
+          clearable={false}
+          {...form.getInputProps(`legs.${index}.departureDate`)}
+        />
+        <TextInput
+          label={t("form.labels.departure_time")}
+          placeholder={t("form.placeholders.time_example")}
+          {...form.getInputProps(`legs.${index}.departureTime`)}
+        />
+      </Group>
+
+      <Select
+        label={t("form.labels.departure_airport")}
+        placeholder={t("form.placeholders.search_airports")}
+        searchable
+        limit={5}
+        required
+        data={airportOptions}
+        maxDropdownHeight={280}
+        nothingFoundMessage={t("form.placeholders.no_matching_airports")}
+        {...form.getInputProps(`legs.${index}.departureAirport`)}
+        clearable={true}
+      />
+
+      <Select
+        label={t("form.labels.arrival_airport")}
+        placeholder={t("form.placeholders.search_airports")}
+        searchable
+        limit={5}
+        required
+        data={airportOptions}
+        maxDropdownHeight={280}
+        nothingFoundMessage={t("form.placeholders.no_matching_airports")}
+        {...form.getInputProps(`legs.${index}.arrivalAirport`)}
+        clearable={true}
+      />
+
+      <Group grow>
+        <Select
+          label={t("form.labels.airline")}
+          placeholder={t("form.placeholders.search_airlines")}
+          searchable
+          limit={5}
+          required
+          data={airlineOptions}
+          maxDropdownHeight={280}
+          nothingFoundMessage={t("form.placeholders.no_matching_airlines")}
+          {...form.getInputProps(`legs.${index}.airline`)}
+          clearable={true}
+        />
+        <TextInput
+          label={t("form.labels.flight_number")}
+          placeholder={t("form.placeholders.flight_number_example")}
+          {...form.getInputProps(`legs.${index}.flightNumber`)}
+        />
+      </Group>
+    </Stack>
+  );
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
   const manualPanel = (
     <Stack>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={form.onSubmit(handleSubmit, handleValidationErrors)}>
         <Stack>
-          <Group grow>
-            <DatePickerInput
-              label={t("form.labels.departure_date")}
-              placeholder={t("form.placeholders.select_date")}
-              required
-              clearable={false}
-              {...form.getInputProps("departureDate")}
-            />
-            <TextInput
-              label={t("form.labels.departure_time")}
-              placeholder={t("form.placeholders.time_example")}
-              {...form.getInputProps("departureTime")}
-            />
-          </Group>
+          {legs.length === 1
+            ? legFields(0)
+            : legs.map((leg, index) => (
+                <Paper key={leg.key} withBorder p="sm" radius="md">
+                  <Group justify="space-between" mb="xs">
+                    <Title order={5}>
+                      {t("form.labels.flight_n", { n: index + 1 })}
+                    </Title>
+                    <ActionIcon
+                      variant="subtle"
+                      color="red"
+                      aria-label={t("form.buttons.remove_flight", {
+                        n: index + 1,
+                      })}
+                      onClick={() => form.removeListItem("legs", index)}
+                    >
+                      <IconTrash size={16} />
+                    </ActionIcon>
+                  </Group>
+                  {legFields(index)}
+                </Paper>
+              ))}
 
-          <Select
-            label={t("form.labels.departure_airport")}
-            placeholder={t("form.placeholders.search_airports")}
-            searchable
-            limit={5}
-            required
-            data={airportOptions}
-            maxDropdownHeight={280}
-            nothingFoundMessage={t("form.placeholders.no_matching_airports")}
-            {...form.getInputProps("departureAirport")}
-            clearable={true}
-          />
-
-          <Select
-            label={t("form.labels.arrival_airport")}
-            placeholder={t("form.placeholders.search_airports")}
-            searchable
-            limit={5}
-            required
-            data={airportOptions}
-            maxDropdownHeight={280}
-            nothingFoundMessage={t("form.placeholders.no_matching_airports")}
-            {...form.getInputProps("arrivalAirport")}
-            clearable={true}
-          />
-
-          <Group grow>
-            <Select
-              label={t("form.labels.airline")}
-              placeholder={t("form.placeholders.search_airlines")}
-              searchable
-              limit={5}
-              required
-              data={airlineOptions}
-              maxDropdownHeight={280}
-              nothingFoundMessage={t("form.placeholders.no_matching_airlines")}
-              {...form.getInputProps("airline")}
-              clearable={true}
-            />
-            <TextInput
-              label={t("form.labels.flight_number")}
-              placeholder={t("form.placeholders.flight_number_example")}
-              {...form.getInputProps("flightNumber")}
-            />
-          </Group>
-
-          {/* Only show addReturn toggle when creating a new flight */}
+          {/* Adding legs only makes sense when creating new flights */}
           {!isEditing && (
-            <>
-              <Switch
-                label={t("form.labels.add_return")}
-                checked={addReturn}
-                onChange={(event) => setAddReturn(event.currentTarget.checked)}
-                mt="md"
-              />
-
-              {addReturn && (
-                <Stack mt="xs" p="xs" style={{ borderRadius: 8 }}>
-                  <Title order={5}>{t("form.labels.return_flight")}</Title>
-                  <Group grow>
-                    <DatePickerInput
-                      label={t("form.labels.return_date")}
-                      placeholder={t("form.placeholders.select_date")}
-                      required
-                      clearable={false}
-                      {...form.getInputProps("returnDate")}
-                    />
-                    <TextInput
-                      label={t("form.labels.return_time")}
-                      placeholder={t("form.placeholders.time_example")}
-                      {...form.getInputProps("returnTime")}
-                    />
-                  </Group>
-                  <Group grow>
-                    <Select
-                      label={t("form.labels.airline")}
-                      placeholder={t("form.placeholders.search_airlines")}
-                      searchable
-                      limit={5}
-                      required
-                      data={airlineOptions}
-                      maxDropdownHeight={280}
-                      nothingFoundMessage={t(
-                        "form.placeholders.no_matching_airlines",
-                      )}
-                      {...form.getInputProps("airline")}
-                      disabled
-                    />
-                    <TextInput
-                      label={t("form.labels.flight_number")}
-                      placeholder={t("form.placeholders.flight_number_example")}
-                      {...form.getInputProps("returnFlightNumber")}
-                    />
-                  </Group>
-                  <TextInput
-                    label={t("form.labels.departure_airport")}
-                    value={form.values.arrivalAirport}
-                    disabled
-                  />
-                  <TextInput
-                    label={t("form.labels.arrival_airport")}
-                    value={form.values.departureAirport}
-                    disabled
-                  />
-                </Stack>
+            <Group gap="xs">
+              <Button
+                variant="light"
+                leftSection={<IconPlus size={16} />}
+                onClick={addNextLeg}
+              >
+                {t("form.buttons.add_flight")}
+              </Button>
+              {!isRoundTrip && (
+                <Button
+                  variant="light"
+                  leftSection={<IconArrowBackUp size={16} />}
+                  onClick={addReturnTrip}
+                >
+                  {t("form.buttons.add_return")}
+                </Button>
               )}
-            </>
+            </Group>
           )}
 
           {!user && (
@@ -521,7 +470,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
             <Button type="submit" loading={loading} disabled={!user}>
               {isEditing
                 ? t("form.buttons.update") || "Update"
-                : addReturn
+                : legs.length > 1
                   ? t("form.buttons.save_multiple")
                   : t("form.buttons.save_single")}
             </Button>
@@ -560,9 +509,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
           <Tabs.Panel value={FLIGHT_ENTRY_TABS.AI} pt="xs">
             <FlightChatInput
-              onParsed={(parsed) => {
-                handleAiParsed(parsed);
-              }}
+              onParsed={handleAiParsed}
               onConfirm={() => setActiveTab(FLIGHT_ENTRY_TABS.MANUAL)}
             />
           </Tabs.Panel>
