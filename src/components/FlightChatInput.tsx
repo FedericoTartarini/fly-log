@@ -63,11 +63,13 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
   const missingFields: string[] = (parsed ?? []).flatMap((leg, index) =>
     REQUIRED_FIELDS.filter((f) => !leg[f]).map((f) => {
       const label = t(FIELD_I18N_KEYS[f] ?? String(f));
-      return isMultiLeg ? `${t("ai.leg", { n: index + 1 })}: ${label}` : label;
+      return isMultiLeg
+        ? `${t("form.labels.flight_n", { n: index + 1 })}: ${label}`
+        : label;
     }),
   );
 
-  // The parser only returns legs with both airports, so any leg is enough.
+  // The parser only returns legs with at least one airport.
   const hasAnyParsedField = Boolean(parsed?.length);
 
   const handleParse = async () => {
@@ -198,7 +200,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               <React.Fragment key={index}>
                 <Text size="xs" fw={600} tt="uppercase" c="dimmed">
                   {isMultiLeg
-                    ? t("ai.leg", { n: index + 1 })
+                    ? t("form.labels.flight_n", { n: index + 1 })
                     : t("ai.flight_details")}
                 </Text>
                 <List size="xs" spacing={4} icon={<IconPlane size={12} />}>

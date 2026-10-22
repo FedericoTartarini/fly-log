@@ -14,7 +14,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
-import { addFlightForUser } from "../firebaseClient";
+import { addFlightsForUser } from "../firebaseClient";
 import { updateFlightForUser } from "../utils/flightService";
 import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -197,18 +197,15 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         flight_number: leg.flightNumber,
       }));
 
-      const [primaryFlight] = flightsToInsert;
-      if (!primaryFlight) {
-        throw new Error("No flight details available to save.");
-      }
-
       if (flight && flight.id) {
-        // Editing a single flight
-        await updateFlightForUser(uid, flight.id, primaryFlight);
+        // Editing a single flight; the form always holds at least one leg.
+        await updateFlightForUser(uid, flight.id, flightsToInsert[0]!);
       } else {
-        // Each leg is stored as its own flight document.
-        for (const f of flightsToInsert) {
-          await addFlightForUser(uid, f);
+        // Each leg is its own flight document, written in one batch so a
+        // failure can't leave half a trip saved (and duplicate it on retry).
+        const { errorCount } = await addFlightsForUser(uid, flightsToInsert);
+        if (errorCount > 0) {
+          throw new Error(`${errorCount} flight(s) could not be saved.`);
         }
       }
 
@@ -239,9 +236,14 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   };
 
   const handleValidationErrors = (errors: typeof form.errors) => {
-    const errorMessages = [
-      ...new Set(Object.values(errors).filter(Boolean) as string[]),
-    ];
+    // Keys look like "legs.1.departureDate"; name the leg when there are several.
+    const errorMessages = Object.entries(errors)
+      .filter(([, message]) => Boolean(message))
+      .map(([path, message]) =>
+        form.values.legs.length > 1
+          ? `${t("form.labels.flight_n", { n: legIndex(path) + 1 })}: ${message}`
+          : String(message),
+      );
     const msg =
       errorMessages.join("; ") ||
       t("form.notifications.validation_error_generic");
@@ -261,11 +263,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
 
   const lastLeg = legs[legs.length - 1];
   const firstLeg = legs[0];
-  // Once the trip ends where it started, a return has already been added.
-  const isRoundTrip =
+  // Once any leg lands back where the trip started, a return already exists.
+  const hasReturn =
     legs.length > 1 &&
-    !!lastLeg?.arrivalAirport &&
-    lastLeg.arrivalAirport === firstLeg?.departureAirport;
+    legs.some(
+      (leg) =>
+        leg.arrivalAirport && leg.arrivalAirport === firstLeg?.departureAirport,
+    );
 
   // The next leg starts where the last one landed, usually on the same airline.
   const addNextLeg = () =>
@@ -277,11 +281,16 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       }),
     );
 
-  // Append the current legs reversed, e.g. SYD→SIN→LHR adds LHR→SIN→SYD.
+  // Legs with both airports set; only these can be reversed into a return.
+  const completeLegs = legs.filter(
+    (leg) => leg.departureAirport && leg.arrivalAirport,
+  );
+
+  // Append the complete legs reversed, e.g. SYD→SIN→LHR adds LHR→SIN→SYD.
   const addReturnTrip = () =>
     form.setFieldValue("legs", [
-      ...legs,
-      ...[...legs].reverse().map((leg) =>
+      ...completeLegs,
+      ...[...completeLegs].reverse().map((leg) =>
         newLeg({
           departureAirport: leg.arrivalAirport,
           arrivalAirport: leg.departureAirport,
@@ -395,28 +404,34 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     <Stack>
       <form onSubmit={form.onSubmit(handleSubmit, handleValidationErrors)}>
         <Stack>
-          {legs.length === 1
-            ? legFields(0)
-            : legs.map((leg, index) => (
-                <Paper key={leg.key} withBorder p="sm" radius="md">
-                  <Group justify="space-between" mb="xs">
-                    <Title order={5}>
-                      {t("form.labels.flight_n", { n: index + 1 })}
-                    </Title>
-                    <ActionIcon
-                      variant="subtle"
-                      color="red"
-                      aria-label={t("form.buttons.remove_flight", {
-                        n: index + 1,
-                      })}
-                      onClick={() => form.removeListItem("legs", index)}
-                    >
-                      <IconTrash size={16} />
-                    </ActionIcon>
-                  </Group>
-                  {legFields(index)}
-                </Paper>
-              ))}
+          {/* Same wrapper for one leg or many, so leg 1 never remounts */}
+          {legs.map((leg, index) => (
+            <Paper
+              key={leg.key}
+              withBorder={legs.length > 1}
+              p={legs.length > 1 ? "sm" : 0}
+              radius="md"
+            >
+              {legs.length > 1 && (
+                <Group justify="space-between" mb="xs">
+                  <Title order={5}>
+                    {t("form.labels.flight_n", { n: index + 1 })}
+                  </Title>
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    aria-label={t("form.buttons.remove_flight", {
+                      n: index + 1,
+                    })}
+                    onClick={() => form.removeListItem("legs", index)}
+                  >
+                    <IconTrash size={16} />
+                  </ActionIcon>
+                </Group>
+              )}
+              {legFields(index)}
+            </Paper>
+          ))}
 
           {/* Adding legs only makes sense when creating new flights */}
           {!isEditing && (
@@ -428,7 +443,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
               >
                 {t("form.buttons.add_flight")}
               </Button>
-              {!isRoundTrip && (
+              {!hasReturn && completeLegs.length > 0 && (
                 <Button
                   variant="light"
                   leftSection={<IconArrowBackUp size={16} />}

@@ -23,8 +23,9 @@ vi.mock("../utils/referenceData", () => ({
 }));
 
 vi.mock("../firebaseClient", () => ({
-  addFlightForUser: vi.fn().mockResolvedValue(undefined),
-  addFlightsForUser: vi.fn().mockResolvedValue(undefined),
+  addFlightsForUser: vi
+    .fn()
+    .mockResolvedValue({ successCount: 1, errorCount: 0 }),
   auth: null,
 }));
 
@@ -52,7 +53,7 @@ vi.mock("../utils/flightAiParser", () => ({
 import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
-import { addFlightForUser } from "../firebaseClient";
+import { addFlightsForUser } from "../firebaseClient";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -314,8 +315,11 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /save flights/i }),
     );
 
-    await waitFor(() => expect(addFlightForUser).toHaveBeenCalledTimes(3));
-    expect(vi.mocked(addFlightForUser).mock.calls[1]?.[1]).toMatchObject({
+    // All legs go in one batch write, one document per leg.
+    await waitFor(() => expect(addFlightsForUser).toHaveBeenCalledOnce());
+    const saved = vi.mocked(addFlightsForUser).mock.calls[0]?.[1];
+    expect(saved).toHaveLength(3);
+    expect(saved?.[1]).toMatchObject({
       departure_airport_iata: "SIN",
       arrival_airport_iata: "LHR",
       airline_iata: "QF",
@@ -364,6 +368,46 @@ describe("FlightEntryForm – AI tab integration", () => {
     expect(
       screen.queryByRole("button", { name: /add return trip/i }),
     ).toBeNull();
+
+    // Adding a further flight after the return must not bring the button back.
+    await userEvent.click(
+      screen.getByRole("button", { name: /add another flight/i }),
+    );
+    expect(
+      screen.queryByRole("button", { name: /add return trip/i }),
+    ).toBeNull();
+  });
+
+  it("'Add return trip' is hidden until a leg has both airports", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+
+    expect(
+      screen.queryByRole("button", { name: /add return trip/i }),
+    ).toBeNull();
+  });
+
+  it("keeps the form and shows an error when the batch save fails", async () => {
+    vi.mocked(addFlightsForUser).mockResolvedValueOnce({
+      successCount: 0,
+      errorCount: 3,
+    });
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(multiLegParsed);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /save flights/i }),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert").textContent).toMatch(
+        /3 flight\(s\) could not be saved/,
+      );
+    });
+    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN", "LHR"]);
   });
 
   it("removing a leg drops it from the form", async () => {

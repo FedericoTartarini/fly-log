@@ -74,8 +74,9 @@ const RESPONSE_SCHEMA = Schema.object({
  * Uses Firebase AI (Gemini) to parse a natural-language flight description
  * into one ParsedFlight per leg, in chronological order.
  *
- * Legs missing either airport are dropped; other missing fields are left
- * null so the form can ask the user for them. Throws if no leg is usable.
+ * Legs with no airport at all are dropped. Other missing fields, including
+ * one missing airport, are left null so the user is told and the form asks
+ * for them. Throws if no leg is usable.
  */
 export async function parseFlightFromText(
   userText: string,
@@ -202,11 +203,11 @@ export async function parseFlightFromText(
         flight_number: normalizeFlightNumber(r.flight_number),
       }),
     )
-    .filter((f) => f.departure_airport_iata && f.arrival_airport_iata);
+    .filter((f) => f.departure_airport_iata || f.arrival_airport_iata);
 
   if (flights.length === 0) {
     throw new Error(
-      "AI could not find any flights with both a departure and an arrival airport. Please try rephrasing your input.",
+      "AI could not find any flights with an airport. Please try rephrasing your input.",
     );
   }
 

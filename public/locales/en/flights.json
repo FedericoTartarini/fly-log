@@ -256,8 +256,7 @@
     "time": "Time",
     "airline": "Airline",
     "flight_number": "Flight No.",
-    "powered_by": "Powered by Google Gemini via Firebase AI",
-    "leg": "Flight {{n}}"
+    "powered_by": "Powered by Google Gemini via Firebase AI"
   },
   "metric": {
     "flights": "Flights",

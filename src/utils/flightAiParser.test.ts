@@ -155,11 +155,24 @@ describe("parseFlightFromText", () => {
     expect(leg?.airline_iata).toBeNull();
   });
 
-  it("drops legs that lack an airport and keeps the rest", async () => {
+  it("keeps a leg missing one airport so the user is told, not left guessing", async () => {
     mockGenerateContent.mockResolvedValue(
       flightsResponse(
         validLeg(),
-        validLeg({ arrival_airport_iata: 123 }), // invalid → dropped
+        validLeg({ departure_airport_iata: "SIN", arrival_airport_iata: 123 }),
+      ),
+    );
+
+    const result = await parseFlightFromText("two flights");
+    expect(result).toHaveLength(2);
+    expect(result[1]?.arrival_airport_iata).toBeNull();
+  });
+
+  it("drops legs with no airport at all, and non-objects", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(
+        validLeg(),
+        validLeg({ departure_airport_iata: null, arrival_airport_iata: null }),
         "not a leg",
       ),
     );
@@ -168,9 +181,11 @@ describe("parseFlightFromText", () => {
     expect(result).toHaveLength(1);
   });
 
-  it("throws when no leg has both airports", async () => {
+  it("throws when no leg has any airport", async () => {
     mockGenerateContent.mockResolvedValue(
-      flightsResponse(validLeg({ arrival_airport_iata: null })),
+      flightsResponse(
+        validLeg({ departure_airport_iata: null, arrival_airport_iata: null }),
+      ),
     );
 
     await expect(parseFlightFromText("vague description")).rejects.toThrow(
