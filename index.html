@@ -73,11 +73,17 @@
     <!--
       The shell above is the indexed copy of "/", but the SPA fallback serves
       this same file for every route, so refreshing /stats painted the landing
-      copy until React mounted. Clear it anywhere but "/". Googlebot's
-      non-rendering pass does not run this, so the indexed copy is untouched.
+      copy until React mounted. Clear it anywhere but "/", and on "/" too for
+      returning signed-in users (AuthContext sets the hint), who are about to
+      be redirected to /stats. Googlebot's non-rendering pass does not run
+      this, so the indexed copy is untouched.
     -->
     <script>
-      if (location.pathname !== "/") {
+      var signedIn = false;
+      try {
+        signedIn = localStorage.getItem("fly-log:signed-in") === "1";
+      } catch (e) {}
+      if (location.pathname !== "/" || signedIn) {
         document.getElementById("root").textContent = "";
       }
     </script>

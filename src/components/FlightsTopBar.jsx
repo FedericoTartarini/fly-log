@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
 import FlightEntryForm from "./FlightEntryForm.tsx";
@@ -10,6 +11,8 @@ const FlightsTopBar = ({ fullWidth = false }) => {
   const allFlights = useFlightStore((s) => s.allFlights);
   const [formOpened, setFormOpened] = useState(false);
   const { t } = useTranslation("flights");
+  // Full screen on phones: the form is long and needs the whole width.
+  const isMobile = useMediaQuery("(max-width: 48em)");
 
   // No refetch: the Firestore listener picks the new flight up from the
   // local write before the server has even acknowledged it.
@@ -22,6 +25,7 @@ const FlightsTopBar = ({ fullWidth = false }) => {
         onClose={() => setFormOpened(false)}
         title={t("form.add_new_flight")}
         size="lg"
+        fullScreen={isMobile}
       >
         <FlightEntryForm onSaved={handleFlightSaved} />
       </Modal>

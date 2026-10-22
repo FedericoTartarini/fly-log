@@ -4,6 +4,9 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 // AuthContext holds the current Firebase user + auth helpers.
 const AuthContext = createContext({});
 
+// Must match the key read by the inline script in index.html.
+const SIGNED_IN_HINT_KEY = "fly-log:signed-in";
+
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
@@ -30,6 +33,14 @@ const AuthProvider = ({ children }) => {
         unsubscribe = firebase.onAuthStateChanged((firebaseUser) => {
           setUser(firebaseUser ?? null);
           setLoading(false);
+          // Read by index.html before React loads, to skip painting the
+          // signed-out landing copy for returning signed-in users.
+          try {
+            if (firebaseUser) localStorage.setItem(SIGNED_IN_HINT_KEY, "1");
+            else localStorage.removeItem(SIGNED_IN_HINT_KEY);
+          } catch {
+            // Storage blocked (private mode); the hint is only cosmetic.
+          }
         });
       } catch (error) {
         console.warn("Firebase auth init failed:", error);

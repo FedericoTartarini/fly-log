@@ -216,7 +216,17 @@ const WorldMap = () => {
       center={center}
       zoom={2}
       minZoom={2}
-      style={{ height: "60vh", width: "100%" }}
+      style={{
+        height: "60vh",
+        width: "100%",
+        // Leaflet's default container background (#ddd) shows through tiles
+        // that failed or haven't loaded yet, which looks like light grey
+        // squares among the dark tiles.
+        background:
+          computedColorScheme === "dark"
+            ? "var(--mantine-color-dark-6)"
+            : undefined,
+      }}
       worldCopyJump={true} // Keep this for smooth navigation
     >
       <FitMapToBounds bounds={bounds} />

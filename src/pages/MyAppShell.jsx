@@ -32,7 +32,7 @@ function MyAppShell() {
   const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
     useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-  const { user, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("common");
@@ -52,7 +52,9 @@ function MyAppShell() {
 
   const renderNavLinks = (onClickHandler) => {
     const navItems = [
-      !user && { to: PATHS.HOME, label: t("nav.home"), key: "home" },
+      // Hidden while auth loads, so signed-in users don't see it flash.
+      !user &&
+        !loading && { to: PATHS.HOME, label: t("nav.home"), key: "home" },
       user && { to: PATHS.STATS, label: t("nav.stats"), key: "stats" },
       user && { to: PATHS.FLIGHTS, label: t("nav.flights"), key: "flights" },
       user && { to: PATHS.TOUR, label: t("nav.tour"), key: "tour" },
@@ -115,7 +117,7 @@ function MyAppShell() {
           />
           Fly Log
           <Group ml="auto" gap="xs">
-            {user ? (
+            {loading ? null : user ? (
               <Button
                 size="xs"
                 variant="default"
