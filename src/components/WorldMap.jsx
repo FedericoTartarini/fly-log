@@ -13,6 +13,9 @@ import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
 import { parseToDate } from "../utils/dateUtils";
 
+// Changes the tile URLs so browsers drop cached tiles; see tileUrl below.
+const TILE_CACHE_BUST = "2026-10";
+
 // Helper to check if coordinates are valid
 const isValidCoords = (coord) =>
   Array.isArray(coord) &&
@@ -197,8 +200,12 @@ const WorldMap = () => {
   // CARTO now requires a (free) API key on its raster tiles: https://carto.com/basemaps/apikey/
   // {r} + detectRetina below requests @2x tiles on HiDPI screens, which is where the free
   // rasters previously looked washed out/blurry.
+  // CARTO changed dark_all's ocean from neutral #262626 to blue-grey #2C353C,
+  // but browsers kept serving some old tiles from their HTTP cache, so the
+  // filtered map mixed grey and blue ocean squares (#70). Bump TILE_CACHE_BUST
+  // whenever CARTO restyles, so every browser refetches all tiles.
   const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
-  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png?key=${cartoApiKey}`;
+  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png?key=${cartoApiKey}&v=${TILE_CACHE_BUST}`;
 
   const attribution = "&copy; OpenStreetMap &copy; CARTO";
 
@@ -235,9 +242,9 @@ const WorldMap = () => {
         url={tileUrl}
         attribution={attribution}
         detectRetina
-        // CARTO's dark_all style renders land and ocean at nearly the same
-        // luminance (9 vs 38 out of 255) — this filter widens that gap so
-        // water reads as a distinct grey against near-black land.
+        // CARTO's dark_all land (#0E0E0E) and ocean (#2C353C) are close in
+        // luminance; this filter widens that gap so water reads clearly
+        // against near-black land.
         className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
       />
 
