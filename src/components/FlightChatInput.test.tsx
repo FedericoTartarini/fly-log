@@ -4,7 +4,7 @@
  * Covers:
  * - Initial render (examples, textarea, parse button)
  * - Successful parse → success alert, extracted badges, missing-fields warning
- * - Round-trip parse → return leg section shown
+ * - Multi-leg parse → one numbered section per leg
  * - "Go to Manual Entry" button calls onConfirm
  * - "Start over" / reset flow
  * - Error state when parseFlightFromText rejects
@@ -33,36 +33,39 @@ import FlightChatInput from "./FlightChatInput";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
-const fullFlight = {
-  departure_airport_iata: "SYD",
-  arrival_airport_iata: "SIN",
-  departure_date: "2026-07-10",
-  departure_time: "09:00",
-  airline_iata: "QF",
-  flight_number: "1",
-  return_date: null,
-  return_time: null,
-  return_flight_number: null,
-};
+const fullFlight = [
+  {
+    departure_airport_iata: "SYD",
+    arrival_airport_iata: "SIN",
+    departure_date: "2026-07-10",
+    departure_time: "09:00",
+    airline_iata: "QF",
+    flight_number: "1",
+  },
+];
 
-const returnFlight = {
+const multiLegFlight = [
   ...fullFlight,
-  return_date: "2026-07-20",
-  return_time: "14:30",
-  return_flight_number: "2",
-};
+  {
+    departure_airport_iata: "SIN",
+    arrival_airport_iata: "LHR",
+    departure_date: null, // missing → warning prefixed with "Flight 2"
+    departure_time: "14:30",
+    airline_iata: "QF",
+    flight_number: "2",
+  },
+];
 
-const partialFlight = {
-  departure_airport_iata: "SYD",
-  arrival_airport_iata: null, // missing → triggers warning
-  departure_date: null, // missing
-  departure_time: null,
-  airline_iata: null, // missing
-  flight_number: null,
-  return_date: null,
-  return_time: null,
-  return_flight_number: null,
-};
+const partialFlight = [
+  {
+    departure_airport_iata: "SYD",
+    arrival_airport_iata: "SIN",
+    departure_date: null, // missing
+    departure_time: null,
+    airline_iata: null, // missing
+    flight_number: null,
+  },
+];
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
@@ -197,7 +200,6 @@ describe("FlightChatInput", () => {
       expect(screen.getByText(/some details are missing/i)).not.toBeNull();
     });
 
-    expect(screen.getByText(/Arrival Airport/)).not.toBeNull();
     expect(screen.getByText(/Departure Date/)).not.toBeNull();
     expect(screen.getByText(/Airline/)).not.toBeNull();
   });
@@ -216,36 +218,24 @@ describe("FlightChatInput", () => {
     expect(screen.queryByText(/some details are missing/i)).toBeNull();
   });
 
-  // ── Return flight section ───────────────────────────────────────────────────
+  // ── Multi-leg trips ────────────────────────────────────────────────────────
 
-  it("shows a return leg section when return_date is present", async () => {
-    mockParseFlightFromText.mockResolvedValue(returnFlight);
+  it("shows one numbered section per leg for a multi-leg trip", async () => {
+    mockParseFlightFromText.mockResolvedValue(multiLegFlight);
     renderComponent();
 
-    await userEvent.type(getTextarea(), "SYD to SIN returning 20 July");
+    await userEvent.type(getTextarea(), "SYD to London via Singapore");
     await userEvent.click(
       screen.getByRole("button", { name: /parse with ai/i }),
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/return flight/i)).not.toBeNull();
+      expect(screen.getByText(/^flight 1$/i)).not.toBeNull();
     });
-
-    expect(screen.getByText("2026-07-20")).not.toBeNull();
+    expect(screen.getByText(/^flight 2$/i)).not.toBeNull();
+    expect(screen.getByText("LHR")).not.toBeNull();
     expect(screen.getByText("14:30")).not.toBeNull();
-  });
-
-  it("labels the first section 'Outbound flight' when a return is detected", async () => {
-    mockParseFlightFromText.mockResolvedValue(returnFlight);
-    renderComponent();
-
-    await userEvent.type(getTextarea(), "return trip");
-    await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
-    );
-
-    await waitFor(() => screen.getByText(/outbound flight/i));
-    expect(screen.getByText(/outbound flight/i)).not.toBeNull();
+    expect(screen.getByText("Flight 2: Departure Date")).not.toBeNull();
   });
 
   // ── Error state ─────────────────────────────────────────────────────────────

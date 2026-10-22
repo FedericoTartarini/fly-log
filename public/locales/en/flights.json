@@ -147,11 +147,8 @@
       "arrival_airport": "Arrival Airport",
       "airline": "Airline",
       "flight_number": "Flight Number",
-      "add_return": "Add return flight",
-      "return_flight": "Return Flight",
-      "return_date": "Return Date",
-      "return_time": "Return Time",
-      "not_signed_in": "You are not signed in. Please sign in to save flights."
+      "not_signed_in": "You are not signed in. Please sign in to save flights.",
+      "flight_n": "Flight {{n}}"
     },
     "tabs": {
       "manual": "Manual Entry",
@@ -173,9 +170,7 @@
       "departure_airport_required": "Departure airport is required",
       "arrival_airport_required": "Arrival airport is required",
       "airline_required": "Airline is required",
-      "arrival_differs": "Arrival and departure airports must be different",
-      "return_date_required": "Return date is required",
-      "return_date_invalid": "Return date is invalid"
+      "arrival_differs": "Arrival and departure airports must be different"
     },
     "notifications": {
       "saving_title": "Saving",
@@ -190,7 +185,10 @@
     "buttons": {
       "save_single": "Save Flight",
       "update": "Update",
-      "save_multiple": "Save Flights"
+      "save_multiple": "Save Flights",
+      "add_flight": "Add another flight",
+      "add_return": "Add return trip",
+      "remove_flight": "Remove flight {{n}}"
     },
     "errors": {
       "user_not_authenticated": "User not authenticated"
@@ -237,7 +235,8 @@
       "I will fly from Sydney to Singapore on the 10th of July 2026 with Qantas",
       "London to Dubai on 15 March 2024, Emirates flight EK003 at 09:45",
       "LAX to JFK on 2026-04-10 with Delta, flight DL405 at 08:30, returning on 2026-04-17",
-      "Flew Sydney to London with Qantas on 5 May, returning on 20 May 2024"
+      "Flew Sydney to London with Qantas on 5 May, returning on 20 May 2024",
+      "Washington Dulles to LA to Sydney on 1 December with United, back on 10 January from Sydney via San Francisco to Washington Reagan"
     ],
     "input_placeholder": "e.g. I flew from Sydney to Singapore on the 10th of July with Qantas",
     "keyboard_hint": "Press Ctrl+Enter (or ⌘+Enter on Mac) to parse",
@@ -251,8 +250,6 @@
     "go_to_manual": "Go to Manual Entry",
     "reset": "Start over",
     "flight_details": "Flight details",
-    "outbound_leg": "Outbound flight",
-    "return_leg": "Return flight",
     "from": "From",
     "to": "To",
     "date": "Date",

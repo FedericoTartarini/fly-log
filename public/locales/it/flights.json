@@ -147,11 +147,8 @@
       "arrival_airport": "Aeroporto di arrivo",
       "airline": "Compagnia",
       "flight_number": "Numero volo",
-      "add_return": "Aggiungi volo di ritorno",
-      "return_flight": "Volo di ritorno",
-      "return_date": "Data ritorno",
-      "return_time": "Ora ritorno",
-      "not_signed_in": "Non sei autenticato. Effettua l'accesso per salvare i voli."
+      "not_signed_in": "Non sei autenticato. Effettua l'accesso per salvare i voli.",
+      "flight_n": "Volo {{n}}"
     },
     "tabs": {
       "manual": "Inserimento manuale",
@@ -173,9 +170,7 @@
       "departure_airport_required": "L'aeroporto di partenza è obbligatorio",
       "arrival_airport_required": "L'aeroporto di arrivo è obbligatorio",
       "airline_required": "La compagnia è obbligatoria",
-      "arrival_differs": "L'aeroporto di arrivo deve essere diverso da quello di partenza",
-      "return_date_required": "La data di ritorno è obbligatoria",
-      "return_date_invalid": "La data di ritorno non è valida"
+      "arrival_differs": "L'aeroporto di arrivo deve essere diverso da quello di partenza"
     },
     "notifications": {
       "saving_title": "Salvataggio",
@@ -190,7 +185,10 @@
     "buttons": {
       "save_single": "Salva volo",
       "update": "Aggiorna",
-      "save_multiple": "Salva voli"
+      "save_multiple": "Salva voli",
+      "add_flight": "Aggiungi un altro volo",
+      "add_return": "Aggiungi viaggio di ritorno",
+      "remove_flight": "Rimuovi volo {{n}}"
     },
     "errors": {
       "user_not_authenticated": "Utente non autenticato"
@@ -237,7 +235,8 @@
       "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
       "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45",
       "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
-      "Volato da Sydney a Londra con Qantas il 5 maggio 2024, ritorno il 20 maggio 2024"
+      "Volato da Sydney a Londra con Qantas il 5 maggio 2024, ritorno il 20 maggio 2024",
+      "Da Washington Dulles a Los Angeles a Sydney il 1 dicembre con United, ritorno il 10 gennaio da Sydney via San Francisco a Washington Reagan"
     ],
     "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
     "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
@@ -251,8 +250,6 @@
     "go_to_manual": "Vai all'inserimento manuale",
     "reset": "Ricomincia",
     "flight_details": "Dettagli volo",
-    "outbound_leg": "Volo di andata",
-    "return_leg": "Volo di ritorno",
     "from": "Da",
     "to": "A",
     "date": "Data",

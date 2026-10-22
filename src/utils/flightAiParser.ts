@@ -1,4 +1,4 @@
-import { getAI, getGenerativeModel } from "firebase/ai";
+import { getAI, getGenerativeModel, Schema } from "firebase/ai";
 import { app, ensureAppCheck } from "../firebaseClient";
 
 export interface ParsedFlight {
@@ -8,10 +8,6 @@ export interface ParsedFlight {
   departure_time: string | null; // HH:MM or null
   airline_iata: string | null;
   flight_number: string | null;
-  // Return flight — only populated when a return leg is mentioned
-  return_date: string | null; // YYYY-MM-DD
-  return_time: string | null; // HH:MM or null
-  return_flight_number: string | null;
 }
 
 /** Required fields that must be present to consider a flight "complete". */
@@ -22,23 +18,25 @@ export const REQUIRED_FIELDS: (keyof ParsedFlight)[] = [
   "airline_iata",
 ];
 
-const SYSTEM_PROMPT = `You are a flight data extractor. Given a user description of one or two flights, extract the details and return ONLY a valid JSON object with exactly these fields:
+const SYSTEM_PROMPT = `You are a flight data extractor. Given a user description of one or more flights, extract every individual flight (leg) and return ONLY a valid JSON object of the form {"flights": [...]}, with the legs in chronological order. Each leg has exactly these fields:
 - departure_airport_iata: 3-letter IATA airport code (uppercase) or null
 - arrival_airport_iata: 3-letter IATA airport code (uppercase) or null
 - departure_date: ISO date string in YYYY-MM-DD format or null. If no year is specified, use the current year (${new Date().getFullYear()}).
 - departure_time: 24-hour time string in HH:MM format or null
 - airline_iata: 2-letter IATA airline code (uppercase) or null
 - flight_number: flight number digits only as a string (e.g. "123"), or null
-- return_date: ISO date string YYYY-MM-DD for the return leg, or null if no return is mentioned
-- return_time: 24-hour HH:MM time for the return leg, or null
-- return_flight_number: flight number digits for the return leg, or null
 
-The return leg is always the reverse route (arrival_airport → departure_airport) with the same airline.
+Rules:
+- A trip with stopovers is split into one leg per flight: "Washington to LA to Sydney" is two legs, IAD → LAX and LAX → SYD.
+- A return trip is written out as its own legs. If the user only says "returning on <date>", add the reverse route (last arrival → first departure) with the same airline. If they describe the return route, use that route.
+- If an airline or date is stated once for a whole journey, apply it to every leg of that journey. If a connection's date is not stated, use the date of the previous leg.
+- Never invent flight numbers or times; use null when not stated.
 
 Common airport mappings (not exhaustive):
 Sydney → SYD, Melbourne → MEL, Brisbane → BNE, Perth → PER, Adelaide → ADL
 Singapore → SIN, London Heathrow → LHR, London Gatwick → LGW, Dubai → DXB
 New York JFK → JFK, New York Newark → EWR, Los Angeles → LAX, San Francisco → SFO
+Washington Dulles → IAD, Washington Reagan → DCA
 Tokyo Narita → NRT, Tokyo Haneda → HND, Paris CDG → CDG, Amsterdam → AMS
 Hong Kong → HKG, Bangkok → BKK, Kuala Lumpur → KUL, Jakarta → CGK
 Rome Fiumicino → FCO, Madrid → MAD, Barcelona → BCN, Lisbon → LIS
@@ -52,14 +50,37 @@ Cathay Pacific → CX, Japan Airlines → JL, ANA → NH
 
 Return ONLY the JSON object with no explanation, no markdown, no code fences.`;
 
+const nullableString = () => Schema.string({ nullable: true });
+
+// Constrains Gemini's output to {"flights": [leg, ...]}.
+const RESPONSE_SCHEMA = Schema.object({
+  properties: {
+    flights: Schema.array({
+      items: Schema.object({
+        properties: {
+          departure_airport_iata: nullableString(),
+          arrival_airport_iata: nullableString(),
+          departure_date: nullableString(),
+          departure_time: nullableString(),
+          airline_iata: nullableString(),
+          flight_number: nullableString(),
+        },
+      }),
+    }),
+  },
+});
+
 /**
  * Uses Firebase AI (Gemini) to parse a natural-language flight description
- * into a structured ParsedFlight object.
+ * into one ParsedFlight per leg, in chronological order.
+ *
+ * Legs with no airport at all are dropped. Other missing fields, including
+ * one missing airport, are left null so the user is told and the form asks
+ * for them. Throws if no leg is usable.
  */
-// Parse natural language into a normalized ParsedFlight object.
 export async function parseFlightFromText(
   userText: string,
-): Promise<ParsedFlight> {
+): Promise<ParsedFlight[]> {
   if (!app) {
     throw new Error(
       "Firebase app is not initialized. Check your environment variables.",
@@ -81,6 +102,10 @@ export async function parseFlightFromText(
   const model = getGenerativeModel(ai, {
     model: "gemini-2.5-flash-lite",
     systemInstruction: SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: RESPONSE_SCHEMA,
+    },
   });
 
   let result;
@@ -118,7 +143,10 @@ export async function parseFlightFromText(
     throw new Error("AI returned an invalid response structure.");
   }
 
-  const r = parsed as Record<string, unknown>;
+  const legs = (parsed as Record<string, unknown>).flights;
+  if (!Array.isArray(legs)) {
+    throw new Error("AI returned an invalid response structure.");
+  }
   // Helper validators / normalizers
   const normalizeIata = (value: unknown, length: number): string | null => {
     if (typeof value !== "string") return null;
@@ -160,26 +188,28 @@ export async function parseFlightFromText(
     return m?.[1] ?? null;
   };
 
-  const normalized: ParsedFlight = {
-    departure_airport_iata: normalizeIata(r.departure_airport_iata, 3),
-    arrival_airport_iata: normalizeIata(r.arrival_airport_iata, 3),
-    departure_date: normalizeDate(r.departure_date),
-    departure_time: normalizeTime(r.departure_time),
-    airline_iata: normalizeIata(r.airline_iata, 2),
-    flight_number: normalizeFlightNumber(r.flight_number),
-    return_date: normalizeDate(r.return_date),
-    return_time: normalizeTime(r.return_time),
-    return_flight_number: normalizeFlightNumber(r.return_flight_number),
-  };
+  const flights = legs
+    .filter(
+      (leg): leg is Record<string, unknown> =>
+        typeof leg === "object" && leg !== null,
+    )
+    .map(
+      (r): ParsedFlight => ({
+        departure_airport_iata: normalizeIata(r.departure_airport_iata, 3),
+        arrival_airport_iata: normalizeIata(r.arrival_airport_iata, 3),
+        departure_date: normalizeDate(r.departure_date),
+        departure_time: normalizeTime(r.departure_time),
+        airline_iata: normalizeIata(r.airline_iata, 2),
+        flight_number: normalizeFlightNumber(r.flight_number),
+      }),
+    )
+    .filter((f) => f.departure_airport_iata || f.arrival_airport_iata);
 
-  const missingRequired = REQUIRED_FIELDS.filter(
-    (field) => normalized[field] === null,
-  );
-  if (missingRequired.length > 0) {
+  if (flights.length === 0) {
     throw new Error(
-      `AI response missing required fields: ${missingRequired.join(", ")}`,
+      "AI could not find any flights with an airport. Please try rephrasing your input.",
     );
   }
 
-  return normalized;
+  return flights;
 }

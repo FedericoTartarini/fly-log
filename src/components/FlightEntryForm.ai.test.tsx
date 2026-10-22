@@ -5,7 +5,7 @@
  * - The "✨ AI Chat" tab renders FlightChatInput
  * - handleAiParsed pre-fills form fields when onParsed fires
  * - "Go to Manual Entry" (onConfirm) switches the active tab to "Manual Entry"
- * - Return flight: setAddReturn(true) is triggered and return date is populated
+ * - Multi-leg trips: AI legs fill one card each, add/return buttons, saving N legs
  * - The form still renders correctly when no AI result is provided
  */
 
@@ -23,8 +23,9 @@ vi.mock("../utils/referenceData", () => ({
 }));
 
 vi.mock("../firebaseClient", () => ({
-  addFlightForUser: vi.fn().mockResolvedValue(undefined),
-  addFlightsForUser: vi.fn().mockResolvedValue(undefined),
+  addFlightsForUser: vi
+    .fn()
+    .mockResolvedValue({ successCount: 1, errorCount: 0 }),
   auth: null,
 }));
 
@@ -52,27 +53,39 @@ vi.mock("../utils/flightAiParser", () => ({
 import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
+import { addFlightsForUser } from "../firebaseClient";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
-const fullParsed = {
+const leg = {
   departure_airport_iata: "SYD",
   arrival_airport_iata: "SIN",
   departure_date: "2026-07-10",
   departure_time: "09:00",
   airline_iata: "QF",
   flight_number: "123",
-  return_date: null,
-  return_time: null,
-  return_flight_number: null,
 };
 
-const returnParsed = {
-  ...fullParsed,
-  return_date: "2026-07-20",
-  return_time: "14:30",
-  return_flight_number: "456",
-};
+const fullParsed = [leg];
+
+const multiLegParsed = [
+  leg,
+  {
+    ...leg,
+    departure_airport_iata: "SIN",
+    arrival_airport_iata: "LHR",
+    departure_time: "23:00",
+    flight_number: "1",
+  },
+  {
+    ...leg,
+    departure_airport_iata: "LHR",
+    arrival_airport_iata: "SYD",
+    departure_date: "2026-07-20",
+    departure_time: "12:00",
+    flight_number: "2",
+  },
+];
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
@@ -104,6 +117,17 @@ describe("FlightEntryForm – AI tab integration", () => {
         iso_country: "SG",
         iso_region: "SG-01",
         elevation: 7,
+      },
+      {
+        iata: "LHR",
+        airport_name: "Heathrow Airport",
+        city: "London",
+        country: "United Kingdom",
+        lat: 51.47,
+        lon: -0.4543,
+        iso_country: "GB",
+        iso_region: "GB-ENG",
+        elevation: 25,
       },
     ]);
     vi.mocked(loadAirlinesInfo).mockResolvedValue([
@@ -246,36 +270,157 @@ describe("FlightEntryForm – AI tab integration", () => {
     });
   });
 
-  // ── Return flight flow ────────────────────────────────────────────────────
+  // ── Multi-leg trips ──────────────────────────────────────────────────────
 
-  it("enables the return flight section when AI extracts a return date", async () => {
-    mockParseFlightFromText.mockResolvedValue(returnParsed);
-    await act(async () => {
-      render(<FlightEntryForm />);
-    });
-
+  /** Parse with the mocked AI and go back to the manual tab. */
+  const parseAndConfirm = async (parsed: unknown) => {
+    mockParseFlightFromText.mockResolvedValue(parsed);
     await userEvent.click(
       screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
     );
     await waitFor(() => screen.getByRole("button", { name: /parse with ai/i }));
-
-    await userEvent.type(getAiTextarea(), "SYD to SIN, returning 20 July");
+    await userEvent.type(getAiTextarea(), "multi-city trip");
     await userEvent.click(
       screen.getByRole("button", { name: /parse with ai/i }),
     );
-
     await waitFor(() =>
       screen.getByRole("button", { name: /go to manual entry/i }),
     );
     await userEvent.click(
       screen.getByRole("button", { name: /go to manual entry/i }),
     );
+  };
+
+  // Select inputs show "SYD - Sydney Airport, ..."; the label also matches
+  // each dropdown listbox, so keep only the inputs.
+  const selectCodes = (label: RegExp) =>
+    screen
+      .getAllByLabelText(label)
+      .filter((el): el is HTMLInputElement => el instanceof HTMLInputElement)
+      .map((input) => input.value.split(" ")[0]);
+
+  it("fills one card per AI-parsed leg and saves each leg as a flight", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(multiLegParsed);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole("heading", { name: /return flight/i }),
-      ).not.toBeNull();
+      expect(screen.getByRole("heading", { name: /flight 3/i })).not.toBeNull();
     });
+    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN", "LHR"]);
+    expect(selectCodes(/^arrival airport/i)).toEqual(["SIN", "LHR", "SYD"]);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /save flights/i }),
+    );
+
+    // All legs go in one batch write, one document per leg.
+    await waitFor(() => expect(addFlightsForUser).toHaveBeenCalledOnce());
+    const saved = vi.mocked(addFlightsForUser).mock.calls[0]?.[1];
+    expect(saved).toHaveLength(3);
+    expect(saved?.[1]).toMatchObject({
+      departure_airport_iata: "SIN",
+      arrival_airport_iata: "LHR",
+      airline_iata: "QF",
+      departure_time: "23:00",
+      flight_number: "1",
+    });
+  });
+
+  it("'Add another flight' starts the new leg where the last one landed", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(fullParsed);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /add another flight/i }),
+    );
+
+    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN"]);
+    expect(selectCodes(/^arrival airport/i)).toEqual(["SIN", ""]);
+    expect(selectCodes(/^airline/i)).toEqual(["QF", "QF"]);
+  });
+
+  it("'Add return trip' appends the legs reversed, then hides itself", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(multiLegParsed.slice(0, 2)); // SYD → SIN → LHR
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /add return trip/i }),
+    );
+
+    expect(selectCodes(/^departure airport/i)).toEqual([
+      "SYD",
+      "SIN",
+      "LHR",
+      "SIN",
+    ]);
+    expect(selectCodes(/^arrival airport/i)).toEqual([
+      "SIN",
+      "LHR",
+      "SIN",
+      "SYD",
+    ]);
+    expect(
+      screen.queryByRole("button", { name: /add return trip/i }),
+    ).toBeNull();
+
+    // Adding a further flight after the return must not bring the button back.
+    await userEvent.click(
+      screen.getByRole("button", { name: /add another flight/i }),
+    );
+    expect(
+      screen.queryByRole("button", { name: /add return trip/i }),
+    ).toBeNull();
+  });
+
+  it("'Add return trip' is hidden until a leg has both airports", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+
+    expect(
+      screen.queryByRole("button", { name: /add return trip/i }),
+    ).toBeNull();
+  });
+
+  it("keeps the form and shows an error when the batch save fails", async () => {
+    vi.mocked(addFlightsForUser).mockResolvedValueOnce({
+      successCount: 0,
+      errorCount: 3,
+    });
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(multiLegParsed);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /save flights/i }),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert").textContent).toMatch(
+        /3 flight\(s\) could not be saved/,
+      );
+    });
+    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN", "LHR"]);
+  });
+
+  it("removing a leg drops it from the form", async () => {
+    await act(async () => {
+      render(<FlightEntryForm />);
+    });
+    await parseAndConfirm(multiLegParsed);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: /remove flight 2/i }),
+    );
+
+    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "LHR"]);
   });
 
   // ── Edit mode hides tabs ──────────────────────────────────────────────────
