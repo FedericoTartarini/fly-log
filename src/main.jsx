@@ -14,6 +14,9 @@ import {
   createTheme,
   MantineProvider,
   ColorSchemeScript,
+  Popover,
+  Modal,
+  Input,
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
@@ -139,6 +142,20 @@ const theme = createTheme({
   headings: {
     fontFamily: "Roboto, sans-serif",
   },
+  components: {
+    // Select, DatePickerInput and Menu dropdowns render in a portal at the
+    // popover z-index (300 by default). The flight edit modal sits at 1000
+    // (see FlightsList), so dropdowns opened inside it rendered behind it.
+    Popover: Popover.extend({ defaultProps: { zIndex: 1100 } }),
+    // The fixed AppShell header sits at 400, so a modal at Mantine's default
+    // (200) opened under it, hiding its title and close button on phones.
+    Modal: Modal.extend({ defaultProps: { zIndex: 500 } }),
+    // iOS Safari zooms in on any input under 16px when it gets focus, and
+    // stays zoomed, which pushes modals off-screen.
+    Input: Input.extend({
+      vars: () => ({ wrapper: { "--input-fz": "16px" } }),
+    }),
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -149,7 +166,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       defaultColorScheme="auto"
       // cssVariablesResolver={resolver}
     >
-      <Notifications />
+      {/* Above every modal, so validation errors show over the form */}
+      <Notifications zIndex={2000} />
       <AuthProvider>
         <Suspense fallback={<PageSkeleton />}>
           <RouterProvider router={router} />
@@ -170,8 +188,12 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
       }
     };
 
+    // On a first visit there is no controller yet, and the new worker taking
+    // control is not an update, so reloading would only replay the load.
+    const hadController = !!navigator.serviceWorker.controller;
+
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (hasRefreshedForNewWorker) return;
+      if (!hadController || hasRefreshedForNewWorker) return;
       hasRefreshedForNewWorker = true;
       window.location.reload();
     });

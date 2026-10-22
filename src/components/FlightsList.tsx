@@ -13,7 +13,7 @@ import {
   Stack,
   ThemeIcon,
 } from "@mantine/core";
-import { IconPlaneInflight } from "@tabler/icons-react";
+import { IconChevronRight, IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
@@ -194,6 +194,7 @@ const FlightsList: React.FC = () => {
                   {t("table.from_to")}
                 </Table.Th>
                 <Table.Th>{t("table.date_duration_distance")}</Table.Th>
+                <Table.Th style={{ width: "3rem" }} />
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -235,22 +236,19 @@ const FlightsList: React.FC = () => {
                 });
 
                 return (
+                  // The whole row opens the details for mouse and touch users;
+                  // the chevron button at the end is the visible cue and the
+                  // keyboard/screen-reader path (a <tr> can't be a button).
+                  // Browsers don't fire click after a scroll gesture, so
+                  // scrolling the list on a phone won't open a flight.
                   <Table.Tr
                     key={flight.id}
                     data-testid={`flight-row-${flight.id}`}
+                    onClick={() => openDetails(flight)}
+                    style={{ cursor: "pointer" }}
                   >
                     <Table.Td p={"0.5rem"}>
-                      <Center>
-                        <ActionIcon
-                          aria-label={rowLabel}
-                          variant="subtle"
-                          size={48}
-                          onClick={() => openDetails(flight)}
-                          data-testid={`flight-details-open-${flight.id}`}
-                        >
-                          {getAirlineIcon(flight)}
-                        </ActionIcon>
-                      </Center>
+                      <Center>{getAirlineIcon(flight)}</Center>
                     </Table.Td>
                     <Table.Td>
                       <Text size="sm">
@@ -274,6 +272,22 @@ const FlightsList: React.FC = () => {
                       <Text size="xs" c="dimmed">
                         {durationDistanceStr}
                       </Text>
+                    </Table.Td>
+                    <Table.Td p={0}>
+                      <Center>
+                        <ActionIcon
+                          aria-label={rowLabel}
+                          variant="subtle"
+                          size="lg"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openDetails(flight);
+                          }}
+                          data-testid={`flight-details-open-${flight.id}`}
+                        >
+                          <IconChevronRight size={20} />
+                        </ActionIcon>
+                      </Center>
                     </Table.Td>
                   </Table.Tr>
                 );

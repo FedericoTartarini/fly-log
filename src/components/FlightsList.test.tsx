@@ -79,7 +79,7 @@ describe("FlightsList", () => {
     expect(screen.getByText(/No flights to display for this selection/));
   });
 
-  it("opens the flight details modal when a row is clicked", async () => {
+  it("opens the flight details modal from the row's chevron button", async () => {
     const mockedUseFlightStore = useFlightStore as unknown as Mock;
     mockedUseFlightStore.mockImplementation(
       (selector: (state: StoreShape) => unknown) =>
@@ -105,5 +105,27 @@ describe("FlightsList", () => {
       await screen.findByTestId("flight-details-edit-1"),
     ).toBeInTheDocument();
     expect(await screen.findByText("DL3")).toBeInTheDocument();
+  });
+
+  it("opens the flight details modal when anywhere on the row is clicked", async () => {
+    const mockedUseFlightStore = useFlightStore as unknown as Mock;
+    mockedUseFlightStore.mockImplementation(
+      (selector: (state: StoreShape) => unknown) =>
+        selector({
+          filteredFlights: [enrichedFlight],
+        }),
+    );
+
+    render(<FlightsList />, {
+      wrapper: ({ children }: { children: React.ReactNode }) => (
+        <MemoryRouter>{children}</MemoryRouter>
+      ),
+    });
+
+    fireEvent.click(screen.getByText(/SFO →/));
+
+    expect(
+      await screen.findByTestId("flight-details-edit-1"),
+    ).toBeInTheDocument();
   });
 });
