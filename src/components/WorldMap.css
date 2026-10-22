@@ -1,6 +1,5 @@
-/* CARTO's dark_all tiles render land and ocean at nearly the same
-   luminance. Boost brightness+contrast so water reads as a distinct
-   grey against near-black land. */
+/* CARTO's dark_all land and ocean are close in luminance. Boost
+   brightness+contrast so water reads clearly against near-black land. */
 .map-tiles-dark {
   filter: brightness(3) contrast(1.4);
 }
