@@ -72,4 +72,34 @@ describe("estimateCo2Kg", () => {
     expect(estimateCo2Kg(flight({ distance_km: Infinity }))).toBe(0);
     expect(estimateCo2Kg(flight({ distance_km: -100 }))).toBe(0);
   });
+
+  it("uses DEFRA's per-cabin factor, and economy when the cabin is absent", () => {
+    const longHaul = (cabin_class?: string) =>
+      estimateCo2Kg({
+        ...flight({ international: true, distance_km: 10_000 }),
+        cabin_class,
+      });
+
+    expect(longHaul()).toBeCloseTo(10_000 * EMISSION_FACTORS.LONG_HAUL);
+    expect(longHaul("economy")).toBeCloseTo(longHaul());
+    expect(longHaul("business")).toBeCloseTo(10_000 * 0.339);
+    expect(longHaul("first")).toBeCloseTo(10_000 * 0.468);
+    // Unknown values fall back to economy rather than to zero.
+    expect(longHaul("bunk")).toBeCloseTo(longHaul());
+  });
+
+  it("fills DEFRA's gaps from the nearest published cabin", () => {
+    // Domestic has one average factor for every cabin.
+    expect(
+      estimateCo2Kg({ ...flight({ distance_km: 1000 }), cabin_class: "first" }),
+    ).toBeCloseTo(1000 * EMISSION_FACTORS.DOMESTIC);
+    // Short haul has no first-class factor, so first uses business.
+    const shortHaul = (cabin_class: string) =>
+      estimateCo2Kg({
+        ...flight({ international: true, distance_km: 1000 }),
+        cabin_class,
+      });
+    expect(shortHaul("first")).toBeCloseTo(shortHaul("business"));
+    expect(shortHaul("premium_economy")).toBeCloseTo(shortHaul("economy"));
+  });
 });
