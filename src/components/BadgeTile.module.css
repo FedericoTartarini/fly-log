@@ -56,36 +56,3 @@
 .locked .barcode {
   opacity: 0.18;
 }
-
-/* --- passport stamp --------------------------------------------------- */
-
-/* An inked stamp pressed onto the page: double ring, sitting slightly off
- * square the way a hand-stamped page does. */
-.stamp {
-  position: relative;
-  border: 2px solid var(--mantine-primary-color-filled);
-  border-radius: var(--mantine-radius-md);
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  transform: rotate(-1.5deg);
-  color: var(--mantine-primary-color-filled);
-  /* The second ring. Inset rather than a wrapper element, so the stamp stays
-   * one box in the layout. */
-  box-shadow: inset 0 0 0 1px var(--mantine-color-body),
-    inset 0 0 0 3px var(--mantine-primary-color-filled);
-  opacity: 0.88;
-}
-
-/* Not yet stamped: the empty place on the page where it will go. */
-.stampEmpty {
-  border-style: dashed;
-  border-color: var(--mantine-color-dimmed);
-  color: var(--mantine-color-dimmed);
-  box-shadow: none;
-  transform: none;
-  opacity: 1;
-}
-
-.stampDate {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-}

@@ -356,13 +356,19 @@
       "pass": "Carta d'imbarco",
       "stamp": "Passaporto"
     },
-    "stamp_caption": "Ammesso",
     "categories": {
       "flights": "Voli",
       "distance": "Distanza",
       "places": "Luoghi",
       "habit": "Costanza"
     },
-    "section_count": "{{unlocked}} di {{total}}"
+    "section_count": "{{unlocked}} di {{total}}",
+    "booklet": {
+      "title": "FlyLog · Passaporto",
+      "stamps": "{{count}} di {{total}} timbri",
+      "page": "Pagina {{n}}",
+      "previous": "Pagina precedente",
+      "next": "Pagina successiva"
+    }
   }
 }

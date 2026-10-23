@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Group, Stack, Text, Progress, ThemeIcon } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { IconMedal } from "@tabler/icons-react";
-import { BADGE_ICONS, BADGE_STYLES } from "../constants/badgeIcons.ts";
+import { BADGE_ICONS } from "../constants/badgeIcons.ts";
 import { DISTANCE_BADGES } from "../utils/badges.ts";
 import { barcodePattern } from "../utils/barcode.ts";
 import { formatCalendarDate } from "../utils/dateUtils";
@@ -17,15 +17,19 @@ const formatProgress = (badge, language) => {
 };
 
 /**
- * One badge. Two looks over identical content: a boarding pass with a torn-off
- * stub, or a passport stamp inked onto the page.
+ * One badge, drawn as a boarding pass with a torn-off stub. The passport look
+ * is a separate booklet (PassportBooklet), not a style of this tile.
  */
-const BadgeTile = ({ badge, styleName = BADGE_STYLES.PASS }) => {
+const BadgeTile = ({ badge }) => {
   const { t, i18n } = useTranslation("flights");
   const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
   const hasProgress = typeof badge.target === "number";
   const percent = hasProgress ? (badge.current / badge.target) * 100 : 0;
-  const date = formatCalendarDate(badge.unlockedOn, "DD MMM YYYY", i18n.language);
+  const date = formatCalendarDate(
+    badge.unlockedOn,
+    "DD MMM YYYY",
+    i18n.language,
+  );
 
   const header = (
     <Group gap="sm" align="flex-start" wrap="nowrap">
@@ -57,51 +61,28 @@ const BadgeTile = ({ badge, styleName = BADGE_STYLES.PASS }) => {
     </Stack>
   );
 
-  const footer =
-    styleName === BADGE_STYLES.STAMP ? (
-      <div
-        className={`${classes.stamp} ${badge.unlocked ? "" : classes.stampEmpty}`}
-        style={{ marginTop: "auto" }}
-      >
+  const footer = (
+    <div className={classes.stub} style={{ marginTop: "auto" }}>
+      <Group gap="sm" justify="space-between" wrap="nowrap" align="center">
+        <div
+          className={classes.barcode}
+          style={{ backgroundImage: barcodePattern(badge.id) }}
+          aria-hidden="true"
+        />
         {badge.unlocked ? (
-          <Stack gap={0} align="center">
-            <Text size="xs" fw={700} tt="uppercase" lh={1.2}>
-              {t("badges.stamp_caption")}
-            </Text>
-            <Text size="sm" fw={700} className={classes.stampDate} lh={1.3}>
-              {date}
-            </Text>
-          </Stack>
+          <Text size="xs" c="primary.7" fw={600} tt="uppercase" ff="monospace">
+            {date}
+          </Text>
         ) : hasProgress ? (
-          <Group justify="center">{progress}</Group>
+          progress
         ) : (
-          <Text size="xs" ta="center" tt="uppercase" fw={600}>
+          <Text size="xs" c="dimmed" tt="uppercase" ff="monospace">
             {t("badges.not_yet")}
           </Text>
         )}
-      </div>
-    ) : (
-      <div className={classes.stub} style={{ marginTop: "auto" }}>
-        <Group gap="sm" justify="space-between" wrap="nowrap" align="center">
-          <div
-            className={classes.barcode}
-            style={{ backgroundImage: barcodePattern(badge.id) }}
-            aria-hidden="true"
-          />
-          {badge.unlocked ? (
-            <Text size="xs" c="primary.7" fw={600} tt="uppercase" ff="monospace">
-              {date}
-            </Text>
-          ) : hasProgress ? (
-            progress
-          ) : (
-            <Text size="xs" c="dimmed" tt="uppercase" ff="monospace">
-              {t("badges.not_yet")}
-            </Text>
-          )}
-        </Group>
-      </div>
-    );
+      </Group>
+    </div>
+  );
 
   return (
     <Card

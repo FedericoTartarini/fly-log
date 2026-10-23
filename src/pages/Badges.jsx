@@ -20,7 +20,9 @@ import {
   BADGE_CATEGORIES,
 } from "../utils/badges.ts";
 import BadgeTile from "../components/BadgeTile.jsx";
-import { BADGE_STYLES } from "../constants/badgeIcons.ts";
+import PassportBooklet from "../components/PassportBooklet.jsx";
+import { BADGE_VIEWS } from "../constants/badgeIcons.ts";
+import { useAuth } from "../context/AuthContext.jsx";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -36,9 +38,10 @@ function Badges() {
     })),
   );
   const { t } = useTranslation("flights");
+  const { user } = useAuth();
 
-  // Two looks over the same badges; the choice is cosmetic and per-session.
-  const [styleName, setStyleName] = useState(BADGE_STYLES.PASS);
+  // Two views of the same badges; the choice is cosmetic and per-session.
+  const [view, setView] = useState(BADGE_VIEWS.PASS);
 
   // Grouped by category, and sorted within each group the same way the shelf
   // always was: earned first, newest first, then the nearest one still locked.
@@ -106,40 +109,47 @@ function Badges() {
           </Stack>
           <SegmentedControl
             size="xs"
-            value={styleName}
-            onChange={setStyleName}
+            value={view}
+            onChange={setView}
             data={[
-              { value: BADGE_STYLES.PASS, label: t("badges.style.pass") },
-              { value: BADGE_STYLES.STAMP, label: t("badges.style.stamp") },
+              { value: BADGE_VIEWS.PASS, label: t("badges.style.pass") },
+              { value: BADGE_VIEWS.PASSPORT, label: t("badges.style.stamp") },
             ]}
           />
         </Group>
 
-        {sections.map(({ category, badges: items }) => (
-          <Stack key={category} gap="sm">
-            <Divider
-              labelPosition="left"
-              label={
-                <Group gap="xs">
-                  <Text fw={700} size="sm" tt="uppercase">
-                    {t(`badges.categories.${category}`)}
-                  </Text>
-                  <Text size="xs" c="dimmed">
-                    {t("badges.section_count", {
-                      unlocked: items.filter((b) => b.unlocked).length,
-                      total: items.length,
-                    })}
-                  </Text>
-                </Group>
-              }
-            />
-            <SimpleGrid cols={{ base: 1, xs: 2, md: 3 }} spacing="md">
-              {items.map((badge) => (
-                <BadgeTile key={badge.id} badge={badge} styleName={styleName} />
-              ))}
-            </SimpleGrid>
-          </Stack>
-        ))}
+        {view === BADGE_VIEWS.PASSPORT ? (
+          <PassportBooklet
+            badges={badges}
+            holder={user?.displayName || user?.email || ""}
+          />
+        ) : (
+          sections.map(({ category, badges: items }) => (
+            <Stack key={category} gap="sm">
+              <Divider
+                labelPosition="left"
+                label={
+                  <Group gap="xs">
+                    <Text fw={700} size="sm" tt="uppercase">
+                      {t(`badges.categories.${category}`)}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      {t("badges.section_count", {
+                        unlocked: items.filter((b) => b.unlocked).length,
+                        total: items.length,
+                      })}
+                    </Text>
+                  </Group>
+                }
+              />
+              <SimpleGrid cols={{ base: 1, xs: 2, md: 3 }} spacing="md">
+                {items.map((badge) => (
+                  <BadgeTile key={badge.id} badge={badge} />
+                ))}
+              </SimpleGrid>
+            </Stack>
+          ))
+        )}
       </Stack>
     </Container>
   );

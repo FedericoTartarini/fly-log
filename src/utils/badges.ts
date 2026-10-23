@@ -259,3 +259,19 @@ export const pickStripBadges = (badges: Badge[], limit = 2): Badge[] => {
 
   return next ? [...recent, next] : recent;
 };
+
+/**
+ * Stamps in the order a real passport fills: earned ones first, oldest first,
+ * so the first page is where the flying began. Locked badges follow as empty
+ * outlines, in the order they arrive in (`badges` comes pre-sorted for the
+ * shelf, nearest first).
+ */
+export const bookletOrder = (badges: Badge[]): Badge[] => [
+  ...badges
+    .filter((badge) => badge.unlocked)
+    .sort(
+      (a, b) =>
+        (a.unlockedOn?.getTime() ?? 0) - (b.unlockedOn?.getTime() ?? 0),
+    ),
+  ...badges.filter((badge) => !badge.unlocked),
+];

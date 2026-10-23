@@ -1,0 +1,115 @@
+/* The passport view of the badge shelf: a booklet of stamp pages. */
+
+.booklet {
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: var(--mantine-color-body);
+}
+
+.header {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  background: var(--mantine-primary-color-filled);
+  color: var(--mantine-color-white);
+}
+
+.spaced {
+  letter-spacing: 0.12em;
+}
+
+/* One page per viewport width. Native scroll-snap does the paging, so a swipe
+ * on a phone needs no script; the buttons below only scroll this strip. */
+.strip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.strip:focus-visible {
+  outline: 2px solid var(--mantine-primary-color-filled);
+  outline-offset: -2px;
+}
+
+/* A page: four stamps in a 2x2 grid on a faint dotted ground, the way visa
+ * pages carry a fine security print under the ink. */
+.page {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(9rem, auto);
+  gap: var(--mantine-spacing-lg);
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--mantine-color-default-border) 1px,
+    transparent 0
+  );
+  background-size: 14px 14px;
+}
+
+/* Below roughly 380px the stamps stack. The page then runs taller than the
+ * fold, which is fine because the paging gesture is horizontal anyway. */
+@media (max-width: 380px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* An inked stamp: double ring, set slightly off square. The second ring is an
+ * inset shadow rather than a wrapper, so the stamp stays one box. */
+.stamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  padding: var(--mantine-spacing-sm);
+  border: 2px solid var(--mantine-primary-color-filled);
+  border-radius: var(--mantine-radius-lg);
+  box-shadow:
+    inset 0 0 0 2px var(--mantine-color-body),
+    inset 0 0 0 4px var(--mantine-primary-color-filled);
+  color: var(--mantine-primary-color-filled);
+  background: var(--mantine-color-body);
+  transform: rotate(var(--tilt, 0deg));
+  opacity: 0.9;
+}
+
+/* Not yet earned: the faint outline where the stamp will go. */
+.reserved {
+  border-style: dashed;
+  border-color: var(--mantine-color-dimmed);
+  color: var(--mantine-color-dimmed);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
+}
+
+.date {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.controls {
+  padding: var(--mantine-spacing-xs) 0 var(--mantine-spacing-sm);
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mantine-color-default-border);
+}
+
+.dot[data-active] {
+  background: var(--mantine-primary-color-filled);
+}
