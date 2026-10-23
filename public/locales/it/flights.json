@@ -376,5 +376,18 @@
       "habit": "Costanza"
     },
     "section_count": "{{unlocked}} di {{total}}"
+  },
+  "auto_check": {
+    "title": "{{flight}} {{from}} → {{to}}: l'orario della compagnia è diverso",
+    "fields": {
+      "departure_time": "Ora di partenza",
+      "arrival_date": "Data di arrivo",
+      "arrival_time": "Ora di arrivo",
+      "aircraft_type_name": "Aereo"
+    },
+    "apply": "Applica",
+    "keep_mine": "Mantieni i miei",
+    "source": "Verificato una volta con AeroDataBox perché il volo è entro una settimana.",
+    "apply_failed": "Impossibile aggiornare il volo. Riprova."
   }
 }

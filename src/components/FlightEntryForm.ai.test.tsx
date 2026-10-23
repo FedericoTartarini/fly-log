@@ -25,8 +25,18 @@ vi.mock("../utils/referenceData", () => ({
 vi.mock("../firebaseClient", () => ({
   addFlightsForUser: vi
     .fn()
-    .mockResolvedValue({ successCount: 1, errorCount: 0 }),
+    .mockResolvedValue({
+      successCount: 3,
+      errorCount: 0,
+      ids: ["a", "b", "c"],
+    }),
   auth: null,
+}));
+
+// The automatic status check calls a Netlify function; here we only check
+// that a successful save hands it the new flights with their ids.
+vi.mock("../utils/autoStatusCheck", () => ({
+  autoCheckSavedFlights: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("../context/AuthContext.jsx", () => ({
@@ -54,6 +64,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
 import { addFlightsForUser } from "../firebaseClient";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { parseToDate } from "../utils/dateUtils";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -322,6 +333,12 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => expect(addFlightsForUser).toHaveBeenCalledOnce());
     const saved = vi.mocked(addFlightsForUser).mock.calls[0]?.[1];
     expect(saved).toHaveLength(3);
+    expect(vi.mocked(autoCheckSavedFlights)).toHaveBeenCalledWith(
+      "test-uid",
+      expect.arrayContaining([
+        expect.objectContaining({ id: "b", departure_airport_iata: "SIN" }),
+      ]),
+    );
     expect(saved?.[1]).toMatchObject({
       departure_airport_iata: "SIN",
       arrival_airport_iata: "LHR",
@@ -332,7 +349,10 @@ describe("FlightEntryForm – AI tab integration", () => {
     });
     expect(parseToDate(saved?.[1]?.arrival_date)?.getDate()).toBe(11);
     // A leg with no arrival stated saves none, rather than a guess.
-    expect(saved?.[0]).toMatchObject({ arrival_date: null, arrival_time: null });
+    expect(saved?.[0]).toMatchObject({
+      arrival_date: null,
+      arrival_time: null,
+    });
   });
 
   it("'Add another flight' starts the new leg where the last one landed", async () => {
@@ -399,6 +419,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     vi.mocked(addFlightsForUser).mockResolvedValueOnce({
       successCount: 0,
       errorCount: 3,
+      ids: [null, null, null],
     });
     await act(async () => {
       render(<FlightEntryForm />);

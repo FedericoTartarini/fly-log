@@ -376,5 +376,18 @@
       "habit": "Habit"
     },
     "section_count": "{{unlocked}} of {{total}}"
+  },
+  "auto_check": {
+    "title": "{{flight}} {{from}} → {{to}}: the airline's schedule differs",
+    "fields": {
+      "departure_time": "Departure time",
+      "arrival_date": "Arrival date",
+      "arrival_time": "Arrival time",
+      "aircraft_type_name": "Aircraft"
+    },
+    "apply": "Apply",
+    "keep_mine": "Keep mine",
+    "source": "Checked once with AeroDataBox because the flight is within a week.",
+    "apply_failed": "Could not update the flight. Please try again."
   }
 }
