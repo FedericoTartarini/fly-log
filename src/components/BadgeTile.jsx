@@ -5,6 +5,7 @@ import { IconMedal } from "@tabler/icons-react";
 import { BADGE_ICONS, BADGE_STYLES } from "../constants/badgeIcons.ts";
 import { DISTANCE_BADGES } from "../utils/badges.ts";
 import { barcodePattern } from "../utils/barcode.ts";
+import { qrPath } from "../utils/qrPath.ts";
 import { formatCalendarDate } from "../utils/dateUtils";
 import classes from "./BadgeTile.module.css";
 
@@ -17,6 +18,28 @@ const formatProgress = (badge, language) => {
 };
 
 /**
+ * A QR code pointing at the thing the badge compares you against. It is also a
+ * link, because the person most likely to see it is looking at this screen.
+ */
+const BadgeQr = ({ link, label }) => {
+  const { size, path } = qrPath(link);
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={classes.qr}
+      aria-label={label}
+      title={link}
+    >
+      <svg viewBox={`-1 -1 ${size + 2} ${size + 2}`} aria-hidden="true">
+        <path d={path} fill="currentColor" shapeRendering="crispEdges" />
+      </svg>
+    </a>
+  );
+};
+
+/**
  * One badge. Two looks over identical content: a boarding pass with a torn-off
  * stub, or a passport stamp inked onto the page.
  */
@@ -26,6 +49,9 @@ const BadgeTile = ({ badge, styleName = BADGE_STYLES.PASS }) => {
   const hasProgress = typeof badge.target === "number";
   const percent = hasProgress ? (badge.current / badge.target) * 100 : 0;
   const date = formatCalendarDate(badge.unlockedOn, "DD MMM YYYY", i18n.language);
+  // Each language links its own Wikipedia. Badges with nowhere worth pointing
+  // keep the decorative barcode.
+  const link = t(`badges.items.${badge.id}.link`, { defaultValue: "" });
 
   const header = (
     <Group gap="sm" align="flex-start" wrap="nowrap">
@@ -83,11 +109,20 @@ const BadgeTile = ({ badge, styleName = BADGE_STYLES.PASS }) => {
     ) : (
       <div className={classes.stub} style={{ marginTop: "auto" }}>
         <Group gap="sm" justify="space-between" wrap="nowrap" align="center">
-          <div
-            className={classes.barcode}
-            style={{ backgroundImage: barcodePattern(badge.id) }}
-            aria-hidden="true"
-          />
+          {link ? (
+            <BadgeQr
+              link={link}
+              label={t("badges.qr_label", {
+                name: t(`badges.items.${badge.id}.name`),
+              })}
+            />
+          ) : (
+            <div
+              className={classes.barcode}
+              style={{ backgroundImage: barcodePattern(badge.id) }}
+              aria-hidden="true"
+            />
+          )}
           {badge.unlocked ? (
             <Text size="xs" c="primary.7" fw={600} tt="uppercase" ff="monospace">
               {date}
