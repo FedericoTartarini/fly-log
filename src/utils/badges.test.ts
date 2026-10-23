@@ -3,6 +3,7 @@ import {
   evaluateBadges,
   sortForShelf,
   pickStripBadges,
+  bookletOrder,
   BADGE_DEFS,
 } from "./badges";
 import type { enhancedFlight } from "../types/enhancedFlight";
@@ -185,5 +186,25 @@ describe("pickStripBadges", () => {
     );
     const picked = pickStripBadges(distanceOnly, 2);
     expect(picked.some((badge) => !badge.unlocked)).toBe(true);
+  });
+});
+
+describe("bookletOrder", () => {
+  it("fills the passport oldest stamp first, then the empty outlines", () => {
+    const history = [
+      flight("2024-03-10", { distance_km: 39_000 }),
+      flight("2020-01-10", { arrival_country: "NZ", distance_km: 2_000 }),
+    ];
+    const order = bookletOrder(sortForShelf(evaluateBadges(history, NOW)));
+
+    const firstLocked = order.findIndex((badge) => !badge.unlocked);
+    expect(order.slice(firstLocked).every((badge) => !badge.unlocked)).toBe(
+      true,
+    );
+    const dates = order
+      .slice(0, firstLocked)
+      .map((badge) => badge.unlockedOn!.getTime());
+    expect(dates).toEqual([...dates].sort((a, b) => a - b));
+    expect(order[0]?.unlockedOn?.toISOString().slice(0, 10)).toBe("2020-01-10");
   });
 });

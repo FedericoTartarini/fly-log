@@ -356,13 +356,19 @@
       "pass": "Boarding pass",
       "stamp": "Passport"
     },
-    "stamp_caption": "Admitted",
     "categories": {
       "flights": "Flights",
       "distance": "Distance",
       "places": "Places",
       "habit": "Habit"
     },
-    "section_count": "{{unlocked}} of {{total}}"
+    "section_count": "{{unlocked}} of {{total}}",
+    "booklet": {
+      "title": "FlyLog · Passport",
+      "stamps": "{{count}} of {{total}} stamps",
+      "page": "Page {{n}}",
+      "previous": "Previous page",
+      "next": "Next page"
+    }
   }
 }

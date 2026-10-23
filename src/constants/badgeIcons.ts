@@ -32,5 +32,6 @@ export const BADGE_ICONS = {
   on_a_roll: IconFlame,
 };
 
-// Cosmetic look for a badge tile; see BadgeTile.
-export const BADGE_STYLES = { PASS: "pass", STAMP: "stamp" } as const;
+// The two views of the badges page: the boarding-pass shelf, or the passport
+// booklet.
+export const BADGE_VIEWS = { PASS: "pass", PASSPORT: "passport" } as const;
