@@ -5,6 +5,13 @@ vi.mock("../store", () => {
   };
 });
 
+// A few known cities; anything else falls back to its code, as the real
+// helper does before the reference data has loaded.
+vi.mock("../utils/airportUtils", () => ({
+  getAirportCity: (iata: string) =>
+    ({ SYD: "Sydney", LHR: "London", MEL: "Melbourne" })[iata] ?? iata,
+}));
+
 import React from "react";
 import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach, type Mock } from "vitest";
@@ -77,6 +84,49 @@ describe("FlightsList", () => {
     });
 
     expect(screen.getByText(/No flights to display for this selection/));
+  });
+
+  it("leads with city and country names, keeping the codes in the tooltip", () => {
+    const mockedUseFlightStore = useFlightStore as unknown as Mock;
+    const international = {
+      ...enrichedFlight,
+      id: "2",
+      departure_airport_iata: "SYD",
+      arrival_airport_iata: "LHR",
+      departure_country: "AU",
+      arrival_country: "GB",
+    };
+    const domestic = {
+      ...enrichedFlight,
+      id: "3",
+      departure_airport_iata: "SYD",
+      arrival_airport_iata: "MEL",
+      departure_country: "AU",
+      arrival_country: "AU",
+    };
+    mockedUseFlightStore.mockImplementation(
+      (selector: (state: StoreShape) => unknown) =>
+        selector({ filteredFlights: [international, domestic] }),
+    );
+
+    render(<FlightsList />, {
+      wrapper: ({ children }: { children: React.ReactNode }) => (
+        <MemoryRouter>{children}</MemoryRouter>
+      ),
+    });
+
+    expect(screen.getByText("Sydney → London")).toHaveAttribute(
+      "title",
+      "SYD → LHR",
+    );
+    expect(screen.getByText("Australia → United Kingdom")).toBeInTheDocument();
+    // A domestic flight names its country once, not "Australia → Australia".
+    expect(screen.getByText("Sydney → Melbourne")).toBeInTheDocument();
+    expect(screen.getByText("Australia")).toBeInTheDocument();
+    expect(screen.getByTestId("flight-details-open-2")).toHaveAttribute(
+      "aria-label",
+      "View flight details: Sydney to London",
+    );
   });
 
   it("opens the flight details modal from the row's chevron button", async () => {
