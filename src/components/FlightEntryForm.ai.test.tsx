@@ -54,6 +54,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
 import { addFlightsForUser } from "../firebaseClient";
+import { parseToDate } from "../utils/dateUtils";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -75,6 +76,8 @@ const multiLegParsed = [
     departure_airport_iata: "SIN",
     arrival_airport_iata: "LHR",
     departure_time: "23:00",
+    arrival_date: "2026-07-11",
+    arrival_time: "05:40",
     flight_number: "1",
   },
   {
@@ -324,8 +327,12 @@ describe("FlightEntryForm – AI tab integration", () => {
       arrival_airport_iata: "LHR",
       airline_iata: "QF",
       departure_time: "23:00",
+      arrival_time: "05:40",
       flight_number: "1",
     });
+    expect(parseToDate(saved?.[1]?.arrival_date)?.getDate()).toBe(11);
+    // A leg with no arrival stated saves none, rather than a guess.
+    expect(saved?.[0]).toMatchObject({ arrival_date: null, arrival_time: null });
   });
 
   it("'Add another flight' starts the new leg where the last one landed", async () => {

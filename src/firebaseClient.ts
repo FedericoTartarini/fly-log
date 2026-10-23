@@ -254,6 +254,9 @@ export const addFlightsForUser = async (
       if (validDate) {
         data.departure_date = Timestamp.fromDate(validDate);
       }
+      // Stored like departure_date, so the two compare as calendar days.
+      const arrivalDate = parseToDate(data.arrival_date);
+      if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
       data.created_at = serverTimestamp();
       batch.set(doc(recordsCol), data);
     }
@@ -291,6 +294,8 @@ export const addFlightForUser = async (
   if (validDate) {
     data.departure_date = Timestamp.fromDate(validDate);
   }
+  const arrivalDate = parseToDate(data.arrival_date);
+  if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
   data.created_at = serverTimestamp();
   return addDoc(collection(firestore, "flights", uid, "records"), data);
 };

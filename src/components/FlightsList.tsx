@@ -16,7 +16,11 @@ import {
 import { IconChevronRight, IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
+import {
+  formatCalendarDate,
+  formatTimeRange,
+  parseToDate,
+} from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
 import { getCountryName } from "../utils/countryUtils";
 import { useTranslation } from "react-i18next";
@@ -247,6 +251,8 @@ const FlightsList: React.FC = () => {
                   durationDistanceStr = `${dist.toLocaleString()} km`;
                 }
 
+                const timeRange = formatTimeRange(flight);
+
                 // Cities lead because few people know IATA codes. The codes
                 // stay in the tooltip for those who do. getAirportCity falls
                 // back to the code itself when the airport is unknown.
@@ -299,9 +305,7 @@ const FlightsList: React.FC = () => {
                     <Table.Td>
                       <Text size="sm">
                         {departureDateStr}
-                        {flight.departure_time
-                          ? `, ${flight.departure_time}`
-                          : ""}
+                        {timeRange ? `, ${timeRange}` : ""}
                       </Text>
                       <Text size="xs" c="dimmed">
                         {durationDistanceStr}

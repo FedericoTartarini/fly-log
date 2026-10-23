@@ -40,6 +40,9 @@ type Leg = {
   key: string;
   departureDate: Date | null;
   departureTime: string;
+  /** Empty means the flight lands on its departure date. */
+  arrivalDate: Date | null;
+  arrivalTime: string;
   departureAirport: string;
   arrivalAirport: string;
   airline: string;
@@ -50,6 +53,8 @@ const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
   key: randomId(),
   departureDate: null,
   departureTime: "",
+  arrivalDate: null,
+  arrivalTime: "",
   departureAirport: "",
   arrivalAirport: "",
   airline: "",
@@ -66,6 +71,8 @@ interface FlightEntryFormProps {
     id: string;
     departure_date?: unknown;
     departure_time?: string | null;
+    arrival_date?: unknown;
+    arrival_time?: string | null;
     departure_airport_iata?: string;
     arrival_airport_iata?: string;
     airline_iata?: string;
@@ -155,6 +162,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         newLeg({
           departureDate,
           departureTime: flight.departure_time || "",
+          arrivalDate: parseToDate(flight.arrival_date),
+          arrivalTime: flight.arrival_time || "",
           departureAirport: flight.departure_airport_iata || "",
           arrivalAirport: flight.arrival_airport_iata || "",
           airline: flight.airline_iata || "",
@@ -191,6 +200,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       const flightsToInsert = values.legs.map((leg) => ({
         departure_date: leg.departureDate,
         departure_time: normalizeTimeString(leg.departureTime),
+        arrival_date: leg.arrivalDate ?? null,
+        arrival_time: normalizeTimeString(leg.arrivalTime),
         departure_airport_iata: leg.departureAirport,
         arrival_airport_iata: leg.arrivalAirport,
         airline_iata: leg.airline,
@@ -304,9 +315,13 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     let hasInvalidDate = false;
     const parsedLegs = parsedFlights.map((parsed) => {
       let departureDate: Date | null = null;
+      let arrivalDate: Date | null = null;
       try {
         if (parsed.departure_date) {
           departureDate = parseToDate(parsed.departure_date);
+        }
+        if (parsed.arrival_date) {
+          arrivalDate = parseToDate(parsed.arrival_date);
         }
       } catch (err) {
         console.error("parseToDate failed for departure_date", {
@@ -318,6 +333,8 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       return newLeg({
         departureDate,
         departureTime: parsed.departure_time ?? "",
+        arrivalDate,
+        arrivalTime: parsed.arrival_time ?? "",
         departureAirport: parsed.departure_airport_iata ?? "",
         arrivalAirport: parsed.arrival_airport_iata ?? "",
         airline: parsed.airline_iata ?? "",
@@ -348,6 +365,20 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           label={t("form.labels.departure_time")}
           placeholder={t("form.placeholders.time_example")}
           {...form.getInputProps(`legs.${index}.departureTime`)}
+        />
+      </Group>
+
+      <Group grow>
+        <DatePickerInput
+          label={t("form.labels.arrival_date")}
+          placeholder={t("form.placeholders.same_day")}
+          clearable
+          {...form.getInputProps(`legs.${index}.arrivalDate`)}
+        />
+        <TextInput
+          label={t("form.labels.arrival_time")}
+          placeholder={t("form.placeholders.time_example")}
+          {...form.getInputProps(`legs.${index}.arrivalTime`)}
         />
       </Group>
 

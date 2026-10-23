@@ -6,6 +6,8 @@ export interface ParsedFlight {
   arrival_airport_iata: string | null;
   departure_date: string | null; // YYYY-MM-DD
   departure_time: string | null; // HH:MM or null
+  arrival_date: string | null; // YYYY-MM-DD, local at the arrival airport
+  arrival_time: string | null; // HH:MM, local at the arrival airport
   airline_iata: string | null;
   flight_number: string | null;
 }
@@ -23,6 +25,8 @@ const SYSTEM_PROMPT = `You are a flight data extractor. Given a user description
 - arrival_airport_iata: 3-letter IATA airport code (uppercase) or null
 - departure_date: ISO date string in YYYY-MM-DD format or null. If no year is specified, use the current year (${new Date().getFullYear()}).
 - departure_time: 24-hour time string in HH:MM format or null
+- arrival_date: ISO date string in YYYY-MM-DD format, the local date the flight lands, or null. Only fill it when the text gives an arrival date or marks the arrival as the next day (e.g. "+1"); otherwise null.
+- arrival_time: 24-hour time string in HH:MM format, the local time the flight lands, or null
 - airline_iata: 2-letter IATA airline code (uppercase) or null
 - flight_number: flight number digits only as a string (e.g. "123"), or null
 
@@ -30,7 +34,7 @@ Rules:
 - A trip with stopovers is split into one leg per flight: "Washington to LA to Sydney" is two legs, IAD → LAX and LAX → SYD.
 - A return trip is written out as its own legs. If the user only says "returning on <date>", add the reverse route (last arrival → first departure) with the same airline. If they describe the return route, use that route.
 - If an airline or date is stated once for a whole journey, apply it to every leg of that journey. If a connection's date is not stated, use the date of the previous leg.
-- Never invent flight numbers or times; use null when not stated.
+- Never invent flight numbers or times; use null when not stated. Never compute an arrival time from the departure time and a flight duration.
 
 Common airport mappings (not exhaustive):
 Sydney → SYD, Melbourne → MEL, Brisbane → BNE, Perth → PER, Adelaide → ADL
@@ -62,6 +66,8 @@ const RESPONSE_SCHEMA = Schema.object({
           arrival_airport_iata: nullableString(),
           departure_date: nullableString(),
           departure_time: nullableString(),
+          arrival_date: nullableString(),
+          arrival_time: nullableString(),
           airline_iata: nullableString(),
           flight_number: nullableString(),
         },
@@ -199,6 +205,8 @@ export async function parseFlightFromText(
         arrival_airport_iata: normalizeIata(r.arrival_airport_iata, 3),
         departure_date: normalizeDate(r.departure_date),
         departure_time: normalizeTime(r.departure_time),
+        arrival_date: normalizeDate(r.arrival_date),
+        arrival_time: normalizeTime(r.arrival_time),
         airline_iata: normalizeIata(r.airline_iata, 2),
         flight_number: normalizeFlightNumber(r.flight_number),
       }),

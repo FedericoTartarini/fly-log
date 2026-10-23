@@ -50,6 +50,18 @@ export const validateCsvData = (data) => {
       );
     }
 
+    // Validate the optional arrival fields the same way
+    if (row.arrival_date && !/^\d{4}-\d{2}-\d{2}$/.test(row.arrival_date)) {
+      errors.push(
+        `Row ${index + 1}: Invalid arrival_date format (YYYY-MM-DD expected)`,
+      );
+    }
+    if (row.arrival_time && !/^\d{2}:\d{2}$/.test(row.arrival_time)) {
+      errors.push(
+        `Row ${index + 1}: Invalid arrival_time format (HH:mm expected)`,
+      );
+    }
+
     // Validate IATA codes
     if (row.departure_airport_iata && row.departure_airport_iata.length !== 3) {
       errors.push(
@@ -132,6 +144,8 @@ const FlightCsvUpload = ({ onComplete }) => {
           const formattedFlights = normalizedRows.map((flight) => ({
             departure_date: flight.departure_date,
             departure_time: flight.departure_time,
+            arrival_date: flight.arrival_date || null,
+            arrival_time: flight.arrival_time || null,
             departure_airport_iata: flight.departure_airport_iata,
             arrival_airport_iata: flight.arrival_airport_iata,
             airline_iata: flight.airline_iata,

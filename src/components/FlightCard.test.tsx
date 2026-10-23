@@ -53,4 +53,18 @@ describe("FlightCard", () => {
     expect(screen.getByText("SG"));
     expect(screen.getByText("IT"));
   });
+
+  it("shows the arrival time, marking an overnight landing", () => {
+    render(
+      <FlightCard
+        flight={{
+          ...mockFlight,
+          departure_time: "21:30",
+          arrival_date: "2025-08-15",
+          arrival_time: "05:10",
+        }}
+      />,
+    );
+    expect(screen.getByText(/21:30 → 05:10 \+1/)).toBeInTheDocument();
+  });
 });

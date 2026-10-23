@@ -11,7 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import type { enhancedFlight } from "../types/enhancedFlight.ts";
-import { formatCalendarDate } from "../utils/dateUtils";
+import { formatCalendarDate, formatTimeRange } from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import { getAirportCity } from "../utils/airportUtils";
 
@@ -39,8 +39,9 @@ const FlightCard: React.FC<FlightCardProps> = ({
     flight.departure_airport_iata;
   const arrivalCity =
     getAirportCity(flight.arrival_airport_iata) ?? flight.arrival_airport_iata;
+  const timeRange = formatTimeRange(flight);
   const dateTime = `${formatCalendarDate(flight.departure_date) || ""}${
-    flight.departure_time ? ` · ${flight.departure_time}` : ""
+    timeRange ? ` · ${timeRange}` : ""
   }`;
   const duration =
     typeof flight.flight_time === "number"
