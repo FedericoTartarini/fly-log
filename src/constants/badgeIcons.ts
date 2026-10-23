@@ -12,6 +12,8 @@ import {
   IconMapPin,
   IconBuildingAirport,
   IconFlame,
+  IconMap,
+  IconWorldPin,
 } from "@tabler/icons-react";
 
 // Badge id -> tabler icon. Separate from badges.ts so the evaluator stays
@@ -30,6 +32,8 @@ export const BADGE_ICONS = {
   globetrotter: IconMapPin,
   terminal_regular: IconBuildingAirport,
   on_a_roll: IconFlame,
+  three_continents: IconMap,
+  six_continents: IconWorldPin,
 };
 
 // Cosmetic look for a badge tile; see BadgeTile.
