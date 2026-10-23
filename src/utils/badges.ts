@@ -1,6 +1,7 @@
 import { parseToDate } from "./dateUtils";
 import { EARTH_CIRCUMFERENCE, DISTANCE_TO_MOON } from "../constants/distances";
 import type { enhancedFlight } from "../types/enhancedFlight";
+import { getContinent, CONTINENTS } from "./continents";
 
 /**
  * Lifetime achievements, computed by replaying flights in order rather than by
@@ -25,6 +26,8 @@ interface Tally {
   flights: number;
   distance: number;
   countries: Set<string>;
+  /** Inhabited continents only: an Antarctic airstrip does not count. */
+  continents: Set<string>;
   airports: Set<string>;
   international: number;
   longHaul: number;
@@ -79,6 +82,8 @@ export const BADGE_DEFS: BadgeDef[] = [
   { id: "globetrotter", category: BADGE_CATEGORIES.PLACES, target: 10, value: (t) => t.countries.size },
   { id: "well_travelled", category: BADGE_CATEGORIES.PLACES, target: 25, value: (t) => t.countries.size },
   { id: "country_collector", category: BADGE_CATEGORIES.PLACES, target: 50, value: (t) => t.countries.size },
+  { id: "three_continents", category: BADGE_CATEGORIES.PLACES, target: 3, value: (t) => t.continents.size },
+  { id: "six_continents", category: BADGE_CATEGORIES.PLACES, target: 6, value: (t) => t.continents.size },
   { id: "terminal_regular", category: BADGE_CATEGORIES.PLACES, target: 25, value: (t) => t.airports.size },
   { id: "on_a_roll", category: BADGE_CATEGORIES.HABIT, target: 6, value: (t) => t.monthStreak },
   { id: "ten_years_running", category: BADGE_CATEGORIES.HABIT, target: 10, value: (t) => t.yearStreak },
@@ -135,6 +140,7 @@ export const evaluateBadges = (
     flights: 0,
     distance: 0,
     countries: new Set(),
+    continents: new Set(),
     airports: new Set(),
     international: 0,
     longHaul: 0,
@@ -159,6 +165,11 @@ export const evaluateBadges = (
       tally.airports.add(flight.arrival_airport_iata);
     if (flight.departure_country) tally.countries.add(flight.departure_country);
     if (flight.arrival_country) tally.countries.add(flight.arrival_country);
+    [flight.departure_country, flight.arrival_country].forEach((country) => {
+      const continent = getContinent(country);
+      if (continent && continent !== CONTINENTS.ANTARCTICA)
+        tally.continents.add(continent);
+    });
 
     if (
       flight.departure_country &&

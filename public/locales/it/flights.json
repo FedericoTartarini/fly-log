@@ -350,6 +350,14 @@
       "ten_years_running": {
         "name": "Dieci anni di fila",
         "criterion": "Vola per dieci anni consecutivi."
+      },
+      "three_continents": {
+        "name": "Tre continenti",
+        "criterion": "Visita tre continenti diversi."
+      },
+      "six_continents": {
+        "name": "Tutti e sei i continenti",
+        "criterion": "Africa, Asia, Europa, America del Nord, Oceania e America del Sud."
       }
     },
     "style": {

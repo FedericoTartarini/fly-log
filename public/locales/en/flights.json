@@ -350,6 +350,14 @@
       "ten_years_running": {
         "name": "Ten years running",
         "criterion": "Fly in ten consecutive years."
+      },
+      "three_continents": {
+        "name": "Three continents",
+        "criterion": "Visit three different continents."
+      },
+      "six_continents": {
+        "name": "All six continents",
+        "criterion": "Africa, Asia, Europe, North America, Oceania and South America."
       }
     },
     "style": {

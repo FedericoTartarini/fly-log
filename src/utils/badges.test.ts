@@ -115,6 +115,20 @@ describe("evaluateBadges", () => {
     expect(crossing.unlocked).toBe(true);
   });
 
+  it("counts the inhabited continents touched at either end", () => {
+    const flights = [
+      flight("2020-01-10", { arrival_country: "SG" }), // Oceania -> Asia
+      flight("2021-01-10", { departure_country: "GB", arrival_country: "US" }),
+      flight("2022-01-10", { departure_country: "AR", arrival_country: "AQ" }),
+    ];
+    // AU, SG, GB, US, AR: five continents. Antarctica does not count.
+    expect(byId(flights, "six_continents").current).toBe(5);
+
+    const three = byId(flights, "three_continents");
+    expect(three.unlocked).toBe(true);
+    expect(three.unlockedOn?.toISOString().slice(0, 10)).toBe("2021-01-10");
+  });
+
   it("survives an empty or missing history", () => {
     expect(evaluateBadges([], NOW).every((badge) => !badge.unlocked)).toBe(true);
     expect(evaluateBadges(null, NOW)).toHaveLength(BADGE_DEFS.length);
