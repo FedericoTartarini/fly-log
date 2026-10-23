@@ -15,6 +15,8 @@ describe("getContinent", () => {
     expect(getContinent("TR")).toBe("AS");
     expect(getContinent("EG")).toBe("AF");
     expect(getContinent("PA")).toBe("NA");
+    expect(getContinent("CX")).toBe("OC"); // Christmas Island
+    expect(getContinent("TL")).toBe("OC"); // Timor-Leste
   });
 
   it("ignores case and whitespace, and returns null for unknown codes", () => {
