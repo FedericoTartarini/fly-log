@@ -269,7 +269,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const isEditing = Boolean(flight && flight.id);
 
   const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
-    FLIGHT_ENTRY_TABS.MANUAL,
+    FLIGHT_ENTRY_TABS.AI,
   );
 
   const lastLeg = legs[legs.length - 1];
