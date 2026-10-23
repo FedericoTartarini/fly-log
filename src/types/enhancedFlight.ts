@@ -9,6 +9,10 @@ export interface enhancedFlight {
   user_id?: string;
   departure_date: DateLike;
   departure_time?: string | null;
+  /** Local date at the arrival airport. Absent or null means same day as departure. */
+  arrival_date?: DateLike | null;
+  /** Local "HH:MM" at the arrival airport, as entered; never derived. */
+  arrival_time?: string | null;
   departure_airport_iata: string;
   arrival_airport_iata: string;
   airline_icao: string | null;

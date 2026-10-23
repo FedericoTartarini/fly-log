@@ -324,6 +324,9 @@ export const updateFlightForUser = async (
     }
     data.departure_date = Timestamp.fromDate(d);
   }
+  // Clearing the arrival date in the form sends null, which must stay null.
+  const arrivalDate = parseToDate(data.arrival_date);
+  if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
 
   await updateDoc(docRef, data);
 

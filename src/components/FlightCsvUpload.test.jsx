@@ -83,4 +83,25 @@ describe("FlightCsvUpload", () => {
     expect(errors.some((e) => e.includes("Missing fields"))).toBe(true);
     expect(errors.some((e) => e.includes("airline_iata"))).toBe(true);
   });
+
+  it("validateCsvData accepts optional arrival columns and checks their format", () => {
+    const row = {
+      departure_date: "2024-03-10",
+      departure_airport_iata: "SYD",
+      arrival_airport_iata: "SIN",
+      airline_iata: "QF",
+    };
+    expect(validateCsvData([row])).toEqual([]);
+    expect(
+      validateCsvData([
+        { ...row, arrival_date: "2024-03-11", arrival_time: "05:40" },
+      ]),
+    ).toEqual([]);
+
+    const errors = validateCsvData([
+      { ...row, arrival_date: "11/03/2024", arrival_time: "5pm" },
+    ]);
+    expect(errors.some((e) => e.includes("arrival_date"))).toBe(true);
+    expect(errors.some((e) => e.includes("arrival_time"))).toBe(true);
+  });
 });

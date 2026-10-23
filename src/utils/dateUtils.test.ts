@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatDate } from "./dateUtils";
+import { formatDate, formatTimeRange, arrivalDayOffset } from "./dateUtils";
 
 describe("formatDate", () => {
   it("formats a Firestore-like seconds object to 'DD MMM YY'", () => {
@@ -28,5 +28,48 @@ describe("formatDate", () => {
   it("returns empty string for invalid date", () => {
     expect(formatDate(null)).toBe("");
     expect(formatDate("not-a-date", "DD MMM YY")).toBe("");
+  });
+});
+
+describe("formatTimeRange", () => {
+  it("shows departure alone when arrival is unknown", () => {
+    expect(formatTimeRange({ departure_time: "09:40" })).toBe("09:40");
+    expect(formatTimeRange({})).toBe("");
+  });
+
+  it("treats a missing arrival date as the same day", () => {
+    expect(
+      formatTimeRange({
+        departure_date: "2024-03-10",
+        departure_time: "09:40",
+        arrival_time: "17:15",
+      }),
+    ).toBe("09:40 → 17:15");
+  });
+
+  it("marks an overnight arrival and a dateline arrival the day before", () => {
+    expect(
+      formatTimeRange({
+        departure_date: "2024-03-10",
+        departure_time: "21:30",
+        arrival_date: "2024-03-11",
+        arrival_time: "05:10",
+      }),
+    ).toBe("21:30 → 05:10 +1");
+    // SYD -> HNL lands on the calendar day before it left.
+    expect(
+      formatTimeRange({
+        departure_date: "2024-03-10",
+        departure_time: "21:30",
+        arrival_date: "2024-03-09",
+        arrival_time: "10:00",
+      }),
+    ).toBe("21:30 → 10:00 −1");
+  });
+
+  it("works across a DST change, where the gap is not exactly 24 hours", () => {
+    expect(
+      arrivalDayOffset(new Date(2024, 2, 30), new Date(2024, 2, 31)),
+    ).toBe(1);
   });
 });

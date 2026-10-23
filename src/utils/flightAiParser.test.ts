@@ -45,6 +45,8 @@ const validLeg = (overrides: Record<string, unknown> = {}) => ({
   arrival_airport_iata: "SIN",
   departure_date: "2026-07-10",
   departure_time: "09:00",
+  arrival_date: null,
+  arrival_time: null,
   airline_iata: "QF",
   flight_number: "1",
   ...overrides,
@@ -143,6 +145,21 @@ describe("parseFlightFromText", () => {
     expect(leg?.departure_time).toBe("09:05");
     expect(leg?.airline_iata).toBe("QF");
     expect(leg?.flight_number).toBeNull();
+  });
+
+  it("extracts an overnight arrival and rejects a malformed one", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(
+        validLeg({ arrival_date: "2026-07-11", arrival_time: "5:40" }),
+        validLeg({ arrival_date: "not a date", arrival_time: "25:00" }),
+      ),
+    );
+
+    const [overnight, malformed] = await parseFlightFromText("two flights");
+    expect(overnight?.arrival_date).toBe("2026-07-11");
+    expect(overnight?.arrival_time).toBe("05:40");
+    expect(malformed?.arrival_date).toBeNull();
+    expect(malformed?.arrival_time).toBeNull();
   });
 
   it("keeps legs with missing dates or airlines so the form can ask for them", async () => {

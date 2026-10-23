@@ -162,3 +162,38 @@ export function normalizeTimeString(time: unknown): string | null {
   if (!parsed) return null;
   return `${String(parsed.hours).padStart(2, "0")}:${String(parsed.minutes).padStart(2, "0")}`;
 }
+
+/**
+ * Whole calendar days from departure to arrival: 1 for an overnight flight, -1
+ * for one that crosses the dateline eastwards and lands "yesterday". 0 when
+ * either date is missing, because a missing arrival date means same day.
+ *
+ * Both dates are stored the same way (midnight, same convention), so the raw
+ * difference is a whole number of days give or take a DST hour.
+ */
+export function arrivalDayOffset(departure: unknown, arrival: unknown): number {
+  const dep = parseToDate(departure);
+  const arr = parseToDate(arrival);
+  if (!dep || !arr) return 0;
+  return Math.round((arr.getTime() - dep.getTime()) / 86_400_000);
+}
+
+/**
+ * "09:40 → 17:15 +1", or whichever half is known. Arrival time is only ever
+ * what the user or the AI parser entered, never departure plus duration: that
+ * would need each airport's timezone to give a correct local clock time.
+ */
+export function formatTimeRange(flight: {
+  departure_date?: unknown;
+  departure_time?: string | null;
+  arrival_date?: unknown;
+  arrival_time?: string | null;
+}): string {
+  const departure = flight.departure_time || "";
+  if (!flight.arrival_time) return departure;
+  const offset = arrivalDayOffset(flight.departure_date, flight.arrival_date);
+  const arrival = offset
+    ? `${flight.arrival_time} ${offset > 0 ? "+" : "−"}${Math.abs(offset)}`
+    : flight.arrival_time;
+  return departure ? `${departure} → ${arrival}` : `→ ${arrival}`;
+}

@@ -38,7 +38,7 @@
   "flight_time": "{{hours}}h {{minutes}}m flight time",
   "csv": {
     "title": "Upload Flight Data from CSV",
-    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number.",
+    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number, arrival_date, arrival_time.",
     "file_input": {
       "placeholder": "Select CSV file",
       "label": "Flight data CSV",
@@ -148,7 +148,9 @@
       "airline": "Airline",
       "flight_number": "Flight Number",
       "not_signed_in": "You are not signed in. Please sign in to save flights.",
-      "flight_n": "Flight {{n}}"
+      "flight_n": "Flight {{n}}",
+      "arrival_date": "Arrival Date",
+      "arrival_time": "Arrival Time"
     },
     "tabs": {
       "manual": "Manual Entry",
@@ -162,7 +164,8 @@
       "search_airlines": "Search airlines",
       "no_matching_airports": "No matching airports",
       "no_matching_airlines": "No matching airlines",
-      "flight_number_example": "ABC123"
+      "flight_number_example": "ABC123",
+      "same_day": "Same day as departure"
     },
     "validation": {
       "departure_date_required": "Departure date is required",
@@ -256,7 +259,8 @@
     "time": "Time",
     "airline": "Airline",
     "flight_number": "Flight No.",
-    "powered_by": "Powered by Google Gemini via Firebase AI"
+    "powered_by": "Powered by Google Gemini via Firebase AI",
+    "arrival": "Arrival"
   },
   "metric": {
     "flights": "Flights",

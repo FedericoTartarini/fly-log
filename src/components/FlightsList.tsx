@@ -16,7 +16,11 @@ import {
 import { IconChevronRight, IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { formatCalendarDate, parseToDate } from "../utils/dateUtils";
+import {
+  formatCalendarDate,
+  formatTimeRange,
+  parseToDate,
+} from "../utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 
@@ -230,6 +234,8 @@ const FlightsList: React.FC = () => {
                   durationDistanceStr = `${dist.toLocaleString()} km`;
                 }
 
+                const timeRange = formatTimeRange(flight);
+
                 const rowLabel = t("table.view_row_details", {
                   from: flight.departure_airport_iata,
                   to: flight.arrival_airport_iata,
@@ -265,9 +271,7 @@ const FlightsList: React.FC = () => {
                     <Table.Td>
                       <Text size="sm">
                         {departureDateStr}
-                        {flight.departure_time
-                          ? `, ${flight.departure_time}`
-                          : ""}
+                        {timeRange ? `, ${timeRange}` : ""}
                       </Text>
                       <Text size="xs" c="dimmed">
                         {durationDistanceStr}

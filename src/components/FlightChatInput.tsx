@@ -236,6 +236,16 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
                       </Badge>
                     </List.Item>
                   )}
+                  {leg.arrival_time && (
+                    <List.Item>
+                      {t("ai.arrival")}:{" "}
+                      <Badge size="xs" variant="light" color="cyan">
+                        {leg.arrival_date
+                          ? `${leg.arrival_date} ${leg.arrival_time}`
+                          : leg.arrival_time}
+                      </Badge>
+                    </List.Item>
+                  )}
                   {leg.airline_iata && (
                     <List.Item>
                       {t("ai.airline")}:{" "}
