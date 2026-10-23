@@ -9,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "vitest": "NODE_OPTIONS= vitest run",
-    "vitest:watch": "NODE_OPTIONS= vitest",
+    "vitest": "node scripts/run-vitest.mjs run",
+    "vitest:watch": "node scripts/run-vitest.mjs",
     "test:e2e": "cypress open",
     "test:e2e:headless": "cypress run"
   },
