@@ -138,6 +138,46 @@ export const getFlightsByAirline = (flights, metric) => {
     .sort((a, b) => b.flights - a.flights);
 };
 
+
+// Returns the most reliable available aircraft model without assuming every
+// flight has been status-checked. Older records may only have aircraft_type_name;
+// status-checked records can supply the model from AeroDataBox's saved response.
+const getAircraftModel = (flight) => {
+  const storedName =
+    typeof flight?.aircraft_type_name === "string"
+      ? flight.aircraft_type_name.trim()
+      : "";
+  if (storedName) return storedName.replace(/\s+/g, " ");
+
+  const status = flight?.flight_status;
+  if (!status || typeof status !== "object") return null;
+  const aircraft = status.aircraft;
+  const model =
+    aircraft && typeof aircraft === "object" ? aircraft.model : null;
+  return typeof model === "string" && model.trim()
+    ? model.trim().replace(/\s+/g, " ")
+    : null;
+};
+
+export const getFlightsByAircraft = (flights, metric) => {
+  if (!Array.isArray(flights)) return [];
+
+  const groups = new Map();
+  flights.forEach((flight) => {
+    const aircraft = getAircraftModel(flight);
+    if (!aircraft) return;
+
+    // Treat case and repeated whitespace differences as the same model while
+    // preserving a human-readable label in the chart.
+    const key = aircraft.toLocaleLowerCase();
+    const entry = groups.get(key) ?? { aircraft, flights: 0 };
+    entry.flights += metricValue(flight, metric);
+    groups.set(key, entry);
+  });
+
+  return [...groups.values()].sort((a, b) => b.flights - a.flights);
+};
+
 // Build a year x month matrix for the Timeline heatmap, totalling either
 // flights or kilometres per month. Returns the sorted list of years (oldest
 // first) and a `counts` map of year -> number[12] (Jan..Dec, UTC).

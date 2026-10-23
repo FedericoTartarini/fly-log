@@ -5,11 +5,13 @@ import {
   Card,
   SegmentedControl,
   ScrollArea,
+  Text,
 } from "@mantine/core";
 import { BarChart } from "@mantine/charts";
 import {
   getDeparturesByCountry,
   getFlightsByAirline,
+  getFlightsByAircraft,
   getFlightsByAirport,
   formatCompactValue,
   labelFitsInsideBar,
@@ -41,6 +43,12 @@ const CHART_GROUPING_CONFIG = {
     dataKey: "airport",
     seriesName: "flights",
     tLabel: "group.airport",
+  },
+  [CHART_GROUPING.AIRCRAFT]: {
+    getData: getFlightsByAircraft,
+    dataKey: "aircraft",
+    seriesName: "flights",
+    tLabel: "group.aircraft",
   },
 };
 
@@ -192,32 +200,39 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
             { label: t("group.country"), value: CHART_GROUPING.COUNTRY },
             { label: t("group.airline"), value: CHART_GROUPING.AIRLINE },
             { label: t("group.airport"), value: CHART_GROUPING.AIRPORT },
+            { label: t("group.aircraft"), value: CHART_GROUPING.AIRCRAFT },
           ]}
         />
         {metricControl}
       </Stack>
       <ScrollArea h={370} scrollbars="y" type="always" offsetScrollbars>
-        <BarChart
-          h={(chartData.length + 1) * 28}
-          data={chartData}
-          withBarValueLabel
-          valueLabelProps={valueLabelProps}
-          dataKey={currentGroupingConfig.dataKey}
-          orientation="vertical"
-          yAxisProps={{
-            width: 100,
-          }}
-          withXAxis={false}
-          gridAxis="none"
-          barProps={{ radius: 8, barSize: 23 }}
-          series={[
-            {
-              name: currentGroupingConfig.seriesName,
-              color: "accent.4",
-            },
-          ]}
-          withTooltip={false}
-        />
+        {grouping === CHART_GROUPING.AIRCRAFT && chartData.length === 0 ? (
+          <Text size="sm" c="dimmed">
+            {t("charts.no_aircraft_data")}
+          </Text>
+        ) : (
+          <BarChart
+            h={(chartData.length + 1) * 28}
+            data={chartData}
+            withBarValueLabel
+            valueLabelProps={valueLabelProps}
+            dataKey={currentGroupingConfig.dataKey}
+            orientation="vertical"
+            yAxisProps={{
+              width: 100,
+            }}
+            withXAxis={false}
+            gridAxis="none"
+            barProps={{ radius: 8, barSize: 23 }}
+            series={[
+              {
+                name: currentGroupingConfig.seriesName,
+                color: "accent.4",
+              },
+            ]}
+            withTooltip={false}
+          />
+        )}
       </ScrollArea>
     </Card>
   );
