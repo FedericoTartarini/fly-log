@@ -13,6 +13,7 @@ import {
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { addFlightsForUser } from "../firebaseClient";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
@@ -154,7 +155,7 @@ const FlightCsvUpload = ({ onComplete }) => {
 
           let lastProgress = 0;
           try {
-            const { successCount, errorCount } = await addFlightsForUser(
+            const { successCount, errorCount, ids } = await addFlightsForUser(
               uid,
               formattedFlights,
               (p) => {
@@ -185,6 +186,14 @@ const FlightCsvUpload = ({ onComplete }) => {
             if (onComplete) {
               onComplete();
             }
+
+            // Rows whose batch failed have no id and are not checked.
+            void autoCheckSavedFlights(
+              uid,
+              formattedFlights
+                .map((f, i) => ({ ...f, id: ids[i] }))
+                .filter((f) => f.id),
+            );
           } catch (e) {
             setError(`${t("csv.errors.unexpected")} - ${e.message}`);
             setParsing(false);
