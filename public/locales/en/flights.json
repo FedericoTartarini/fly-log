@@ -364,11 +364,6 @@
         "criterion": "Africa, Asia, Europe, North America, Oceania and South America."
       }
     },
-    "style": {
-      "pass": "Boarding pass",
-      "stamp": "Passport"
-    },
-    "stamp_caption": "Admitted",
     "categories": {
       "flights": "Flights",
       "distance": "Distance",

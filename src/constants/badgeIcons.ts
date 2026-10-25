@@ -35,6 +35,3 @@ export const BADGE_ICONS = {
   three_continents: IconMap,
   six_continents: IconWorldPin,
 };
-
-// Cosmetic look for a badge tile; see BadgeTile.
-export const BADGE_STYLES = { PASS: "pass", STAMP: "stamp" } as const;
