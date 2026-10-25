@@ -5,7 +5,7 @@
  * - Initial render (examples, textarea, parse button)
  * - Successful parse → success alert, extracted badges, missing-fields warning
  * - Multi-leg parse → one numbered section per leg
- * - "Go to Manual Entry" button calls onConfirm
+ * - "Review and save" button calls onConfirm
  * - "Start over" / reset flow
  * - Error state when parseFlightFromText rejects
  * - Ctrl+Enter keyboard shortcut triggers parse
@@ -150,7 +150,7 @@ describe("FlightChatInput", () => {
     expect(onParsed).toHaveBeenCalledWith(fullFlight);
   });
 
-  it("shows the 'Go to Manual Entry' button after a successful parse", async () => {
+  it("shows the 'Review and save' button after a successful parse", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
@@ -161,12 +161,12 @@ describe("FlightChatInput", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /go to manual entry/i }),
+        screen.getByRole("button", { name: /review and save/i }),
       ).not.toBeNull();
     });
   });
 
-  it("calls onConfirm when 'Go to Manual Entry' is clicked", async () => {
+  it("calls onConfirm when 'Review and save' is clicked", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
@@ -176,10 +176,10 @@ describe("FlightChatInput", () => {
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     expect(onConfirm).toHaveBeenCalledOnce();

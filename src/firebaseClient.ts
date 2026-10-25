@@ -211,6 +211,8 @@ export const onAuthStateChanged = (cb: (user: User | null) => void) => {
 export type AddFlightsResult = {
   successCount: number;
   errorCount: number;
+  /** Document id per input flight, in order; null where its batch failed. */
+  ids: (string | null)[];
 };
 
 /**
@@ -240,11 +242,13 @@ export const addFlightsForUser = async (
   let processed = 0;
   let successCount = 0;
   let errorCount = 0;
+  const ids: (string | null)[] = [];
 
   for (let i = 0; i < flights.length; i += chunkSize) {
     const chunk = flights.slice(i, i + chunkSize);
     const batch = writeBatch(firestore);
     const recordsCol = collection(firestore, "flights", uid, "records");
+    const chunkIds: string[] = [];
 
     for (const f of chunk) {
       const data: { departure_date?: unknown } & Record<string, unknown> = {
@@ -258,14 +262,18 @@ export const addFlightsForUser = async (
       const arrivalDate = parseToDate(data.arrival_date);
       if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
       data.created_at = serverTimestamp();
-      batch.set(doc(recordsCol), data);
+      const ref = doc(recordsCol);
+      chunkIds.push(ref.id);
+      batch.set(ref, data);
     }
 
     try {
       await batch.commit();
       successCount += chunk.length;
+      ids.push(...chunkIds);
     } catch (err) {
       errorCount += chunk.length;
+      ids.push(...chunkIds.map(() => null));
       console.error("Failed to commit flight batch:", err);
     }
 
@@ -275,7 +283,7 @@ export const addFlightsForUser = async (
 
   if (progressCb) progressCb(100);
 
-  return { successCount, errorCount };
+  return { successCount, errorCount, ids };
 };
 
 export const addFlightForUser = async (

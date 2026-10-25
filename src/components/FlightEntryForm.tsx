@@ -15,6 +15,7 @@ import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { addFlightsForUser } from "../firebaseClient";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { updateFlightForUser } from "../utils/flightService";
 import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -221,10 +222,18 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       } else {
         // Each leg is its own flight document, written in one batch so a
         // failure can't leave half a trip saved (and duplicate it on retry).
-        const { errorCount } = await addFlightsForUser(uid, flightsToInsert);
+        const { errorCount, ids } = await addFlightsForUser(
+          uid,
+          flightsToInsert,
+        );
         if (errorCount > 0) {
           throw new Error(`${errorCount} flight(s) could not be saved.`);
         }
+        // Not awaited: the save is done, and suggestions arrive on their own.
+        void autoCheckSavedFlights(
+          uid,
+          flightsToInsert.map((f, i) => ({ ...f, id: ids[i]! })),
+        );
       }
 
       notifications.show({

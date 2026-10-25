@@ -4,7 +4,7 @@
  * Covers:
  * - The "✨ AI Chat" tab renders FlightChatInput
  * - handleAiParsed pre-fills form fields when onParsed fires
- * - "Go to Manual Entry" (onConfirm) switches the active tab to "Manual Entry"
+ * - "Review and save" (onConfirm) switches the active tab to "Manual Entry"
  * - Multi-leg trips: AI legs fill one card each, add/return buttons, saving N legs
  * - The form still renders correctly when no AI result is provided
  */
@@ -25,8 +25,18 @@ vi.mock("../utils/referenceData", () => ({
 vi.mock("../firebaseClient", () => ({
   addFlightsForUser: vi
     .fn()
-    .mockResolvedValue({ successCount: 1, errorCount: 0 }),
+    .mockResolvedValue({
+      successCount: 3,
+      errorCount: 0,
+      ids: ["a", "b", "c"],
+    }),
   auth: null,
+}));
+
+// The automatic status check calls a Netlify function; here we only check
+// that a successful save hands it the new flights with their ids.
+vi.mock("../utils/autoStatusCheck", () => ({
+  autoCheckSavedFlights: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("../context/AuthContext.jsx", () => ({
@@ -54,6 +64,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
 import { addFlightsForUser } from "../firebaseClient";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { parseToDate } from "../utils/dateUtils";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -204,10 +215,10 @@ describe("FlightEntryForm – AI tab integration", () => {
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -242,7 +253,7 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── onConfirm switches tab ────────────────────────────────────────────────
 
-  it("'Go to Manual Entry' makes the Manual Entry tab active", async () => {
+  it("'Review and save' makes the Manual Entry tab active", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
     await act(async () => {
       render(<FlightEntryForm />);
@@ -258,11 +269,11 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -288,10 +299,10 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
   };
 
@@ -323,6 +334,12 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => expect(addFlightsForUser).toHaveBeenCalledOnce());
     const saved = vi.mocked(addFlightsForUser).mock.calls[0]?.[1];
     expect(saved).toHaveLength(3);
+    expect(vi.mocked(autoCheckSavedFlights)).toHaveBeenCalledWith(
+      "test-uid",
+      expect.arrayContaining([
+        expect.objectContaining({ id: "b", departure_airport_iata: "SIN" }),
+      ]),
+    );
     expect(saved?.[1]).toMatchObject({
       departure_airport_iata: "SIN",
       arrival_airport_iata: "LHR",
@@ -405,6 +422,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     vi.mocked(addFlightsForUser).mockResolvedValueOnce({
       successCount: 0,
       errorCount: 3,
+      ids: [null, null, null],
     });
     await act(async () => {
       render(<FlightEntryForm />);

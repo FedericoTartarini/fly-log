@@ -251,10 +251,10 @@
     "error_title": "Impossibile analizzare il volo",
     "error_generic": "Non è stato possibile comprendere i dettagli del volo. Prova a riformulare.",
     "success_title": "Dettagli volo estratti!",
-    "success_subtitle": "Verifica i dettagli qui sotto, poi clicca \"Vai all'inserimento manuale\" per confermare e salvare.",
+    "success_subtitle": "Clicca \"Controlla e salva\" per verificare i dettagli nel modulo, poi salva il volo.",
     "missing_title": "Alcuni dettagli mancano",
     "missing_subtitle": "Inserisci manualmente i seguenti campi nel modulo:",
-    "go_to_manual": "Vai all'inserimento manuale",
+    "review_and_save": "Controlla e salva",
     "reset": "Ricomincia",
     "flight_details": "Dettagli volo",
     "from": "Da",
@@ -390,5 +390,18 @@
     "premium_economy": "Premium economy",
     "business": "Business",
     "first": "Prima"
+  },
+  "auto_check": {
+    "title": "{{flight}} {{from}} → {{to}}: l'orario della compagnia è diverso",
+    "fields": {
+      "departure_time": "Ora di partenza",
+      "arrival_date": "Data di arrivo",
+      "arrival_time": "Ora di arrivo",
+      "aircraft_type_name": "Aereo"
+    },
+    "apply": "Applica",
+    "keep_mine": "Mantieni i miei",
+    "source": "Verificato una volta con AeroDataBox perché il volo è entro una settimana.",
+    "apply_failed": "Impossibile aggiornare il volo. Riprova."
   }
 }

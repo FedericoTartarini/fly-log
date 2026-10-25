@@ -251,10 +251,10 @@
     "error_title": "Could not parse flight",
     "error_generic": "Could not understand the flight details. Please try rephrasing.",
     "success_title": "Flight details extracted!",
-    "success_subtitle": "Review the details below, then click \"Go to Manual Entry\" to confirm and save.",
+    "success_subtitle": "Click \"Review and save\" to check these details in the form, then save the flight.",
     "missing_title": "Some details are missing",
     "missing_subtitle": "Please fill in the following fields manually in the form:",
-    "go_to_manual": "Go to Manual Entry",
+    "review_and_save": "Review and save",
     "reset": "Start over",
     "flight_details": "Flight details",
     "from": "From",
@@ -390,5 +390,18 @@
     "premium_economy": "Premium economy",
     "business": "Business",
     "first": "First"
+  },
+  "auto_check": {
+    "title": "{{flight}} {{from}} → {{to}}: the airline's schedule differs",
+    "fields": {
+      "departure_time": "Departure time",
+      "arrival_date": "Arrival date",
+      "arrival_time": "Arrival time",
+      "aircraft_type_name": "Aircraft"
+    },
+    "apply": "Apply",
+    "keep_mine": "Keep mine",
+    "source": "Checked once with AeroDataBox because the flight is within a week.",
+    "apply_failed": "Could not update the flight. Please try again."
   }
 }
