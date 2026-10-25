@@ -4,6 +4,7 @@ import { capitalize } from "./stringUtils";
 import { getCountryName } from "./countryUtils";
 import { getAirlineName } from "./airlineUtils";
 import { getAirportCity } from "./airportUtils";
+import { aircraftFamily } from "./aircraft";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
 
 // What one flight adds to its bucket: 1 for a flight count, its distance in
@@ -139,18 +140,12 @@ export const getFlightsByAirline = (flights, metric) => {
 };
 
 // The aircraft family a flight was flown on, or null when it isn't known. The
-// name the user accepted from a status check wins over the raw status response.
-// The variant after the dash is dropped ("Airbus A330-300" -> "Airbus A330"),
-// because AeroDataBox doesn't always report it, which would split one aircraft
-// type across two bars.
-// ponytail: dash split only; a variant -> family table if names still diverge.
-export const getAircraftFamily = (flight) => {
-  const name =
-    flight?.aircraft_type_name || flight?.flight_status?.aircraft?.model;
-  if (typeof name !== "string") return null;
-  const family = name.split("-")[0].replace(/\s+/g, " ").trim();
-  return family || null;
-};
+// name the user entered or accepted from a status check wins over the raw
+// status response.
+export const getAircraftFamily = (flight) =>
+  aircraftFamily(
+    flight?.aircraft_type_name || flight?.flight_status?.aircraft?.model,
+  );
 
 export const getFlightsByAircraft = (flights, metric) => {
   if (!Array.isArray(flights)) return [];

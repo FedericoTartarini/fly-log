@@ -419,4 +419,17 @@ describe("getFlightsByAircraft", () => {
       ]),
     ).toEqual([{ aircraft: "Airbus A320", flights: 2 }]);
   });
+
+  it("counts Boeing's 737-8 with the MAX, not the 737-800", () => {
+    expect(
+      getFlightsByAircraft([
+        { aircraft_type_name: "Boeing 737-8" },
+        { aircraft_type_name: "Boeing 737 MAX 8" },
+        { flight_status: { aircraft: { model: "Boeing 737-800" } } },
+      ]),
+    ).toEqual([
+      { aircraft: "Boeing 737 MAX", flights: 2 },
+      { aircraft: "Boeing 737", flights: 1 },
+    ]);
+  });
 });

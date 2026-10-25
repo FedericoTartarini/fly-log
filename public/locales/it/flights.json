@@ -151,7 +151,8 @@
       "flight_n": "Volo {{n}}",
       "arrival_date": "Data di arrivo",
       "arrival_time": "Ora di arrivo",
-      "cabin_class": "Classe"
+      "cabin_class": "Classe",
+      "aircraft": "Aereo"
     },
     "tabs": {
       "manual": "Inserimento manuale",
@@ -166,7 +167,9 @@
       "no_matching_airports": "Nessun aeroporto trovato",
       "no_matching_airlines": "Nessuna compagnia trovata",
       "flight_number_example": "ABC123",
-      "same_day": "Stesso giorno della partenza"
+      "same_day": "Stesso giorno della partenza",
+      "search_aircraft": "Cerca aereo (facoltativo)",
+      "no_matching_aircraft": "Nessun aereo corrispondente"
     },
     "validation": {
       "departure_date_required": "La data di partenza è obbligatoria",
@@ -223,7 +226,7 @@
     "distance_by": "Chilometri percorsi per {{period}}",
     "co2_by": "CO₂e emessa per {{period}}",
     "no_aircraft_data": "Nessun dato sul modello dell'aeromobile. Controlla lo stato del volo per ottenere i dettagli dell'aereo.",
-    "aircraft_subset": "Basato su {{known}} di {{total}} voli. L'aereo viene aggiunto quando controlli lo stato di un volo."
+    "aircraft_subset": "Basato su {{known}} di {{total}} voli. Aggiungi l'aereo quando modifichi un volo, oppure controlla lo stato del volo per inserirlo."
   },
   "time": {
     "day_of_week": "Giorno della settimana",

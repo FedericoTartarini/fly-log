@@ -254,6 +254,14 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
                       </Badge>
                     </List.Item>
                   )}
+                  {leg.aircraft_type_name && (
+                    <List.Item>
+                      {t("form.labels.aircraft")}:{" "}
+                      <Badge size="xs" variant="light" color="indigo">
+                        {leg.aircraft_type_name}
+                      </Badge>
+                    </List.Item>
+                  )}
                   {leg.airline_iata && (
                     <List.Item>
                       {t("ai.airline")}:{" "}
