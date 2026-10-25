@@ -18,6 +18,7 @@ export const CHART_GROUPING = {
   COUNTRY: "country",
   AIRLINE: "airline",
   AIRPORT: "airport",
+  AIRCRAFT: "aircraft",
 } as const;
 
 export type ChartGrouping =

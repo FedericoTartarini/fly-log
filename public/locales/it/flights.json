@@ -221,7 +221,9 @@
     "departures_by_country": "Partenze per paese",
     "flights_by": "Voli per {{period}}",
     "distance_by": "Chilometri percorsi per {{period}}",
-    "co2_by": "CO₂e emessa per {{period}}"
+    "co2_by": "CO₂e emessa per {{period}}",
+    "no_aircraft_data": "Nessun dato sul modello dell'aeromobile. Controlla lo stato del volo per ottenere i dettagli dell'aereo.",
+    "aircraft_subset": "Basato su {{known}} di {{total}} voli. L'aereo viene aggiunto quando controlli lo stato di un volo."
   },
   "time": {
     "day_of_week": "Giorno della settimana",
@@ -231,7 +233,8 @@
   "group": {
     "country": "Paese",
     "airline": "Compagnia aerea",
-    "airport": "Città"
+    "airport": "Città",
+    "aircraft": "Aereo"
   },
   "loading": "Caricamento...",
   "ai": {

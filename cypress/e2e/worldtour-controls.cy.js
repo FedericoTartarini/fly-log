@@ -1,9 +1,16 @@
 /* global describe, it, before, cy, Cypress */
 
 describe("WorldTour Globe Animation Controls", () => {
-  before(() => {
+  before(function () {
     const email = Cypress.env("CY_TEST_EMAIL");
     const password = Cypress.env("CY_TEST_PASSWORD");
+
+    // Pull requests from forks don't get the repo's secrets, so there is no
+    // account to log in with. The full suite runs again after merging.
+    if (!email || !password) {
+      this.skip();
+      return;
+    }
 
     cy.visit("/login");
     cy.wait(500); // Allow React/Mantine hydration to fully complete
