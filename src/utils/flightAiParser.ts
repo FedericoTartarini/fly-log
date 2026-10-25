@@ -1,5 +1,6 @@
 import { getAI, getGenerativeModel, Schema } from "firebase/ai";
 import { app, ensureAppCheck } from "../firebaseClient";
+import { CABIN_CLASSES, type CabinClass } from "./emissions";
 
 export interface ParsedFlight {
   departure_airport_iata: string | null;
@@ -10,6 +11,7 @@ export interface ParsedFlight {
   arrival_time: string | null; // HH:MM, local at the arrival airport
   airline_iata: string | null;
   flight_number: string | null;
+  cabin_class: CabinClass | null;
 }
 
 /** Required fields that must be present to consider a flight "complete". */
@@ -29,6 +31,7 @@ const SYSTEM_PROMPT = `You are a flight data extractor. Given a user description
 - arrival_time: 24-hour time string in HH:MM format, the local time the flight lands, or null
 - airline_iata: 2-letter IATA airline code (uppercase) or null
 - flight_number: flight number digits only as a string (e.g. "123"), or null
+- cabin_class: one of "economy", "premium_economy", "business", "first", or null when the cabin is not stated. Map fare names to the cabin they sit in (e.g. "Premium" or "Premium Economy" → premium_economy, "Business" or "Upper Class" → business).
 
 Rules:
 - A trip with stopovers is split into one leg per flight: "Washington to LA to Sydney" is two legs, IAD → LAX and LAX → SYD.
@@ -70,6 +73,7 @@ const RESPONSE_SCHEMA = Schema.object({
           arrival_time: nullableString(),
           airline_iata: nullableString(),
           flight_number: nullableString(),
+          cabin_class: nullableString(),
         },
       }),
     }),
@@ -194,6 +198,14 @@ export async function parseFlightFromText(
     return m?.[1] ?? null;
   };
 
+  const normalizeCabin = (value: unknown): CabinClass | null => {
+    if (typeof value !== "string") return null;
+    const v = value.trim().toLowerCase().replace(/[\s-]+/g, "_");
+    return (Object.values(CABIN_CLASSES) as string[]).includes(v)
+      ? (v as CabinClass)
+      : null;
+  };
+
   const flights = legs
     .filter(
       (leg): leg is Record<string, unknown> =>
@@ -209,6 +221,7 @@ export async function parseFlightFromText(
         arrival_time: normalizeTime(r.arrival_time),
         airline_iata: normalizeIata(r.airline_iata, 2),
         flight_number: normalizeFlightNumber(r.flight_number),
+        cabin_class: normalizeCabin(r.cabin_class),
       }),
     )
     .filter((f) => f.departure_airport_iata || f.arrival_airport_iata);

@@ -104,4 +104,19 @@ describe("FlightCsvUpload", () => {
     expect(errors.some((e) => e.includes("arrival_date"))).toBe(true);
     expect(errors.some((e) => e.includes("arrival_time"))).toBe(true);
   });
+
+  it("validateCsvData accepts a known cabin_class and rejects anything else", () => {
+    const row = {
+      departure_date: "2024-03-10",
+      departure_airport_iata: "SYD",
+      arrival_airport_iata: "SIN",
+      airline_iata: "QF",
+    };
+    expect(validateCsvData([{ ...row, cabin_class: "business" }])).toEqual([]);
+    expect(
+      validateCsvData([{ ...row, cabin_class: "Upper" }]).some((e) =>
+        e.includes("cabin_class"),
+      ),
+    ).toBe(true);
+  });
 });

@@ -90,6 +90,7 @@ const multiLegParsed = [
     arrival_date: "2026-07-11",
     arrival_time: "05:40",
     flight_number: "1",
+    cabin_class: "business",
   },
   {
     ...leg,
@@ -346,12 +347,14 @@ describe("FlightEntryForm – AI tab integration", () => {
       departure_time: "23:00",
       arrival_time: "05:40",
       flight_number: "1",
+      cabin_class: "business",
     });
     expect(parseToDate(saved?.[1]?.arrival_date)?.getDate()).toBe(11);
     // A leg with no arrival stated saves none, rather than a guess.
     expect(saved?.[0]).toMatchObject({
       arrival_date: null,
       arrival_time: null,
+      cabin_class: null,
     });
   });
 

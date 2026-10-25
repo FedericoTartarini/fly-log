@@ -1,4 +1,5 @@
 import type { DateLike } from "../utils/dateUtils";
+import type { CabinClass } from "../utils/emissions";
 
 /**
  * Represents a flight record.
@@ -18,6 +19,8 @@ export interface enhancedFlight {
   airline_icao: string | null;
   airline_iata: string;
   flight_number?: string | null;
+  /** One of CABIN_CLASSES; absent means economy. Changes the CO2e factor. */
+  cabin_class?: CabinClass | null;
   created_at?: string | null;
   departure_coordinates: [number, number] | null;
   arrival_coordinates: [number, number] | null;

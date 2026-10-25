@@ -103,6 +103,12 @@ const FlightCard: React.FC<FlightCardProps> = ({
           )}
         </SimpleGrid>
 
+        {flight.cabin_class && (
+          <Text size="sm">
+            {t("form.labels.cabin_class")}: {t(`cabin.${flight.cabin_class}`)}
+          </Text>
+        )}
+
         {flight.aircraft_type_name && (
           <Text size="sm">
             {t("aircraft_label")} {flight.aircraft_type_name}

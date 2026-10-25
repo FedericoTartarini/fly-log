@@ -22,14 +22,59 @@ export const INCLUDES_RADIATIVE_FORCING = true;
 
 /**
  * kg CO2e per passenger-kilometre, economy class, with radiative forcing.
- * Economy is assumed because the flight record carries no cabin class; premium,
- * business and first are multiples of these, so those trips are understated.
+ * Economy is what a flight with no cabin class recorded is assumed to be.
  */
 export const EMISSION_FACTORS = {
   DOMESTIC: 0.229,
   SHORT_HAUL: 0.126,
   LONG_HAUL: 0.117,
 } as const;
+
+export const CABIN_CLASSES = {
+  ECONOMY: "economy",
+  PREMIUM_ECONOMY: "premium_economy",
+  BUSINESS: "business",
+  FIRST: "first",
+} as const;
+
+export type CabinClass = (typeof CABIN_CLASSES)[keyof typeof CABIN_CLASSES];
+
+/**
+ * Per-cabin factors, from the same DEFRA 2025 "with RF" table, "to/from UK"
+ * rows, rounded to three places like the economy factors above.
+ *
+ * DEFRA does not publish every cabin for every haul, so the gaps are filled
+ * from the nearest published one rather than invented:
+ * - domestic has only an average-passenger factor, so every cabin uses it;
+ * - short haul has only economy and business, so premium economy takes the
+ *   economy factor and first takes the business one.
+ */
+const CABIN_FACTORS: Record<
+  keyof typeof EMISSION_FACTORS,
+  Record<CabinClass, number>
+> = {
+  DOMESTIC: {
+    economy: EMISSION_FACTORS.DOMESTIC,
+    premium_economy: EMISSION_FACTORS.DOMESTIC,
+    business: EMISSION_FACTORS.DOMESTIC,
+    first: EMISSION_FACTORS.DOMESTIC,
+  },
+  SHORT_HAUL: {
+    economy: EMISSION_FACTORS.SHORT_HAUL,
+    premium_economy: EMISSION_FACTORS.SHORT_HAUL,
+    business: 0.189,
+    first: 0.189,
+  },
+  LONG_HAUL: {
+    economy: EMISSION_FACTORS.LONG_HAUL,
+    premium_economy: 0.187,
+    business: 0.339,
+    first: 0.468,
+  },
+};
+
+const isCabinClass = (value: unknown): value is CabinClass =>
+  Object.values(CABIN_CLASSES).includes(value as CabinClass);
 
 /** DEFRA splits international flights into short and long haul at 3700 km. */
 export const LONG_HAUL_THRESHOLD_KM = 3700;
@@ -49,6 +94,8 @@ export function estimateCo2Kg(flight: {
   international?: boolean;
   departure_country?: string | null;
   arrival_country?: string | null;
+  /** Stored as entered, so anything unrecognised is treated as economy. */
+  cabin_class?: unknown;
 }): number {
   const distance = flight?.distance_km;
   // typeof narrows away null/undefined; isFinite rejects NaN and Infinity.
@@ -60,11 +107,16 @@ export function estimateCo2Kg(flight: {
   const international =
     flight.international ?? flight.departure_country !== flight.arrival_country;
 
-  const factor = !international
-    ? EMISSION_FACTORS.DOMESTIC
+  const haul = !international
+    ? "DOMESTIC"
     : distance < LONG_HAUL_THRESHOLD_KM
-      ? EMISSION_FACTORS.SHORT_HAUL
-      : EMISSION_FACTORS.LONG_HAUL;
+      ? "SHORT_HAUL"
+      : "LONG_HAUL";
+  // Absent or unrecognised means economy, exactly as before cabins existed.
+  const cabin = isCabinClass(flight.cabin_class)
+    ? flight.cabin_class
+    : CABIN_CLASSES.ECONOMY;
+  const factor = CABIN_FACTORS[haul][cabin];
 
   return distance * factor;
 }

@@ -38,7 +38,7 @@
   "flight_time": "{{hours}}h {{minutes}}m flight time",
   "csv": {
     "title": "Upload Flight Data from CSV",
-    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number, arrival_date, arrival_time.",
+    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number, arrival_date, arrival_time, cabin_class (economy, premium_economy, business, first).",
     "file_input": {
       "placeholder": "Select CSV file",
       "label": "Flight data CSV",
@@ -150,7 +150,8 @@
       "not_signed_in": "You are not signed in. Please sign in to save flights.",
       "flight_n": "Flight {{n}}",
       "arrival_date": "Arrival Date",
-      "arrival_time": "Arrival Time"
+      "arrival_time": "Arrival Time",
+      "cabin_class": "Cabin Class"
     },
     "tabs": {
       "manual": "Manual Entry",
@@ -195,6 +196,9 @@
     },
     "errors": {
       "user_not_authenticated": "User not authenticated"
+    },
+    "descriptions": {
+      "cabin_class": "Used for the CO2e estimate. Leave empty for economy."
     }
   },
   "distance": {
@@ -277,15 +281,18 @@
     "items": {
       "first_flight": {
         "name": "First flight",
-        "criterion": "Log your first flight."
+        "criterion": "Log your first flight.",
+        "link": "https://en.wikipedia.org/wiki/Wright_Flyer"
       },
       "border_crossed": {
         "name": "Border crossed",
-        "criterion": "Fly from one country to another."
+        "criterion": "Fly from one country to another.",
+        "link": "https://en.wikipedia.org/wiki/Border"
       },
       "long_hauler": {
         "name": "Long hauler",
-        "criterion": "A single flight of 5,000 km or more."
+        "criterion": "A single flight of 5,000 km or more.",
+        "link": "https://en.wikipedia.org/wiki/Flight_length"
       },
       "ten_up": {
         "name": "Ten up",
@@ -301,19 +308,23 @@
       },
       "once_around": {
         "name": "Once around",
-        "criterion": "40,075 km — one lap of the Earth."
+        "criterion": "40,075 km — one lap of the Earth.",
+        "link": "https://en.wikipedia.org/wiki/Earth%27s_circumference"
       },
       "five_laps": {
         "name": "Five laps",
-        "criterion": "200,375 km — five times around the Earth."
+        "criterion": "200,375 km — five times around the Earth.",
+        "link": "https://en.wikipedia.org/wiki/Earth%27s_circumference"
       },
       "to_the_moon": {
         "name": "To the Moon",
-        "criterion": "384,400 km — the distance to the Moon."
+        "criterion": "384,400 km — the distance to the Moon.",
+        "link": "https://en.wikipedia.org/wiki/Lunar_distance"
       },
       "there_and_back": {
         "name": "To the Moon and back",
-        "criterion": "768,800 km — the Moon and home again."
+        "criterion": "768,800 km — the Moon and home again.",
+        "link": "https://en.wikipedia.org/wiki/Lunar_distance"
       },
       "globetrotter": {
         "name": "Globetrotter",
@@ -337,7 +348,8 @@
       },
       "million_club": {
         "name": "Million kilometre club",
-        "criterion": "1,000,000 km — the frequent flyer's million."
+        "criterion": "1,000,000 km — the frequent flyer's million.",
+        "link": "https://en.wikipedia.org/wiki/Frequent-flyer_program"
       },
       "explorer": {
         "name": "Explorer",
@@ -354,20 +366,30 @@
       "ten_years_running": {
         "name": "Ten years running",
         "criterion": "Fly in ten consecutive years."
+      },
+      "three_continents": {
+        "name": "Three continents",
+        "criterion": "Visit three different continents."
+      },
+      "six_continents": {
+        "name": "All six continents",
+        "criterion": "Africa, Asia, Europe, North America, Oceania and South America."
       }
     },
-    "style": {
-      "pass": "Boarding pass",
-      "stamp": "Passport"
-    },
-    "stamp_caption": "Admitted",
     "categories": {
       "flights": "Flights",
       "distance": "Distance",
       "places": "Places",
       "habit": "Habit"
     },
-    "section_count": "{{unlocked}} of {{total}}"
+    "section_count": "{{unlocked}} of {{total}}",
+    "link_label": "Read about {{name}} on Wikipedia"
+  },
+  "cabin": {
+    "economy": "Economy",
+    "premium_economy": "Premium economy",
+    "business": "Business",
+    "first": "First"
   },
   "auto_check": {
     "title": "{{flight}} {{from}} → {{to}}: the airline's schedule differs",
