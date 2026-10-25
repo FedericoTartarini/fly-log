@@ -32,7 +32,7 @@ import { useTranslation } from "react-i18next";
 interface FlightChatInputProps {
   /** Called as soon as parsing succeeds — pre-fills the form fields. */
   onParsed: (flights: ParsedFlight[]) => void;
-  /** Called when the user clicks "Go to Manual Entry" after a successful parse. */
+  /** Called when the user clicks "Review and save" after a successful parse. */
   onConfirm: () => void;
 }
 
@@ -307,7 +307,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
           {t("ai.powered_by")}
         </Text>
         <Group gap="xs">
-          {/* Show "Go to Manual Entry" once we have a successful parse */}
+          {/* Show "Review and save" once we have a successful parse */}
           {hasAnyParsedField && (
             <Button
               variant="light"
@@ -316,7 +316,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               rightSection={<IconArrowRight size={14} />}
               onClick={onConfirm}
             >
-              {t("ai.go_to_manual")}
+              {t("ai.review_and_save")}
             </Button>
           )}
           {hasAnyParsedField ? (

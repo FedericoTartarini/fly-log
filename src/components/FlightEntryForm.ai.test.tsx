@@ -4,7 +4,7 @@
  * Covers:
  * - The "✨ AI Chat" tab renders FlightChatInput
  * - handleAiParsed pre-fills form fields when onParsed fires
- * - "Go to Manual Entry" (onConfirm) switches the active tab to "Manual Entry"
+ * - "Review and save" (onConfirm) switches the active tab to "Manual Entry"
  * - Multi-leg trips: AI legs fill one card each, add/return buttons, saving N legs
  * - The form still renders correctly when no AI result is provided
  */
@@ -215,10 +215,10 @@ describe("FlightEntryForm – AI tab integration", () => {
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -253,7 +253,7 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── onConfirm switches tab ────────────────────────────────────────────────
 
-  it("'Go to Manual Entry' makes the Manual Entry tab active", async () => {
+  it("'Review and save' makes the Manual Entry tab active", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
     await act(async () => {
       render(<FlightEntryForm />);
@@ -269,11 +269,11 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -299,10 +299,10 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
   };
 
