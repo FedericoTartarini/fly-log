@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Group, Stack, Text, Progress, ThemeIcon } from "@mantine/core";
 import { useTranslation } from "react-i18next";
-import { IconMedal } from "@tabler/icons-react";
+import { IconExternalLink, IconMedal } from "@tabler/icons-react";
 import { BADGE_ICONS } from "../constants/badgeIcons.ts";
 import { DISTANCE_BADGES } from "../utils/badges.ts";
 import { barcodePattern } from "../utils/barcode.ts";
@@ -16,7 +16,10 @@ const formatProgress = (badge, language) => {
   return `${value} / ${target}${suffix}`;
 };
 
-/** One badge, drawn as a boarding pass with a torn-off stub. */
+/**
+ * One badge, drawn as a boarding pass with a torn-off stub. A badge with a
+ * Wikipedia article behind it is a link to that article, the whole card.
+ */
 const BadgeTile = ({ badge }) => {
   const { t, i18n } = useTranslation("flights");
   const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
@@ -27,6 +30,19 @@ const BadgeTile = ({ badge }) => {
     "DD MMM YYYY",
     i18n.language,
   );
+  // Each language links its own Wikipedia; most badges have no link.
+  const link = t(`badges.items.${badge.id}.link`, { defaultValue: "" });
+  const linkProps = link
+    ? {
+        component: "a",
+        href: link,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "aria-label": t("badges.link_label", {
+          name: t(`badges.items.${badge.id}.name`),
+        }),
+      }
+    : {};
 
   const header = (
     <Group gap="sm" align="flex-start" wrap="nowrap">
@@ -88,8 +104,16 @@ const BadgeTile = ({ badge }) => {
       withBorder
       padding="sm"
       data-cy={`badge-${badge.id}`}
-      className={`${classes.tile} ${badge.unlocked ? "" : classes.locked}`}
+      className={`${classes.tile} ${badge.unlocked ? "" : classes.locked} ${link ? classes.linked : ""}`}
+      {...linkProps}
     >
+      {link && (
+        <IconExternalLink
+          size={14}
+          className={classes.linkIcon}
+          aria-hidden="true"
+        />
+      )}
       <Stack gap="xs" h="100%">
         {header}
         {footer}
