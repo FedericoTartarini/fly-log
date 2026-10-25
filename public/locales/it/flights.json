@@ -55,7 +55,7 @@
   },
   "csv": {
     "title": "Carica dati volo da CSV",
-    "description": "Il tuo CSV deve includere queste colonne: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Opzionale: flight_number, arrival_date, arrival_time.",
+    "description": "Il tuo CSV deve includere queste colonne: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Opzionale: flight_number, arrival_date, arrival_time, cabin_class (economy, premium_economy, business, first).",
     "file_input": {
       "placeholder": "Seleziona file CSV",
       "label": "CSV dati volo",
@@ -150,7 +150,8 @@
       "not_signed_in": "Non sei autenticato. Effettua l'accesso per salvare i voli.",
       "flight_n": "Volo {{n}}",
       "arrival_date": "Data di arrivo",
-      "arrival_time": "Ora di arrivo"
+      "arrival_time": "Ora di arrivo",
+      "cabin_class": "Classe"
     },
     "tabs": {
       "manual": "Inserimento manuale",
@@ -195,6 +196,9 @@
     },
     "errors": {
       "user_not_authenticated": "Utente non autenticato"
+    },
+    "descriptions": {
+      "cabin_class": "Usata per la stima della CO2e. Lascia vuoto per economy."
     }
   },
   "distance": {
@@ -380,5 +384,11 @@
     },
     "section_count": "{{unlocked}} di {{total}}",
     "link_label": "Approfondisci {{name}} su Wikipedia"
+  },
+  "cabin": {
+    "economy": "Economy",
+    "premium_economy": "Premium economy",
+    "business": "Business",
+    "first": "Prima"
   }
 }

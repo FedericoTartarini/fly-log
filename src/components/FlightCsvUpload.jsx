@@ -17,6 +17,7 @@ import { notifications } from "@mantine/notifications";
 import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
 import { validateAndNormalizeCsvRows } from "../utils/iataValidation";
+import { CABIN_CLASSES } from "../utils/emissions";
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -59,6 +60,15 @@ export const validateCsvData = (data) => {
     if (row.arrival_time && !/^\d{2}:\d{2}$/.test(row.arrival_time)) {
       errors.push(
         `Row ${index + 1}: Invalid arrival_time format (HH:mm expected)`,
+      );
+    }
+
+    if (
+      row.cabin_class &&
+      !Object.values(CABIN_CLASSES).includes(row.cabin_class.trim())
+    ) {
+      errors.push(
+        `Row ${index + 1}: Invalid cabin_class (${Object.values(CABIN_CLASSES).join(", ")} expected)`,
       );
     }
 
@@ -146,6 +156,7 @@ const FlightCsvUpload = ({ onComplete }) => {
             departure_time: flight.departure_time,
             arrival_date: flight.arrival_date || null,
             arrival_time: flight.arrival_time || null,
+            cabin_class: flight.cabin_class?.trim() || null,
             departure_airport_iata: flight.departure_airport_iata,
             arrival_airport_iata: flight.arrival_airport_iata,
             airline_iata: flight.airline_iata,

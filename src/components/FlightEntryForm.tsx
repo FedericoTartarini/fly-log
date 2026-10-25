@@ -29,6 +29,7 @@ import {
 } from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
 import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
+import { CABIN_CLASSES } from "../utils/emissions";
 
 type SelectOption = {
   value: string;
@@ -47,6 +48,8 @@ type Leg = {
   arrivalAirport: string;
   airline: string;
   flightNumber: string;
+  /** Empty means not recorded, which the emissions model treats as economy. */
+  cabinClass: string;
 };
 
 const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
@@ -59,6 +62,7 @@ const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
   arrivalAirport: "",
   airline: "",
   flightNumber: "",
+  cabinClass: "",
   ...overrides,
 });
 
@@ -77,6 +81,7 @@ interface FlightEntryFormProps {
     arrival_airport_iata?: string;
     airline_iata?: string;
     flight_number?: string | null;
+    cabin_class?: string | null;
   } | null;
 }
 
@@ -168,6 +173,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           arrivalAirport: flight.arrival_airport_iata || "",
           airline: flight.airline_iata || "",
           flightNumber: flight.flight_number || "",
+          cabinClass: flight.cabin_class || "",
         }),
       ],
     });
@@ -206,6 +212,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         arrival_airport_iata: leg.arrivalAirport,
         airline_iata: leg.airline,
         flight_number: leg.flightNumber,
+        cabin_class: leg.cabinClass || null,
       }));
 
       if (flight && flight.id) {
@@ -339,6 +346,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         arrivalAirport: parsed.arrival_airport_iata ?? "",
         airline: parsed.airline_iata ?? "",
         flightNumber: parsed.flight_number ?? "",
+        cabinClass: parsed.cabin_class ?? "",
       });
     });
     form.setValues({ legs: parsedLegs.length ? parsedLegs : [newLeg()] });
@@ -350,6 +358,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       });
     }
   };
+
+  const cabinOptions = Object.values(CABIN_CLASSES).map((value) => ({
+    value,
+    label: t(`cabin.${value}`),
+  }));
 
   const legFields = (index: number) => (
     <Stack>
@@ -427,6 +440,15 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           {...form.getInputProps(`legs.${index}.flightNumber`)}
         />
       </Group>
+
+      <Select
+        label={t("form.labels.cabin_class")}
+        placeholder={t("cabin.economy")}
+        description={t("form.descriptions.cabin_class")}
+        clearable
+        data={cabinOptions}
+        {...form.getInputProps(`legs.${index}.cabinClass`)}
+      />
     </Stack>
   );
 

@@ -168,6 +168,7 @@ export const enrichFlightData = (
     co2_kg: estimateCo2Kg({
       distance_km: distance,
       international: depCountry !== arrCountry,
+      cabin_class: flight.cabin_class,
     }),
     airline_name: airlineName,
     airline_icon_path: airlineIconPath,

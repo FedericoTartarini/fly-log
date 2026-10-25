@@ -38,7 +38,7 @@
   "flight_time": "{{hours}}h {{minutes}}m flight time",
   "csv": {
     "title": "Upload Flight Data from CSV",
-    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number, arrival_date, arrival_time.",
+    "description": "Your CSV must include these columns: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Optional: flight_number, arrival_date, arrival_time, cabin_class (economy, premium_economy, business, first).",
     "file_input": {
       "placeholder": "Select CSV file",
       "label": "Flight data CSV",
@@ -150,7 +150,8 @@
       "not_signed_in": "You are not signed in. Please sign in to save flights.",
       "flight_n": "Flight {{n}}",
       "arrival_date": "Arrival Date",
-      "arrival_time": "Arrival Time"
+      "arrival_time": "Arrival Time",
+      "cabin_class": "Cabin Class"
     },
     "tabs": {
       "manual": "Manual Entry",
@@ -195,6 +196,9 @@
     },
     "errors": {
       "user_not_authenticated": "User not authenticated"
+    },
+    "descriptions": {
+      "cabin_class": "Used for the CO2e estimate. Leave empty for economy."
     }
   },
   "distance": {
@@ -380,5 +384,11 @@
     },
     "section_count": "{{unlocked}} of {{total}}",
     "link_label": "Read about {{name}} on Wikipedia"
+  },
+  "cabin": {
+    "economy": "Economy",
+    "premium_economy": "Premium economy",
+    "business": "Business",
+    "first": "First"
   }
 }
