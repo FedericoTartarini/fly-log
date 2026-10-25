@@ -4,7 +4,7 @@
  * Covers:
  * - The "✨ AI Chat" tab renders FlightChatInput
  * - handleAiParsed pre-fills form fields when onParsed fires
- * - "Go to Manual Entry" (onConfirm) switches the active tab to "Manual Entry"
+ * - "Review and save" (onConfirm) switches the active tab to "Manual Entry"
  * - Multi-leg trips: AI legs fill one card each, add/return buttons, saving N legs
  * - The form still renders correctly when no AI result is provided
  */
@@ -25,8 +25,18 @@ vi.mock("../utils/referenceData", () => ({
 vi.mock("../firebaseClient", () => ({
   addFlightsForUser: vi
     .fn()
-    .mockResolvedValue({ successCount: 1, errorCount: 0 }),
+    .mockResolvedValue({
+      successCount: 3,
+      errorCount: 0,
+      ids: ["a", "b", "c"],
+    }),
   auth: null,
+}));
+
+// The automatic status check calls a Netlify function; here we only check
+// that a successful save hands it the new flights with their ids.
+vi.mock("../utils/autoStatusCheck", () => ({
+  autoCheckSavedFlights: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("../context/AuthContext.jsx", () => ({
@@ -54,7 +64,7 @@ import FlightEntryForm from "./FlightEntryForm";
 import { FLIGHT_ENTRY_TABS } from "../constants/tabs";
 import { loadAirportsInfo, loadAirlinesInfo } from "../utils/referenceData";
 import { addFlightsForUser } from "../firebaseClient";
-import { parseToDate } from "../utils/dateUtils";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -79,6 +89,7 @@ const multiLegParsed = [
     arrival_date: "2026-07-11",
     arrival_time: "05:40",
     flight_number: "1",
+    cabin_class: "business",
   },
   {
     ...leg,
@@ -160,12 +171,19 @@ describe("FlightEntryForm – AI tab integration", () => {
     ).not.toBeNull();
   });
 
-  it("shows Manual Entry panel by default", async () => {
+  it("shows the AI Chat panel by default for a new flight", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
+    expect(
+      screen.getByRole("button", { name: /parse with ai/i }),
+    ).not.toBeNull();
+    // Inactive tab panels stay mounted (hidden), so check the selected tab
+    // rather than whether the manual fields exist.
+    expect(
+      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("switching to AI Chat tab shows the FlightChatInput textarea", async () => {
@@ -203,10 +221,10 @@ describe("FlightEntryForm – AI tab integration", () => {
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -241,7 +259,7 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── onConfirm switches tab ────────────────────────────────────────────────
 
-  it("'Go to Manual Entry' makes the Manual Entry tab active", async () => {
+  it("'Review and save' makes the Manual Entry tab active", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
     await act(async () => {
       render(<FlightEntryForm />);
@@ -257,11 +275,11 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
 
     await waitFor(() => {
@@ -287,10 +305,10 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /parse with ai/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /go to manual entry/i }),
+      screen.getByRole("button", { name: /review and save/i }),
     );
   };
 
@@ -322,6 +340,12 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => expect(addFlightsForUser).toHaveBeenCalledOnce());
     const saved = vi.mocked(addFlightsForUser).mock.calls[0]?.[1];
     expect(saved).toHaveLength(3);
+    expect(vi.mocked(autoCheckSavedFlights)).toHaveBeenCalledWith(
+      "test-uid",
+      expect.arrayContaining([
+        expect.objectContaining({ id: "b", departure_airport_iata: "SIN" }),
+      ]),
+    );
     expect(saved?.[1]).toMatchObject({
       departure_airport_iata: "SIN",
       arrival_airport_iata: "LHR",
@@ -329,10 +353,15 @@ describe("FlightEntryForm – AI tab integration", () => {
       departure_time: "23:00",
       arrival_time: "05:40",
       flight_number: "1",
+      cabin_class: "business",
     });
-    expect(parseToDate(saved?.[1]?.arrival_date)?.getDate()).toBe(11);
+    expect(saved?.[1]?.arrival_date).toBe("2026-07-11");
     // A leg with no arrival stated saves none, rather than a guess.
-    expect(saved?.[0]).toMatchObject({ arrival_date: null, arrival_time: null });
+    expect(saved?.[0]).toMatchObject({
+      arrival_date: null,
+      arrival_time: null,
+      cabin_class: null,
+    });
   });
 
   it("'Add another flight' starts the new leg where the last one landed", async () => {
@@ -399,6 +428,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     vi.mocked(addFlightsForUser).mockResolvedValueOnce({
       successCount: 0,
       errorCount: 3,
+      ids: [null, null, null],
     });
     await act(async () => {
       render(<FlightEntryForm />);

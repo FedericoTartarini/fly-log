@@ -138,6 +138,39 @@ export const getFlightsByAirline = (flights, metric) => {
     .sort((a, b) => b.flights - a.flights);
 };
 
+// The aircraft family a flight was flown on, or null when it isn't known. The
+// name the user accepted from a status check wins over the raw status response.
+// The variant after the dash is dropped ("Airbus A330-300" -> "Airbus A330"),
+// because AeroDataBox doesn't always report it, which would split one aircraft
+// type across two bars.
+// ponytail: dash split only; a variant -> family table if names still diverge.
+export const getAircraftFamily = (flight) => {
+  const name =
+    flight?.aircraft_type_name || flight?.flight_status?.aircraft?.model;
+  if (typeof name !== "string") return null;
+  const family = name.split("-")[0].replace(/\s+/g, " ").trim();
+  return family || null;
+};
+
+export const getFlightsByAircraft = (flights, metric) => {
+  if (!Array.isArray(flights)) return [];
+
+  const groups = new Map();
+  flights.forEach((flight) => {
+    const aircraft = getAircraftFamily(flight);
+    if (!aircraft) return;
+
+    // Treat case and repeated whitespace differences as the same model while
+    // preserving a human-readable label in the chart.
+    const key = aircraft.toLocaleLowerCase();
+    const entry = groups.get(key) ?? { aircraft, flights: 0 };
+    entry.flights += metricValue(flight, metric);
+    groups.set(key, entry);
+  });
+
+  return [...groups.values()].sort((a, b) => b.flights - a.flights);
+};
+
 // Build a year x month matrix for the Timeline heatmap, totalling either
 // flights or kilometres per month. Returns the sorted list of years (oldest
 // first) and a `counts` map of year -> number[12] (Jan..Dec, UTC).

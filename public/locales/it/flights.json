@@ -55,7 +55,7 @@
   },
   "csv": {
     "title": "Carica dati volo da CSV",
-    "description": "Il tuo CSV deve includere queste colonne: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Opzionale: flight_number, arrival_date, arrival_time.",
+    "description": "Il tuo CSV deve includere queste colonne: departure_date, departure_time, departure_airport_iata, arrival_airport_iata, airline_iata. Opzionale: flight_number, arrival_date, arrival_time, cabin_class (economy, premium_economy, business, first).",
     "file_input": {
       "placeholder": "Seleziona file CSV",
       "label": "CSV dati volo",
@@ -150,7 +150,8 @@
       "not_signed_in": "Non sei autenticato. Effettua l'accesso per salvare i voli.",
       "flight_n": "Volo {{n}}",
       "arrival_date": "Data di arrivo",
-      "arrival_time": "Ora di arrivo"
+      "arrival_time": "Ora di arrivo",
+      "cabin_class": "Classe"
     },
     "tabs": {
       "manual": "Inserimento manuale",
@@ -195,6 +196,9 @@
     },
     "errors": {
       "user_not_authenticated": "Utente non autenticato"
+    },
+    "descriptions": {
+      "cabin_class": "Usata per la stima della CO2e. Lascia vuoto per economy."
     }
   },
   "distance": {
@@ -217,7 +221,9 @@
     "departures_by_country": "Partenze per paese",
     "flights_by": "Voli per {{period}}",
     "distance_by": "Chilometri percorsi per {{period}}",
-    "co2_by": "CO₂e emessa per {{period}}"
+    "co2_by": "CO₂e emessa per {{period}}",
+    "no_aircraft_data": "Nessun dato sul modello dell'aeromobile. Controlla lo stato del volo per ottenere i dettagli dell'aereo.",
+    "aircraft_subset": "Basato su {{known}} di {{total}} voli. L'aereo viene aggiunto quando controlli lo stato di un volo."
   },
   "time": {
     "day_of_week": "Giorno della settimana",
@@ -227,7 +233,8 @@
   "group": {
     "country": "Paese",
     "airline": "Compagnia aerea",
-    "airport": "Città"
+    "airport": "Città",
+    "aircraft": "Aereo"
   },
   "loading": "Caricamento...",
   "ai": {
@@ -247,10 +254,10 @@
     "error_title": "Impossibile analizzare il volo",
     "error_generic": "Non è stato possibile comprendere i dettagli del volo. Prova a riformulare.",
     "success_title": "Dettagli volo estratti!",
-    "success_subtitle": "Verifica i dettagli qui sotto, poi clicca \"Vai all'inserimento manuale\" per confermare e salvare.",
+    "success_subtitle": "Clicca \"Controlla e salva\" per verificare i dettagli nel modulo, poi salva il volo.",
     "missing_title": "Alcuni dettagli mancano",
     "missing_subtitle": "Inserisci manualmente i seguenti campi nel modulo:",
-    "go_to_manual": "Vai all'inserimento manuale",
+    "review_and_save": "Controlla e salva",
     "reset": "Ricomincia",
     "flight_details": "Dettagli volo",
     "from": "Da",
@@ -277,15 +284,18 @@
     "items": {
       "first_flight": {
         "name": "Primo volo",
-        "criterion": "Registra il tuo primo volo."
+        "criterion": "Registra il tuo primo volo.",
+        "link": "https://it.wikipedia.org/wiki/Wright_Flyer"
       },
       "border_crossed": {
         "name": "Confine superato",
-        "criterion": "Vola da un Paese a un altro."
+        "criterion": "Vola da un Paese a un altro.",
+        "link": "https://it.wikipedia.org/wiki/Confine"
       },
       "long_hauler": {
         "name": "Lungo raggio",
-        "criterion": "Un singolo volo di almeno 5.000 km."
+        "criterion": "Un singolo volo di almeno 5.000 km.",
+        "link": "https://it.wikipedia.org/wiki/Lunghezza_di_un_volo"
       },
       "ten_up": {
         "name": "Quota dieci",
@@ -301,19 +311,23 @@
       },
       "once_around": {
         "name": "Giro del mondo",
-        "criterion": "40.075 km — un giro della Terra."
+        "criterion": "40.075 km — un giro della Terra.",
+        "link": "https://it.wikipedia.org/wiki/Eratostene"
       },
       "five_laps": {
         "name": "Cinque giri",
-        "criterion": "200.375 km — cinque giri della Terra."
+        "criterion": "200.375 km — cinque giri della Terra.",
+        "link": "https://it.wikipedia.org/wiki/Eratostene"
       },
       "to_the_moon": {
         "name": "Fino alla Luna",
-        "criterion": "384.400 km — la distanza dalla Luna."
+        "criterion": "384.400 km — la distanza dalla Luna.",
+        "link": "https://it.wikipedia.org/wiki/Distanza_lunare"
       },
       "there_and_back": {
         "name": "Luna, andata e ritorno",
-        "criterion": "768.800 km — la Luna e ritorno."
+        "criterion": "768.800 km — la Luna e ritorno.",
+        "link": "https://it.wikipedia.org/wiki/Distanza_lunare"
       },
       "globetrotter": {
         "name": "Giramondo",
@@ -337,7 +351,8 @@
       },
       "million_club": {
         "name": "Club del milione",
-        "criterion": "1.000.000 km — il milione del frequent flyer."
+        "criterion": "1.000.000 km — il milione del frequent flyer.",
+        "link": "https://it.wikipedia.org/wiki/Programma_frequent_flyer"
       },
       "explorer": {
         "name": "Esploratore",
@@ -364,17 +379,32 @@
         "criterion": "Africa, Asia, Europa, America del Nord, Oceania e America del Sud."
       }
     },
-    "style": {
-      "pass": "Carta d'imbarco",
-      "stamp": "Passaporto"
-    },
-    "stamp_caption": "Ammesso",
     "categories": {
       "flights": "Voli",
       "distance": "Distanza",
       "places": "Luoghi",
       "habit": "Costanza"
     },
-    "section_count": "{{unlocked}} di {{total}}"
+    "section_count": "{{unlocked}} di {{total}}",
+    "link_label": "Approfondisci {{name}} su Wikipedia"
+  },
+  "cabin": {
+    "economy": "Economy",
+    "premium_economy": "Premium economy",
+    "business": "Business",
+    "first": "Prima"
+  },
+  "auto_check": {
+    "title": "{{flight}} {{from}} → {{to}}: l'orario della compagnia è diverso",
+    "fields": {
+      "departure_time": "Ora di partenza",
+      "arrival_date": "Data di arrivo",
+      "arrival_time": "Ora di arrivo",
+      "aircraft_type_name": "Aereo"
+    },
+    "apply": "Applica",
+    "keep_mine": "Mantieni i miei",
+    "source": "Verificato una volta con AeroDataBox perché il volo è entro una settimana.",
+    "apply_failed": "Impossibile aggiornare il volo. Riprova."
   }
 }
