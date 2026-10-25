@@ -15,8 +15,9 @@ import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { addFlightsForUser } from "../firebaseClient";
+import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { updateFlightForUser } from "../utils/flightService";
-import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
+import { toCalendarDay, normalizeTimeString } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
@@ -29,6 +30,7 @@ import {
 } from "../utils/referenceData";
 import { useTranslation } from "react-i18next";
 import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
+import { CABIN_CLASSES } from "../utils/emissions";
 
 type SelectOption = {
   value: string;
@@ -38,15 +40,18 @@ type SelectOption = {
 /** One flight (leg) of a possibly multi-city trip, as held by the form. */
 type Leg = {
   key: string;
-  departureDate: Date | null;
+  /** "YYYY-MM-DD", the value Mantine's date pickers use. */
+  departureDate: string | null;
   departureTime: string;
   /** Empty means the flight lands on its departure date. */
-  arrivalDate: Date | null;
+  arrivalDate: string | null;
   arrivalTime: string;
   departureAirport: string;
   arrivalAirport: string;
   airline: string;
   flightNumber: string;
+  /** Empty means not recorded, which the emissions model treats as economy. */
+  cabinClass: string;
 };
 
 const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
@@ -59,6 +64,7 @@ const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
   arrivalAirport: "",
   airline: "",
   flightNumber: "",
+  cabinClass: "",
   ...overrides,
 });
 
@@ -77,6 +83,7 @@ interface FlightEntryFormProps {
     arrival_airport_iata?: string;
     airline_iata?: string;
     flight_number?: string | null;
+    cabin_class?: string | null;
   } | null;
 }
 
@@ -151,23 +158,21 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   useEffect(() => {
     // If flight prop changes, update form values accordingly
     if (!flight) return;
-    let departureDate: Date | null = null;
-    try {
-      departureDate = parseToDate(flight.departure_date);
-    } catch (e) {
-      console.error("parseToDate failed in FlightEntryForm", e);
-    }
+    // Stored dates are UTC midnight. As a Date, the picker would show them in
+    // local time, which is the previous day west of UTC.
+    const departureDate = toCalendarDay(flight.departure_date);
     form.setValues({
       legs: [
         newLeg({
           departureDate,
           departureTime: flight.departure_time || "",
-          arrivalDate: parseToDate(flight.arrival_date),
+          arrivalDate: toCalendarDay(flight.arrival_date),
           arrivalTime: flight.arrival_time || "",
           departureAirport: flight.departure_airport_iata || "",
           arrivalAirport: flight.arrival_airport_iata || "",
           airline: flight.airline_iata || "",
           flightNumber: flight.flight_number || "",
+          cabinClass: flight.cabin_class || "",
         }),
       ],
     });
@@ -206,6 +211,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         arrival_airport_iata: leg.arrivalAirport,
         airline_iata: leg.airline,
         flight_number: leg.flightNumber,
+        cabin_class: leg.cabinClass || null,
       }));
 
       if (flight && flight.id) {
@@ -214,10 +220,18 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       } else {
         // Each leg is its own flight document, written in one batch so a
         // failure can't leave half a trip saved (and duplicate it on retry).
-        const { errorCount } = await addFlightsForUser(uid, flightsToInsert);
+        const { errorCount, ids } = await addFlightsForUser(
+          uid,
+          flightsToInsert,
+        );
         if (errorCount > 0) {
           throw new Error(`${errorCount} flight(s) could not be saved.`);
         }
+        // Not awaited: the save is done, and suggestions arrive on their own.
+        void autoCheckSavedFlights(
+          uid,
+          flightsToInsert.map((f, i) => ({ ...f, id: ids[i]! })),
+        );
       }
 
       notifications.show({
@@ -269,7 +283,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const isEditing = Boolean(flight && flight.id);
 
   const [activeTab, setActiveTab] = useState<FlightEntryTab | null>(
-    FLIGHT_ENTRY_TABS.MANUAL,
+    FLIGHT_ENTRY_TABS.AI,
   );
 
   const lastLeg = legs[legs.length - 1];
@@ -314,22 +328,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const handleAiParsed = (parsedFlights: ParsedFlight[]) => {
     let hasInvalidDate = false;
     const parsedLegs = parsedFlights.map((parsed) => {
-      let departureDate: Date | null = null;
-      let arrivalDate: Date | null = null;
-      try {
-        if (parsed.departure_date) {
-          departureDate = parseToDate(parsed.departure_date);
-        }
-        if (parsed.arrival_date) {
-          arrivalDate = parseToDate(parsed.arrival_date);
-        }
-      } catch (err) {
-        console.error("parseToDate failed for departure_date", {
-          error: err,
-          value: parsed.departure_date,
-        });
-        hasInvalidDate = true;
-      }
+      // Kept as "YYYY-MM-DD" strings: as Dates they would be UTC midnight,
+      // which the picker shows as the previous day west of UTC.
+      const departureDate = toCalendarDay(parsed.departure_date);
+      const arrivalDate = toCalendarDay(parsed.arrival_date);
+      if (parsed.departure_date && !departureDate) hasInvalidDate = true;
       return newLeg({
         departureDate,
         departureTime: parsed.departure_time ?? "",
@@ -339,6 +342,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         arrivalAirport: parsed.arrival_airport_iata ?? "",
         airline: parsed.airline_iata ?? "",
         flightNumber: parsed.flight_number ?? "",
+        cabinClass: parsed.cabin_class ?? "",
       });
     });
     form.setValues({ legs: parsedLegs.length ? parsedLegs : [newLeg()] });
@@ -350,6 +354,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
       });
     }
   };
+
+  const cabinOptions = Object.values(CABIN_CLASSES).map((value) => ({
+    value,
+    label: t(`cabin.${value}`),
+  }));
 
   const legFields = (index: number) => (
     <Stack>
@@ -427,6 +436,15 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           {...form.getInputProps(`legs.${index}.flightNumber`)}
         />
       </Group>
+
+      <Select
+        label={t("form.labels.cabin_class")}
+        placeholder={t("cabin.economy")}
+        description={t("form.descriptions.cabin_class")}
+        clearable
+        data={cabinOptions}
+        {...form.getInputProps(`legs.${index}.cabinClass`)}
+      />
     </Stack>
   );
 

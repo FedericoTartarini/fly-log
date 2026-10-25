@@ -49,6 +49,7 @@ const validLeg = (overrides: Record<string, unknown> = {}) => ({
   arrival_time: null,
   airline_iata: "QF",
   flight_number: "1",
+  cabin_class: null,
   ...overrides,
 });
 
@@ -145,6 +146,19 @@ describe("parseFlightFromText", () => {
     expect(leg?.departure_time).toBe("09:05");
     expect(leg?.airline_iata).toBe("QF");
     expect(leg?.flight_number).toBeNull();
+  });
+
+  it("normalizes the cabin class and drops unknown ones", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(
+        validLeg({ cabin_class: "Premium Economy" }),
+        validLeg({ cabin_class: "upper deck" }),
+      ),
+    );
+
+    const [premium, unknown] = await parseFlightFromText("two flights");
+    expect(premium?.cabin_class).toBe("premium_economy");
+    expect(unknown?.cabin_class).toBeNull();
   });
 
   it("extracts an overnight arrival and rejects a malformed one", async () => {

@@ -3,6 +3,7 @@ import i18n from "i18next";
 import {
   getFlightsByTimeGrouping,
   getFlightsByAirline,
+  getFlightsByAircraft,
   getFlightMonthMatrix,
   getMonthMatrixStats,
   formatMetricValue,
@@ -347,5 +348,75 @@ describe("the distance metric", () => {
     expect(formatMetricValue(1404, CHART_METRIC.CO2, "en-AU")).toBe(
       "1,404 kg CO₂e",
     );
+  });
+});
+
+describe("getFlightsByAircraft", () => {
+  it("returns an empty array for empty or missing input", () => {
+    expect(getFlightsByAircraft([])).toEqual([]);
+    expect(getFlightsByAircraft(null)).toEqual([]);
+  });
+
+  it("groups direct aircraft names and saved flight-status models", () => {
+    const flights = [
+      { aircraft_type_name: "Airbus A320", distance_km: 500 },
+      {
+        flight_status: { aircraft: { model: "Airbus A320" } },
+        distance_km: 900,
+      },
+      {
+        flight_status: { aircraft: { model: "Boeing 787-9" } },
+        distance_km: 600,
+      },
+      { flight_status: { aircraft: { model: null } }, distance_km: 1000 },
+      { flight_status: null, distance_km: 2000 },
+    ];
+
+    expect(getFlightsByAircraft(flights)).toEqual([
+      { aircraft: "Airbus A320", flights: 2 },
+      { aircraft: "Boeing 787", flights: 1 },
+    ]);
+  });
+
+  it("sums the selected metric, sorts by value, and ignores missing models", () => {
+    const flights = [
+      {
+        flight_status: { aircraft: { model: "Airbus A320" } },
+        distance_km: 500,
+      },
+      {
+        flight_status: { aircraft: { model: "Airbus A320" } },
+        distance_km: 900,
+      },
+      { aircraft_type_name: "Boeing 787-9", distance_km: 600 },
+      { distance_km: 2000 },
+    ];
+
+    expect(getFlightsByAircraft(flights, CHART_METRIC.DISTANCE)).toEqual([
+      { aircraft: "Airbus A320", flights: 1400 },
+      { aircraft: "Boeing 787", flights: 600 },
+    ]);
+  });
+
+  it("groups variants of one aircraft family together", () => {
+    expect(
+      getFlightsByAircraft([
+        { aircraft_type_name: "Airbus A330-300" },
+        { flight_status: { aircraft: { model: "Airbus A330" } } },
+        { aircraft_type_name: "Boeing 787-9" },
+      ]),
+    ).toEqual([
+      { aircraft: "Airbus A330", flights: 2 },
+      { aircraft: "Boeing 787", flights: 1 },
+    ]);
+  });
+
+  it("combines case and whitespace variants of the same model", () => {
+    expect(
+      getFlightsByAircraft([
+        { aircraft_type_name: "Airbus  A320" },
+        { flight_status: { aircraft: { model: " airbus a320 " } } },
+      ]),
+    ).toEqual([{ aircraft: "Airbus A320", flights: 2 }]);
   });
 });
