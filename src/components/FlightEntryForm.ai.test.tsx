@@ -172,12 +172,19 @@ describe("FlightEntryForm – AI tab integration", () => {
     ).not.toBeNull();
   });
 
-  it("shows Manual Entry panel by default", async () => {
+  it("shows the AI Chat panel by default for a new flight", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
+    expect(
+      screen.getByRole("button", { name: /parse with ai/i }),
+    ).not.toBeNull();
+    // Inactive tab panels stay mounted (hidden), so check the selected tab
+    // rather than whether the manual fields exist.
+    expect(
+      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   it("switching to AI Chat tab shows the FlightChatInput textarea", async () => {
