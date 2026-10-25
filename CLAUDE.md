@@ -42,3 +42,11 @@ gcloud recaptcha keys describe 6LdsTagtAAAAADLWgLFvh_Ai_aZllrofB0D2Lx4Q \
 
 The functions also need their Netlify environment variables (for example
 `RAPIDAPI_AERODATABOX_KEY`) set for the Deploy Previews context.
+
+## Which branch a PR targets
+
+Federico's own PRs go straight to `main`, because Netlify only builds deploy previews for PRs
+against `main`. Outside contributors open PRs against `development`, so their PRs don't each
+trigger a preview build that needs approving. Development PRs are tested locally with
+`npm run dev`. After every push to `main`, the `sync-development.yml` workflow merges `main`
+into `development`. If that job fails on a conflict, merge `main` into `development` by hand.
