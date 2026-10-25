@@ -6,6 +6,13 @@ describe("Login Failure Scenario", () => {
     const email = Cypress.env("CY_WRONG_EMAIL");
     const password = Cypress.env("CY_WRONG_PASSWORD");
 
+    // Pull requests from forks don't get the repo's secrets, so there is no
+    // account to log in with. The full suite runs again after merging.
+    if (!email || !password) {
+      this.skip();
+      return;
+    }
+
     const base = Cypress.config("baseUrl") || "http://localhost:5173";
     const mochaCtx = this;
 
