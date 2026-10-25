@@ -22,9 +22,18 @@ vi.mock("../utils/flightStatusService", async (importOriginal) => {
   };
 });
 
+const showNotificationMock = vi.fn();
+vi.mock("@mantine/notifications", () => ({
+  notifications: {
+    show: (...args: unknown[]) => showNotificationMock(...args),
+    hide: vi.fn(),
+  },
+}));
+
 const deleteFlightForUserMock = vi.fn();
 vi.mock("../utils/flightService", () => ({
   deleteFlightForUser: (...args: unknown[]) => deleteFlightForUserMock(...args),
+  updateFlightForUser: vi.fn(),
 }));
 
 const baseFlight: enhancedFlight = {
@@ -53,6 +62,7 @@ describe("FlightDetailsModal", () => {
   beforeEach(() => {
     checkFlightStatusMock.mockReset();
     deleteFlightForUserMock.mockReset();
+    showNotificationMock.mockReset();
   });
 
   it("renders the saved flight route without repeating its identity", () => {
@@ -84,6 +94,32 @@ describe("FlightDetailsModal", () => {
 
     await waitFor(() =>
       expect(checkFlightStatusMock).toHaveBeenCalledWith("uid-1", baseFlight),
+    );
+  });
+
+  it("offers the schedule's differences instead of a plain success", async () => {
+    checkFlightStatusMock.mockResolvedValue({
+      departure: { scheduledTime: { local: "2026-09-20 15:10+10:00" } },
+    });
+    render(<FlightDetailsModal flight={baseFlight} onEdit={vi.fn()} />);
+    fireEvent.click(screen.getByTestId("flight-status-check-1"));
+
+    await waitFor(() => expect(showNotificationMock).toHaveBeenCalledOnce());
+    expect(showNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "status-changes-1", autoClose: false }),
+    );
+  });
+
+  it("shows plain success when the schedule matches what was entered", async () => {
+    checkFlightStatusMock.mockResolvedValue({
+      departure: { scheduledTime: { local: "2026-09-20 14:30+10:00" } },
+    });
+    render(<FlightDetailsModal flight={baseFlight} onEdit={vi.fn()} />);
+    fireEvent.click(screen.getByTestId("flight-status-check-1"));
+
+    await waitFor(() => expect(showNotificationMock).toHaveBeenCalledOnce());
+    expect(showNotificationMock).toHaveBeenCalledWith(
+      expect.objectContaining({ color: "green" }),
     );
   });
 

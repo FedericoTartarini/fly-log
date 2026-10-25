@@ -11,10 +11,12 @@ interface StatusChangesNoticeProps {
   changes: StatusChange[];
   /** The notification this sits in, so the buttons can dismiss it. */
   notificationId: string;
+  /** Whether the check ran by itself on save, which the footnote explains. */
+  automatic?: boolean;
 }
 
 /**
- * Body of the notification shown after a new flight's automatic status check:
+ * Body of the notification shown after a status check, automatic or manual:
  * what the airline's schedule says differently, and whether to take it.
  * Nothing is written unless the user chooses Apply.
  */
@@ -23,6 +25,7 @@ const StatusChangesNotice: React.FC<StatusChangesNoticeProps> = ({
   flightId,
   changes,
   notificationId,
+  automatic = true,
 }) => {
   const { t } = useTranslation("flights");
   const [saving, setSaving] = useState(false);
@@ -69,9 +72,11 @@ const StatusChangesNotice: React.FC<StatusChangesNoticeProps> = ({
           {t("auto_check.keep_mine")}
         </Button>
       </Group>
-      <Text size="xs" c="dimmed">
-        {t("auto_check.source")}
-      </Text>
+      {automatic && (
+        <Text size="xs" c="dimmed">
+          {t("auto_check.source")}
+        </Text>
+      )}
     </Stack>
   );
 };
