@@ -221,12 +221,15 @@
     "departures_by_country": "Departures by Country",
     "flights_by": "Flights by {{period}}",
     "distance_by": "Kilometres flown by {{period}}",
-    "co2_by": "CO₂e emitted by {{period}}"
+    "co2_by": "CO₂e emitted by {{period}}",
+    "no_aircraft_data": "No aircraft model data yet. Check flight status to populate aircraft details.",
+    "aircraft_subset": "Based on {{known}} of {{total}} flights. The aircraft is filled in when you check a flight's status."
   },
   "group": {
     "country": "Country",
     "airline": "Airline",
-    "airport": "City"
+    "airport": "City",
+    "aircraft": "Aircraft"
   },
   "time": {
     "day_of_week": "Day of Week",

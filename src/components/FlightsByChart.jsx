@@ -5,11 +5,14 @@ import {
   Card,
   SegmentedControl,
   ScrollArea,
+  Text,
 } from "@mantine/core";
 import { BarChart } from "@mantine/charts";
 import {
   getDeparturesByCountry,
   getFlightsByAirline,
+  getAircraftFamily,
+  getFlightsByAircraft,
   getFlightsByAirport,
   formatCompactValue,
   labelFitsInsideBar,
@@ -42,6 +45,12 @@ const CHART_GROUPING_CONFIG = {
     seriesName: "flights",
     tLabel: "group.airport",
   },
+  [CHART_GROUPING.AIRCRAFT]: {
+    getData: getFlightsByAircraft,
+    dataKey: "aircraft",
+    seriesName: "flights",
+    tLabel: "group.aircraft",
+  },
 };
 
 // Recharts passes each label its bar's geometry, which lets a value that would
@@ -64,6 +73,35 @@ const makeBarValueLabel = (locale) =>
       </text>
     );
   };
+
+// Aircraft names are long ("Airbus A320 NEO"), so the maker goes on its own
+// line above the model rather than widening the axis, which phones can't spare.
+const AircraftTick = ({ x, y, payload }) => {
+  const [maker, ...model] = String(payload.value).split(" ");
+  const lines = model.length ? [maker, model.join(" ")] : [maker];
+  return (
+    // Same offset and colour as Mantine's own ticks.
+    <text
+      x={x}
+      y={y}
+      transform="translate(-10, 0)"
+      textAnchor="end"
+      dominantBaseline="central"
+      fontSize={12}
+      fill="currentColor"
+    >
+      {lines.map((line, i) => (
+        <tspan
+          key={line}
+          x={x}
+          dy={i === 0 ? `${(1 - lines.length) * 0.6}em` : "1.2em"}
+        >
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
+};
 
 // Card heading per metric: "Flights by X", "Kilometres flown by X", ...
 const TITLE_KEYS = {
@@ -116,6 +154,15 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
         ? []
         : currentGroupingConfig.getData(filteredFlights, metric),
     [filteredFlights, currentGroupingConfig, metric],
+  );
+  const isAircraft = grouping === CHART_GROUPING.AIRCRAFT;
+  // Only flights with a known aircraft make it into that chart, so say how many.
+  const aircraftKnown = useMemo(
+    () =>
+      isAircraft && Array.isArray(filteredFlights)
+        ? filteredFlights.filter(getAircraftFamily).length
+        : 0,
+    [isAircraft, filteredFlights],
   );
 
   // If data is provided, it's the old time-based chart
@@ -192,33 +239,51 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
             { label: t("group.country"), value: CHART_GROUPING.COUNTRY },
             { label: t("group.airline"), value: CHART_GROUPING.AIRLINE },
             { label: t("group.airport"), value: CHART_GROUPING.AIRPORT },
+            { label: t("group.aircraft"), value: CHART_GROUPING.AIRCRAFT },
           ]}
         />
         {metricControl}
       </Stack>
       <ScrollArea h={370} scrollbars="y" type="always" offsetScrollbars>
-        <BarChart
-          h={(chartData.length + 1) * 28}
-          data={chartData}
-          withBarValueLabel
-          valueLabelProps={valueLabelProps}
-          dataKey={currentGroupingConfig.dataKey}
-          orientation="vertical"
-          yAxisProps={{
-            width: 100,
-          }}
-          withXAxis={false}
-          gridAxis="none"
-          barProps={{ radius: 8, barSize: 23 }}
-          series={[
-            {
-              name: currentGroupingConfig.seriesName,
-              color: "accent.4",
-            },
-          ]}
-          withTooltip={false}
-        />
+        {isAircraft && chartData.length === 0 ? (
+          <Text size="sm" c="dimmed">
+            {t("charts.no_aircraft_data")}
+          </Text>
+        ) : (
+          <BarChart
+            h={(chartData.length + 1) * 28}
+            data={chartData}
+            withBarValueLabel
+            valueLabelProps={valueLabelProps}
+            dataKey={currentGroupingConfig.dataKey}
+            orientation="vertical"
+            yAxisProps={{
+              width: 100,
+              ...(isAircraft && { tick: AircraftTick }),
+            }}
+            withXAxis={false}
+            gridAxis="none"
+            barProps={{ radius: 8, barSize: 23 }}
+            series={[
+              {
+                name: currentGroupingConfig.seriesName,
+                color: "accent.4",
+              },
+            ]}
+            withTooltip={false}
+          />
+        )}
       </ScrollArea>
+      {isAircraft &&
+        aircraftKnown > 0 &&
+        aircraftKnown < filteredFlights.length && (
+          <Text size="xs" c="dimmed" mt="xs">
+            {t("charts.aircraft_subset", {
+              known: aircraftKnown,
+              total: filteredFlights.length,
+            })}
+          </Text>
+        )}
     </Card>
   );
 };
