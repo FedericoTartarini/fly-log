@@ -4,9 +4,9 @@
 language: "en-GB"
 
 tone_instructions: >-
-  Prioritize confirmed, actionable correctness, reliability, and security issues.
-  Include concise evidence and concrete fixes; avoid speculative or repetitive
-  feedback and purely stylistic suggestions.
+  Prioritise confirmed, actionable correctness, reliability and security issues,
+  with concrete fixes. Combine related findings, don't repeat earlier comments,
+  and skip speculative or purely stylistic feedback.
 
 reviews:
   profile: "chill"
@@ -15,21 +15,15 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    # The default branch (development) is always reviewed; this adds release PRs.
     base_branches:
       - "main"
-      - "master"
   path_filters:
     - "!**/node_modules/**"
-    - "!node_modules/**"
     - "!dist/**"
     - "!build/**"
   path_instructions:
     - path: "**/*.md"
-      instructions: >-
-        Avoid purely stylistic or editorial findings. Still report material
-        factual errors, security or privacy risks, and instructions that would
-        break setup or normal project workflows.
-    - path: "docs/**"
       instructions: >-
         Avoid purely stylistic or editorial findings. Still report material
         factual errors, security or privacy risks, and instructions that would
