@@ -1,4 +1,4 @@
-import { parseToDate } from "./dateUtils";
+import { parseToDate, toCalendarDay } from "./dateUtils";
 
 /** Saving checks status automatically only this many days ahead. */
 export const AUTO_CHECK_WINDOW_DAYS = 7;
@@ -56,19 +56,6 @@ const localParts = (value: string | undefined) => {
   return match ? { date: match[1]!, time: match[2]! } : null;
 };
 
-// A stored or form date as "YYYY-MM-DD". A plain date string is taken as is,
-// because re-parsing it would shift it by the local timezone.
-const toIsoDay = (value: unknown): string | null => {
-  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return value;
-  }
-  const date = parseToDate(value);
-  if (!date) return null;
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  return `${date.getFullYear()}-${mm}-${dd}`;
-};
-
 /**
  * What the airline's schedule says that differs from what the user entered.
  * Only fields the schedule actually has are compared, so an empty answer from
@@ -97,7 +84,7 @@ export const diffAgainstStatus = (
   // A same-day arrival is stored as no arrival date, so only a schedule that
   // lands on another day has an arrival date worth proposing.
   if (departure && arrival && arrival.date !== departure.date) {
-    compare("arrival_date", toIsoDay(flight.arrival_date), arrival.date);
+    compare("arrival_date", toCalendarDay(flight.arrival_date), arrival.date);
   }
   compare("arrival_time", text(flight.arrival_time), arrival?.time);
   compare(

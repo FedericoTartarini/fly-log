@@ -17,7 +17,7 @@ import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
 import { addFlightsForUser } from "../firebaseClient";
 import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { updateFlightForUser } from "../utils/flightService";
-import { parseToDate, normalizeTimeString } from "../utils/dateUtils";
+import { toCalendarDay, normalizeTimeString } from "../utils/dateUtils";
 import { useAuth } from "../context/AuthContext.jsx";
 import { notifications } from "@mantine/notifications";
 import FlightCsvUpload from "./FlightCsvUpload.jsx";
@@ -40,10 +40,11 @@ type SelectOption = {
 /** One flight (leg) of a possibly multi-city trip, as held by the form. */
 type Leg = {
   key: string;
-  departureDate: Date | null;
+  /** "YYYY-MM-DD", the value Mantine's date pickers use. */
+  departureDate: string | null;
   departureTime: string;
   /** Empty means the flight lands on its departure date. */
-  arrivalDate: Date | null;
+  arrivalDate: string | null;
   arrivalTime: string;
   departureAirport: string;
   arrivalAirport: string;
@@ -157,18 +158,15 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   useEffect(() => {
     // If flight prop changes, update form values accordingly
     if (!flight) return;
-    let departureDate: Date | null = null;
-    try {
-      departureDate = parseToDate(flight.departure_date);
-    } catch (e) {
-      console.error("parseToDate failed in FlightEntryForm", e);
-    }
+    // Stored dates are UTC midnight. As a Date, the picker would show them in
+    // local time, which is the previous day west of UTC.
+    const departureDate = toCalendarDay(flight.departure_date);
     form.setValues({
       legs: [
         newLeg({
           departureDate,
           departureTime: flight.departure_time || "",
-          arrivalDate: parseToDate(flight.arrival_date),
+          arrivalDate: toCalendarDay(flight.arrival_date),
           arrivalTime: flight.arrival_time || "",
           departureAirport: flight.departure_airport_iata || "",
           arrivalAirport: flight.arrival_airport_iata || "",
@@ -330,22 +328,11 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
   const handleAiParsed = (parsedFlights: ParsedFlight[]) => {
     let hasInvalidDate = false;
     const parsedLegs = parsedFlights.map((parsed) => {
-      let departureDate: Date | null = null;
-      let arrivalDate: Date | null = null;
-      try {
-        if (parsed.departure_date) {
-          departureDate = parseToDate(parsed.departure_date);
-        }
-        if (parsed.arrival_date) {
-          arrivalDate = parseToDate(parsed.arrival_date);
-        }
-      } catch (err) {
-        console.error("parseToDate failed for departure_date", {
-          error: err,
-          value: parsed.departure_date,
-        });
-        hasInvalidDate = true;
-      }
+      // Kept as "YYYY-MM-DD" strings: as Dates they would be UTC midnight,
+      // which the picker shows as the previous day west of UTC.
+      const departureDate = toCalendarDay(parsed.departure_date);
+      const arrivalDate = toCalendarDay(parsed.arrival_date);
+      if (parsed.departure_date && !departureDate) hasInvalidDate = true;
       return newLeg({
         departureDate,
         departureTime: parsed.departure_time ?? "",

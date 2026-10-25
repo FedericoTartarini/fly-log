@@ -170,12 +170,13 @@ export async function parseFlightFromText(
     const s = value.trim();
     // Accept explicit YYYY-MM-DD
     if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-    // Fallback: try Date parse and format to YYYY-MM-DD
+    // Fallback: try Date parse and format to YYYY-MM-DD. Strings like
+    // "10 July 2026" parse as local midnight, so read them back in local time.
     const d = new Date(s);
     if (Number.isNaN(d.getTime())) return null;
-    const yyyy = d.getUTCFullYear();
-    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const dd = String(d.getUTCDate()).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   };
 

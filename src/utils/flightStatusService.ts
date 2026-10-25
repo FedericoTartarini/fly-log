@@ -1,4 +1,4 @@
-import { parseToDate } from "./dateUtils";
+import { toCalendarDay } from "./dateUtils";
 import { getAppCheckToken } from "../firebaseClient";
 import { updateFlightForUser } from "./flightService";
 import type { enhancedFlight } from "../types/enhancedFlight";
@@ -21,14 +21,8 @@ export class FlightStatusError extends Error {
 
 // departure_date is stored/read as a UTC calendar date (see the fix in #60);
 // AeroDataBox's date param expects that same calendar date.
-const toIsoDate = (flight: enhancedFlight): string | null => {
-  const d = parseToDate(flight.departure_date);
-  if (!d) return null;
-  const yyyy = d.getUTCFullYear();
-  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const dd = String(d.getUTCDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-};
+const toIsoDate = (flight: enhancedFlight): string | null =>
+  toCalendarDay(flight.departure_date);
 
 // A flight number/date can match more than one leg near a date boundary
 // (e.g. QF1 SIN->LHR departing just before/after midnight UTC on either

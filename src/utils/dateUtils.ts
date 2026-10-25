@@ -99,6 +99,22 @@ export function formatCalendarDate(
 }
 
 /**
+ * The calendar day a date-like value names, as "YYYY-MM-DD". Flight dates are
+ * stored as UTC midnight, so the day is read in UTC; reading it in local time
+ * gives the previous day anywhere west of UTC.
+ */
+export function toCalendarDay(value: unknown): string | null {
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return value;
+  }
+  const d = parseToDate(value);
+  if (!d) return null;
+  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  return `${d.getUTCFullYear()}-${mm}-${dd}`;
+}
+
+/**
  * Parse a date-like value into a JS Date object, or return null if invalid.
  */
 // Convert date-like inputs into a JS Date (or null on invalid input).
