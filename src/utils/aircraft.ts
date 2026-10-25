@@ -100,6 +100,14 @@ const BY_KEY = new Map<string, { name: string; family: string }>();
 Object.entries(FAMILIES).forEach(([family, names]) => {
   names.forEach((name) => BY_KEY.set(aircraftKey(name), { name, family }));
 });
+// Boeing's official names for the MAX ("Boeing 737-8"), which the dash rule
+// would otherwise count with the 737-800. Not offered in the picker.
+[7, 8, 9, 10].forEach((n) =>
+  BY_KEY.set(aircraftKey(`Boeing 737-${n}`), {
+    name: `Boeing 737 MAX ${n}`,
+    family: "Boeing 737 MAX",
+  }),
+);
 
 /** The listed name for `name`, or null when it isn't on the list. */
 export const findAircraftName = (name: unknown): string | null =>

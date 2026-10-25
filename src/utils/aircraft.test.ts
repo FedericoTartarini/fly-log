@@ -13,6 +13,8 @@ describe("aircraftFamily", () => {
     expect(aircraftFamily("Airbus A320 NEO")).toBe("Airbus A320neo");
     expect(aircraftFamily("Airbus A330-900")).toBe("Airbus A330neo");
     expect(aircraftFamily("Boeing 737-800")).toBe("Boeing 737");
+    expect(aircraftFamily("Boeing 737-8")).toBe("Boeing 737 MAX");
+    expect(aircraftFamily("Boeing 737-900")).toBe("Boeing 737");
   });
 
   it("doesn't cut names whose dash isn't the variant", () => {
@@ -31,6 +33,8 @@ describe("findAircraftName", () => {
   it("returns the listed spelling, or null", () => {
     expect(findAircraftName("boeing 787-9")).toBe("Boeing 787-9");
     expect(findAircraftName("A380")).toBeNull();
+    expect(findAircraftName("Boeing 737-8")).toBe("Boeing 737 MAX 8");
+    expect(AIRCRAFT_NAMES).not.toContain("Boeing 737-8");
   });
 
   it("lists every name once", () => {
