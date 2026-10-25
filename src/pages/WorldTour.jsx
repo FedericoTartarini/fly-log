@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { getYearValuesFromFlights } from "../utils/yearFilterOptions";
 import { getYear, parseToDate, parseHourMinute } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
+import { getCentringRotation } from "../utils/globeRotation";
 import fallbackWorld from "../assets/world-fallback.json";
 
 const WORLD_GEOJSON_URL =
@@ -744,7 +745,7 @@ function WorldTour() {
 
     const [midLat, midLon] = getRouteMidpoint(route);
     const startRotate = viz.projection.rotate();
-    const endRotate = [-midLon, -midLat, startRotate[2] || 0];
+    const endRotate = getCentringRotation(startRotate, [midLon, midLat]);
     const interpolateRotate = d3.interpolate(startRotate, endRotate);
 
     const rotateDuration = Math.round(ROTATE_MS * SPEED_MULTIPLIER[speed]);
