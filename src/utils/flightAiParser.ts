@@ -1,6 +1,7 @@
 import { getAI, getGenerativeModel, Schema } from "firebase/ai";
 import { app, ensureAppCheck } from "../firebaseClient";
 import { CABIN_CLASSES, type CabinClass } from "./emissions";
+import { AIRCRAFT_NAMES, findAircraftName } from "./aircraft";
 
 export interface ParsedFlight {
   departure_airport_iata: string | null;
@@ -12,6 +13,7 @@ export interface ParsedFlight {
   airline_iata: string | null;
   flight_number: string | null;
   cabin_class: CabinClass | null;
+  aircraft_type_name: string | null; // one of AIRCRAFT_NAMES
 }
 
 /** Required fields that must be present to consider a flight "complete". */
@@ -32,6 +34,7 @@ const SYSTEM_PROMPT = `You are a flight data extractor. Given a user description
 - airline_iata: 2-letter IATA airline code (uppercase) or null
 - flight_number: flight number digits only as a string (e.g. "123"), or null
 - cabin_class: one of "economy", "premium_economy", "business", "first", or null when the cabin is not stated. Map fare names to the cabin they sit in (e.g. "Premium" or "Premium Economy" → premium_economy, "Business" or "Upper Class" → business).
+- aircraft_type_name: the aircraft, copied exactly from the aircraft list below, or null when no aircraft is stated or none on the list matches. If the variant is not stated, use the plain family name ("Qantas A380" → "Airbus A380", "a 787" → "Boeing 787").
 
 Rules:
 - A trip with stopovers is split into one leg per flight: "Washington to LA to Sydney" is two legs, IAD → LAX and LAX → SYD.
@@ -55,6 +58,9 @@ British Airways → BA, Lufthansa → LH, Air France → AF, KLM → KL
 Delta → DL, United → UA, American → AA, Southwest → WN
 Cathay Pacific → CX, Japan Airlines → JL, ANA → NH
 
+Aircraft list:
+${AIRCRAFT_NAMES.join(", ")}
+
 Return ONLY the JSON object with no explanation, no markdown, no code fences.`;
 
 const nullableString = () => Schema.string({ nullable: true });
@@ -74,6 +80,7 @@ const RESPONSE_SCHEMA = Schema.object({
           airline_iata: nullableString(),
           flight_number: nullableString(),
           cabin_class: nullableString(),
+          aircraft_type_name: nullableString(),
         },
       }),
     }),
@@ -223,6 +230,7 @@ export async function parseFlightFromText(
         airline_iata: normalizeIata(r.airline_iata, 2),
         flight_number: normalizeFlightNumber(r.flight_number),
         cabin_class: normalizeCabin(r.cabin_class),
+        aircraft_type_name: findAircraftName(r.aircraft_type_name),
       }),
     )
     .filter((f) => f.departure_airport_iata || f.arrival_airport_iata);

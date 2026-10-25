@@ -151,7 +151,8 @@
       "flight_n": "Flight {{n}}",
       "arrival_date": "Arrival Date",
       "arrival_time": "Arrival Time",
-      "cabin_class": "Cabin Class"
+      "cabin_class": "Cabin Class",
+      "aircraft": "Aircraft"
     },
     "tabs": {
       "manual": "Manual Entry",
@@ -166,7 +167,9 @@
       "no_matching_airports": "No matching airports",
       "no_matching_airlines": "No matching airlines",
       "flight_number_example": "ABC123",
-      "same_day": "Same day as departure"
+      "same_day": "Same day as departure",
+      "search_aircraft": "Search aircraft (optional)",
+      "no_matching_aircraft": "No matching aircraft"
     },
     "validation": {
       "departure_date_required": "Departure date is required",
@@ -223,7 +226,7 @@
     "distance_by": "Kilometres flown by {{period}}",
     "co2_by": "CO₂e emitted by {{period}}",
     "no_aircraft_data": "No aircraft model data yet. Check flight status to populate aircraft details.",
-    "aircraft_subset": "Based on {{known}} of {{total}} flights. The aircraft is filled in when you check a flight's status."
+    "aircraft_subset": "Based on {{known}} of {{total}} flights. Add the aircraft when you edit a flight, or check its status to fill it in."
   },
   "group": {
     "country": "Country",

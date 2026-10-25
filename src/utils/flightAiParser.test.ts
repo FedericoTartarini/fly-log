@@ -50,6 +50,7 @@ const validLeg = (overrides: Record<string, unknown> = {}) => ({
   airline_iata: "QF",
   flight_number: "1",
   cabin_class: null,
+  aircraft_type_name: null,
   ...overrides,
 });
 
@@ -159,6 +160,19 @@ describe("parseFlightFromText", () => {
     const [premium, unknown] = await parseFlightFromText("two flights");
     expect(premium?.cabin_class).toBe("premium_economy");
     expect(unknown?.cabin_class).toBeNull();
+  });
+
+  it("matches the aircraft to the list and drops unknown ones", async () => {
+    mockGenerateContent.mockResolvedValue(
+      flightsResponse(
+        validLeg({ aircraft_type_name: "airbus a320 NEO" }),
+        validLeg({ aircraft_type_name: "Spruce Goose" }),
+      ),
+    );
+
+    const [listed, unknown] = await parseFlightFromText("two flights");
+    expect(listed?.aircraft_type_name).toBe("Airbus A320neo");
+    expect(unknown?.aircraft_type_name).toBeNull();
   });
 
   it("extracts an overnight arrival and rejects a malformed one", async () => {

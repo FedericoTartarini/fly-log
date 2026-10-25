@@ -90,6 +90,7 @@ const multiLegParsed = [
     arrival_time: "05:40",
     flight_number: "1",
     cabin_class: "business",
+    aircraft_type_name: "Airbus A380",
   },
   {
     ...leg,
@@ -354,6 +355,7 @@ describe("FlightEntryForm – AI tab integration", () => {
       arrival_time: "05:40",
       flight_number: "1",
       cabin_class: "business",
+      aircraft_type_name: "Airbus A380",
     });
     expect(saved?.[1]?.arrival_date).toBe("2026-07-11");
     // A leg with no arrival stated saves none, rather than a guess.
@@ -361,6 +363,7 @@ describe("FlightEntryForm – AI tab integration", () => {
       arrival_date: null,
       arrival_time: null,
       cabin_class: null,
+      aircraft_type_name: null,
     });
   });
 
