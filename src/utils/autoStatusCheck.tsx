@@ -33,26 +33,42 @@ export async function autoCheckSavedFlights(
       continue;
     }
 
-    const changes = diffAgainstStatus(flight, leg);
-    if (changes.length === 0) continue;
-
-    const notificationId = `status-changes-${flight.id}`;
-    notifications.show({
-      id: notificationId,
-      autoClose: false,
-      title: i18next.t("flights:auto_check.title", {
-        flight: `${flight.airline_iata ?? ""}${flight.flight_number ?? ""}`,
-        from: flight.departure_airport_iata,
-        to: flight.arrival_airport_iata,
-      }),
-      message: (
-        <StatusChangesNotice
-          uid={uid}
-          flightId={flight.id}
-          changes={changes}
-          notificationId={notificationId}
-        />
-      ),
-    });
+    offerStatusChanges(uid, flight, leg);
   }
+}
+
+/**
+ * Show what a status check found that differs from what the user entered, with
+ * Apply and Keep mine. Used after the automatic check on save and after the
+ * manual Check status button. Returns whether there was anything to offer.
+ */
+export function offerStatusChanges(
+  uid: string,
+  flight: SavedFlight,
+  leg: object,
+  automatic = true,
+): boolean {
+  const changes = diffAgainstStatus(flight, leg);
+  if (changes.length === 0) return false;
+
+  const notificationId = `status-changes-${flight.id}`;
+  notifications.show({
+    id: notificationId,
+    autoClose: false,
+    title: i18next.t("flights:auto_check.title", {
+      flight: `${flight.airline_iata ?? ""}${flight.flight_number ?? ""}`,
+      from: flight.departure_airport_iata,
+      to: flight.arrival_airport_iata,
+    }),
+    message: (
+      <StatusChangesNotice
+        uid={uid}
+        flightId={flight.id}
+        changes={changes}
+        notificationId={notificationId}
+        automatic={automatic}
+      />
+    ),
+  });
+  return true;
 }
