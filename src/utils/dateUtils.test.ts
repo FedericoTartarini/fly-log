@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { formatDate, formatTimeRange, arrivalDayOffset } from "./dateUtils";
+import {
+  formatDate,
+  formatTimeRange,
+  arrivalDayOffset,
+  toCalendarDay,
+} from "./dateUtils";
 
 describe("formatDate", () => {
   it("formats a Firestore-like seconds object to 'DD MMM YY'", () => {
@@ -19,7 +24,8 @@ describe("formatDate", () => {
   });
 
   it("formats Date object when no format provided (locale)", () => {
-    const d = new Date(2024, 10, 10); // local timezone
+    // Stored flight dates are UTC midnight, and formatDate reads them in UTC.
+    const d = new Date(Date.UTC(2024, 10, 10));
     const out = formatDate(d, undefined, "en-GB");
     // depending on environment locale timezone differences, just ensure not empty and contains 10
     expect(out).toContain("10");
@@ -68,8 +74,19 @@ describe("formatTimeRange", () => {
   });
 
   it("works across a DST change, where the gap is not exactly 24 hours", () => {
-    expect(
-      arrivalDayOffset(new Date(2024, 2, 30), new Date(2024, 2, 31)),
-    ).toBe(1);
+    expect(arrivalDayOffset(new Date(2024, 2, 30), new Date(2024, 2, 31))).toBe(
+      1,
+    );
+  });
+});
+
+describe("toCalendarDay", () => {
+  it("reads stored UTC-midnight dates as the day they name", () => {
+    // How a flight date comes back from Firestore. In New York this instant is
+    // 8 pm on 9 July, which a local-time read would show as the 9th.
+    const stored = { toDate: () => new Date(Date.UTC(2026, 6, 10)) };
+    expect(toCalendarDay(stored)).toBe("2026-07-10");
+    expect(toCalendarDay("2026-07-10")).toBe("2026-07-10");
+    expect(toCalendarDay(null)).toBeNull();
   });
 });

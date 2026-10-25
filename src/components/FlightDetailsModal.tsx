@@ -13,6 +13,7 @@ import {
   checkFlightStatus,
   FlightStatusError,
 } from "../utils/flightStatusService";
+import { offerStatusChanges } from "../utils/autoStatusCheck";
 
 interface FlightDetailsModalProps {
   flight: enhancedFlight;
@@ -67,12 +68,16 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
     }
     setIsChecking(true);
     try {
-      await checkFlightStatus(user.uid, flight);
-      notifications.show({
-        title: t("status.check_success_title"),
-        message: "",
-        color: "green",
-      });
+      const leg = await checkFlightStatus(user.uid, flight);
+      // Differences from what the user entered replace the plain success
+      // message, so they can update the flight in one click.
+      if (!offerStatusChanges(user.uid, flight, leg, false)) {
+        notifications.show({
+          title: t("status.check_success_title"),
+          message: "",
+          color: "green",
+        });
+      }
     } catch (err) {
       // Keep the technical detail where a developer can find it; the user
       // gets the translated summary.
