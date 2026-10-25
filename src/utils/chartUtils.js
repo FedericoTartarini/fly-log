@@ -138,25 +138,18 @@ export const getFlightsByAirline = (flights, metric) => {
     .sort((a, b) => b.flights - a.flights);
 };
 
-
-// Returns the most reliable available aircraft model without assuming every
-// flight has been status-checked. Older records may only have aircraft_type_name;
-// status-checked records can supply the model from AeroDataBox's saved response.
-const getAircraftModel = (flight) => {
-  const storedName =
-    typeof flight?.aircraft_type_name === "string"
-      ? flight.aircraft_type_name.trim()
-      : "";
-  if (storedName) return storedName.replace(/\s+/g, " ");
-
-  const status = flight?.flight_status;
-  if (!status || typeof status !== "object") return null;
-  const aircraft = status.aircraft;
-  const model =
-    aircraft && typeof aircraft === "object" ? aircraft.model : null;
-  return typeof model === "string" && model.trim()
-    ? model.trim().replace(/\s+/g, " ")
-    : null;
+// The aircraft family a flight was flown on, or null when it isn't known. The
+// name the user accepted from a status check wins over the raw status response.
+// The variant after the dash is dropped ("Airbus A330-300" -> "Airbus A330"),
+// because AeroDataBox doesn't always report it, which would split one aircraft
+// type across two bars.
+// ponytail: dash split only; a variant -> family table if names still diverge.
+export const getAircraftFamily = (flight) => {
+  const name =
+    flight?.aircraft_type_name || flight?.flight_status?.aircraft?.model;
+  if (typeof name !== "string") return null;
+  const family = name.split("-")[0].replace(/\s+/g, " ").trim();
+  return family || null;
 };
 
 export const getFlightsByAircraft = (flights, metric) => {
@@ -164,7 +157,7 @@ export const getFlightsByAircraft = (flights, metric) => {
 
   const groups = new Map();
   flights.forEach((flight) => {
-    const aircraft = getAircraftModel(flight);
+    const aircraft = getAircraftFamily(flight);
     if (!aircraft) return;
 
     // Treat case and repeated whitespace differences as the same model while

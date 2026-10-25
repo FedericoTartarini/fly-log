@@ -351,7 +351,6 @@ describe("the distance metric", () => {
   });
 });
 
-
 describe("getFlightsByAircraft", () => {
   it("returns an empty array for empty or missing input", () => {
     expect(getFlightsByAircraft([])).toEqual([]);
@@ -375,7 +374,7 @@ describe("getFlightsByAircraft", () => {
 
     expect(getFlightsByAircraft(flights)).toEqual([
       { aircraft: "Airbus A320", flights: 2 },
-      { aircraft: "Boeing 787-9", flights: 1 },
+      { aircraft: "Boeing 787", flights: 1 },
     ]);
   });
 
@@ -395,7 +394,20 @@ describe("getFlightsByAircraft", () => {
 
     expect(getFlightsByAircraft(flights, CHART_METRIC.DISTANCE)).toEqual([
       { aircraft: "Airbus A320", flights: 1400 },
-      { aircraft: "Boeing 787-9", flights: 600 },
+      { aircraft: "Boeing 787", flights: 600 },
+    ]);
+  });
+
+  it("groups variants of one aircraft family together", () => {
+    expect(
+      getFlightsByAircraft([
+        { aircraft_type_name: "Airbus A330-300" },
+        { flight_status: { aircraft: { model: "Airbus A330" } } },
+        { aircraft_type_name: "Boeing 787-9" },
+      ]),
+    ).toEqual([
+      { aircraft: "Airbus A330", flights: 2 },
+      { aircraft: "Boeing 787", flights: 1 },
     ]);
   });
 
