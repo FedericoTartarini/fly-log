@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useMemo, useState } from "react";
+import React, { lazy, Suspense, useMemo } from "react";
 import {
   Container,
   Stack,
@@ -7,7 +7,6 @@ import {
   SimpleGrid,
   Divider,
   Group,
-  SegmentedControl,
   Center,
   Loader,
 } from "@mantine/core";
@@ -20,7 +19,6 @@ import {
   BADGE_CATEGORIES,
 } from "../utils/badges.ts";
 import BadgeTile from "../components/BadgeTile.jsx";
-import { BADGE_STYLES } from "../constants/badgeIcons.ts";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 
 const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
@@ -36,9 +34,6 @@ function Badges() {
     })),
   );
   const { t } = useTranslation("flights");
-
-  // Two looks over the same badges; the choice is cosmetic and per-session.
-  const [styleName, setStyleName] = useState(BADGE_STYLES.PASS);
 
   // Grouped by category, and sorted within each group the same way the shelf
   // always was: earned first, newest first, then the nearest one still locked.
@@ -104,15 +99,6 @@ function Badges() {
               })}
             </Text>
           </Stack>
-          <SegmentedControl
-            size="xs"
-            value={styleName}
-            onChange={setStyleName}
-            data={[
-              { value: BADGE_STYLES.PASS, label: t("badges.style.pass") },
-              { value: BADGE_STYLES.STAMP, label: t("badges.style.stamp") },
-            ]}
-          />
         </Group>
 
         {sections.map(({ category, badges: items }) => (
@@ -135,7 +121,7 @@ function Badges() {
             />
             <SimpleGrid cols={{ base: 1, xs: 2, md: 3 }} spacing="md">
               {items.map((badge) => (
-                <BadgeTile key={badge.id} badge={badge} styleName={styleName} />
+                <BadgeTile key={badge.id} badge={badge} />
               ))}
             </SimpleGrid>
           </Stack>

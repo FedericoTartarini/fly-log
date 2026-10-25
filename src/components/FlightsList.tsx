@@ -21,6 +21,8 @@ import {
   formatTimeRange,
   parseToDate,
 } from "../utils/dateUtils";
+import { getAirportCity } from "../utils/airportUtils";
+import { getCountryName } from "../utils/countryUtils";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 
@@ -57,6 +59,21 @@ const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
       </Text>
     </Group>
   );
+};
+
+/**
+ * "Australia → United Kingdom" for an international flight, a single country
+ * for a domestic one, so the row does not say "Australia → Australia".
+ */
+const formatCountries = (flight: enhancedFlight): string => {
+  const from = flight.departure_country
+    ? getCountryName(flight.departure_country)
+    : null;
+  const to = flight.arrival_country
+    ? getCountryName(flight.arrival_country)
+    : null;
+  if (from && to && from !== to) return `${from} → ${to}`;
+  return from ?? to ?? "";
 };
 
 /**
@@ -236,9 +253,18 @@ const FlightsList: React.FC = () => {
 
                 const timeRange = formatTimeRange(flight);
 
+                // Cities lead because few people know IATA codes. The codes
+                // stay in the tooltip for those who do. getAirportCity falls
+                // back to the code itself when the airport is unknown.
+                const departureCity = getAirportCity(
+                  flight.departure_airport_iata,
+                );
+                const arrivalCity = getAirportCity(flight.arrival_airport_iata);
+                const countries = formatCountries(flight);
+
                 const rowLabel = t("table.view_row_details", {
-                  from: flight.departure_airport_iata,
-                  to: flight.arrival_airport_iata,
+                  from: departureCity,
+                  to: arrivalCity,
                 });
 
                 return (
@@ -257,10 +283,18 @@ const FlightsList: React.FC = () => {
                       <Center>{getAirlineIcon(flight)}</Center>
                     </Table.Td>
                     <Table.Td>
-                      <Text size="sm">
-                        {flight.departure_airport_iata} →{" "}
-                        {flight.arrival_airport_iata}
+                      <Text
+                        size="sm"
+                        truncate="end"
+                        title={`${flight.departure_airport_iata} → ${flight.arrival_airport_iata}`}
+                      >
+                        {departureCity} → {arrivalCity}
                       </Text>
+                      {countries && (
+                        <Text size="xs" c="dimmed" truncate="end">
+                          {countries}
+                        </Text>
+                      )}
                       <Text size="xs" c="dimmed">
                         {flight.airline_iata || flight.airline_name}{" "}
                         {flight.flight_number
