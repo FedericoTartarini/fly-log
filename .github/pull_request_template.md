@@ -1,3 +1,5 @@
+<!-- Contributors: open your PR against the `development` branch, not `main`. -->
+
 Closes #
 
 <!-- One or two sentences: what changes for the user, and why. -->
