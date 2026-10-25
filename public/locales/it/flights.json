@@ -364,11 +364,6 @@
         "criterion": "Africa, Asia, Europa, America del Nord, Oceania e America del Sud."
       }
     },
-    "style": {
-      "pass": "Carta d'imbarco",
-      "stamp": "Passaporto"
-    },
-    "stamp_caption": "Ammesso",
     "categories": {
       "flights": "Voli",
       "distance": "Distanza",
