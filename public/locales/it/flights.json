@@ -277,15 +277,18 @@
     "items": {
       "first_flight": {
         "name": "Primo volo",
-        "criterion": "Registra il tuo primo volo."
+        "criterion": "Registra il tuo primo volo.",
+        "link": "https://it.wikipedia.org/wiki/Wright_Flyer"
       },
       "border_crossed": {
         "name": "Confine superato",
-        "criterion": "Vola da un Paese a un altro."
+        "criterion": "Vola da un Paese a un altro.",
+        "link": "https://it.wikipedia.org/wiki/Confine"
       },
       "long_hauler": {
         "name": "Lungo raggio",
-        "criterion": "Un singolo volo di almeno 5.000 km."
+        "criterion": "Un singolo volo di almeno 5.000 km.",
+        "link": "https://it.wikipedia.org/wiki/Lunghezza_di_un_volo"
       },
       "ten_up": {
         "name": "Quota dieci",
@@ -301,19 +304,23 @@
       },
       "once_around": {
         "name": "Giro del mondo",
-        "criterion": "40.075 km — un giro della Terra."
+        "criterion": "40.075 km — un giro della Terra.",
+        "link": "https://it.wikipedia.org/wiki/Eratostene"
       },
       "five_laps": {
         "name": "Cinque giri",
-        "criterion": "200.375 km — cinque giri della Terra."
+        "criterion": "200.375 km — cinque giri della Terra.",
+        "link": "https://it.wikipedia.org/wiki/Eratostene"
       },
       "to_the_moon": {
         "name": "Fino alla Luna",
-        "criterion": "384.400 km — la distanza dalla Luna."
+        "criterion": "384.400 km — la distanza dalla Luna.",
+        "link": "https://it.wikipedia.org/wiki/Distanza_lunare"
       },
       "there_and_back": {
         "name": "Luna, andata e ritorno",
-        "criterion": "768.800 km — la Luna e ritorno."
+        "criterion": "768.800 km — la Luna e ritorno.",
+        "link": "https://it.wikipedia.org/wiki/Distanza_lunare"
       },
       "globetrotter": {
         "name": "Giramondo",
@@ -337,7 +344,8 @@
       },
       "million_club": {
         "name": "Club del milione",
-        "criterion": "1.000.000 km — il milione del frequent flyer."
+        "criterion": "1.000.000 km — il milione del frequent flyer.",
+        "link": "https://it.wikipedia.org/wiki/Programma_frequent_flyer"
       },
       "explorer": {
         "name": "Esploratore",
@@ -370,6 +378,7 @@
       "places": "Luoghi",
       "habit": "Costanza"
     },
-    "section_count": "{{unlocked}} di {{total}}"
+    "section_count": "{{unlocked}} di {{total}}",
+    "link_label": "Approfondisci {{name}} su Wikipedia"
   }
 }
