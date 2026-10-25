@@ -238,15 +238,15 @@
   },
   "loading": "Caricamento...",
   "ai": {
-    "title": "Descrivi il tuo volo",
-    "subtitle": "Racconta il tuo volo in italiano e compileremo il modulo per te",
+    "title": "Descrivi il tuo volo o viaggio",
+    "subtitle": "Descrivi un volo o un intero viaggio, compresi il ritorno e gli scali, e compileremo tutti i voli per te.",
     "examples_label": "Prova uno di questi esempi:",
     "examples": [
-      "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
-      "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45",
-      "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
+      "Da Washington Dulles a Los Angeles a Sydney il 1 dicembre con United, ritorno il 10 gennaio da Sydney via San Francisco a Washington Reagan",
       "Volato da Sydney a Londra con Qantas il 5 maggio 2024, ritorno il 20 maggio 2024",
-      "Da Washington Dulles a Los Angeles a Sydney il 1 dicembre con United, ritorno il 10 gennaio da Sydney via San Francisco a Washington Reagan"
+      "LAX a JFK il 10 aprile 2026 con Delta, volo DL405 alle 08:30, ritorno il 17 aprile 2026",
+      "Ho volato da Sydney a Singapore il 10 luglio 2026 con Qantas",
+      "Londra a Dubai il 15 marzo 2024, volo Emirates EK003 alle 09:45"
     ],
     "input_placeholder": "es. Ho volato da Sydney a Singapore il 10 luglio con Qantas",
     "keyboard_hint": "Premi Ctrl+Invio (o ⌘+Invio su Mac) per analizzare",
