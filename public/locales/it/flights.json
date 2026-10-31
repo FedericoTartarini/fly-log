@@ -138,7 +138,6 @@
     "view_tour": "Visualizza le tue rotte"
   },
   "form": {
-    "add_new_flight": "Aggiungi nuovo volo",
     "labels": {
       "edit_flight": "Modifica volo",
       "departure_date": "Data di partenza",

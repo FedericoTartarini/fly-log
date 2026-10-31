@@ -8,14 +8,23 @@
     "sign_out": "Esci",
     "tour": "Tour",
     "timeline": "Cronologia",
-    "badges": "Traguardi"
+    "badges": "Traguardi",
+    "add_flight": "Aggiungi volo",
+    "main": "Principale"
   },
   "language": "Lingua",
   "appearance": {
     "label": "Aspetto",
     "system": "Sistema",
     "light": "Chiaro",
-    "dark": "Scuro"
+    "dark": "Scuro",
+    "hint": "Sistema segue l'impostazione chiara o scura del tuo dispositivo."
+  },
+  "account": {
+    "menu": "Menu account",
+    "title": "Il tuo account",
+    "settings": "Impostazioni",
+    "about": "Informazioni su FlyLog"
   },
   "error": {
     "title": "Si è verificato un errore",

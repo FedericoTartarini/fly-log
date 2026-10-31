@@ -138,7 +138,6 @@
     "view_tour": "View Route Tour"
   },
   "form": {
-    "add_new_flight": "Add New Flight",
     "labels": {
       "edit_flight": "Edit Flight",
       "departure_date": "Departure Date",

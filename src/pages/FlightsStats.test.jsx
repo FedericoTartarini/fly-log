@@ -12,9 +12,9 @@ vi.mock("../components/StatsSummary.jsx", () => ({
   __esModule: true,
   default: () => <div data-testid="stats-summary" />,
 }));
-vi.mock("../components/FlightsTopBar.jsx", () => ({
+vi.mock("../components/NoFlightsCard.jsx", () => ({
   __esModule: true,
-  default: () => <div data-testid="flights-top-bar" />,
+  default: () => <div data-testid="no-flights-card" />,
 }));
 vi.mock("../components/DistanceStatsCard.js", () => ({
   __esModule: true,
@@ -134,7 +134,6 @@ describe("FlightsStats", () => {
     expect(screen.getByTestId("stats-summary")).toBeInTheDocument();
     expect(screen.getByTestId("distance-card")).toBeInTheDocument();
     expect(screen.getAllByTestId("flight-card")).toHaveLength(2);
-    expect(screen.getByTestId("flights-top-bar")).toBeInTheDocument();
     expect(screen.getAllByTestId("flights-by-chart")).toHaveLength(2);
     expect(
       screen.getByRole("button", { name: /Filter Flights/i }),

@@ -53,16 +53,16 @@ const LanguageSwitcher = () => {
   return (
     <Select
       label={t("language")}
-      size="xs"
+      size="md"
       value={value}
       onChange={handleChange}
       data={LANGUAGE_OPTIONS}
       renderOption={renderOption}
       withinPortal={false}
       position="bottom"
-      px="xs"
-      style={{ minWidth: 110 }}
       styles={() => ({
+        label: { fontWeight: 600 },
+        input: { minHeight: 44 },
         dropdown: {
           zIndex: 10_000,
         },

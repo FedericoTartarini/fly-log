@@ -21,7 +21,7 @@ import {
 import BadgeTile from "../components/BadgeTile.jsx";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 
-const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
+const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
 // Badges are lifetime facts, so this page reads the full history and ignores
 // the shared year filter. Timeline does the same, for the same reason.
@@ -77,7 +77,7 @@ function Badges() {
               </Center>
             }
           >
-            <FlightsTopBar fullWidth={true} />
+            <NoFlightsCard />
           </Suspense>
         </Stack>
       </Container>

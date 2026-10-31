@@ -1,186 +1,210 @@
-import React, { Suspense } from "react";
+import React, { createElement, lazy, Suspense } from "react";
 import {
+  ActionIcon,
+  Affix,
   AppShell,
-  Burger,
-  Container,
-  Drawer,
-  Group,
-  Stack,
-  rem,
-  NavLink,
   Button,
+  Center,
+  Container,
+  Group,
+  Loader,
+  Modal,
+  Text,
+  rem,
 } from "@mantine/core";
-import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import { Outlet, useLocation, Link, NavLink } from "react-router-dom";
+import { useHeadroom, useMediaQuery } from "@mantine/hooks";
+import {
+  IconAward,
+  IconCalendar,
+  IconChartBar,
+  IconList,
+  IconPlus,
+  IconWorld,
+} from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 import ErrorBoundary from "../components/ErrorBoundary.jsx";
-import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { useAuth } from "../context/AuthContext.jsx";
-import LanguageSwitcher from "../components/LanguageSwitcher";
-import { useTranslation } from "react-i18next";
-import AppearanceControl from "../components/AppearanceControl";
+import AccountMenu from "../components/AccountMenu";
 import AppFooter from "../components/AppFooter";
+import useFlightStore from "../store.ts";
+import classes from "./MyAppShell.module.css";
 
-const controlStyles = {
-  display: "block",
-  borderRadius: "var(--mantine-radius-md)",
-  fontWeight: 500,
-};
+const FlightEntryForm = lazy(() => import("../components/FlightEntryForm.tsx"));
 
-// App layout shell with nav, drawer, and routed content.
+// A 44 px control with 8 px above and below, plus the 1 px border.
+const HEADER_HEIGHT = 61;
+const TAB_BAR_HEIGHT = 66;
+
+const PAGES = [
+  { to: PATHS.STATS, key: "stats", icon: IconChartBar },
+  { to: PATHS.FLIGHTS, key: "flights", icon: IconList },
+  { to: PATHS.TOUR, key: "tour", icon: IconWorld },
+  { to: PATHS.TIMELINE, key: "timeline", icon: IconCalendar },
+  { to: PATHS.BADGES, key: "badges", icon: IconAward },
+];
+
+// App layout: header, bottom tab bar on phones, the add-flight form, and the
+// routed page.
 function MyAppShell() {
-  const [mobileOpened, { toggle: toggleMobile, close: closeMobile }] =
-    useDisclosure();
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-  const { user, loading, signOut } = useAuth();
-  const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const location = useLocation();
   const { t } = useTranslation("common");
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate(PATHS.HOME);
-    closeMobile();
-  };
-
-  // Helper to close mobile navbar on NavLink click
-  const handleNavClick = () => {
-    closeMobile();
-  };
+  const addFlightOpened = useFlightStore((s) => s.addFlightOpened);
+  const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
 
   const pinned = useHeadroom({ fixedAt: 120 });
+  // One switch at 860 px: below it the tab bar, from it the page links. The
+  // links need about 790 px in Italian, so tablets in portrait and unfolded
+  // phones get the tab bar too. Read synchronously, so the first paint
+  // already has the right layout.
+  const isPhone = useMediaQuery("(max-width: 53.74em)", false, {
+    getInitialValueInEffect: false,
+  });
+  const showTabs = Boolean(user) && isPhone;
 
-  const renderNavLinks = (onClickHandler) => {
-    const navItems = [
-      // Hidden while auth loads, so signed-in users don't see it flash.
-      !user &&
-        !loading && { to: PATHS.HOME, label: t("nav.home"), key: "home" },
-      user && { to: PATHS.STATS, label: t("nav.stats"), key: "stats" },
-      user && { to: PATHS.FLIGHTS, label: t("nav.flights"), key: "flights" },
-      user && { to: PATHS.TOUR, label: t("nav.tour"), key: "tour" },
-      user && {
-        to: PATHS.TIMELINE,
-        label: t("nav.timeline"),
-        key: "timeline",
-      },
-      user && { to: PATHS.BADGES, label: t("nav.badges"), key: "badges" },
-      { to: PATHS.ABOUT, label: t("nav.about"), key: "about" },
-    ].filter(Boolean);
-
-    return (
-      <Stack spacing="xs" w="100%">
-        {navItems.map(({ to, label, key }) => (
-          <NavLink
-            key={key}
-            component={Link}
-            px="xs"
-            to={to}
-            label={label}
-            sx={controlStyles}
-            onClick={onClickHandler}
-          />
-        ))}
-        <LanguageSwitcher />
-        <AppearanceControl />
-      </Stack>
-    );
-  };
-
-  const SIZE_DRAWER = "xl"; // breakpoint for mobile vs desktop
+  const openAddFlight = () => setAddFlightOpened(true);
+  const closeAddFlight = () => setAddFlightOpened(false);
 
   return (
     <AppShell
-      header={{ height: 60, collapsed: !pinned, offset: false }}
-      navbar={{
-        width: 250, // 75% width on mobile, 150px on sm+
-        breakpoint: SIZE_DRAWER,
-        collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
-      }}
-      transitionDuration={500}
+      header={{ height: HEADER_HEIGHT, collapsed: !pinned, offset: false }}
+      footer={{ height: TAB_BAR_HEIGHT, collapsed: !showTabs }}
+      transitionDuration={220}
       transitionTimingFunction="ease"
     >
       <AppShell.Header zIndex={400}>
-        <Group h="100%" px="md">
-          <Burger
-            opened={mobileOpened}
-            onClick={toggleMobile}
-            hiddenFrom={SIZE_DRAWER}
-            size="sm"
-            aria-label="Open navigation menu"
-            data-cy="menu-mobile-open"
-          />
-          <Burger
-            opened={desktopOpened}
-            onClick={toggleDesktop}
-            visibleFrom={SIZE_DRAWER}
-            size="sm"
-            aria-label="Toggle sidebar menu"
-          />
-          Fly Log
-          <Group ml="auto" gap="xs">
-            {loading ? null : user ? (
-              <Button
-                size="xs"
-                variant="default"
-                onClick={handleSignOut}
-              >
-                {t("nav.sign_out")}
-              </Button>
-            ) : (
-              <Button
-                size="xs"
-                variant="default"
-                component={Link}
-                to={PATHS.LOGIN}
-              >
-                {t("nav.login")}
-              </Button>
-            )}
-          </Group>
-        </Group>
-      </AppShell.Header>
-      <AppShell.Navbar
-        visibleFrom={SIZE_DRAWER}
-        py="md"
-        px={4}
-        pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
-      >
-        <nav aria-label="Primary navigation">
-          {renderNavLinks(handleNavClick)}
-        </nav>
-      </AppShell.Navbar>
+        <Container size="lg" h="100%" px="md">
+          <Group h="100%" gap="sm" wrap="nowrap">
+            <Group
+              component={Link}
+              to={PATHS.HOME}
+              gap={8}
+              wrap="nowrap"
+              c="var(--fl-ink)"
+              style={{ textDecoration: "none" }}
+            >
+              <img src="/airplane.png" alt="" width={30} height={30} />
+              <Text component="span" fw={600} fz={20}>
+                FlyLog
+              </Text>
+            </Group>
 
-      <Drawer
-        data-cy="drawer"
-        opened={mobileOpened}
-        onClose={closeMobile}
-        position="left"
-        size="250px"
-        zIndex={500}
-        padding="md"
-        hiddenFrom={SIZE_DRAWER}
+            {user && !isPhone && (
+              <Group
+                component="nav"
+                aria-label={t("nav.main")}
+                h="100%"
+                gap={0}
+                ml="sm"
+                wrap="nowrap"
+              >
+                {PAGES.map(({ to, key }) => (
+                  <NavLink key={key} to={to} className={classes.link}>
+                    {t(`nav.${key}`)}
+                  </NavLink>
+                ))}
+              </Group>
+            )}
+
+            <Group ml="auto" gap={10} wrap="nowrap">
+              {user && !isPhone && (
+                <Button
+                  radius="xl"
+                  h={44}
+                  leftSection={<IconPlus size={18} aria-hidden />}
+                  onClick={openAddFlight}
+                >
+                  {t("nav.add_flight")}
+                </Button>
+              )}
+              {!loading && !user && (
+                <Button
+                  variant="default"
+                  radius="xl"
+                  h={44}
+                  component={Link}
+                  to={PATHS.LOGIN}
+                >
+                  {t("nav.login")}
+                </Button>
+              )}
+              {!loading && <AccountMenu isPhone={isPhone} />}
+            </Group>
+          </Group>
+        </Container>
+      </AppShell.Header>
+
+      {showTabs && (
+        <>
+          <AppShell.Footer>
+            <nav aria-label={t("nav.main")} className={classes.tabs}>
+              {PAGES.map(({ to, key, icon }) => (
+                <NavLink key={key} to={to} className={classes.tab}>
+                  {createElement(icon, {
+                    size: 24,
+                    stroke: 1.8,
+                    "aria-hidden": true,
+                  })}
+                  {t(`nav.${key}`)}
+                </NavLink>
+              ))}
+            </nav>
+          </AppShell.Footer>
+          <Affix position={{ bottom: TAB_BAR_HEIGHT + 18, right: 16 }}>
+            <ActionIcon
+              size={56}
+              radius="xl"
+              aria-label={t("nav.add_flight")}
+              onClick={openAddFlight}
+              style={{ boxShadow: "var(--mantine-shadow-lg)" }}
+            >
+              <IconPlus size={26} stroke={2.2} aria-hidden />
+            </ActionIcon>
+          </Affix>
+        </>
+      )}
+
+      <Modal
+        opened={addFlightOpened}
+        onClose={closeAddFlight}
+        title={t("nav.add_flight")}
+        size="lg"
+        // Full screen on phones: the form is long and needs the whole width.
+        fullScreen={isPhone}
       >
-        <nav aria-label="Mobile navigation">
-          {renderNavLinks(handleNavClick)}
-        </nav>
-      </Drawer>
+        <Suspense
+          fallback={
+            <Center>
+              <Loader />
+            </Center>
+          }
+        >
+          {/* No refetch: the Firestore listener picks the new flight up from
+              the local write before the server has even acknowledged it. */}
+          <FlightEntryForm onSaved={closeAddFlight} />
+        </Suspense>
+      </Modal>
 
       <AppShell.Main
         id="main-content"
-        pt={`calc(${rem(60)} + var(--mantine-spacing-md))`}
+        pt={`calc(${rem(HEADER_HEIGHT)} + var(--mantine-spacing-md))`}
       >
         <Container size="lg" p={0}>
           {/* Route chunks suspend here rather than at the router, so the
-              header and navbar stay put instead of being torn down and
-              rebuilt while a page loads. */}
+              header stays put instead of being torn down and rebuilt while a
+              page loads. */}
           <ErrorBoundary resetKey={location.pathname}>
             <Suspense fallback={<PageSkeleton />}>
               <Outlet />
             </Suspense>
           </ErrorBoundary>
         </Container>
+        {/* Inside Main, so the tab bar's bottom padding keeps it visible. */}
+        <AppFooter />
       </AppShell.Main>
-      <AppFooter />
     </AppShell>
   );
 }
