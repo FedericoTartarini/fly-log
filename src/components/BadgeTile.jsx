@@ -66,9 +66,9 @@ const BadgeTile = ({ badge }) => {
   );
 
   const progress = (
-    <Stack gap={3} style={{ flex: "0 0 46%" }}>
+    <Stack gap={3} miw="46%">
       <Progress value={percent} size="sm" color="gray" radius="xl" />
-      <Text size="xs" c="dimmed" ff="monospace" ta="right">
+      <Text size="xs" c="dimmed" ff="monospace" ta="right" style={{ whiteSpace: "nowrap" }}>
         {formatProgress(badge, i18n.language)}
       </Text>
     </Stack>
@@ -76,7 +76,15 @@ const BadgeTile = ({ badge }) => {
 
   const footer = (
     <div className={classes.stub} style={{ marginTop: "auto" }}>
-      <Group gap="sm" justify="space-between" wrap="nowrap" align="center">
+      {/* One height for the date, "not yet" and the progress bar, so the
+          perforation sits at the same height on every card in a row. */}
+      <Group
+        gap="sm"
+        justify="space-between"
+        wrap="nowrap"
+        align="center"
+        mih={30}
+      >
         <div
           className={classes.barcode}
           style={{ backgroundImage: barcodePattern(badge.id) }}
