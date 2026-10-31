@@ -862,15 +862,13 @@ function WorldTour() {
               <Button
                 onClick={handleStart}
                 disabled={!routes.length || isPlaying || hasStartedAnimation}
-                variant="gradient"
               >
                 {t("start")}
               </Button>
               {hasStartedAnimation &&
                 (isPaused ? (
                   <Button
-                    variant="outline"
-                    color="accent"
+                    variant="default"
                     onClick={handleResume}
                     disabled={!hasStartedAnimation || isPlaying}
                   >
@@ -878,8 +876,7 @@ function WorldTour() {
                   </Button>
                 ) : (
                   <Button
-                    variant="outline"
-                    color="accent"
+                    variant="default"
                     onClick={handlePause}
                     disabled={!hasStartedAnimation || !isPlaying}
                   >
@@ -926,7 +923,7 @@ function WorldTour() {
                   total: routes.length,
                 })}
                 {isPaused && (
-                  <Text c="accent" component="span" fw={800} ml="sm">
+                  <Text c="dimmed" component="span" fw={800} ml="sm">
                     [Paused]
                   </Text>
                 )}

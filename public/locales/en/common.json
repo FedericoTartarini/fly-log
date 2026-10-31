@@ -11,6 +11,12 @@
     "badges": "Badges"
   },
   "language": "Language",
+  "appearance": {
+    "label": "Appearance",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "error": {
     "title": "Something went wrong",
     "message": "This page hit an unexpected error. Try reloading — your flights are safe.",

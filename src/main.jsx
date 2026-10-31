@@ -10,14 +10,15 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/charts/styles.css";
-import {
-  createTheme,
-  MantineProvider,
-  ColorSchemeScript,
-  Popover,
-  Modal,
-  Input,
-} from "@mantine/core";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/ibm-plex-mono/600.css";
+import "./index.css";
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import { theme, resolver } from "./theme.js";
 import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
 
@@ -105,66 +106,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Mantine theme used app-wide (colors + gradients + headings).
-const theme = createTheme({
-  primaryColor: "primary",
-  colors: {
-    accent: [
-      "#f3f0ff",
-      "#e3def3",
-      "#c3bae0",
-      "#a294ce",
-      "#8574bf",
-      "#735fb6",
-      "#6a55b3",
-      "#554295",
-      "#4f3d8e",
-      "#44347e",
-    ],
-    primary: [
-      "#ffe8ea",
-      "#ffcfd2",
-      "#ff9ca1",
-      "#fe656e",
-      "#fd3942",
-      "#fe1e27",
-      "#fe0f18",
-      "#e6000d",
-      "#cb0009",
-      "#b10004",
-    ],
-  },
-  defaultGradient: {
-    from: "primary.6",
-    to: "accent.6",
-    deg: 75,
-  },
-  headings: {
-    fontFamily: "Roboto, sans-serif",
-  },
-  components: {
-    // Select, DatePickerInput and Menu dropdowns render in a portal at the
-    // popover z-index (300 by default). The flight edit modal sits at 1000
-    // (see FlightsList), so dropdowns opened inside it rendered behind it.
-    Popover: Popover.extend({ defaultProps: { zIndex: 1100 } }),
-    // The fixed AppShell header sits at 400, so a modal at Mantine's default
-    // (200) opened under it, hiding its title and close button on phones.
-    Modal: Modal.extend({ defaultProps: { zIndex: 500 } }),
-    // iOS Safari zooms in on any input under 16px when it gets focus, and
-    // stays zoomed, which pushes modals off-screen.
-    Input: Input.extend({
-      vars: () => ({ wrapper: { "--input-fz": "16px" } }),
-    }),
-  },
-});
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ColorSchemeScript defaultColorScheme="auto" />
     <MantineProvider
       theme={theme}
       defaultColorScheme="auto"
-      // cssVariablesResolver={resolver}
+      cssVariablesResolver={resolver}
     >
       {/* Above every modal, so validation errors show over the form */}
       <Notifications zIndex={2000} />

@@ -11,6 +11,12 @@
     "badges": "Traguardi"
   },
   "language": "Lingua",
+  "appearance": {
+    "label": "Aspetto",
+    "system": "Sistema",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  },
   "error": {
     "title": "Si è verificato un errore",
     "message": "Questa pagina ha riscontrato un errore imprevisto. Prova a ricaricare: i tuoi voli sono al sicuro.",

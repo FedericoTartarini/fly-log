@@ -81,13 +81,13 @@ const FlightCard: React.FC<FlightCardProps> = ({
 
         {(flight.departure_country || flight.arrival_country) && (
           <Group gap="xs">
-            <Badge size="sm" variant="light" color="accent">
+            <Badge size="sm" variant="light" color="gray">
               {flight.departure_country ?? "–"}
             </Badge>
             <Text size="xs" c="dimmed">
               {t("to", { defaultValue: "→" })}
             </Text>
-            <Badge size="sm" variant="light" color="accent">
+            <Badge size="sm" variant="light" color="gray">
               {flight.arrival_country ?? "–"}
             </Badge>
           </Group>

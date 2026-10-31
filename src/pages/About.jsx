@@ -163,8 +163,6 @@ function About() {
                   href={APP_INFO.PATREON}
                   target="_blank"
                   aria-label="Support on Patreon (opens in a new tab)"
-                  color="red"
-                  variant="gradient"
                   leftSection={<IconHeart size={14} />}
                 >
                   Support on Patreon

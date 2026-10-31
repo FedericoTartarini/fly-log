@@ -109,7 +109,6 @@ const FlightsStats = () => {
         <Button
           radius="xl"
           size="sm"
-          variant="gradient"
           onClick={() => setFiltersOpen(true)}
         >
           {t("filters.title")}
@@ -162,7 +161,7 @@ const FlightsStats = () => {
           </MotionDiv>
         </div>
         <Stack
-          bg="var(--mantine-color-body)"
+          bg="var(--fl-page)"
           gap="md"
           px="md"
           style={{ position: "relative", zIndex: 1 }}

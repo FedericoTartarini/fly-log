@@ -47,7 +47,7 @@ const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
             : undefined
         }
         alt=""
-        color="accent"
+        color="gray"
         radius="xl"
         size="sm"
       >

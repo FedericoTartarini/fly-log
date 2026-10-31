@@ -67,7 +67,7 @@ const BadgeTile = ({ badge }) => {
 
   const progress = (
     <Stack gap={3} style={{ flex: "0 0 46%" }}>
-      <Progress value={percent} size="sm" color="accent" radius="xl" />
+      <Progress value={percent} size="sm" color="gray" radius="xl" />
       <Text size="xs" c="dimmed" ff="monospace" ta="right">
         {formatProgress(badge, i18n.language)}
       </Text>
@@ -83,7 +83,7 @@ const BadgeTile = ({ badge }) => {
           aria-hidden="true"
         />
         {badge.unlocked ? (
-          <Text size="xs" c="primary.7" fw={600} tt="uppercase" ff="monospace">
+          <Text size="xs" c="var(--fl-accent-text)" fw={600} tt="uppercase" ff="monospace">
             {date}
           </Text>
         ) : hasProgress ? (
