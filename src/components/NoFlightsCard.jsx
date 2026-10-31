@@ -6,9 +6,13 @@ import flightImg760 from "../assets/flight-760.webp";
 import flightImg1200 from "../assets/flight-1200.webp";
 import flightImg1800 from "../assets/flight-1800.webp";
 import { useTranslation } from "react-i18next";
+import useFlightStore from "../store.ts";
 
-function NoFlightsCard({ setFormOpened }) {
+// Empty state for pages that need flights. Opens the add-flight form in the
+// app shell.
+function NoFlightsCard() {
   const { t } = useTranslation("flights");
+  const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
   return (
     <Container>
       <Card shadow="sm" radius="md" withBorder style={{ marginTop: "1rem" }}>
@@ -28,7 +32,7 @@ function NoFlightsCard({ setFormOpened }) {
           {t("no_flights_card.description")}
         </Text>
         <Button
-          onClick={() => setFormOpened(true)}
+          onClick={() => setAddFlightOpened(true)}
           fullWidth
         >
           {t("no_flights_card.cta")}

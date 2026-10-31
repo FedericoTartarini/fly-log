@@ -15,13 +15,16 @@ export default function AppearanceControl() {
   const labelId = useId();
 
   return (
-    <Stack gap={4} px="xs">
-      <Text id={labelId} size="xs" fw={500}>
+    <Stack gap={8}>
+      <Text id={labelId} fw={600}>
         {t("appearance.label")}
       </Text>
       <SegmentedControl
         aria-labelledby={labelId}
-        size="xs"
+        size="md"
+        fullWidth
+        // 36 px options on a 4 px track make the 44 px touch target.
+        styles={{ label: { minHeight: 36, alignContent: "center" } }}
         value={colorScheme}
         onChange={setColorScheme}
         data={[
@@ -30,6 +33,9 @@ export default function AppearanceControl() {
           { value: "dark", label: t("appearance.dark") },
         ]}
       />
+      <Text size="sm" c="dimmed">
+        {t("appearance.hint")}
+      </Text>
     </Stack>
   );
 }

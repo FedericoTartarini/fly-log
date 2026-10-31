@@ -60,6 +60,9 @@ export interface FlightStoreState {
   setChartMetric: (metric: ChartMetric) => void;
   setFilters: (filters: Partial<StoreFlightFilters>) => void;
   clearFilters: () => void;
+  // The add-flight form lives in the app shell, so any page can open it.
+  addFlightOpened: boolean;
+  setAddFlightOpened: (opened: boolean) => void;
 }
 
 // Reduce flights based on the selected year preset or explicit year.
@@ -184,6 +187,8 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
   },
   isLoading: true,
   error: null,
+  addFlightOpened: false,
+  setAddFlightOpened: (opened: boolean) => set({ addFlightOpened: opened }),
 
   // Update the year filter and recompute the filtered list in memory.
   setSelectedYear: async (year: string) => {

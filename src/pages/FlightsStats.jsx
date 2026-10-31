@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useState, useEffect, useMemo } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
-const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
+const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 import {
   Stack,
   Grid,
@@ -91,7 +91,7 @@ const FlightsStats = () => {
   if (allFlights.length === 0) {
     return (
       <Suspense fallback={<Skeleton height={36} radius="xl" />}>
-        <FlightsTopBar fullWidth={true} />
+        <NoFlightsCard />
       </Suspense>
     );
   }
@@ -167,11 +167,6 @@ const FlightsStats = () => {
           style={{ position: "relative", zIndex: 1 }}
         >
           <StatsSummary />
-
-          {/* Add button to open modal */}
-          <Suspense fallback={<Skeleton height={36} radius="xl" />}>
-            <FlightsTopBar fullWidth={true} />
-          </Suspense>
 
           <BadgeStrip />
 

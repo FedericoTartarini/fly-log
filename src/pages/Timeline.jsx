@@ -27,7 +27,7 @@ import {
 } from "../utils/chartUtils.js";
 import { CHART_METRIC } from "../constants/filters.ts";
 
-const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
+const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
 // Grid template: a fixed year-label column followed by 12 equal month columns.
 const GRID_COLUMNS = `2.5rem repeat(12, 1fr)`;
@@ -159,7 +159,7 @@ function Timeline() {
               </Center>
             }
           >
-            <FlightsTopBar fullWidth={true} />
+            <NoFlightsCard />
           </Suspense>
         </Stack>
       </Container>
