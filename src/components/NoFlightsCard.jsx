@@ -30,7 +30,6 @@ function NoFlightsCard({ setFormOpened }) {
         <Button
           onClick={() => setFormOpened(true)}
           fullWidth
-          variant="gradient"
         >
           {t("no_flights_card.cta")}
         </Button>

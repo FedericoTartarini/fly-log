@@ -267,7 +267,7 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
             series={[
               {
                 name: currentGroupingConfig.seriesName,
-                color: "accent.4",
+                color: "primary.4",
               },
             ]}
             withTooltip={false}

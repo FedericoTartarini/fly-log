@@ -106,7 +106,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
     <Stack mt="sm" gap="md">
       {/* Header */}
       <Flex gap="xs">
-        <ThemeIcon size="md" variant="light" color="accent">
+        <ThemeIcon size="md" variant="light" color="gray">
           <IconRobot size={16} />
         </ThemeIcon>
         <div>
@@ -139,7 +139,7 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               >
                 <Text
                   size="xs"
-                  c="accent"
+                  c="var(--fl-accent-text)"
                   style={{
                     textDecoration: "underline dotted",
                   }}
@@ -311,7 +311,6 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
           {hasAnyParsedField && (
             <Button
               variant="light"
-              color="accent"
               size="xs"
               rightSection={<IconArrowRight size={14} />}
               onClick={onConfirm}
@@ -329,7 +328,6 @@ export const FlightChatInput: React.FC<FlightChatInputProps> = ({
               onClick={handleParse}
               loading={loading}
               disabled={!input.trim()}
-              variant="gradient"
             >
               {t("ai.parse_button")}
             </Button>

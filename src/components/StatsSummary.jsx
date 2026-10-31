@@ -113,8 +113,7 @@ function StatsSummary() {
             {t("stats.view_flights")}
           </Button>
           <Button
-            variant="light"
-            color="accent"
+            variant="default"
             onClick={() => navigate(PATHS.TOUR)}
             data-cy="view-tour-btn"
           >
