@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("../store.ts", () => ({
   default: vi.fn(),
 }));
-vi.mock("../components/FlightsTopBar.jsx", () => ({
+vi.mock("../components/NoFlightsCard.jsx", () => ({
   __esModule: true,
-  default: () => <div data-testid="flights-top-bar" />,
+  default: () => <div data-testid="no-flights-card" />,
 }));
 
 import { render, screen, waitFor } from "../../test-utils/index.js";
@@ -58,14 +58,14 @@ describe("Timeline", () => {
     expect(
       screen.getByText("Error loading flight data: Network error"),
     ).toBeInTheDocument();
-    expect(screen.queryByTestId("flights-top-bar")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("no-flights-card")).not.toBeInTheDocument();
   });
 
   it("shows the add-flight call to action when there are no flights", async () => {
     applyMockState({ allFlights: [] });
     render(<Timeline />);
     await waitFor(() => {
-      expect(screen.getByTestId("flights-top-bar")).toBeInTheDocument();
+      expect(screen.getByTestId("no-flights-card")).toBeInTheDocument();
     });
   });
 

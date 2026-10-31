@@ -97,6 +97,8 @@ export const theme = createTheme({
       "#0B0E13",
     ],
   },
+  // Panels and modals open without sliding when the device asks for less motion.
+  respectReducedMotion: true,
   fontFamily: "'IBM Plex Sans', system-ui, sans-serif",
   fontFamilyMonospace: "'IBM Plex Mono', ui-monospace, monospace",
   headings: {

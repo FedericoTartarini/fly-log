@@ -18,7 +18,7 @@ import useFlightStore from "../store.ts";
 import FlightFilters from "../components/FlightFilters.tsx";
 
 const FlightsList = lazy(() => import("../components/FlightsList.tsx"));
-const FlightsTopBar = lazy(() => import("../components/FlightsTopBar.jsx"));
+const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
 // Flights table page with filters and entry CTA.
 function Flights() {
@@ -58,7 +58,7 @@ function Flights() {
               </Center>
             }
           >
-            <FlightsTopBar fullWidth={true} />
+            <NoFlightsCard />
           </Suspense>
         </Stack>
       </Container>
@@ -85,16 +85,6 @@ function Flights() {
 
           <FlightFilters />
         </Card>
-
-        <Suspense
-          fallback={
-            <Center>
-              <Loader color="blue" aria-label={t("loading")} />
-            </Center>
-          }
-        >
-          <FlightsTopBar fullWidth={false} />
-        </Suspense>
 
         <Suspense
           fallback={

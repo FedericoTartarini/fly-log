@@ -8,14 +8,24 @@
     "sign_out": "Sign Out",
     "tour": "Tour",
     "timeline": "Timeline",
-    "badges": "Badges"
+    "badges": "Badges",
+    "add_flight": "Add flight",
+    "menu": "Menu",
+    "main": "Main"
   },
   "language": "Language",
   "appearance": {
     "label": "Appearance",
     "system": "System",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "hint": "System follows your device's light or dark setting."
+  },
+  "account": {
+    "menu": "Account menu",
+    "title": "Your account",
+    "settings": "Settings",
+    "about": "About FlyLog"
   },
   "error": {
     "title": "Something went wrong",
