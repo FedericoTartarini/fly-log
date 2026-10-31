@@ -109,17 +109,21 @@ function AccountMenu({ isPhone }) {
           size="auto"
           // Above the header (400), which a default drawer opens under.
           zIndex={500}
-          title={title}
+          title={
+            <>
+              {title}
+              {user && (
+                <Text component="span" display="block" size="sm" c="dimmed">
+                  {user.email}
+                </Text>
+              )}
+            </>
+          }
           styles={{
             content: { borderRadius: "20px 20px 0 0" },
             title: { fontSize: 18, fontWeight: 600 },
           }}
         >
-          {user && (
-            <Text size="sm" c="dimmed" mt={-12} mb="lg">
-              {user.email}
-            </Text>
-          )}
           {body}
         </Drawer>
       </>

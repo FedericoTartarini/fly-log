@@ -3,19 +3,17 @@ import {
   ActionIcon,
   Affix,
   AppShell,
-  Burger,
   Button,
   Center,
   Container,
   Group,
   Loader,
-  Menu,
   Modal,
   Text,
   rem,
 } from "@mantine/core";
 import { Outlet, useLocation, Link, NavLink } from "react-router-dom";
-import { useDisclosure, useHeadroom, useMediaQuery } from "@mantine/hooks";
+import { useHeadroom, useMediaQuery } from "@mantine/hooks";
 import {
   IconAward,
   IconCalendar,
@@ -54,17 +52,17 @@ function MyAppShell() {
   const { user, loading } = useAuth();
   const location = useLocation();
   const { t } = useTranslation("common");
-  const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
-    useDisclosure(false);
   const addFlightOpened = useFlightStore((s) => s.addFlightOpened);
   const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
 
   const pinned = useHeadroom({ fixedAt: 120 });
-  // Read synchronously, so the first paint already has the right layout.
-  const sync = { getInitialValueInEffect: false };
-  const isPhone = useMediaQuery("(max-width: 48em)", false, sync);
-  // Below 860 px the five page links no longer fit next to "Add flight".
-  const showLinks = useMediaQuery("(min-width: 53.75em)", false, sync);
+  // One switch at 860 px: below it the tab bar, from it the page links. The
+  // links need about 790 px in Italian, so tablets in portrait and unfolded
+  // phones get the tab bar too. Read synchronously, so the first paint
+  // already has the right layout.
+  const isPhone = useMediaQuery("(max-width: 53.74em)", false, {
+    getInitialValueInEffect: false,
+  });
   const showTabs = Boolean(user) && isPhone;
 
   const openAddFlight = () => setAddFlightOpened(true);
@@ -80,49 +78,6 @@ function MyAppShell() {
       <AppShell.Header zIndex={400}>
         <Container size="lg" h="100%" px="md">
           <Group h="100%" gap="sm" wrap="nowrap">
-            {user && !isPhone && !showLinks && (
-              <Menu
-                opened={menuOpened}
-                onChange={(value) => !value && closeMenu()}
-                position="bottom-start"
-                width={220}
-              >
-                <Menu.Target>
-                  <Burger
-                    opened={menuOpened}
-                    onClick={toggleMenu}
-                    size="sm"
-                    w={44}
-                    h={44}
-                    ml={-10}
-                    aria-label={t("nav.menu")}
-                  />
-                </Menu.Target>
-                <Menu.Dropdown>
-                  {PAGES.map(({ to, key, icon }) => (
-                    <Menu.Item
-                      key={key}
-                      component={NavLink}
-                      to={to}
-                      mih={44}
-                      fw={location.pathname === to ? 600 : 400}
-                      bg={
-                        location.pathname === to
-                          ? "var(--fl-subtle)"
-                          : undefined
-                      }
-                      leftSection={createElement(icon, {
-                        size: 18,
-                        "aria-hidden": true,
-                      })}
-                    >
-                      {t(`nav.${key}`)}
-                    </Menu.Item>
-                  ))}
-                </Menu.Dropdown>
-              </Menu>
-            )}
-
             <Group
               component={Link}
               to={PATHS.HOME}
@@ -137,8 +92,15 @@ function MyAppShell() {
               </Text>
             </Group>
 
-            {user && !isPhone && showLinks && (
-              <Group component="nav" aria-label={t("nav.main")} gap={2}>
+            {user && !isPhone && (
+              <Group
+                component="nav"
+                aria-label={t("nav.main")}
+                h="100%"
+                gap={0}
+                ml="sm"
+                wrap="nowrap"
+              >
                 {PAGES.map(({ to, key }) => (
                   <NavLink key={key} to={to} className={classes.link}>
                     {t(`nav.${key}`)}
