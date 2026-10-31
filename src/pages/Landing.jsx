@@ -34,11 +34,6 @@ function Landing() {
   const { t } = useTranslation("landing");
   const theme = useMantineTheme();
   const shouldReduceMotion = useReducedMotion();
-  const heroGradient = {
-    from: "grape",
-    to: "red",
-    deg: 60,
-  };
   return (
     <Container size="md" mt="xl">
       <Stack align="center" gap="xl">
@@ -64,15 +59,12 @@ function Landing() {
                 fontWeight: 900,
                 letterSpacing: -1,
               }}
-              gradient={heroGradient}
-              variant="gradient"
             >
               {t("title")}
             </Title>
             <Text
               ta="center"
-              variant="gradient"
-              gradient={heroGradient}
+              c="dimmed"
               size="xl"
               maw={680}
               style={{ fontSize: "1.3rem", fontWeight: 600 }}
@@ -91,8 +83,7 @@ function Landing() {
               to={PATHS.LOGIN}
               size="lg"
               radius="xl"
-              style={{ fontWeight: 700, boxShadow: "0px 0.5px 8px #0ea5e911" }}
-              variant="gradient"
+              style={{ fontWeight: 700 }}
             >
               {t("get_started")}
             </Button>
@@ -102,8 +93,7 @@ function Landing() {
             to={PATHS.ABOUT}
             size="lg"
             radius="xl"
-            variant="light"
-            color="accent"
+            variant="default"
             style={{ fontWeight: 500 }}
           >
             {t("learn_more")}
@@ -153,7 +143,7 @@ function Landing() {
           <Card shadow="xl" p="md" radius="lg" withBorder w="100%">
             <Grid align="center" gutter="xl" justify="center">
               <Grid.Col span={{ base: "content" }}>
-                <ThemeIcon radius="xl" size={54} variant="light" color="accent">
+                <ThemeIcon radius="xl" size={54} variant="light" color="gray">
                   <IconRobotFace size={36} />
                 </ThemeIcon>
               </Grid.Col>

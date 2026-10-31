@@ -18,7 +18,7 @@ import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { useAuth } from "../context/AuthContext.jsx";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import ColorSchemeToggle from "../components/ColorSchemeToggle";
+import AppearanceControl from "../components/AppearanceControl";
 import AppFooter from "../components/AppFooter";
 
 const controlStyles = {
@@ -81,6 +81,7 @@ function MyAppShell() {
           />
         ))}
         <LanguageSwitcher />
+        <AppearanceControl />
       </Stack>
     );
   };
@@ -122,7 +123,6 @@ function MyAppShell() {
                 size="xs"
                 variant="default"
                 onClick={handleSignOut}
-                c="accent"
               >
                 {t("nav.sign_out")}
               </Button>
@@ -132,12 +132,10 @@ function MyAppShell() {
                 variant="default"
                 component={Link}
                 to={PATHS.LOGIN}
-                c="primary"
               >
                 {t("nav.login")}
               </Button>
             )}
-            <ColorSchemeToggle />
           </Group>
         </Group>
       </AppShell.Header>

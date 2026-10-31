@@ -35,7 +35,6 @@ const FlightsTopBar = ({ fullWidth = false }) => {
         <NoFlightsCard setFormOpened={setFormOpened} />
       ) : (
         <Button
-          variant="gradient"
           onClick={() => setFormOpened(true)}
           fullWidth={fullWidth}
         >

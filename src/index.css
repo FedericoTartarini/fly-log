@@ -1,0 +1,5 @@
+/* Cards and panels use the surface colour (Mantine's "body"), and sit on the
+   page colour. Both are tokens from src/theme.js. */
+body {
+  background-color: var(--fl-page);
+}

@@ -58,7 +58,7 @@ const StripItem = ({ badge, caption, dimmed, onOpen }) => {
           <Text size="xs" c="dimmed" lh={1.3}>
             {t(`badges.items.${badge.id}.criterion`)}
           </Text>
-          <Text size="xs" c={dimmed ? "dimmed" : "primary.7"} fw={500}>
+          <Text size="xs" c={dimmed ? "dimmed" : "var(--fl-accent-text)"} fw={500}>
             {caption}
           </Text>
         </Stack>
