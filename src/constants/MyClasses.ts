@@ -12,6 +12,7 @@ export const IDS = {
     AIRPORTS_VISITED: "airports-visited",
     AIRLINES_FLOWN: "airlines-flown",
     COUNTRIES_VISITED: "countries-visited",
+    ALL_STATS_LINK: "all-stats-link",
   },
   FILTERS: {
     YEAR_FILTER: "flight-year-filter",
@@ -37,6 +38,7 @@ export const PATHS = {
   LANDING: "/landing",
   FLIGHTS: "/flights",
   STATS: "/stats",
+  ALL_STATS: "/stats/all",
   TOUR: "/tour",
   TIMELINE: "/timeline",
   BADGES: "/badges",

@@ -40,6 +40,15 @@
   padding-top: 14px;
 }
 
+.fields dl {
+  margin: 0;
+}
+
+/* Under the three fields on a phone, the sixth cell on the wide pass. */
+.allStats {
+  grid-column: 1 / -1;
+}
+
 .fields dt {
   font-size: 13px;
   color: var(--fl-muted);
@@ -139,6 +148,11 @@
 
   .wideOnly {
     display: block;
+  }
+
+  .allStats {
+    grid-column: auto;
+    align-self: end;
   }
 
   .stub {

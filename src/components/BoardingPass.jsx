@@ -1,11 +1,12 @@
 import React from "react";
-import { Text } from "@mantine/core";
-import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
+import { Button, Text } from "@mantine/core";
+import { IconArrowNarrowRight, IconChevronRight } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { EARTH_CIRCUMFERENCE } from "../constants/distances";
-import { IDS } from "../constants/MyClasses.ts";
+import { IDS, PATHS } from "../constants/MyClasses.ts";
 import {
   formatCalendarDate,
   getYear,
@@ -16,12 +17,16 @@ import { barcodePattern } from "../utils/barcode.ts";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
 import classes from "./BoardingPass.module.css";
 
-const Field = ({ id, label, value, className }) => (
-  <div className={className}>
-    <dt data-cy={id && `${id}-label`}>{label}</dt>
-    <dd data-cy={id && `${id}-value`}>{value}</dd>
-  </div>
-);
+// `as="dl"` for a field that stands alone, outside a list of fields.
+const Field = ({ id, label, value, className, as = "div" }) => {
+  const Tag = as;
+  return (
+    <Tag className={className}>
+      <dt data-cy={id && `${id}-label`}>{label}</dt>
+      <dd data-cy={id && `${id}-value`}>{value}</dd>
+    </Tag>
+  );
+};
 
 // The stub under the perforation: next flight, or the last one if none is
 // booked.
@@ -136,35 +141,52 @@ function BoardingPass() {
             {comparison}
           </Text>
         </div>
-        <dl className={classes.fields}>
+        {/* One <dl> per field, so the button can share their grid. */}
+        <div className={classes.fields}>
           <Field
+            as="dl"
             id={IDS.STATS.TOTAL_FLIGHTS}
             label={t("pass.flights")}
             value={number(filteredFlights.length)}
           />
           <Field
+            as="dl"
             id={IDS.STATS.TOTAL_TIME}
             label={t("pass.in_the_air")}
             value={inTheAir}
           />
           <Field
+            as="dl"
             id={IDS.STATS.COUNTRIES_VISITED}
             label={t("pass.countries")}
             value={number(stats.countries)}
           />
           <Field
+            as="dl"
             id={IDS.STATS.AIRPORTS_VISITED}
             label={t("pass.airports")}
             value={number(stats.airports)}
             className={classes.wideOnly}
           />
           <Field
+            as="dl"
             id={IDS.STATS.AIRLINES_FLOWN}
             label={t("pass.airlines")}
             value={number(stats.airlines)}
             className={classes.wideOnly}
           />
-        </dl>
+          <Button
+            component={Link}
+            to={PATHS.ALL_STATS}
+            variant="default"
+            size="md"
+            rightSection={<IconChevronRight size={18} aria-hidden />}
+            className={classes.allStats}
+            data-cy={IDS.STATS.ALL_STATS_LINK}
+          >
+            {t("pass.see_all")}
+          </Button>
+        </div>
       </div>
       {stub && <Stub entry={stub} />}
     </section>

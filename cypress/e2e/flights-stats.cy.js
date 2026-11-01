@@ -50,4 +50,10 @@ describe("StatsSummary Component", () => {
     // Prefer robust selectors if available, but keep visible text for feature sections as backup
     cy.contains(/filter flights/i).should("be.visible");
   });
+
+  it("opens the All stats page from the boarding pass", () => {
+    cy.get('[data-cy="all-stats-link"]').click();
+    cy.location("pathname").should("eq", "/stats/all");
+    cy.get('[data-cy="total-co2-value"]').should("be.visible");
+  });
 });

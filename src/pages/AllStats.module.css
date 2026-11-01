@@ -1,0 +1,50 @@
+.card {
+  box-shadow: 0 1px 0 var(--fl-border);
+}
+
+.back {
+  align-self: flex-start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.number {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* The "How far" bars: a thick red-tint track, a solid red fill for progress
+ * towards the next lap or trip, and the completed count on the right. */
+.track {
+  position: relative;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--fl-accent-tint);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--fl-accent);
+}
+
+.times {
+  position: absolute;
+  inset: 0 14px 0 auto;
+  display: flex;
+  align-items: center;
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--fl-ink);
+}
