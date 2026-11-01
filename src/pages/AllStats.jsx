@@ -99,7 +99,8 @@ const StatCard = ({ icon, label, value, main, id }) => {
 };
 
 // One "How far" bar: the fill is progress towards the next lap or trip, and
-// the number inside counts the completed ones.
+// the number inside counts the completed ones. On first view, one sweep
+// stands for the completed laps, then the fill grows to the current one.
 const JourneyBar = ({ label, ratio, next, aria }) => {
   const done = Math.floor(ratio);
   const percent = Math.floor((ratio - done) * 100);
@@ -114,7 +115,11 @@ const JourneyBar = ({ label, ratio, next, aria }) => {
         aria-valuemax={100}
         className={classes.track}
       >
-        <div className={classes.fill} style={{ width: `${percent}%` }} />
+        {done > 0 && <div className={classes.sweep} />}
+        <div
+          className={`${classes.fill} ${done > 0 ? classes.afterSweep : ""}`}
+          style={{ width: `${percent}%` }}
+        />
         <span className={classes.times}>{done}×</span>
       </div>
       <Text fz={14} c="var(--fl-muted)">
@@ -139,8 +144,11 @@ const AllStats = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // The router keeps the Stats page's scroll position, which would open this
-  // page partway down.
-  useEffect(() => window.scrollTo(0, 0), []);
+  // page partway down. Braces matter: Chrome's scrollTo returns a promise,
+  // and React would call it as the effect's cleanup on unmount.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (isLoading) {
     return <PageSkeleton />;
@@ -162,7 +170,6 @@ const AllStats = () => {
       maximumFractionDigits: digits,
     });
   const flights = filteredFlights.length;
-  const distance = stats.totalDistance * progress;
 
   const groups = [
     {
@@ -248,7 +255,7 @@ const AllStats = () => {
             </Title>
             <JourneyBar
               label={t("all_stats.around_earth")}
-              ratio={distance / EARTH_CIRCUMFERENCE}
+              ratio={stats.totalDistance / EARTH_CIRCUMFERENCE}
               aria={(lap) => t("all_stats.earth_aria", { lap })}
               next={(percent, lap) =>
                 t("all_stats.earth_next", { percent, lap })
@@ -256,7 +263,7 @@ const AllStats = () => {
             />
             <JourneyBar
               label={t("all_stats.to_moon")}
-              ratio={distance / DISTANCE_TO_MOON}
+              ratio={stats.totalDistance / DISTANCE_TO_MOON}
               aria={(trip) => t("all_stats.moon_aria", { trip })}
               next={(percent, trip) =>
                 t("all_stats.moon_next", { percent, trip })

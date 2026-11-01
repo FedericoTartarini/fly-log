@@ -56,6 +56,7 @@
 .allStatsLabel {
   white-space: normal;
   height: auto;
+  text-align: center;
 }
 
 .fields dt {
