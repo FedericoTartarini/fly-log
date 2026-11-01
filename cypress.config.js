@@ -31,6 +31,15 @@ export default defineConfig({
       return config;
     },
     env,
+    // Specs read the secrets above with cy.env(), which keeps them out of
+    // the browser. Cypress.env() would hand them to any page code.
+    allowCypressEnv: false,
+    // Public flags, so a spec can skip at once when a fork's pull request
+    // gets no secrets.
+    expose: {
+      HAS_TEST_ACCOUNT: Boolean(env.CY_TEST_EMAIL && env.CY_TEST_PASSWORD),
+      HAS_WRONG_ACCOUNT: Boolean(env.CY_WRONG_EMAIL && env.CY_WRONG_PASSWORD),
+    },
     baseUrl: "http://localhost:5173",
     supportFile: false,
   },

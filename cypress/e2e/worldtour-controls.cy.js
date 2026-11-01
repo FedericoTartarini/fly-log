@@ -2,12 +2,9 @@
 
 describe("WorldTour Globe Animation Controls", () => {
   before(function () {
-    const email = Cypress.env("CY_TEST_EMAIL");
-    const password = Cypress.env("CY_TEST_PASSWORD");
-
     // Pull requests from forks don't get the repo's secrets, so there is no
     // account to log in with. The full suite runs again after merging.
-    if (!email || !password) {
+    if (!Cypress.expose("HAS_TEST_ACCOUNT")) {
       this.skip();
       return;
     }
@@ -18,13 +15,17 @@ describe("WorldTour Globe Animation Controls", () => {
       .should("exist")
       .should("be.visible")
       .should("not.be.disabled");
-    cy.get('[data-cy="login-email"]').type(email, { log: false });
+    cy.env(["CY_TEST_EMAIL", "CY_TEST_PASSWORD"]).then(
+      ({ CY_TEST_EMAIL: email, CY_TEST_PASSWORD: password }) => {
+        cy.get('[data-cy="login-email"]').type(email, { log: false });
 
-    cy.get('[data-cy="login-password"]')
-      .should("exist")
-      .should("be.visible")
-      .should("not.be.disabled");
-    cy.get('[data-cy="login-password"]').type(password, { log: false });
+        cy.get('[data-cy="login-password"]')
+          .should("exist")
+          .should("be.visible")
+          .should("not.be.disabled");
+        cy.get('[data-cy="login-password"]').type(password, { log: false });
+      },
+    );
 
     cy.get('[data-cy="login-submit"]').click();
     cy.location("pathname").should("eq", "/stats");
