@@ -122,20 +122,8 @@
     "cta": "Add New Flight"
   },
   "stats": {
-    "total_flights": "Total Flights",
-    "distance_km": "Distance (km)",
-    "co2_kg": "CO₂e (kg)",
-    "flight_time_days": "Flight Time (days)",
-    "airports_visited": "Airports Visited",
-    "airlines_flown": "Airlines Flown",
-    "countries_visited": "Countries Visited",
-    "international_flights": "International Flights",
-    "long_haul_flights": "Long-Haul Flights",
-    "west_bound_flights": "Westbound Flights",
-    "view_flights": "View Flights",
     "shortest_flight": "Shortest Flight",
     "longest_flight": "Longest Flight",
-    "view_tour": "View Route Tour",
     "page_title": "Your stats",
     "open_map": "Open the full map",
     "map_title": "Your routes"
@@ -204,20 +192,6 @@
     },
     "descriptions": {
       "cabin_class": "Used for the CO2e estimate. Leave empty for economy."
-    }
-  },
-  "distance": {
-    "title": "Distance Statistics",
-    "total_distance": "Total Distance (km)",
-    "mean_distance": "Mean Distance (km)",
-    "journey_title": "Journey to Space",
-    "earth_label": "{{value}}x around Earth",
-    "moon_label": "{{value}}% to Moon",
-    "mars_label": "{{value}}% to Mars",
-    "destinations": {
-      "earth": "Earth",
-      "moon": "Moon",
-      "mars": "Mars"
     }
   },
   "charts": {
@@ -441,6 +415,33 @@
     "route": "{{from}} to {{to}}",
     "date": "Date",
     "departs": "Departs",
-    "flight": "Flight"
+    "flight": "Flight",
+    "see_all": "See all your stats"
+  },
+  "all_stats": {
+    "back": "Stats",
+    "title": "All your stats",
+    "flights": "Flights",
+    "distance_time_co2": "Distance, time and CO₂e",
+    "places": "Places",
+    "total_flights": "Total flights",
+    "international": "International",
+    "long_haul": "Long-haul",
+    "westbound": "Heading west",
+    "km_flown": "Kilometres flown",
+    "km_per_flight": "Km per flight, on average",
+    "days_in_air": "Days in the air",
+    "co2_kg": "Kg of CO₂e",
+    "countries": "Countries",
+    "continents": "Continents",
+    "airports": "Airports",
+    "airlines": "Airlines",
+    "how_far": "How far is {{value}} km?",
+    "around_earth": "Around the Earth",
+    "to_moon": "To the Moon",
+    "earth_aria": "Progress towards lap {{lap}} around the Earth",
+    "earth_next": "{{percent}}% of the way to lap {{lap}}",
+    "moon_aria": "Progress towards trip {{trip}} to the Moon",
+    "moon_next": "{{percent}}% of the way to trip {{trip}}"
   }
 }

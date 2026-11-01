@@ -40,6 +40,24 @@
   padding-top: 14px;
 }
 
+.fields dl {
+  margin: 0;
+}
+
+/* Under the three fields on a phone, the sixth cell on the wide pass. */
+.allStats {
+  grid-column: 1 / -1;
+  height: auto;
+  min-height: 44px;
+  padding-block: 6px;
+}
+
+/* The sixth cell is narrow just above 860 px, so the label may wrap there. */
+.allStatsLabel {
+  white-space: normal;
+  height: auto;
+}
+
 .fields dt {
   font-size: 13px;
   color: var(--fl-muted);
@@ -139,6 +157,11 @@
 
   .wideOnly {
     display: block;
+  }
+
+  .allStats {
+    grid-column: auto;
+    align-self: end;
   }
 
   .stub {

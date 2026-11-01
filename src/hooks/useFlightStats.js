@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { getContinent, CONTINENTS } from "../utils/continents";
 
 // Compute summary stats for the current filtered flights collection.
 export const useFlightStats = (filteredFlights) => {
@@ -30,6 +31,13 @@ export const useFlightStats = (filteredFlights) => {
       if (flight.departure_country) countries.add(flight.departure_country);
       if (flight.arrival_country) countries.add(flight.arrival_country);
     });
+
+    // Inhabited continents only, matching the continent badges.
+    const continents = new Set(
+      [...countries]
+        .map(getContinent)
+        .filter((c) => c && c !== CONTINENTS.ANTARCTICA),
+    );
 
     // Calculate flight categories
     const domesticFlights = filteredFlights.filter(
@@ -76,6 +84,7 @@ export const useFlightStats = (filteredFlights) => {
     return {
       airlines: airlines.size,
       airports: airports.size,
+      continents: continents.size,
       countries: countries.size,
       domesticFlights: domesticFlights.length,
       internationalFlights: internationalFlights.length,
