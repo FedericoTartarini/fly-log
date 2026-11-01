@@ -4,6 +4,7 @@ import {
   TileLayer,
   Polyline,
   CircleMarker,
+  Pane,
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -184,10 +185,10 @@ const WorldMap = ({ height = "60vh" }) => {
   // With a filter on, every route still shows, but only the matching ones in
   // strong colour.
   const filtering = filteredFlights.length < allFlights.length;
-  const matching = useMemo(
-    () => new Set(filteredFlights.map((flight) => flight.id)),
-    [filteredFlights],
-  );
+  const fadedFlights = useMemo(() => {
+    const matching = new Set(filteredFlights.map((flight) => flight.id));
+    return allFlights.filter((flight) => !matching.has(flight.id));
+  }, [allFlights, filteredFlights]);
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
@@ -226,6 +227,70 @@ const WorldMap = ({ height = "60vh" }) => {
     });
   };
 
+  // One flight's route and airports, drawn on each of the three world
+  // copies.
+  const renderRoute = (flight, weight) => {
+    const greatCirclePath = getGreatCirclePath(
+      flight.departure_coordinates,
+      flight.arrival_coordinates,
+    );
+
+    // We split the path to prevent visual artifacts
+    const pathSegments = splitPathAtAntimeridian(greatCirclePath);
+
+    let flightColor = "#C91A25";
+    const departureDate = parseToDate(flight.departure_date);
+    const now = new Date();
+    if (departureDate && departureDate > now) {
+      flightColor = "#7B2EDA";
+    }
+
+    // We render 3 copies: Main, Left World (-360), Right World (+360)
+    const offsets = [0, 360, -360];
+
+    return (
+      <React.Fragment key={flight.id}>
+        {offsets.map((offset) => (
+          <React.Fragment key={offset}>
+            {/* Render Lines */}
+            {pathSegments.map((segment, i) => (
+              <Polyline
+                key={`line-${i}-${offset}`}
+                positions={shiftCoords(segment, offset)}
+                color={flightColor}
+                weight={weight}
+              />
+            ))}
+
+            {/* Render Markers (Departure) */}
+            <CircleMarker
+              center={[
+                flight.departure_coordinates[0],
+                flight.departure_coordinates[1] + offset,
+              ]}
+              radius={3}
+              color={flightColor}
+              fillColor={flightColor}
+              fillOpacity={1}
+            />
+
+            {/* Render Markers (Arrival) */}
+            <CircleMarker
+              center={[
+                flight.arrival_coordinates[0],
+                flight.arrival_coordinates[1] + offset,
+              ]}
+              radius={3}
+              color={flightColor}
+              fillColor={flightColor}
+              fillOpacity={1}
+            />
+          </React.Fragment>
+        ))}
+      </React.Fragment>
+    );
+  };
+
   return (
     <MapContainer
       center={center}
@@ -256,72 +321,19 @@ const WorldMap = ({ height = "60vh" }) => {
         className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
       />
 
-      {allFlights.filter(isValidFlight).map((flight) => {
-        const faded = filtering && !matching.has(flight.id);
-        const opacity = faded ? 0.15 : 1;
-        const greatCirclePath = getGreatCirclePath(
-          flight.departure_coordinates,
-          flight.arrival_coordinates,
-        );
-
-        // We split the path to prevent visual artifacts
-        const pathSegments = splitPathAtAntimeridian(greatCirclePath);
-
-        let flightColor = "#C91A25";
-        const departureDate = parseToDate(flight.departure_date);
-        const now = new Date();
-        if (departureDate && departureDate > now) {
-          flightColor = "#7B2EDA";
-        }
-
-        // We render 3 copies: Main, Left World (-360), Right World (+360)
-        const offsets = [0, 360, -360];
-
-        return (
-          <React.Fragment key={flight.id}>
-            {offsets.map((offset) => (
-              <React.Fragment key={offset}>
-                {/* Render Lines */}
-                {pathSegments.map((segment, i) => (
-                  <Polyline
-                    key={`line-${i}-${offset}`}
-                    positions={shiftCoords(segment, offset)}
-                    color={flightColor}
-                    weight={filtering && !faded ? 2 : 1}
-                    opacity={opacity}
-                  />
-                ))}
-
-                {/* Render Markers (Departure) */}
-                <CircleMarker
-                  center={[
-                    flight.departure_coordinates[0],
-                    flight.departure_coordinates[1] + offset,
-                  ]}
-                  radius={3}
-                  color={flightColor}
-                  fillColor={flightColor}
-                  opacity={opacity}
-                  fillOpacity={opacity}
-                />
-
-                {/* Render Markers (Arrival) */}
-                <CircleMarker
-                  center={[
-                    flight.arrival_coordinates[0],
-                    flight.arrival_coordinates[1] + offset,
-                  ]}
-                  radius={3}
-                  color={flightColor}
-                  fillColor={flightColor}
-                  opacity={opacity}
-                  fillOpacity={opacity}
-                />
-              </React.Fragment>
-            ))}
-          </React.Fragment>
-        );
-      })}
+      {/* With a filter on, the other routes sit underneath in their own pane.
+          The pane is faded as a whole, so routes flown many times don't stack
+          up into solid lines. */}
+      {filtering && (
+        <Pane name="faded-routes" style={{ zIndex: 390, opacity: 0.15 }}>
+          {fadedFlights
+            .filter(isValidFlight)
+            .map((flight) => renderRoute(flight, 1))}
+        </Pane>
+      )}
+      {filteredFlights
+        .filter(isValidFlight)
+        .map((flight) => renderRoute(flight, filtering ? 2 : 1))}
     </MapContainer>
   );
 };

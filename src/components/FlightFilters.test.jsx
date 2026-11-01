@@ -225,6 +225,17 @@ describe("FlightFilters", () => {
     ).toBeInTheDocument();
   });
 
+  it("drops a year bound whose flights are gone", async () => {
+    // As if the only 2023 flight was deleted after picking From 2023.
+    setStore({ fromYear: 2023 });
+    render(<FlightFilters isPhone />);
+
+    await waitFor(() =>
+      expect(useFlightStore.getState().filters.fromYear).toBeNull(),
+    );
+    expect(useFlightStore.getState().filteredFlights).toHaveLength(3);
+  });
+
   it("auto-clears invalid arrival when other active filters make it impossible", async () => {
     setStore({ airline: "AZ", departureAirport: "BLQ", arrivalAirport: "LHR" });
 

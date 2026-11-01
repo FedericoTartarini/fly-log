@@ -49,16 +49,14 @@ const FlightFilters: React.FC<{ isPhone: boolean }> = ({ isPhone }) => {
   const { t } = useTranslation("flights");
   const [opened, { open, close }] = useDisclosure(false);
   const swipeStart = React.useRef<number | null>(null);
-  const { allFlights, filteredCount, filters, setFilters, clearFilters } =
-    useFlightStore(
-      useShallow((s: FlightStoreState) => ({
-        allFlights: s.allFlights as enhancedFlight[],
-        filteredCount: s.filteredFlights.length,
-        filters: s.filters as StoreFlightFilters,
-        setFilters: s.setFilters,
-        clearFilters: s.clearFilters,
-      })),
-    );
+  const { allFlights, filters, setFilters, clearFilters } = useFlightStore(
+    useShallow((s: FlightStoreState) => ({
+      allFlights: s.allFlights as enhancedFlight[],
+      filters: s.filters as StoreFlightFilters,
+      setFilters: s.setFilters,
+      clearFilters: s.clearFilters,
+    })),
+  );
   const [airportsData, setAirportsData] = React.useState<AirportInfo[]>([]);
 
   React.useEffect(() => {
@@ -231,10 +229,47 @@ const FlightFilters: React.FC<{ isPhone: boolean }> = ({ isPhone }) => {
     ]);
   }, [filters.minDuration, filters.maxDuration]);
 
+  // The slider's ends mean no limit.
+  const toDurations = ([min, max]: [number, number]) => ({
+    minDuration: min === DEFAULT_MIN ? null : min,
+    maxDuration: max === DEFAULT_MAX ? null : max,
+  });
+  // The store only takes the slider's value on release, so every page doesn't
+  // redraw on each step of a drag. The count follows the drag anyway.
+  const shownCount = React.useMemo(
+    () =>
+      filterFlightsForFacetOptions(allFlights, {
+        ...filters,
+        ...toDurations(rangeValue),
+      }).length,
+    [allFlights, filters, rangeValue],
+  );
+
   // A bound at the first or last year is stored as null, so it does not
   // count as a filter.
   const firstYear = years[0];
   const lastYear = years.at(-1);
+
+  // Deleting a flight can take a stored bound's year off the list, which
+  // would leave the fields stuck on a range with no flights. Drop such a
+  // bound, and one that has become the first or last year.
+  React.useEffect(() => {
+    if (allFlights.length === 0) return;
+    const stale = (year: number | null, end: number | undefined) =>
+      year !== null && (year === end || !years.includes(year));
+    const patch: Partial<StoreFlightFilters> = {};
+    if (stale(filters.fromYear, firstYear)) patch.fromYear = null;
+    if (stale(filters.toYear, lastYear)) patch.toYear = null;
+    if (Object.keys(patch).length > 0) setFilters(patch);
+  }, [
+    allFlights.length,
+    years,
+    firstYear,
+    lastYear,
+    filters.fromYear,
+    filters.toYear,
+    setFilters,
+  ]);
   const fromYear = filters.fromYear ?? firstYear;
   const toYear = filters.toYear ?? lastYear;
   const yearsLocked = years.length <= 1;
@@ -478,13 +513,7 @@ const FlightFilters: React.FC<{ isPhone: boolean }> = ({ isPhone }) => {
                   value={rangeValue}
                   onChange={setRangeValue}
                   label={(value) => t("filters.hours", { value })}
-                  onChangeEnd={([min, max]) =>
-                    // The slider's ends mean no limit.
-                    setFilters({
-                      minDuration: min === DEFAULT_MIN ? null : min,
-                      maxDuration: max === DEFAULT_MAX ? null : max,
-                    })
-                  }
+                  onChangeEnd={(value) => setFilters(toDurations(value))}
                   mb={8}
                 />
               </Stack>
@@ -515,7 +544,7 @@ const FlightFilters: React.FC<{ isPhone: boolean }> = ({ isPhone }) => {
               {t("filters.clear_all")}
             </Button>
             <Button radius="xl" size="md" h={48} flex={1} onClick={close}>
-              {t("filters.show", { count: filteredCount })}
+              {t("filters.show", { count: shownCount })}
             </Button>
           </Group>
         </Drawer.Content>
