@@ -22,6 +22,7 @@ import { Notifications } from "@mantine/notifications";
 import "./i18n"; // initialize i18n
 
 const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
+const AllStats = lazy(() => import("./pages/AllStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <FlightsStats />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.ALL_STATS,
+        element: (
+          <ProtectedRoute>
+            <AllStats />
           </ProtectedRoute>
         ),
       },

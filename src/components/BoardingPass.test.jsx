@@ -6,6 +6,7 @@ vi.mock("../store.ts", () => ({
 }));
 
 import { render, screen } from "../../test-utils/index.js";
+import { makeRouterWrapper } from "../../test-utils/wrappers.jsx";
 import BoardingPass from "./BoardingPass.jsx";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
 import useFlightStore from "../store.ts";
@@ -67,7 +68,7 @@ describe("BoardingPass", () => {
       selector({ filteredFlights: flights, allFlights: flights }),
     );
 
-    render(<BoardingPass />);
+    render(<BoardingPass />, { wrapper: makeRouterWrapper() });
 
     expect(screen.getByText("Distance flown since 2019")).toBeInTheDocument();
     expect(screen.getByText("50,000 km")).toBeInTheDocument();
@@ -76,5 +77,8 @@ describe("BoardingPass", () => {
     expect(screen.getByText(/^Next flight, in \d+ days$/)).toBeInTheDocument();
     expect(screen.getByText("QF81")).toBeInTheDocument();
     expect(screen.getByText("11:40")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "See all your stats" }),
+    ).toHaveAttribute("href", "/stats/all");
   });
 });
