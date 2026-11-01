@@ -96,10 +96,13 @@ describe("AllStats", () => {
   });
 
   it("unmounts cleanly when scrollTo returns a promise, as in Chrome", () => {
-    vi.spyOn(window, "scrollTo").mockReturnValue(Promise.resolve());
+    const scrollTo = vi
+      .spyOn(window, "scrollTo")
+      .mockReturnValue(Promise.resolve());
     const { unmount } = render(<AllStats />, {
       wrapper: makeRouterWrapper(),
     });
-    expect(unmount).not.toThrow();
+    expect(() => unmount()).not.toThrow();
+    scrollTo.mockRestore();
   });
 });

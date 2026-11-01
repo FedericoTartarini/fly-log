@@ -104,6 +104,8 @@ const StatCard = ({ icon, label, value, main, id }) => {
 const JourneyBar = ({ label, ratio, next, aria }) => {
   const done = Math.floor(ratio);
   const percent = Math.floor((ratio - done) * 100);
+  // Decided on first view only, so a later filter change never replays it.
+  const [sweep] = useState(done > 0);
   return (
     <Stack gap={6}>
       <Text fw={500}>{label}</Text>
@@ -115,9 +117,9 @@ const JourneyBar = ({ label, ratio, next, aria }) => {
         aria-valuemax={100}
         className={classes.track}
       >
-        {done > 0 && <div className={classes.sweep} />}
+        {sweep && <div className={classes.sweep} />}
         <div
-          className={`${classes.fill} ${done > 0 ? classes.afterSweep : ""}`}
+          className={`${classes.fill} ${sweep ? classes.afterSweep : ""}`}
           style={{ width: `${percent}%` }}
         />
         <span className={classes.times}>{done}×</span>
