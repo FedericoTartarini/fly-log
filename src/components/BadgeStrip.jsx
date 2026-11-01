@@ -58,7 +58,11 @@ const StripItem = ({ badge, caption, dimmed, onOpen }) => {
           <Text size="xs" c="dimmed" lh={1.3}>
             {t(`badges.items.${badge.id}.criterion`)}
           </Text>
-          <Text size="xs" c={dimmed ? "dimmed" : "var(--fl-accent-text)"} fw={500}>
+          <Text
+            size="xs"
+            c={dimmed ? "dimmed" : "var(--fl-accent-text)"}
+            fw={500}
+          >
             {caption}
           </Text>
         </Stack>
@@ -96,7 +100,7 @@ function BadgeStrip() {
     : null;
 
   return (
-    <Card shadow="sm" radius="md" withBorder padding="md">
+    <Card shadow="sm" radius="md" withBorder padding="md" h="100%">
       <Stack gap="sm">
         <Group justify="space-between">
           <Text fw={700} size="sm" tt="uppercase" c="dimmed">
@@ -116,9 +120,9 @@ function BadgeStrip() {
           </Anchor>
         </Group>
 
-        {/* A grid rather than a wrapping row: three items wrapping to a second
-            line left a ragged gap on a phone. */}
-        <SimpleGrid cols={{ base: 1, xs: 3 }} spacing="md" verticalSpacing="sm">
+        {/* One column: the card shares its row with the records on desktop,
+            so three side by side would not fit. */}
+        <SimpleGrid cols={1} spacing="md" verticalSpacing="sm">
           {recent.map((badge) => (
             <StripItem
               key={badge.id}

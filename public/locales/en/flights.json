@@ -135,7 +135,10 @@
     "view_flights": "View Flights",
     "shortest_flight": "Shortest Flight",
     "longest_flight": "Longest Flight",
-    "view_tour": "View Route Tour"
+    "view_tour": "View Route Tour",
+    "page_title": "Your stats",
+    "open_map": "Open the full map",
+    "map_title": "Your routes"
   },
   "form": {
     "labels": {
@@ -225,7 +228,14 @@
     "distance_by": "Kilometres flown by {{period}}",
     "co2_by": "CO₂e emitted by {{period}}",
     "no_aircraft_data": "No aircraft model data yet. Check flight status to populate aircraft details.",
-    "aircraft_subset": "Based on {{known}} of {{total}} flights. Add the aircraft when you edit a flight, or check its status to fill it in."
+    "aircraft_subset": "Based on {{known}} of {{total}} flights. Add the aircraft when you edit a flight, or check its status to fill it in.",
+    "show_more": "Show more",
+    "show_fewer": "Show fewer",
+    "group_by": "Group by",
+    "measure": "Measure",
+    "busiest_day": "{{day}} is your busiest day, with {{value}}.",
+    "busiest_day_flights_one": "{{day}} is your busiest day, with {{count}} flight.",
+    "busiest_day_flights_other": "{{day}} is your busiest day, with {{count}} flights."
   },
   "group": {
     "country": "Country",
@@ -408,5 +418,29 @@
     "keep_mine": "Keep mine",
     "source": "Checked once with AeroDataBox because the flight is within a week.",
     "apply_failed": "Could not update the flight. Please try again."
+  },
+  "pass": {
+    "label": "Lifetime totals and next flight",
+    "distance_since": "Distance flown since {{year}}",
+    "distance": "Distance flown",
+    "around_earth_one": "Once around the Earth",
+    "around_earth_other": "{{count}} times around the Earth",
+    "part_of_earth": "{{value}}% of the way around the Earth",
+    "days": "{{value}} d",
+    "hours": "{{value}} h",
+    "flights": "Flights",
+    "in_the_air": "In the air",
+    "countries": "Countries",
+    "airports": "Airports",
+    "airlines": "Airlines",
+    "next_flight_zero": "Next flight, today",
+    "next_flight_one": "Next flight, tomorrow",
+    "next_flight_other": "Next flight, in {{count}} days",
+    "last_flight_one": "Last flight, yesterday",
+    "last_flight_other": "Last flight, {{count}} days ago",
+    "route": "{{from}} to {{to}}",
+    "date": "Date",
+    "departs": "Departs",
+    "flight": "Flight"
   }
 }

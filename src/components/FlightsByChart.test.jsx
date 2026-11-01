@@ -4,21 +4,23 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("../store.ts", () => ({
   default: vi.fn(),
 }));
-// Recharts needs real layout to render bars; mock the chart itself so the
-// test can assert on the data it was actually given instead of on SVG output.
-vi.mock("@mantine/charts", () => ({
-  __esModule: true,
-  BarChart: ({ data }) => (
-    <div data-testid="bar-chart">{JSON.stringify(data)}</div>
-  ),
-}));
-
+import userEvent from "@testing-library/user-event";
 import { render, screen } from "../../test-utils/index.js";
 import FlightsByChart from "./FlightsByChart.jsx";
 import useFlightStore from "../store.ts";
-import { CHART_GROUPING, CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
+import {
+  CHART_GROUPING,
+  CHART_METRIC,
+  TIME_GROUPING,
+} from "../constants/filters.ts";
 
 const mockedUseFlightStore = useFlightStore;
+
+// Label and value of each bar, in order.
+const rowTexts = () =>
+  [...document.querySelectorAll("[class^=_label_], [class^=_value_]")].map(
+    (el) => el.textContent,
+  );
 
 const BASE_STATE = {
   timeGrouping: TIME_GROUPING.MONTH,
@@ -53,21 +55,52 @@ describe("FlightsByChart", () => {
     applyMockState({ chartMetric: CHART_METRIC.FLIGHTS });
     render(<FlightsByChart filteredFlights={flights} />);
 
-    const data = JSON.parse(screen.getByTestId("bar-chart").textContent);
-    expect(data).toEqual([
-      { country: "United States", departures: 2 },
-      { country: "France", departures: 1 },
-    ]);
+    expect(rowTexts()).toEqual(["United States", "2", "France", "1"]);
   });
 
   it("aggregates by distance flown when the shared metric is distance", () => {
     applyMockState({ chartMetric: CHART_METRIC.DISTANCE });
     render(<FlightsByChart filteredFlights={flights} />);
 
-    const data = JSON.parse(screen.getByTestId("bar-chart").textContent);
-    expect(data).toEqual([
-      { country: "France", departures: 5000 },
-      { country: "United States", departures: 400 },
-    ]);
+    expect(rowTexts()).toEqual(["France", "5K", "United States", "400"]);
+  });
+});
+
+describe("FlightsByChart bars", () => {
+  it("shows 8 rows, then all of them after Show more, without clipping", async () => {
+    applyMockState({ chartMetric: CHART_METRIC.FLIGHTS });
+    const many = [
+      "US",
+      "FR",
+      "IT",
+      "DE",
+      "ES",
+      "GB",
+      "JP",
+      "AU",
+      "NZ",
+      "SG",
+    ].map((country, i) => ({ id: String(i), departure_country: country }));
+    render(<FlightsByChart filteredFlights={many} />);
+
+    expect(rowTexts()).toHaveLength(16);
+    await userEvent.click(screen.getByRole("button", { name: "Show more" }));
+    expect(rowTexts()).toHaveLength(20);
+    expect(
+      screen.getByRole("button", { name: "Show fewer" }),
+    ).toBeInTheDocument();
+  });
+
+  it("names the busiest day under the day-of-week chart", () => {
+    applyMockState({ timeGrouping: TIME_GROUPING.DAY_OF_WEEK });
+    const data = [3, 1, 0, 0, 0, 0, 0].map((flights, i) => ({
+      period: String(i),
+      flights,
+    }));
+    render(<FlightsByChart data={data} />);
+
+    expect(
+      screen.getByText("Monday is your busiest day, with 3 flights."),
+    ).toBeInTheDocument();
   });
 });

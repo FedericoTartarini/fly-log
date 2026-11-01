@@ -8,17 +8,13 @@ vi.mock("../components/WorldMap.jsx", () => ({
   __esModule: true,
   default: () => <div data-testid="world-map" />,
 }));
-vi.mock("../components/StatsSummary.jsx", () => ({
+vi.mock("../components/BoardingPass.jsx", () => ({
   __esModule: true,
-  default: () => <div data-testid="stats-summary" />,
+  default: () => <div data-testid="boarding-pass" />,
 }));
 vi.mock("../components/NoFlightsCard.jsx", () => ({
   __esModule: true,
   default: () => <div data-testid="no-flights-card" />,
-}));
-vi.mock("../components/DistanceStatsCard.js", () => ({
-  __esModule: true,
-  default: () => <div data-testid="distance-card" />,
 }));
 vi.mock("../components/BadgeStrip.jsx", () => ({
   __esModule: true,
@@ -131,8 +127,7 @@ describe("FlightsStats", () => {
       expect(screen.getByTestId("world-map")).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId("stats-summary")).toBeInTheDocument();
-    expect(screen.getByTestId("distance-card")).toBeInTheDocument();
+    expect(screen.getByTestId("boarding-pass")).toBeInTheDocument();
     expect(screen.getAllByTestId("flight-card")).toHaveLength(2);
     expect(screen.getAllByTestId("flights-by-chart")).toHaveLength(2);
     expect(

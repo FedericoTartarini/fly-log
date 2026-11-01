@@ -27,9 +27,9 @@ describe("WorldTour Globe Animation Controls", () => {
     cy.get('[data-cy="login-password"]').type(password, { log: false });
 
     cy.get('[data-cy="login-submit"]').click();
-    cy.wait(500); // Allow React/Mantine hydration to fully complete
-    cy.scrollTo(0, 500);
-    cy.contains("button", /view route tour/i).click();
+    cy.location("pathname").should("eq", "/stats");
+    // The header's page links; the Stats page no longer has a tour button.
+    cy.contains("nav a", /^tour$/i).click();
     cy.location("pathname").should("eq", "/tour");
     cy.scrollTo(0, 500);
   });
