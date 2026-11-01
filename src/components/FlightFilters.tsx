@@ -467,6 +467,8 @@ const FlightFilters: React.FC<{ isPhone: boolean }> = ({ isPhone }) => {
                 </Group>
                 <RangeSlider
                   aria-labelledby="filters-length-label"
+                  thumbFromLabel={t("filters.length_min")}
+                  thumbToLabel={t("filters.length_max")}
                   min={DEFAULT_MIN}
                   max={DEFAULT_MAX}
                   step={0.25}

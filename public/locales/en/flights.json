@@ -87,6 +87,8 @@
     "no_results": "No results",
     "length": "Flight length",
     "length_range": "{{min}} h to {{max}} h",
+    "length_min": "Shortest flight, in hours",
+    "length_max": "Longest flight, in hours",
     "hours": "{{value}} h",
     "clear_all": "Clear all",
     "show_one": "Show {{count}} flight",

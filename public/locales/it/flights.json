@@ -69,6 +69,8 @@
     "no_results": "Nessun risultato",
     "length": "Durata del volo",
     "length_range": "da {{min}} h a {{max}} h",
+    "length_min": "Volo più breve, in ore",
+    "length_max": "Volo più lungo, in ore",
     "hours": "{{value}} h",
     "clear_all": "Azzera tutto",
     "show_one": "Mostra {{count}} volo",

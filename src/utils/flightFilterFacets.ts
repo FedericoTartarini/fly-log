@@ -1,6 +1,6 @@
 import { YEAR_FILTER } from "../constants/filters";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import { parseToDate } from "./dateUtils";
+import { getYear, parseToDate } from "./dateUtils";
 import type { StoreFlightFilters } from "../store";
 
 export type FacetKey = "airline" | "departureAirport" | "arrivalAirport";
@@ -22,7 +22,7 @@ export const filterByDate = (
     if (!date) return false;
     if (when === YEAR_FILTER.UPCOMING && date < today) return false;
     if (when === YEAR_FILTER.PAST && date >= today) return false;
-    const year = date.getFullYear();
+    const year = getYear(flight.departure_date) ?? date.getFullYear();
     if (fromYear !== null && year < fromYear) return false;
     return toYear === null || year <= toYear;
   });

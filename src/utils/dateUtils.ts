@@ -54,7 +54,8 @@ export function formatDate(
     // If no format specified, return the locale's default date string. Read in
     // UTC for the same reason formatCalendarDate is: everything this app
     // formats is a calendar date, not a genuine instant.
-    if (!format) return d.toLocaleDateString(effectiveLocale, { timeZone: "UTC" });
+    if (!format)
+      return d.toLocaleDateString(effectiveLocale, { timeZone: "UTC" });
 
     return formatCalendarDate(d, format, effectiveLocale);
   } catch {
@@ -146,11 +147,13 @@ export function parseToDate(value: unknown): Date | null {
 }
 
 /**
- * Return the full year (e.g., 2024) for a date-like value, or null if unparsable
+ * Return the year (e.g., 2024) of the calendar day a date-like value names,
+ * or null if unparsable. Read like toCalendarDay, so a 1 January flight
+ * stays in its year west of UTC.
  */
 export function getYear(value: DateLike): number | null {
-  const d = parseToDate(value);
-  return d ? d.getFullYear() : null;
+  const day = toCalendarDay(value);
+  return day ? Number(day.slice(0, 4)) : null;
 }
 
 /**

@@ -1,6 +1,13 @@
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, userEvent, waitFor } from "../../test-utils/index.js";
+import {
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from "../../test-utils/index.js";
 import FlightFilters from "./FlightFilters";
 import useFlightStore from "../store";
 import { DEFAULT_FILTERS } from "../utils/activeFilters";
@@ -135,6 +142,39 @@ describe("FlightFilters", () => {
       screen.getByRole("button", { name: "Show 3 flights" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Clear all" })).toBeDisabled();
+  });
+
+  it("closes when the sheet's header is swiped down", async () => {
+    const dialog = await openPanel();
+    const header = within(dialog).getByRole("heading", {
+      name: "Filter flights",
+    }).parentElement;
+    // The scroll lock also listens to touches, and reads both lists.
+    const swipe = (from, to) => {
+      const at = (clientY) => [{ clientX: 0, clientY }];
+      fireEvent.touchStart(header, {
+        touches: at(from),
+        changedTouches: at(from),
+      });
+      fireEvent.touchEnd(header, { touches: [], changedTouches: at(to) });
+    };
+
+    swipe(100, 120);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    swipe(100, 200);
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  });
+
+  it("names both ends of the flight length slider", async () => {
+    await openPanel();
+
+    expect(
+      screen.getByRole("slider", { name: "Shortest flight, in hours" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("slider", { name: "Longest flight, in hours" }),
+    ).toBeInTheDocument();
   });
 
   it("says on the button how many filters are on", () => {
