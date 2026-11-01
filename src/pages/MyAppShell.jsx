@@ -29,6 +29,7 @@ import ErrorBoundary from "../components/ErrorBoundary.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import AccountMenu from "../components/AccountMenu";
 import AppFooter from "../components/AppFooter";
+import FlightFilters from "../components/FlightFilters.tsx";
 import useFlightStore from "../store.ts";
 import classes from "./MyAppShell.module.css";
 
@@ -45,6 +46,9 @@ const PAGES = [
   { to: PATHS.TIMELINE, key: "timeline", icon: IconCalendar },
   { to: PATHS.BADGES, key: "badges", icon: IconAward },
 ];
+
+// Pages whose flights the header's filter button narrows down.
+const FILTER_PAGES = [PATHS.STATS, PATHS.ALL_STATS, PATHS.FLIGHTS];
 
 // App layout: header, bottom tab bar on phones, the add-flight form, and the
 // routed page.
@@ -64,6 +68,7 @@ function MyAppShell() {
     getInitialValueInEffect: false,
   });
   const showTabs = Boolean(user) && isPhone;
+  const showFilter = Boolean(user) && FILTER_PAGES.includes(location.pathname);
 
   const openAddFlight = () => setAddFlightOpened(true);
   const closeAddFlight = () => setAddFlightOpened(false);
@@ -110,6 +115,7 @@ function MyAppShell() {
             )}
 
             <Group ml="auto" gap={10} wrap="nowrap">
+              {showFilter && <FlightFilters isPhone={isPhone} />}
               {user && !isPhone && (
                 <Button
                   radius="xl"

@@ -81,7 +81,7 @@ describe("FlightsStats", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the dashboard content, including the filter button, when flights exist", async () => {
+  it("renders the dashboard content when flights exist", async () => {
     const flights = [
       {
         id: "1",
@@ -130,8 +130,5 @@ describe("FlightsStats", () => {
     expect(screen.getByTestId("boarding-pass")).toBeInTheDocument();
     expect(screen.getAllByTestId("flight-card")).toHaveLength(2);
     expect(screen.getAllByTestId("flights-by-chart")).toHaveLength(2);
-    expect(
-      screen.getByRole("button", { name: /Filter Flights/i }),
-    ).toBeInTheDocument();
   });
 });

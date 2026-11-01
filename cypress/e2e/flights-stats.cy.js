@@ -47,8 +47,26 @@ describe("StatsSummary Component", () => {
     cy.get('[data-cy="countries-visited-value"]').should("be.visible");
     cy.get('[data-cy="countries-visited-label"]').should("be.visible");
 
-    // Prefer robust selectors if available, but keep visible text for feature sections as backup
-    cy.contains(/filter flights/i).should("be.visible");
+    // The header's filter button opens the panel. A filter shows as a tag on
+    // the boarding pass, and the dot moves into the button's label. Scroll
+    // back up first, because the header hides on the way down.
+    cy.scrollTo(0, 0);
+    cy.get('[data-cy="filter-button"]').should("be.visible").click();
+    cy.get('[role="dialog"]').contains("label", "Upcoming").click();
+    cy.get('[role="dialog"]')
+      .contains("button", /^Show \d+ flights?$/)
+      .click();
+    cy.get('[role="dialog"]').should("not.exist");
+    cy.get('[aria-label="Remove filter: Upcoming"]').should("be.visible");
+    cy.get('[data-cy="filter-button"]').should(
+      "have.attr",
+      "aria-label",
+      "Filter flights, 1 filter on",
+    );
+    cy.get('[role="group"][aria-label="Active filters"]')
+      .contains("button", "Clear all")
+      .click();
+    cy.get('[aria-label="Remove filter: Upcoming"]').should("not.exist");
 
     // A second test can't log in again: the Firebase session survives, so
     // /login redirects straight to /stats. Check the All stats page here.

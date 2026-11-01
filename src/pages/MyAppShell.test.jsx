@@ -60,6 +60,20 @@ describe("MyAppShell on a phone", () => {
     ).toHaveTextContent("AL");
   });
 
+  it("shows the filter button only on pages that filter", () => {
+    renderAt("/stats");
+    expect(
+      screen.getByRole("button", { name: "Filter flights" }),
+    ).toBeInTheDocument();
+  });
+
+  it("hides the filter button on pages that don't filter", () => {
+    renderAt("/tour");
+    expect(
+      screen.queryByRole("button", { name: /filter flights/i }),
+    ).toBeNull();
+  });
+
   it("opens the add-flight form from the floating button", async () => {
     renderAt("/stats");
     await userEvent.click(screen.getByRole("button", { name: "Add flight" }));

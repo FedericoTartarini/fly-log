@@ -15,6 +15,29 @@
   font-family: var(--mantine-font-family-monospace);
 }
 
+/* The filters that are on, as dark removable tags under the red band. */
+.tags {
+  grid-column: 1 / -1;
+  padding: 12px 20px;
+  background: var(--fl-subtle);
+  border-bottom: 1px solid var(--fl-divider);
+}
+
+/* Mantine sets the label's line height from --pill-height, so a plain
+ * height would leave the text at the top. */
+.tag {
+  --pill-height: 36px;
+  padding-inline: 14px 6px;
+  background: var(--fl-ink);
+  color: var(--fl-surface);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tagRemove {
+  color: inherit;
+}
+
 .main {
   padding: 18px 20px 20px;
   display: flex;
