@@ -135,7 +135,10 @@
     "view_flights": "Visualizza voli",
     "shortest_flight": "Volo più corto",
     "longest_flight": "Volo più lungo",
-    "view_tour": "Visualizza le tue rotte"
+    "view_tour": "Visualizza le tue rotte",
+    "page_title": "Le tue statistiche",
+    "open_map": "Apri la mappa intera",
+    "map_title": "Le tue rotte"
   },
   "form": {
     "labels": {
@@ -222,7 +225,14 @@
     "distance_by": "Chilometri percorsi per {{period}}",
     "co2_by": "CO₂e emessa per {{period}}",
     "no_aircraft_data": "Nessun dato sul modello dell'aeromobile. Controlla lo stato del volo per ottenere i dettagli dell'aereo.",
-    "aircraft_subset": "Basato su {{known}} di {{total}} voli. L'aereo viene aggiunto quando controlli lo stato di un volo."
+    "aircraft_subset": "Basato su {{known}} di {{total}} voli. L'aereo viene aggiunto quando controlli lo stato di un volo.",
+    "show_more": "Mostra altri",
+    "show_fewer": "Mostra meno",
+    "group_by": "Raggruppa per",
+    "measure": "Misura",
+    "busiest_day": "Il {{day}} è il tuo giorno più intenso, con {{value}}.",
+    "busiest_day_flights_one": "Il {{day}} è il tuo giorno più intenso, con {{count}} volo.",
+    "busiest_day_flights_other": "Il {{day}} è il tuo giorno più intenso, con {{count}} voli."
   },
   "time": {
     "day_of_week": "Giorno della settimana",
@@ -405,5 +415,29 @@
     "keep_mine": "Mantieni i miei",
     "source": "Verificato una volta con AeroDataBox perché il volo è entro una settimana.",
     "apply_failed": "Impossibile aggiornare il volo. Riprova."
+  },
+  "pass": {
+    "label": "Totali e prossimo volo",
+    "distance_since": "Distanza percorsa dal {{year}}",
+    "distance": "Distanza percorsa",
+    "around_earth_one": "Una volta intorno alla Terra",
+    "around_earth_other": "{{count}} volte intorno alla Terra",
+    "part_of_earth": "{{value}}% del giro della Terra",
+    "days": "{{value}} g",
+    "hours": "{{value}} h",
+    "flights": "Voli",
+    "in_the_air": "In volo",
+    "countries": "Paesi",
+    "airports": "Aeroporti",
+    "airlines": "Compagnie",
+    "next_flight_zero": "Prossimo volo, oggi",
+    "next_flight_one": "Prossimo volo, domani",
+    "next_flight_other": "Prossimo volo, tra {{count}} giorni",
+    "last_flight_one": "Ultimo volo, ieri",
+    "last_flight_other": "Ultimo volo, {{count}} giorni fa",
+    "route": "Da {{from}} a {{to}}",
+    "date": "Data",
+    "departs": "Partenza",
+    "flight": "Volo"
   }
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Avatar,
   Badge,
   Card,
   Group,
@@ -61,9 +62,25 @@ const FlightCard: React.FC<FlightCardProps> = ({
           <Group justify="space-between">
             {title && <Title order={4}>{title}</Title>}
             {showAirline && flight.airline_name && (
-              <Text size="sm" c="dimmed">
-                {flight.airline_name}
-              </Text>
+              <Group gap="xs" wrap="nowrap">
+                <Text size="sm" c="dimmed">
+                  {flight.airline_name}
+                </Text>
+                {/* Same logo as the flights list. */}
+                <Avatar
+                  src={
+                    flight.airline_icon_path
+                      ? `/logos/${flight.airline_icon_path}`
+                      : undefined
+                  }
+                  alt=""
+                  color="gray"
+                  radius="xl"
+                  size="sm"
+                >
+                  {flight.airline_iata}
+                </Avatar>
+              </Group>
             )}
           </Group>
         )}

@@ -216,20 +216,12 @@ export const getMonthMatrixStats = (matrix) => {
 };
 
 // Abbreviate a bar value: 12000 -> "12K", 1500 -> "1.5K" ("1,5K" in Italian).
-// Bars are short, and the unit lives in the card title rather than on each bar.
+// The unit lives in the card title rather than on each bar.
 export const formatCompactValue = (value, locale) =>
   new Intl.NumberFormat(locale || (i18n && i18n.language) || "en-AU", {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(value);
-
-// Rough width of one character at fontSize 12, used only to decide whether a
-// bar's value label fits inside it. Being a few pixels out is harmless: the
-// label moves outside the bar instead, which is still readable.
-const CHAR_WIDTH = 7;
-
-export const labelFitsInsideBar = (barWidth, text) =>
-  barWidth > text.length * CHAR_WIDTH + 12;
 
 // Unit shown after a formatted value. Flight counts have none.
 const METRIC_UNITS = {

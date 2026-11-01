@@ -1,0 +1,41 @@
+/* One grid for every row, so all bars start at the same x. The label column
+ * is as wide as the longest label up to 9rem; longer labels wrap. */
+.bars {
+  display: grid;
+  grid-template-columns: fit-content(9rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.row {
+  display: contents;
+}
+
+.label {
+  font-size: 14px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.track {
+  height: 20px;
+  border-radius: 4px;
+  background: var(--fl-subtle);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--fl-ink);
+}
+
+.fill[data-top] {
+  background: var(--fl-accent);
+}
+
+.value {
+  text-align: right;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 14px;
+}
