@@ -94,4 +94,15 @@ describe("AllStats", () => {
     expect(screen.getByText("100")).toBeInTheDocument(); // CO₂e of one flight
     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(raf);
   });
+
+  it("unmounts cleanly when scrollTo returns a promise, as in Chrome", () => {
+    const scrollTo = vi
+      .spyOn(window, "scrollTo")
+      .mockReturnValue(Promise.resolve());
+    const { unmount } = render(<AllStats />, {
+      wrapper: makeRouterWrapper(),
+    });
+    expect(() => unmount()).not.toThrow();
+    scrollTo.mockRestore();
+  });
 });

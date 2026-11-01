@@ -36,8 +36,54 @@
 }
 
 .fill {
+  position: relative;
   height: 100%;
   background: var(--fl-accent);
+  transform-origin: left;
+  animation: grow 500ms ease-out both;
+}
+
+/* A full bar that fills once and fades, for the laps already completed. */
+.sweep {
+  position: absolute;
+  inset: 0;
+  background: var(--fl-accent);
+  transform-origin: left;
+  animation: sweep 900ms ease-in-out forwards;
+}
+
+.afterSweep {
+  animation-delay: 900ms;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes sweep {
+  from {
+    transform: scaleX(0);
+  }
+  70% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep {
+    display: none;
+  }
+
+  .fill {
+    animation: none;
+  }
 }
 
 /* On its own surface chip, so it stays readable once the red fill reaches it. */

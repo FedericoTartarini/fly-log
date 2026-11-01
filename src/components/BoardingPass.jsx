@@ -180,6 +180,10 @@ function BoardingPass() {
             to={PATHS.ALL_STATS}
             variant="default"
             size="md"
+            // An empty left section as wide as the chevron keeps the label
+            // centred.
+            justify="space-between"
+            leftSection={<span style={{ width: 18 }} />}
             rightSection={<IconChevronRight size={18} aria-hidden />}
             classNames={{
               root: classes.allStats,
