@@ -38,9 +38,13 @@
   background: var(--fl-accent);
 }
 
+/* On its own surface chip, so it stays readable once the red fill reaches it. */
 .times {
   position: absolute;
-  inset: 0 14px 0 auto;
+  inset: 6px 6px 6px auto;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--fl-surface);
   display: flex;
   align-items: center;
   font-family: var(--mantine-font-family-monospace);

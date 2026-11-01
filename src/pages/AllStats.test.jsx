@@ -69,4 +69,29 @@ describe("AllStats", () => {
       }),
     ).toHaveAttribute("aria-valuenow", "60");
   });
+
+  it("counts up once, then shows filter changes at once", () => {
+    window.matchMedia.mockImplementation(() => ({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+    // Each animation frame lands after the count-up has finished.
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((step) => {
+      step(performance.now() + 5000);
+      return 1;
+    });
+    const { rerender } = render(<AllStats />, {
+      wrapper: makeRouterWrapper(),
+    });
+    expect(screen.getByText("1,334")).toBeInTheDocument();
+
+    const raf = window.requestAnimationFrame.mock.calls.length;
+    useFlightStore.mockImplementation((selector) =>
+      selector({ filteredFlights: [flights[1]], isLoading: false }),
+    );
+    rerender(<AllStats />);
+    expect(screen.getByText("100")).toBeInTheDocument(); // CO₂e of one flight
+    expect(window.requestAnimationFrame).toHaveBeenCalledTimes(raf);
+  });
 });
