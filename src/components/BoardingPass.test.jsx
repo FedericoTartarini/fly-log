@@ -10,6 +10,7 @@ import { makeRouterWrapper } from "../../test-utils/wrappers.jsx";
 import BoardingPass from "./BoardingPass.jsx";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
 import useFlightStore from "../store.ts";
+import { DEFAULT_FILTERS } from "../utils/activeFilters.ts";
 
 const NOW = new Date(2026, 10, 1, 15, 0); // 1 Nov 2026, 3 pm local
 
@@ -65,7 +66,11 @@ describe("BoardingPass", () => {
       }),
     ];
     useFlightStore.mockImplementation((selector) =>
-      selector({ filteredFlights: flights, allFlights: flights }),
+      selector({
+        filteredFlights: flights,
+        allFlights: flights,
+        filters: DEFAULT_FILTERS,
+      }),
     );
 
     render(<BoardingPass />, { wrapper: makeRouterWrapper() });

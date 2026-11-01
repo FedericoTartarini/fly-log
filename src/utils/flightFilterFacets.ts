@@ -5,33 +5,26 @@ import type { StoreFlightFilters } from "../store";
 
 export type FacetKey = "airline" | "departureAirport" | "arrivalAirport";
 
-// Apply the selected year preset to a flight collection.
-const filterByYearSelection = (
+// Keep flights that match When (all, past or upcoming) and the year range.
+export const filterByDate = (
   flights: enhancedFlight[],
-  selectedYear: string,
+  { when, fromYear, toYear }: StoreFlightFilters,
 ): enhancedFlight[] => {
-  if (!selectedYear || selectedYear === YEAR_FILTER.ALL) return flights;
+  if (when === YEAR_FILTER.ALL && fromYear === null && toYear === null) {
+    return flights;
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (selectedYear === YEAR_FILTER.UPCOMING) {
-    return flights.filter((flight) => {
-      const date = parseToDate(flight.departure_date);
-      return date !== null && date >= today;
-    });
-  }
-
-  if (selectedYear === YEAR_FILTER.PAST) {
-    return flights.filter((flight) => {
-      const date = parseToDate(flight.departure_date);
-      return date !== null && date < today;
-    });
-  }
-
   return flights.filter((flight) => {
-    const year = getYear(flight.departure_date);
-    return year !== null && String(year) === selectedYear;
+    const date = parseToDate(flight.departure_date);
+    if (!date) return false;
+    if (when === YEAR_FILTER.UPCOMING && date < today) return false;
+    if (when === YEAR_FILTER.PAST && date >= today) return false;
+    const year = getYear(flight.departure_date) ?? date.getFullYear();
+    if (fromYear !== null && year < fromYear) return false;
+    return toYear === null || year <= toYear;
   });
 };
 
@@ -62,13 +55,14 @@ const filterByDuration = (
   });
 };
 
+// Apply every filter except `excludedFacet`, so a facet's options list what
+// the other filters still allow. With no facet excluded, this is the filter.
 export const filterFlightsForFacetOptions = (
   flights: enhancedFlight[],
-  selectedYear: string,
   filters: StoreFlightFilters,
-  excludedFacet: FacetKey,
+  excludedFacet?: FacetKey,
 ): enhancedFlight[] => {
-  let filtered = filterByYearSelection(flights, selectedYear);
+  let filtered = filterByDate(flights, filters);
   filtered = filterByDuration(filtered, filters);
 
   if (excludedFacet !== "airline" && filters.airline) {

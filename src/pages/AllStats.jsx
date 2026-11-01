@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Affix,
   Anchor,
-  Button,
   Container,
-  Modal,
   Paper,
   SimpleGrid,
   Stack,
@@ -34,7 +31,6 @@ import useFlightStore from "../store.ts";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { DISTANCE_TO_MOON, EARTH_CIRCUMFERENCE } from "../constants/distances";
 import { IDS, PATHS } from "../constants/MyClasses.ts";
-import FlightFilters from "../components/FlightFilters.tsx";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 import classes from "./AllStats.module.css";
 
@@ -143,7 +139,6 @@ const AllStats = () => {
   const stats = useFlightStats(filteredFlights);
   const progress = useCountUp(!isLoading);
   const { t, i18n } = useTranslation("flights");
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // The router keeps the Stats page's scroll position, which would open this
   // page partway down. Braces matter: Chrome's scrollTo returns a promise,
@@ -274,29 +269,6 @@ const AllStats = () => {
           </Stack>
         </Paper>
       </Stack>
-
-      {/* Same floating filter button as the Stats page, until #119 moves it
-          into the header. */}
-      <Affix
-        position={{
-          bottom: "calc(var(--app-shell-footer-offset, 0px) + 16px)",
-          left: 16,
-        }}
-      >
-        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
-          {t("filters.title")}
-        </Button>
-      </Affix>
-
-      <Modal
-        opened={filtersOpen}
-        onClose={() => setFiltersOpen(false)}
-        title={t("filters.title")}
-        size="lg"
-        overlayProps={{ blur: 3 }}
-      >
-        <FlightFilters />
-      </Modal>
     </Container>
   );
 };

@@ -15,6 +15,7 @@ import {
 import { getAirportCity } from "../utils/airportUtils";
 import { barcodePattern } from "../utils/barcode.ts";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
+import FilterTags from "./FilterTags.jsx";
 import classes from "./BoardingPass.module.css";
 
 // `as="dl"` for a field that stands alone, outside a list of fields.
@@ -119,6 +120,7 @@ function BoardingPass() {
 
   return (
     <section aria-label={t("pass.label")} className={classes.pass}>
+      <FilterTags />
       <div className={classes.main}>
         <div>
           <Text

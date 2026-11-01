@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { subscribeToUserFlights } from "./utils/flightService";
 import { onAuthStateChanged } from "./firebaseClient";
 import type { Unsubscribe } from "firebase/auth";
-import { getYear, parseToDate } from "./utils/dateUtils";
 import {
   CHART_GROUPING,
   CHART_METRIC,
@@ -12,7 +11,10 @@ import {
   type ChartGrouping,
   type ChartMetric,
   type TimeGrouping,
+  type YearFilterPreset,
 } from "./constants/filters";
+import { filterFlightsForFacetOptions } from "./utils/flightFilterFacets";
+import { DEFAULT_FILTERS } from "./utils/activeFilters";
 import type { enhancedFlight } from "./types/enhancedFlight";
 
 // Current auth subscription + user id used for fetching flights.
@@ -37,6 +39,10 @@ export const clearAuthListener = () => {
 };
 
 export interface StoreFlightFilters {
+  when: YearFilterPreset;
+  // Null means no bound, so the range runs to the first or last flight.
+  fromYear: number | null;
+  toYear: number | null;
   airline: string | null;
   departureAirport: string | null;
   arrivalAirport: string | null;
@@ -47,14 +53,12 @@ export interface StoreFlightFilters {
 export interface FlightStoreState {
   allFlights: enhancedFlight[]; // master list from backend
   filteredFlights: enhancedFlight[]; // UI-facing filtered subset
-  selectedYear: string;
   timeGrouping: TimeGrouping;
   chartGrouping: ChartGrouping;
   chartMetric: ChartMetric;
   filters: StoreFlightFilters;
   isLoading: boolean;
   error: string | null;
-  setSelectedYear: (year: string) => Promise<void>;
   setTimeGrouping: (grouping: TimeGrouping) => void;
   setChartGrouping: (grouping: ChartGrouping) => void;
   setChartMetric: (metric: ChartMetric) => void;
@@ -64,74 +68,6 @@ export interface FlightStoreState {
   addFlightOpened: boolean;
   setAddFlightOpened: (opened: boolean) => void;
 }
-
-// Reduce flights based on the selected year preset or explicit year.
-const filterByYear = (flights: enhancedFlight[], year: string) => {
-  if (!year || year === YEAR_FILTER.ALL) return flights;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  if (year === YEAR_FILTER.UPCOMING) {
-    return flights.filter((f) => {
-      const dt = parseToDate(f.departure_date);
-      return dt !== null && dt >= today;
-    });
-  }
-
-  if (year === YEAR_FILTER.PAST) {
-    return flights.filter((f) => {
-      const dt = parseToDate(f.departure_date);
-      return dt !== null && dt < today;
-    });
-  }
-
-  // Numeric year
-  return flights.filter((f) => {
-    const y = getYear(f.departure_date);
-    return y !== null && String(y) === year;
-  });
-};
-
-// Apply year + facet filters to produce the UI-facing subset.
-const applyFilters = (
-  flights: enhancedFlight[],
-  year: string,
-  filters: StoreFlightFilters,
-) => {
-  let result = filterByYear(flights, year);
-
-  if (filters.airline) {
-    result = result.filter(
-      (f) =>
-        f.airline_iata === filters.airline ||
-        f.airline_name === filters.airline,
-    );
-  }
-  if (filters.departureAirport) {
-    result = result.filter(
-      (f) => f.departure_airport_iata === filters.departureAirport,
-    );
-  }
-  if (filters.arrivalAirport) {
-    result = result.filter(
-      (f) => f.arrival_airport_iata === filters.arrivalAirport,
-    );
-  }
-  if (filters.minDuration !== null || filters.maxDuration !== null) {
-    result = result.filter((f) => {
-      if (typeof f.flight_time !== "number") return false;
-      if (filters.minDuration !== null && f.flight_time < filters.minDuration) {
-        return false;
-      }
-      return !(
-        filters.maxDuration !== null && f.flight_time > filters.maxDuration
-      );
-    });
-  }
-
-  return result;
-};
 
 // Attach a live listener for the user's flights. The first callback comes
 // straight from Firestore's persistent cache, so a returning visitor sees their
@@ -159,51 +95,29 @@ const startFlightsListener = () => {
     (allFlights) => {
       useFlightStore.setState((state) => ({
         allFlights,
-        filteredFlights: applyFilters(
+        filteredFlights: filterFlightsForFacetOptions(
           allFlights,
-          state.selectedYear,
           state.filters,
         ),
         isLoading: false,
       }));
     },
-    (error) => useFlightStore.setState({ error: error.message, isLoading: false }),
+    (error) =>
+      useFlightStore.setState({ error: error.message, isLoading: false }),
   );
 };
 
-const useFlightStore = create<FlightStoreState>((set, get) => ({
+const useFlightStore = create<FlightStoreState>((set) => ({
   allFlights: [],
   filteredFlights: [],
-  selectedYear: YEAR_FILTER.ALL,
   timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
   chartMetric: CHART_METRIC.FLIGHTS,
   chartGrouping: CHART_GROUPING.COUNTRY,
-  filters: {
-    airline: null,
-    departureAirport: null,
-    arrivalAirport: null,
-    minDuration: null,
-    maxDuration: null,
-  },
+  filters: DEFAULT_FILTERS,
   isLoading: true,
   error: null,
   addFlightOpened: false,
   setAddFlightOpened: (opened: boolean) => set({ addFlightOpened: opened }),
-
-  // Update the year filter and recompute the filtered list in memory.
-  setSelectedYear: async (year: string) => {
-    // Update selectedYear synchronously without toggling a loading state
-    set({ selectedYear: year, error: null });
-    try {
-      const allFlights = get().allFlights;
-      const filteredFlights = applyFilters(allFlights, year, get().filters);
-      // Apply filtered results synchronously; no loading flash for in-memory work
-      set({ filteredFlights, isLoading: false });
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : String(error);
-      set({ error: message, isLoading: false });
-    }
-  },
 
   setChartMetric: (metric: ChartMetric) => {
     set({ chartMetric: metric });
@@ -223,9 +137,8 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
       const nextFilters = { ...state.filters, ...filters };
       return {
         filters: nextFilters,
-        filteredFlights: applyFilters(
+        filteredFlights: filterFlightsForFacetOptions(
           state.allFlights,
-          state.selectedYear,
           nextFilters,
         ),
       };
@@ -234,25 +147,11 @@ const useFlightStore = create<FlightStoreState>((set, get) => ({
 
   // Clear filters and recompute filteredFlights.
   clearFilters: () => {
-    set((state) => {
-      const cleared: StoreFlightFilters = {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      };
-      return {
-        filters: cleared,
-        filteredFlights: applyFilters(
-          state.allFlights,
-          state.selectedYear,
-          cleared,
-        ),
-      };
-    });
+    set((state) => ({
+      filters: DEFAULT_FILTERS,
+      filteredFlights: state.allFlights,
+    }));
   },
-
 }));
 
 export default useFlightStore;
@@ -270,17 +169,10 @@ authUnsubscribe = onAuthStateChanged((user) => {
       filteredFlights: [],
       isLoading: false,
       error: null,
-      selectedYear: YEAR_FILTER.ALL,
       timeGrouping: TIME_GROUPING.DAY_OF_WEEK,
       chartMetric: CHART_METRIC.FLIGHTS,
       chartGrouping: CHART_GROUPING.COUNTRY,
-      filters: {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      },
+      filters: DEFAULT_FILTERS,
     });
   }
 });
