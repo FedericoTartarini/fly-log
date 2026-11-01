@@ -3,12 +3,9 @@
 describe("Login Failure Scenario", () => {
   // Use a regular function so we can call `this.skip()` when env vars are missing.
   beforeEach(function () {
-    const email = Cypress.env("CY_WRONG_EMAIL");
-    const password = Cypress.env("CY_WRONG_PASSWORD");
-
     // Pull requests from forks don't get the repo's secrets, so there is no
     // account to log in with. The full suite runs again after merging.
-    if (!email || !password) {
+    if (!Cypress.expose("HAS_WRONG_ACCOUNT")) {
       this.skip();
       return;
     }
@@ -28,12 +25,14 @@ describe("Login Failure Scenario", () => {
 
       cy.visit("/login");
       cy.wait(1000);
-      cy.get('[data-cy="login-email"]').type(email, {
-        log: false,
-      });
-      cy.get('[data-cy="login-password"]').should("be.visible").type(password, {
-        log: false,
-      });
+      cy.env(["CY_WRONG_EMAIL", "CY_WRONG_PASSWORD"]).then(
+        ({ CY_WRONG_EMAIL: email, CY_WRONG_PASSWORD: password }) => {
+          cy.get('[data-cy="login-email"]').type(email, { log: false });
+          cy.get('[data-cy="login-password"]')
+            .should("be.visible")
+            .type(password, { log: false });
+        },
+      );
       cy.get('[data-cy="login-submit"]').should("not.be.disabled").click();
     });
   });
