@@ -47,7 +47,11 @@ const useCountUp = (ready, duration = 900) => {
   const [progress, setProgress] = useState(() => (reducedMotion() ? 1 : 0));
 
   useEffect(() => {
-    if (!ready || reducedMotion()) return;
+    if (!ready) return;
+    if (reducedMotion()) {
+      setProgress(1);
+      return;
+    }
     const start = performance.now();
     let frame;
     const step = (now) => {
@@ -133,6 +137,10 @@ const AllStats = () => {
   const progress = useCountUp(!isLoading);
   const { t, i18n } = useTranslation("flights");
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // The router keeps the Stats page's scroll position, which would open this
+  // page partway down.
+  useEffect(() => window.scrollTo(0, 0), []);
 
   if (isLoading) {
     return <PageSkeleton />;

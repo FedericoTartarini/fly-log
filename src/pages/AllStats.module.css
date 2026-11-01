@@ -10,8 +10,10 @@
   gap: 4px;
 }
 
+/* A long number drops under its icon rather than overflowing a narrow card. */
 .value {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }

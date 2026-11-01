@@ -181,7 +181,10 @@ function BoardingPass() {
             variant="default"
             size="md"
             rightSection={<IconChevronRight size={18} aria-hidden />}
-            className={classes.allStats}
+            classNames={{
+              root: classes.allStats,
+              label: classes.allStatsLabel,
+            }}
             data-cy={IDS.STATS.ALL_STATS_LINK}
           >
             {t("pass.see_all")}
