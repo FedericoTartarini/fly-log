@@ -1,22 +1,22 @@
-import React, { lazy, Suspense, useState, useEffect, useMemo } from "react";
+import React, { lazy, Suspense, useState, useMemo } from "react";
 const WorldMap = lazy(() => import("../components/WorldMap.jsx"));
 const FlightsByChart = lazy(() => import("../components/FlightsByChart.jsx"));
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 import {
-  Stack,
-  Grid,
-  Paper,
+  ActionIcon,
   Container,
   Skeleton,
   Text,
   Modal,
   Button,
   Affix,
+  VisuallyHidden,
 } from "@mantine/core";
-import StatsSummary from "../components/StatsSummary.jsx";
+import { useHeadroom } from "@mantine/hooks";
+import { IconMaximize } from "@tabler/icons-react";
 import useFlightStore from "../store.ts";
 import FlightCard from "../components/FlightCard.tsx";
-import DistanceStatsCard from "../components/DistanceStatsCard.js";
+import BoardingPass from "../components/BoardingPass.jsx";
 import BadgeStrip from "../components/BadgeStrip.jsx";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
@@ -24,11 +24,10 @@ import { useTranslation } from "react-i18next";
 import FlightFilters from "../components/FlightFilters.tsx";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 import { useShallow } from "zustand/react/shallow";
-import { motion, useReducedMotion } from "framer-motion";
-const MotionDiv = motion.div;
-import { IconChevronsUp } from "@tabler/icons-react";
+import classes from "./FlightsStats.module.css";
 
-// Stats dashboard with map, summaries, and charts.
+// Stats dashboard: the map, with the boarding pass, records, badges and charts
+// sliding up over it.
 const FlightsStats = () => {
   const {
     filteredFlights,
@@ -61,18 +60,10 @@ const FlightsStats = () => {
   const { t } = useTranslation("flights");
 
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [animateChevron, setAnimateChevron] = useState(true);
-  const shouldReduceMotion = useReducedMotion();
-
-  // Stop the chevron animation after 15 seconds to avoid distraction
-  useEffect(() => {
-    if (shouldReduceMotion) {
-      setAnimateChevron(false);
-      return;
-    }
-    const id = setTimeout(() => setAnimateChevron(false), 15000);
-    return () => clearTimeout(id);
-  }, [shouldReduceMotion]);
+  const [mapOpen, setMapOpen] = useState(false);
+  // Same settings as the app shell's header, so the map moves up exactly
+  // when the header hides.
+  const headerPinned = useHeadroom({ fixedAt: 120 });
 
   if (isLoading) {
     return <PageSkeleton />;
@@ -97,16 +88,59 @@ const FlightsStats = () => {
   }
 
   return (
-    <>
-      <div style={{ position: "sticky", top: 0, zIndex: 0 }}>
-        <Suspense fallback={<Skeleton height="60vh" radius={0} />}>
-          <WorldMap />
+    <div className={classes.page}>
+      <VisuallyHidden component="h1">{t("stats.page_title")}</VisuallyHidden>
+
+      <div
+        className={classes.map}
+        style={{ top: headerPinned ? "var(--app-shell-header-height)" : 0 }}
+      >
+        <Suspense fallback={<Skeleton height="100%" radius={0} />}>
+          <WorldMap height="100%" />
         </Suspense>
+        <ActionIcon
+          variant="default"
+          size={44}
+          className={classes.mapButton}
+          aria-label={t("stats.open_map")}
+          onClick={() => setMapOpen(true)}
+        >
+          <IconMaximize size={20} aria-hidden />
+        </ActionIcon>
       </div>
 
-      {/* Sticky filter button (Affix) that opens a modal with full filters.
-          Sits above the phone tab bar, whose height AppShell exposes as
-          --app-shell-footer-offset (0px when the bar is hidden). */}
+      <div className={classes.sheet}>
+        <div aria-hidden className={classes.handle} />
+
+        <BoardingPass />
+
+        <div className={classes.columns}>
+          <div className={classes.records}>
+            <FlightCard
+              flight={stats.longestFlight}
+              title={t("stats.longest_flight")}
+            />
+            <FlightCard
+              flight={stats.shortestFlight}
+              title={t("stats.shortest_flight")}
+            />
+          </div>
+          <BadgeStrip />
+        </div>
+
+        <div className={classes.columns}>
+          <Suspense fallback={<Skeleton height={320} radius="md" />}>
+            <FlightsByChart data={timeChartData} />
+          </Suspense>
+          <Suspense fallback={<Skeleton height={320} radius="md" />}>
+            <FlightsByChart filteredFlights={filteredFlights} />
+          </Suspense>
+        </div>
+      </div>
+
+      {/* Floating filter button, above the phone tab bar, whose height
+          AppShell exposes as --app-shell-footer-offset (0px when the bar is
+          hidden). #119 moves it into the header. */}
       <Affix
         position={{
           bottom: "calc(var(--app-shell-footer-offset, 0px) + 16px)",
@@ -128,88 +162,17 @@ const FlightsStats = () => {
         <FlightFilters />
       </Modal>
 
-      {/* This Stack will scroll over the map */}
-      <Paper radius="lg" pt="xs" style={{ position: "relative", zIndex: 1 }}>
-        {/* Small animated chevron to indicate draggable content */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <MotionDiv
-            initial={{ y: -2 }}
-            animate={
-              animateChevron && !shouldReduceMotion
-                ? { y: [0, -6, 0] }
-                : { y: -2 }
-            }
-            transition={
-              animateChevron && !shouldReduceMotion
-                ? { repeat: Infinity, duration: 1.5 }
-                : { duration: 0 }
-            }
-            aria-hidden
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <IconChevronsUp
-              size={20}
-              stroke={2}
-              style={{ color: "var(--mantine-color-dimmed, #868e96)" }}
-            />
-          </MotionDiv>
-        </div>
-        <Stack
-          bg="var(--fl-page)"
-          gap="md"
-          px="md"
-          style={{ position: "relative", zIndex: 1 }}
-        >
-          <StatsSummary />
-
-          <BadgeStrip />
-
-          <Grid>
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <FlightCard
-                flight={stats.shortestFlight}
-                title={t("stats.shortest_flight")}
-              />
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 6 }}>
-              <FlightCard
-                flight={stats.longestFlight}
-                title={t("stats.longest_flight")}
-              />
-            </Grid.Col>
-          </Grid>
-
-          <Suspense
-            fallback={
-              <Skeleton height={(timeChartData.length + 1) * 28} radius="md" />
-            }
-          >
-            <FlightsByChart
-              data={timeChartData}
-              height={(timeChartData.length + 1) * 28}
-            />
-          </Suspense>
-
-          <Suspense fallback={<Skeleton height={160} radius="md" />}>
-            <FlightsByChart filteredFlights={filteredFlights} />
-          </Suspense>
-
-          <DistanceStatsCard
-            totalDistance={stats.totalDistance}
-            totalFlights={filteredFlights.length}
-          />
-        </Stack>
-      </Paper>
-    </>
+      <Modal
+        opened={mapOpen}
+        onClose={() => setMapOpen(false)}
+        title={t("stats.map_title")}
+        fullScreen
+      >
+        <Suspense fallback={<Skeleton height="80dvh" radius={0} />}>
+          <WorldMap height="calc(100dvh - 80px)" />
+        </Suspense>
+      </Modal>
+    </div>
   );
 };
 

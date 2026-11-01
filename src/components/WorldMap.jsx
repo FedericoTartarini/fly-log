@@ -178,7 +178,7 @@ const FitMapToBounds = ({ bounds }) => {
 };
 
 // Leaflet map rendering flight paths and markers.
-const WorldMap = () => {
+const WorldMap = ({ height = "60vh" }) => {
   const filteredFlights = useFlightStore((s) => s.filteredFlights);
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
@@ -224,7 +224,7 @@ const WorldMap = () => {
       zoom={2}
       minZoom={2}
       style={{
-        height: "60vh",
+        height,
         width: "100%",
         // Leaflet's default container background (#ddd) shows through tiles
         // that failed or haven't loaded yet, which looks like light grey

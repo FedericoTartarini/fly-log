@@ -1,13 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Title,
   Stack,
   Card,
   SegmentedControl,
-  ScrollArea,
   Text,
+  Button,
 } from "@mantine/core";
-import { BarChart } from "@mantine/charts";
 import {
   getDeparturesByCountry,
   getFlightsByAirline,
@@ -15,7 +14,7 @@ import {
   getFlightsByAircraft,
   getFlightsByAirport,
   formatCompactValue,
-  labelFitsInsideBar,
+  formatMetricValue,
 } from "../utils/chartUtils.js";
 import { useTranslation } from "react-i18next";
 import {
@@ -25,6 +24,7 @@ import {
 } from "../constants/filters.ts";
 import useFlightStore from "../store.ts";
 import { useShallow } from "zustand/react/shallow";
+import classes from "./FlightsByChart.module.css";
 
 const CHART_GROUPING_CONFIG = {
   [CHART_GROUPING.COUNTRY]: {
@@ -53,55 +53,9 @@ const CHART_GROUPING_CONFIG = {
   },
 };
 
-// Recharts passes each label its bar's geometry, which lets a value that would
-// not fit inside a short bar sit just outside its right-hand end instead.
-const makeBarValueLabel = (locale) =>
-  function BarValueLabel({ x, y, width, height, value }) {
-    if (!value) return null;
-    const text = formatCompactValue(value, locale);
-    const fitsInside = labelFitsInsideBar(width, text);
-    return (
-      <text
-        x={fitsInside ? x + width - 8 : x + width + 6}
-        y={y + height / 2}
-        textAnchor={fitsInside ? "end" : "start"}
-        dominantBaseline="central"
-        fontSize={12}
-        fill={fitsInside ? "white" : "var(--mantine-color-dimmed)"}
-      >
-        {text}
-      </text>
-    );
-  };
-
-// Aircraft names are long ("Airbus A320 NEO"), so the maker goes on its own
-// line above the model rather than widening the axis, which phones can't spare.
-const AircraftTick = ({ x, y, payload }) => {
-  const [maker, ...model] = String(payload.value).split(" ");
-  const lines = model.length ? [maker, model.join(" ")] : [maker];
-  return (
-    // Same offset and colour as Mantine's own ticks.
-    <text
-      x={x}
-      y={y}
-      transform="translate(-10, 0)"
-      textAnchor="end"
-      dominantBaseline="central"
-      fontSize={12}
-      fill="currentColor"
-    >
-      {lines.map((line, i) => (
-        <tspan
-          key={line}
-          x={x}
-          dy={i === 0 ? `${(1 - lines.length) * 0.6}em` : "1.2em"}
-        >
-          {line}
-        </tspan>
-      ))}
-    </text>
-  );
-};
+// Rows shown before "Show more". Enough to cover a week, so the day chart
+// never needs the button.
+const ROWS_SHOWN = 8;
 
 // Card heading per metric: "Flights by X", "Kilometres flown by X", ...
 const TITLE_KEYS = {
@@ -110,7 +64,58 @@ const TITLE_KEYS = {
   [CHART_METRIC.CO2]: "charts.co2_by",
 };
 
-const FlightsByChart = ({ filteredFlights, data, height }) => {
+// Monday-first, like the day-of-week data.
+const longWeekday = (index, locale) =>
+  new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" }).format(
+    new Date(Date.UTC(1970, 0, 5 + index)),
+  );
+
+/**
+ * Horizontal bars as plain HTML: the highest bar is red, the rest ink. Long
+ * labels wrap rather than being clipped, and the list grows the card instead
+ * of scrolling inside it.
+ */
+const Bars = ({ rows, labelKey, valueKey }) => {
+  const { t, i18n } = useTranslation("flights");
+  const [expanded, setExpanded] = useState(false);
+  const max = Math.max(0, ...rows.map((r) => r[valueKey]));
+  const shown = expanded ? rows : rows.slice(0, ROWS_SHOWN);
+
+  return (
+    <Stack gap="xs">
+      <div className={classes.bars}>
+        {shown.map((row) => (
+          <div key={row[labelKey]} className={classes.row}>
+            <span className={classes.label}>{row[labelKey]}</span>
+            <span className={classes.track}>
+              <span
+                className={classes.fill}
+                data-top={max > 0 && row[valueKey] === max ? "" : undefined}
+                style={{
+                  width: `${max > 0 ? (row[valueKey] / max) * 100 : 0}%`,
+                }}
+              />
+            </span>
+            <span className={classes.value}>
+              {formatCompactValue(row[valueKey], i18n.language)}
+            </span>
+          </div>
+        ))}
+      </div>
+      {rows.length > ROWS_SHOWN && (
+        <Button
+          variant="default"
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+        >
+          {expanded ? t("charts.show_fewer") : t("charts.show_more")}
+        </Button>
+      )}
+    </Stack>
+  );
+};
+
+const FlightsByChart = ({ filteredFlights, data }) => {
   const {
     timeGrouping,
     setTimeGrouping,
@@ -133,8 +138,11 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
   // Both cards share one metric, so the toggle renders identically in each.
   const metricControl = (
     <SegmentedControl
+      size="xs"
+      fullWidth
       value={metric}
       onChange={setMetric}
+      aria-label={t("charts.measure")}
       data={[
         { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
         { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
@@ -142,7 +150,6 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
       ]}
     />
   );
-  const valueLabelProps = { content: makeBarValueLabel(i18n.language) };
 
   const currentGroupingConfig =
     CHART_GROUPING_CONFIG[grouping] ||
@@ -165,42 +172,33 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
     [isAircraft, filteredFlights],
   );
 
-  // If data is provided, it's the old time-based chart
+  // If data is provided, it's the time-based chart
   if (data) {
-    const timeChartData = data;
-    const commonTimeBarProps = {
-      h: height || (timeChartData.length + 1) * 28,
-      data: timeChartData,
-      dataKey: "period",
-      orientation: "vertical",
-      yAxisProps: {
-        width: 60,
-      },
-      withXAxis: false,
-      gridAxis: "none",
-      barProps: { radius: 8, barSize: 23 },
-      series: [{ name: "flights", color: "primary.4" }],
-      withTooltip: false,
-      withBarValueLabel: true,
-      valueLabelProps,
-    };
+    const isDays = timeGrouping === TIME_GROUPING.DAY_OF_WEEK;
+    const busiest = data.reduce(
+      (best, row, i) =>
+        row.flights > (best?.row.flights ?? 0) ? { row, i } : best,
+      null,
+    );
 
     return (
-      <Card shadow="sm" radius="md" withBorder>
-        <Stack mb="md">
-          <Title order={3}>
+      <Card shadow="sm" radius="md" withBorder h="100%">
+        <Stack gap="sm">
+          <Title order={2} fz={17}>
             {t(TITLE_KEYS[metric] ?? TITLE_KEYS[CHART_METRIC.FLIGHTS], {
-              period:
-                timeGrouping === TIME_GROUPING.DAY_OF_WEEK
-                  ? t("time.day_of_week")
-                  : timeGrouping === TIME_GROUPING.YEAR
-                    ? t("time.year")
-                    : t("time.month"),
+              period: isDays
+                ? t("time.day_of_week")
+                : timeGrouping === TIME_GROUPING.YEAR
+                  ? t("time.year")
+                  : t("time.month"),
             })}
           </Title>
           <SegmentedControl
+            size="xs"
+            fullWidth
             value={timeGrouping}
             onChange={setTimeGrouping}
+            aria-label={t("charts.group_by")}
             data={[
               {
                 label: t("time.day_of_week"),
@@ -211,30 +209,46 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
             ]}
           />
           {metricControl}
+          <Bars
+            key={timeGrouping}
+            rows={data}
+            labelKey="period"
+            valueKey="flights"
+          />
+          {isDays && busiest && (
+            <Text size="sm" c="var(--fl-muted)">
+              {t("charts.busiest_day", {
+                day: longWeekday(busiest.i, i18n.language),
+                value: formatMetricValue(
+                  busiest.row.flights,
+                  metric,
+                  i18n.language,
+                ),
+                count: busiest.row.flights,
+                context:
+                  metric === CHART_METRIC.FLIGHTS ? "flights" : undefined,
+              })}
+            </Text>
+          )}
         </Stack>
-        {timeGrouping === TIME_GROUPING.YEAR && (
-          <ScrollArea h={370} scrollbars="y" offsetScrollbars>
-            <BarChart {...commonTimeBarProps} />
-          </ScrollArea>
-        )}
-        {timeGrouping !== TIME_GROUPING.YEAR && (
-          <BarChart {...commonTimeBarProps} />
-        )}
       </Card>
     );
   }
 
   return (
-    <Card shadow="sm" radius="md" withBorder>
-      <Stack mb="md">
-        <Title order={3}>
+    <Card shadow="sm" radius="md" withBorder h="100%">
+      <Stack gap="sm">
+        <Title order={2} fz={17}>
           {t(TITLE_KEYS[metric] ?? TITLE_KEYS[CHART_METRIC.FLIGHTS], {
             period: t(currentGroupingConfig.tLabel),
           })}
         </Title>
         <SegmentedControl
+          size="xs"
+          fullWidth
           value={grouping}
           onChange={setGrouping}
+          aria-label={t("charts.group_by")}
           data={[
             { label: t("group.country"), value: CHART_GROUPING.COUNTRY },
             { label: t("group.airline"), value: CHART_GROUPING.AIRLINE },
@@ -243,47 +257,29 @@ const FlightsByChart = ({ filteredFlights, data, height }) => {
           ]}
         />
         {metricControl}
-      </Stack>
-      <ScrollArea h={370} scrollbars="y" type="always" offsetScrollbars>
         {isAircraft && chartData.length === 0 ? (
           <Text size="sm" c="dimmed">
             {t("charts.no_aircraft_data")}
           </Text>
         ) : (
-          <BarChart
-            h={(chartData.length + 1) * 28}
-            data={chartData}
-            withBarValueLabel
-            valueLabelProps={valueLabelProps}
-            dataKey={currentGroupingConfig.dataKey}
-            orientation="vertical"
-            yAxisProps={{
-              width: 100,
-              ...(isAircraft && { tick: AircraftTick }),
-            }}
-            withXAxis={false}
-            gridAxis="none"
-            barProps={{ radius: 8, barSize: 23 }}
-            series={[
-              {
-                name: currentGroupingConfig.seriesName,
-                color: "primary.4",
-              },
-            ]}
-            withTooltip={false}
+          <Bars
+            key={grouping}
+            rows={chartData}
+            labelKey={currentGroupingConfig.dataKey}
+            valueKey={currentGroupingConfig.seriesName}
           />
         )}
-      </ScrollArea>
-      {isAircraft &&
-        aircraftKnown > 0 &&
-        aircraftKnown < filteredFlights.length && (
-          <Text size="xs" c="dimmed" mt="xs">
-            {t("charts.aircraft_subset", {
-              known: aircraftKnown,
-              total: filteredFlights.length,
-            })}
-          </Text>
-        )}
+        {isAircraft &&
+          aircraftKnown > 0 &&
+          aircraftKnown < filteredFlights.length && (
+            <Text size="xs" c="dimmed">
+              {t("charts.aircraft_subset", {
+                known: aircraftKnown,
+                total: filteredFlights.length,
+              })}
+            </Text>
+          )}
+      </Stack>
     </Card>
   );
 };

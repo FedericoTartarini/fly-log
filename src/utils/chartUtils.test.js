@@ -8,7 +8,6 @@ import {
   getMonthMatrixStats,
   formatMetricValue,
   formatCompactValue,
-  labelFitsInsideBar,
 } from "./chartUtils";
 import { capitalize } from "./stringUtils";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
@@ -308,12 +307,6 @@ describe("the distance metric", () => {
     expect(formatCompactValue(1500, "en-AU")).toBe("1.5K");
     expect(formatCompactValue(12000, "en-AU")).toBe("12K");
     expect(formatCompactValue(1500, "it")).toBe("1,5K");
-  });
-
-  it("keeps a bar label inside only when the bar is wide enough for it", () => {
-    // A 200px bar swallows "12K"; a 20px one does not, so the label moves out.
-    expect(labelFitsInsideBar(200, "12K")).toBe(true);
-    expect(labelFitsInsideBar(20, "12K")).toBe(false);
   });
 
   it("sums the co2_kg set at enrichment time", () => {
