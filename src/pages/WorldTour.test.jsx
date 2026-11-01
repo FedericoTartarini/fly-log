@@ -101,7 +101,6 @@ describe("WorldTour", () => {
     useFlightStore.setState({
       allFlights: [],
       filteredFlights: [],
-      selectedYear: "all",
       filters: {
         airline: null,
         departureAirport: null,

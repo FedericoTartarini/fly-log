@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, userEvent, waitFor } from "../../test-utils/index.js";
 import FlightFilters from "./FlightFilters";
 import useFlightStore from "../store";
+import { DEFAULT_FILTERS } from "../utils/activeFilters";
 
 vi.mock("../utils/referenceData", async () => {
   const actual = await vi.importActual("../utils/referenceData");
@@ -109,66 +110,85 @@ const sampleFlights = [
   },
 ];
 
-describe("FlightFilters", () => {
-  beforeEach(() => {
-    // reset store
-    useFlightStore.setState({
-      allFlights: sampleFlights,
-      filteredFlights: sampleFlights,
-      selectedYear: "all",
-      filters: {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      },
-    });
+const setStore = (filters = {}, flights = sampleFlights) =>
+  useFlightStore.setState({
+    allFlights: flights,
+    filteredFlights: flights,
+    filters: { ...DEFAULT_FILTERS, ...filters },
   });
 
-  it("shows Clear button disabled initially and clears filters when clicked", async () => {
-    render(<FlightFilters />);
+const openPanel = async () => {
+  render(<FlightFilters isPhone />);
+  await userEvent.click(
+    screen.getByRole("button", { name: /^Filter flights/ }),
+  );
+  return screen.findByRole("dialog");
+};
 
-    const clearButton = screen.getByTestId("filters-clear");
-    expect(clearButton).toBeInTheDocument();
-    expect(clearButton).toBeDisabled();
+describe("FlightFilters", () => {
+  beforeEach(() => setStore());
 
-    // Set filters programmatically to simulate user selecting something
-    await waitFor(() => {
-      useFlightStore.getState().setFilters({ airline: "AA", minDuration: 1 });
-    });
+  it("opens the panel with the live count of flights", async () => {
+    await openPanel();
 
-    // Wait for the UI to reflect the enabled button
-    await waitFor(() =>
-      expect(screen.getByTestId("filters-clear")).toBeEnabled(),
-    );
+    expect(
+      screen.getByRole("button", { name: "Show 3 flights" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Clear all" })).toBeDisabled();
+  });
 
-    // Click clear and assert store is reset
-    await userEvent.click(screen.getByTestId("filters-clear"));
+  it("says on the button how many filters are on", () => {
+    setStore({ airline: "AA", minDuration: 1 });
+    render(<FlightFilters isPhone={false} />);
 
-    await waitFor(() => {
-      const state = useFlightStore.getState();
-      expect(state.filters.airline).toBeNull();
-      expect(state.filters.minDuration).toBeNull();
-      expect(state.filteredFlights.length).toBe(sampleFlights.length);
-    });
+    expect(
+      screen.getByRole("button", { name: "Filter flights, 2 filters on" }),
+    ).toBeInTheDocument();
+  });
+
+  it("clears every filter with Clear all", async () => {
+    setStore({ when: "past", airline: "AA", minDuration: 1 });
+    await openPanel();
+
+    await userEvent.click(screen.getByRole("button", { name: "Clear all" }));
+
+    const state = useFlightStore.getState();
+    expect(state.filters).toEqual(DEFAULT_FILTERS);
+    expect(state.filteredFlights).toHaveLength(sampleFlights.length);
+  });
+
+  it("locks both year fields when every flight is in one year", async () => {
+    await openPanel();
+
+    expect(
+      screen.getByText("All 3 of your flights are in 2025."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "From year" })).toBeDisabled();
+    expect(screen.getByRole("textbox", { name: "To year" })).toBeDisabled();
+  });
+
+  it("offers the years of the chosen When", async () => {
+    setStore({}, [
+      ...sampleFlights,
+      { ...sampleFlights[0], id: "f4", departure_date: "2023-06-01" },
+    ]);
+    await openPanel();
+
+    expect(
+      screen.getByText("Your flights run from 2023 to 2025."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "From year" })).toBeEnabled();
+
+    await userEvent.click(screen.getByRole("radio", { name: "Upcoming" }));
+    expect(
+      screen.getByText("You have no upcoming flights."),
+    ).toBeInTheDocument();
   });
 
   it("auto-clears invalid arrival when other active filters make it impossible", async () => {
-    useFlightStore.setState({
-      allFlights: sampleFlights,
-      filteredFlights: sampleFlights,
-      selectedYear: "all",
-      filters: {
-        airline: "AZ",
-        departureAirport: "BLQ",
-        arrivalAirport: "LHR",
-        minDuration: null,
-        maxDuration: null,
-      },
-    });
+    setStore({ airline: "AZ", departureAirport: "BLQ", arrivalAirport: "LHR" });
 
-    render(<FlightFilters />);
+    render(<FlightFilters isPhone />);
 
     await waitFor(() => {
       const state = useFlightStore.getState();

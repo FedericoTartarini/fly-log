@@ -8,8 +8,6 @@ import {
   Skeleton,
   Text,
   Modal,
-  Button,
-  Affix,
   VisuallyHidden,
 } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
@@ -21,7 +19,6 @@ import BadgeStrip from "../components/BadgeStrip.jsx";
 import { getFlightsByTimeGrouping } from "../utils/chartUtils.js";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { useTranslation } from "react-i18next";
-import FlightFilters from "../components/FlightFilters.tsx";
 import PageSkeleton from "../components/PageSkeleton.jsx";
 import { useShallow } from "zustand/react/shallow";
 import classes from "./FlightsStats.module.css";
@@ -59,7 +56,6 @@ const FlightsStats = () => {
 
   const { t } = useTranslation("flights");
 
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   // Same settings as the app shell's header, so the map moves up exactly
   // when the header hides.
@@ -137,30 +133,6 @@ const FlightsStats = () => {
           </Suspense>
         </div>
       </div>
-
-      {/* Floating filter button, above the phone tab bar, whose height
-          AppShell exposes as --app-shell-footer-offset (0px when the bar is
-          hidden). #119 moves it into the header. */}
-      <Affix
-        position={{
-          bottom: "calc(var(--app-shell-footer-offset, 0px) + 16px)",
-          left: 16,
-        }}
-      >
-        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
-          {t("filters.title")}
-        </Button>
-      </Affix>
-
-      <Modal
-        opened={filtersOpen}
-        onClose={() => setFiltersOpen(false)}
-        title={t("filters.title")}
-        size="lg"
-        overlayProps={{ blur: 3 }}
-      >
-        <FlightFilters />
-      </Modal>
 
       <Modal
         opened={mapOpen}

@@ -180,6 +180,14 @@ const FitMapToBounds = ({ bounds }) => {
 // Leaflet map rendering flight paths and markers.
 const WorldMap = ({ height = "60vh" }) => {
   const filteredFlights = useFlightStore((s) => s.filteredFlights);
+  const allFlights = useFlightStore((s) => s.allFlights);
+  // With a filter on, every route still shows, but only the matching ones in
+  // strong colour.
+  const filtering = filteredFlights.length < allFlights.length;
+  const matching = useMemo(
+    () => new Set(filteredFlights.map((flight) => flight.id)),
+    [filteredFlights],
+  );
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
@@ -248,7 +256,9 @@ const WorldMap = ({ height = "60vh" }) => {
         className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
       />
 
-      {filteredFlights.filter(isValidFlight).map((flight) => {
+      {allFlights.filter(isValidFlight).map((flight) => {
+        const faded = filtering && !matching.has(flight.id);
+        const opacity = faded ? 0.15 : 1;
         const greatCirclePath = getGreatCirclePath(
           flight.departure_coordinates,
           flight.arrival_coordinates,
@@ -277,7 +287,8 @@ const WorldMap = ({ height = "60vh" }) => {
                     key={`line-${i}-${offset}`}
                     positions={shiftCoords(segment, offset)}
                     color={flightColor}
-                    weight={1}
+                    weight={filtering && !faded ? 2 : 1}
+                    opacity={opacity}
                   />
                 ))}
 
@@ -290,7 +301,8 @@ const WorldMap = ({ height = "60vh" }) => {
                   radius={3}
                   color={flightColor}
                   fillColor={flightColor}
-                  fillOpacity={1}
+                  opacity={opacity}
+                  fillOpacity={opacity}
                 />
 
                 {/* Render Markers (Arrival) */}
@@ -302,7 +314,8 @@ const WorldMap = ({ height = "60vh" }) => {
                   radius={3}
                   color={flightColor}
                   fillColor={flightColor}
-                  fillOpacity={1}
+                  opacity={opacity}
+                  fillOpacity={opacity}
                 />
               </React.Fragment>
             ))}

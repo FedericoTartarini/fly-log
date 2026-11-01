@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { filterFlightsForFacetOptions } from "./flightFilterFacets";
+import { DEFAULT_FILTERS } from "./activeFilters";
 
 const flights = [
   {
@@ -71,8 +72,8 @@ describe("filterFlightsForFacetOptions", () => {
   it("updates airline facet based on selected departure airport", () => {
     const out = filterFlightsForFacetOptions(
       flights,
-      "all",
       {
+        ...DEFAULT_FILTERS,
         airline: null,
         departureAirport: "BLQ",
         arrivalAirport: null,
@@ -88,8 +89,8 @@ describe("filterFlightsForFacetOptions", () => {
   it("updates arrival facet based on selected departure and airline", () => {
     const out = filterFlightsForFacetOptions(
       flights,
-      "all",
       {
+        ...DEFAULT_FILTERS,
         airline: "BA",
         departureAirport: "BLQ",
         arrivalAirport: null,
@@ -106,8 +107,8 @@ describe("filterFlightsForFacetOptions", () => {
   it("applies duration constraints when computing facet options", () => {
     const out = filterFlightsForFacetOptions(
       flights,
-      "all",
       {
+        ...DEFAULT_FILTERS,
         airline: null,
         departureAirport: "BLQ",
         arrivalAirport: null,

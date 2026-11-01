@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { filterFlightsForFacetOptions } from "./flightFilterFacets";
 import { YEAR_FILTER } from "../constants/filters";
+import { DEFAULT_FILTERS } from "./activeFilters";
 
 const getISODateOffset = (days: number) => {
   const date = new Date();
@@ -49,14 +50,7 @@ describe("filterFlightsForFacetOptions year presets", () => {
   it("filters for upcoming flights", () => {
     const out = filterFlightsForFacetOptions(
       flights,
-      YEAR_FILTER.UPCOMING,
-      {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      },
+      { ...DEFAULT_FILTERS, when: YEAR_FILTER.UPCOMING },
       "airline",
     );
 
@@ -67,18 +61,23 @@ describe("filterFlightsForFacetOptions year presets", () => {
   it("filters for past flights", () => {
     const out = filterFlightsForFacetOptions(
       flights,
-      YEAR_FILTER.PAST,
-      {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      },
+      { ...DEFAULT_FILTERS, when: YEAR_FILTER.PAST },
       "airline",
     );
 
     expect(out).toHaveLength(1);
     expect(out[0]?.id).toBe("2");
+  });
+
+  it("keeps flights inside the year range", () => {
+    const year = new Date().getFullYear();
+    const all = filterFlightsForFacetOptions(flights, DEFAULT_FILTERS);
+    const none = filterFlightsForFacetOptions(flights, {
+      ...DEFAULT_FILTERS,
+      fromYear: year + 2,
+    });
+
+    expect(all).toHaveLength(2);
+    expect(none).toHaveLength(0);
   });
 });
