@@ -12,12 +12,11 @@ reviews:
   profile: "chill"
   high_level_summary: false
   collapse_walkthrough: true
+  # Only reviews when someone comments "@coderabbitai review": automatic
+  # reviews of many small PRs used up the quota. Claude Haiku reviews every PR
+  # instead (.github/workflows/claude-review.yml).
   auto_review:
-    enabled: true
-    drafts: false
-    # The default branch (development) is always reviewed; this adds release PRs.
-    base_branches:
-      - "main"
+    enabled: false
   path_filters:
     - "!**/node_modules/**"
     - "!dist/**"
