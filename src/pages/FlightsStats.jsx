@@ -104,13 +104,16 @@ const FlightsStats = () => {
         </Suspense>
       </div>
 
-      {/* Sticky filter button (Affix) that opens a modal with full filters. */}
-      <Affix position={{ bottom: 16, left: 16 }}>
-        <Button
-          radius="xl"
-          size="sm"
-          onClick={() => setFiltersOpen(true)}
-        >
+      {/* Sticky filter button (Affix) that opens a modal with full filters.
+          Sits above the phone tab bar, whose height AppShell exposes as
+          --app-shell-footer-offset (0px when the bar is hidden). */}
+      <Affix
+        position={{
+          bottom: "calc(var(--app-shell-footer-offset, 0px) + 16px)",
+          left: 16,
+        }}
+      >
+        <Button radius="xl" size="sm" onClick={() => setFiltersOpen(true)}>
           {t("filters.title")}
         </Button>
       </Affix>
