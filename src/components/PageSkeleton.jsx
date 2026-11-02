@@ -1,39 +1,36 @@
-import { Grid, Paper, Skeleton, Stack } from "@mantine/core";
+import { Skeleton } from "@mantine/core";
+import classes from "../pages/FlightsStats.module.css";
 
-// Placeholder that mirrors the stats page layout: full-width map, the summary
-// grid, an action button, two flight cards and a chart. Every loading state in
-// the authenticated app renders this same shape in the same place, so nothing
-// jumps as auth resolves, the route chunk arrives, and the flights land.
+// Placeholder that mirrors the stats page: the map, then the sheet with the
+// boarding pass, the two record cards next to the badges, and the two charts.
+// It reuses the page's own classes, so the sizes and the two-column switch
+// match and nothing jumps when the real page arrives. Heights are the desktop
+// ones measured on the real page.
 const PageSkeleton = () => (
-  <>
-    <Skeleton height="60vh" radius={0} />
+  <div className={classes.page}>
+    <div className={classes.map}>
+      <Skeleton height="100%" radius={0} />
+    </div>
 
-    <Paper radius="lg" pt="md" style={{ position: "relative", zIndex: 1 }}>
-      <Stack gap="md" px="md">
-        <Grid>
-          {Array.from({ length: 9 }, (_, i) => (
-            <Grid.Col key={i} span={{ base: 6, xs: 4 }}>
-              <Skeleton height={26} mb={8} />
-              <Skeleton height={10} width="55%" />
-            </Grid.Col>
-          ))}
-        </Grid>
+    <div className={classes.sheet}>
+      <div aria-hidden className={classes.handle} />
 
-        <Skeleton height={36} radius="xl" />
+      <Skeleton height={334} radius="lg" />
 
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Skeleton height={140} radius="md" />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Skeleton height={140} radius="md" />
-          </Grid.Col>
-        </Grid>
+      <div className={classes.columns}>
+        <div className={classes.records}>
+          <Skeleton height={157} radius="md" />
+          <Skeleton height={157} radius="md" />
+        </div>
+        <Skeleton height={326} radius="md" />
+      </div>
 
-        <Skeleton height={160} radius="md" />
-      </Stack>
-    </Paper>
-  </>
+      <div className={classes.columns}>
+        <Skeleton height={430} radius="md" />
+        <Skeleton height={430} radius="md" />
+      </div>
+    </div>
+  </div>
 );
 
 export default PageSkeleton;
