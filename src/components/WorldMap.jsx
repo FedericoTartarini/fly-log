@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import {
+  AttributionControl,
   MapContainer,
   TileLayer,
   Polyline,
@@ -308,7 +309,11 @@ const WorldMap = ({ height = "60vh" }) => {
             : undefined,
       }}
       worldCopyJump={true} // Keep this for smooth navigation
+      attributionControl={false}
     >
+      {/* Top right, because at the bottom the Stats sheet slides over the
+          credit and leaves a stray white corner next to the expand button. */}
+      <AttributionControl position="topright" />
       <FitMapToBounds bounds={bounds} />
       <TileLayer
         key={computedColorScheme}
