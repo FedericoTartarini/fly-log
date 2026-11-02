@@ -230,7 +230,7 @@ const WorldMap = ({ height = "60vh" }) => {
     "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}";
 
   const attribution = isDark
-    ? "Tiles &copy; Esri"
+    ? "Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community"
     : "&copy; OpenStreetMap &copy; CARTO";
 
   // Helper to shift coordinates for ghost copies

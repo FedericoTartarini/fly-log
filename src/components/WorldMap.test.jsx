@@ -14,7 +14,7 @@ vi.mock("react-leaflet", () => ({
   },
   Polyline: () => null,
   CircleMarker: () => null,
-  Pane: ({ children }) => <div>{children}</div>,
+  Pane: ({ name, children }) => <div data-pane={name}>{children}</div>,
   AttributionControl: () => null,
   useMap: () => null,
 }));
@@ -47,7 +47,9 @@ describe("WorldMap tiles", () => {
     const [base, labels] = tileLayers;
     expect(base.url).toContain("World_Dark_Gray_Base");
     expect(base.keepBuffer).toBe(4);
-    expect(base.attribution).toBe("Tiles &copy; Esri");
+    expect(base.attribution).toBe(
+      "Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community",
+    );
     expect(labels.url).toContain("World_Dark_Gray_Reference");
     expect(labels.keepBuffer).toBe(4);
   });
@@ -60,5 +62,31 @@ describe("WorldMap tiles", () => {
     expect(tileLayers[0].url).toContain("basemaps.cartocdn.com");
     expect(tileLayers[0].url).toContain("light_all");
     expect(tileLayers[0].keepBuffer).toBe(4);
+  });
+
+  it("draws faded routes in their own pane only while a filter is on", () => {
+    const flight = {
+      id: 1,
+      departure_date: "2025-01-01",
+      departure_coordinates: [51.47, -0.45],
+      arrival_coordinates: [40.64, -73.78],
+    };
+    const other = { ...flight, id: 2 };
+
+    useFlightStore.mockImplementation((selector) =>
+      selector({ filteredFlights: [flight], allFlights: [flight, other] }),
+    );
+    const { unmount } = render(<WorldMap />);
+    expect(document.querySelector('[data-pane="faded-routes"]')).not.toBeNull();
+    unmount();
+
+    useFlightStore.mockImplementation((selector) =>
+      selector({
+        filteredFlights: [flight, other],
+        allFlights: [flight, other],
+      }),
+    );
+    render(<WorldMap />);
+    expect(document.querySelector('[data-pane="faded-routes"]')).toBeNull();
   });
 });
