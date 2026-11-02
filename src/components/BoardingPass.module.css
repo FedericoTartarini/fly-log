@@ -69,10 +69,21 @@
 
 /* Under the three fields on a phone, the sixth cell on the wide pass. */
 .allStats {
+  position: relative;
   grid-column: 1 / -1;
   height: auto;
   min-height: 44px;
   padding-block: 6px;
+  /* Equal sides, so the label centres. Mantine pads the right side for a
+     right section, which pushed the label left. */
+  padding-inline: 40px;
+}
+
+.allStatsChevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* The sixth cell is narrow just above 860 px, so the label may wrap there. */
