@@ -215,10 +215,9 @@ const WorldMap = ({ height = "60vh" }) => {
   // CARTO now requires a (free) API key on its raster tiles: https://carto.com/basemaps/apikey/
   // {r} + detectRetina below requests @2x tiles on HiDPI screens, which is where the free
   // rasters previously looked washed out/blurry.
-  // CARTO changed dark_all's ocean from neutral #262626 to blue-grey #2C353C,
-  // but browsers kept serving some old tiles from their HTTP cache, so the
-  // filtered map mixed grey and blue ocean squares (#70). Bump TILE_CACHE_BUST
-  // whenever CARTO restyles, so every browser refetches all tiles.
+  // Light mode only: CARTO changed light_all's colours at some point, but browsers
+  // kept serving old tiles from their HTTP cache. Bump TILE_CACHE_BUST
+  // whenever CARTO restyles light_all, so every browser refetches all tiles.
   // Dark mode uses Esri's Dark Gray Canvas (no key needed), which keeps the
   // ocean and land apart without a CSS filter. Its place names are a second
   // layer on top, so they stay readable.
