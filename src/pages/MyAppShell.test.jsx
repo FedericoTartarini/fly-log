@@ -53,6 +53,16 @@ describe("MyAppShell on a phone", () => {
     expect([...current].map((a) => a.textContent)).toEqual(["Flights"]);
   });
 
+  it("starts with a skip link to a focusable main area", () => {
+    renderAt("/stats");
+    const link = screen.getByRole("link", { name: "Skip to content" });
+    expect(link).toHaveAttribute("href", "#main-content");
+    expect(document.getElementById("main-content")).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+  });
+
   it("shows the first and last initials on the account button", () => {
     renderAt("/stats");
     expect(
