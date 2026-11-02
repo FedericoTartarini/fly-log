@@ -8,7 +8,8 @@
 .map {
   position: sticky;
   z-index: 0;
-  height: 230px;
+  /* 30% taller than 280px, but never more than half of a short screen. */
+  height: min(364px, 50dvh);
   transition: top 220ms ease;
 }
 
