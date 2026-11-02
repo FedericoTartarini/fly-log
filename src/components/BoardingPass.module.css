@@ -76,7 +76,7 @@
   padding-block: 6px;
   /* Equal sides, so the label centres. Mantine pads the right side for a
      right section, which pushed the label left. */
-  padding-inline: 22px;
+  padding-inline: 40px;
 }
 
 .allStatsChevron {
