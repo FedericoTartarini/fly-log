@@ -8,6 +8,7 @@ import {
   Pane,
   useMap,
 } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
@@ -193,6 +194,11 @@ const WorldMap = ({ height = "60vh" }) => {
     getInitialValueInEffect: true,
   });
 
+  // One canvas for all routes, padded a full screen on each side. Leaflet only
+  // draws what sits inside the padded area, so routes are already there while
+  // the map is dragged, instead of appearing when the mouse is released.
+  const renderer = useMemo(() => L.canvas({ padding: 1 }), []);
+
   // Use the new smart bounds logic
   const bounds = useMemo(
     () => getFlightsBounds(filteredFlights),
@@ -239,7 +245,7 @@ const WorldMap = ({ height = "60vh" }) => {
 
   // One flight's route and airports, drawn on each of the three world
   // copies.
-  const renderRoute = (flight, weight) => {
+  const renderRoute = (flight, weight, renderer) => {
     const greatCirclePath = getGreatCirclePath(
       flight.departure_coordinates,
       flight.arrival_coordinates,
@@ -269,6 +275,7 @@ const WorldMap = ({ height = "60vh" }) => {
                 positions={shiftCoords(segment, offset)}
                 color={flightColor}
                 weight={weight}
+                renderer={renderer}
               />
             ))}
 
@@ -282,6 +289,7 @@ const WorldMap = ({ height = "60vh" }) => {
               color={flightColor}
               fillColor={flightColor}
               fillOpacity={1}
+              renderer={renderer}
             />
 
             {/* Render Markers (Arrival) */}
@@ -294,6 +302,7 @@ const WorldMap = ({ height = "60vh" }) => {
               color={flightColor}
               fillColor={flightColor}
               fillOpacity={1}
+              renderer={renderer}
             />
           </React.Fragment>
         ))}
@@ -324,18 +333,23 @@ const WorldMap = ({ height = "60vh" }) => {
           credit and leaves a stray white corner next to the expand button. */}
       <AttributionControl position="topright" />
       <FitMapToBounds bounds={bounds} />
+      {/* keepBuffer keeps loaded tiles around the view (Leaflet's default is
+          2 rings), so panning back over an area shows it at once. */}
       <TileLayer
         key={computedColorScheme}
         url={tileUrl}
         attribution={attribution}
         detectRetina
+        keepBuffer={4}
       />
-      {isDark && <TileLayer url={labelsUrl} />}
+      {isDark && <TileLayer url={labelsUrl} keepBuffer={4} />}
 
       {/* With a filter on, the other routes sit underneath in their own pane.
           The pane is faded as a whole, so routes flown many times don't stack
           up into solid lines. */}
       {filtering && (
+        // No canvas renderer here: a canvas ignores the pane, so the
+        // pane's opacity would not fade these routes.
         <Pane name="faded-routes" style={{ zIndex: 390, opacity: 0.15 }}>
           {fadedFlights
             .filter(isValidFlight)
@@ -344,7 +358,7 @@ const WorldMap = ({ height = "60vh" }) => {
       )}
       {filteredFlights
         .filter(isValidFlight)
-        .map((flight) => renderRoute(flight, filtering ? 2 : 1))}
+        .map((flight) => renderRoute(flight, filtering ? 2 : 1, renderer))}
     </MapContainer>
   );
 };
