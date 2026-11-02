@@ -182,14 +182,13 @@ function BoardingPass() {
             to={PATHS.ALL_STATS}
             variant="default"
             size="md"
-            // An empty left section as wide as the chevron keeps the label
-            // centred.
-            justify="space-between"
-            leftSection={<span style={{ width: 18 }} />}
+            // The chevron is pinned to the edge, so the label centres on the
+            // whole button.
             rightSection={<IconChevronRight size={18} aria-hidden />}
             classNames={{
               root: classes.allStats,
               label: classes.allStatsLabel,
+              section: classes.allStatsChevron,
             }}
             data-cy={IDS.STATS.ALL_STATS_LINK}
           >
