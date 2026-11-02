@@ -35,6 +35,24 @@
   background: var(--fl-accent);
 }
 
+/* Off-screen until it takes keyboard focus, then it sits above the header. */
+.skipLink {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--fl-ink);
+  color: var(--mantine-color-body);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skipLink:focus {
+  transform: none;
+}
+
 .tabs {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

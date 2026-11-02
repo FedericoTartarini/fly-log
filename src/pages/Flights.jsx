@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Container, Title, Stack, Center, Loader } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import useFlightStore from "../store.ts";
+import FlightsListSkeleton from "../components/FlightsListSkeleton.jsx";
 
 const FlightsList = lazy(() => import("../components/FlightsList.tsx"));
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
@@ -12,20 +13,9 @@ function Flights() {
   const allFlights = useFlightStore((state) => state.allFlights);
   const isLoading = useFlightStore((state) => state.isLoading);
 
-  // If loading, show loading indicator.
+  // If loading, show the list-shaped skeleton.
   if (isLoading) {
-    return (
-      <Container mt="md">
-        <Stack gap="xl">
-          <Title order={2} ta="center">
-            {t("title")}
-          </Title>
-          <Center>
-            <Loader color="blue" aria-label={t("loading")} />
-          </Center>
-        </Stack>
-      </Container>
-    );
+    return <FlightsListSkeleton />;
   }
 
   // If there are no flights, show the shared top bar (empty state + add button).

@@ -80,6 +80,10 @@ function MyAppShell() {
       transitionDuration={220}
       transitionTimingFunction="ease"
     >
+      {/* First Tab stop. Hidden until focused, then jumps past the header and tab bar. */}
+      <a href="#main-content" className={classes.skipLink}>
+        {t("nav.skip_to_content")}
+      </a>
       <AppShell.Header zIndex={400}>
         <Container size="lg" h="100%" px="md">
           <Group h="100%" gap="sm" wrap="nowrap">
@@ -196,6 +200,7 @@ function MyAppShell() {
 
       <AppShell.Main
         id="main-content"
+        tabIndex={-1}
         pt={`calc(${rem(HEADER_HEIGHT)} + var(--mantine-spacing-md))`}
       >
         <Container size="lg" p={0}>
