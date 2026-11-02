@@ -9,7 +9,6 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./WorldMap.css";
 import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
@@ -214,10 +213,20 @@ const WorldMap = ({ height = "60vh" }) => {
   // but browsers kept serving some old tiles from their HTTP cache, so the
   // filtered map mixed grey and blue ocean squares (#70). Bump TILE_CACHE_BUST
   // whenever CARTO restyles, so every browser refetches all tiles.
+  // Dark mode uses Esri's Dark Gray Canvas (no key needed), which keeps the
+  // ocean and land apart without a CSS filter. Its place names are a second
+  // layer on top, so they stay readable.
   const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
-  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png?key=${cartoApiKey}&v=${TILE_CACHE_BUST}`;
+  const isDark = computedColorScheme === "dark";
+  const tileUrl = isDark
+    ? "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+    : `https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=${cartoApiKey}&v=${TILE_CACHE_BUST}`;
+  const labelsUrl =
+    "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}";
 
-  const attribution = "&copy; OpenStreetMap &copy; CARTO";
+  const attribution = isDark
+    ? "Tiles &copy; Esri"
+    : "&copy; OpenStreetMap &copy; CARTO";
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
@@ -320,11 +329,8 @@ const WorldMap = ({ height = "60vh" }) => {
         url={tileUrl}
         attribution={attribution}
         detectRetina
-        // CARTO's dark_all land (#0E0E0E) and ocean (#2C353C) are close in
-        // luminance; this filter widens that gap so water reads clearly
-        // against near-black land.
-        className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
       />
+      {isDark && <TileLayer url={labelsUrl} />}
 
       {/* With a filter on, the other routes sit underneath in their own pane.
           The pane is faded as a whole, so routes flown many times don't stack
