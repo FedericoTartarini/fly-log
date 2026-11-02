@@ -3,11 +3,12 @@ import { useAuth } from "../context/AuthContext";
 import { PATHS } from "../constants/MyClasses.ts";
 import PageSkeleton from "./PageSkeleton.jsx";
 
-const ProtectedRoute = ({ children }) => {
+// fallback lets a route show its own skeleton while auth resolves.
+const ProtectedRoute = ({ children, fallback = <PageSkeleton /> }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <PageSkeleton />;
+    return fallback;
   }
 
   if (!user) {

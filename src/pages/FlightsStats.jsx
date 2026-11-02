@@ -68,7 +68,7 @@ const FlightsStats = () => {
   if (error) {
     return (
       <Container size="lg" mt="md">
-        <Text c="red" size="lg" ta="center">
+        <Text c="red" size="lg" ta="center" role="alert">
           Error loading flight data: {error}
         </Text>
       </Container>
