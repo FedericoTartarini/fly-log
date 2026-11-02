@@ -8,7 +8,9 @@
 .map {
   position: sticky;
   z-index: 0;
-  height: 230px;
+  /* Was 230px. Capped at half the screen height so short phones keep room
+   * for the sheet. */
+  height: min(364px, 50dvh);
   transition: top 220ms ease;
 }
 
