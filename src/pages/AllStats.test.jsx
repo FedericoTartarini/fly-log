@@ -100,19 +100,24 @@ describe("AllStats", () => {
     useFlightStore.mockImplementation((selector) =>
       selector({ filteredFlights: [flights[1]], isLoading: false }),
     );
-    const { container, rerender } = render(<AllStats />, {
+    const { rerender } = render(<AllStats />, {
       wrapper: makeRouterWrapper(),
     });
-    const sweeps = () => container.querySelectorAll('[class*="sweep"]');
-    expect(sweeps()).toHaveLength(1);
+    // The Earth bar comes first in the page, then the Moon bar.
+    const hasSweep = (bar) => bar.querySelector('[class*="sweep"]') !== null;
+    const [earth, moon] = screen.getAllByRole("progressbar");
+    expect(hasSweep(earth)).toBe(true);
+    expect(hasSweep(moon)).toBe(false);
 
-    // Now a trip is complete too, but the bar already decided on first view.
+    // Now two trips are complete too, but the Moon bar decided on first view.
     useFlightStore.mockImplementation((selector) =>
       selector({ filteredFlights: flights, isLoading: false }),
     );
     rerender(<AllStats />);
     expect(screen.getByText("2×")).toBeInTheDocument();
-    expect(sweeps()).toHaveLength(1);
+    const [earthAfter, moonAfter] = screen.getAllByRole("progressbar");
+    expect(hasSweep(earthAfter)).toBe(true);
+    expect(hasSweep(moonAfter)).toBe(false);
   });
 
   it("unmounts cleanly when scrollTo returns a promise, as in Chrome", () => {
