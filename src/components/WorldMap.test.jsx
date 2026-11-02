@@ -47,9 +47,7 @@ describe("WorldMap tiles", () => {
     const [base, labels] = tileLayers;
     expect(base.url).toContain("World_Dark_Gray_Base");
     expect(base.keepBuffer).toBe(4);
-    expect(base.attribution).toBe(
-      "Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community",
-    );
+    expect(base.attribution).toBe("Esri | &copy; OpenStreetMap");
     expect(labels.url).toContain("World_Dark_Gray_Reference");
     expect(labels.keepBuffer).toBe(4);
   });
