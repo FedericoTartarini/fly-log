@@ -95,6 +95,31 @@ describe("AllStats", () => {
     expect(window.requestAnimationFrame).toHaveBeenCalledTimes(raf);
   });
 
+  it("sweeps only the bars that start with a completed lap or trip, once", () => {
+    // 102,000 km is 2 laps of the Earth but under one trip to the Moon.
+    useFlightStore.mockImplementation((selector) =>
+      selector({ filteredFlights: [flights[1]], isLoading: false }),
+    );
+    const { rerender } = render(<AllStats />, {
+      wrapper: makeRouterWrapper(),
+    });
+    // The Earth bar comes first in the page, then the Moon bar.
+    const hasSweep = (bar) => bar.querySelector('[class*="sweep"]') !== null;
+    const [earth, moon] = screen.getAllByRole("progressbar");
+    expect(hasSweep(earth)).toBe(true);
+    expect(hasSweep(moon)).toBe(false);
+
+    // Now two trips are complete too, but the Moon bar decided on first view.
+    useFlightStore.mockImplementation((selector) =>
+      selector({ filteredFlights: flights, isLoading: false }),
+    );
+    rerender(<AllStats />);
+    expect(screen.getByText("2×")).toBeInTheDocument();
+    const [earthAfter, moonAfter] = screen.getAllByRole("progressbar");
+    expect(hasSweep(earthAfter)).toBe(true);
+    expect(hasSweep(moonAfter)).toBe(false);
+  });
+
   it("unmounts cleanly when scrollTo returns a promise, as in Chrome", () => {
     const scrollTo = vi
       .spyOn(window, "scrollTo")
