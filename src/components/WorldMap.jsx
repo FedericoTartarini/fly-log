@@ -8,8 +8,8 @@ import {
   Pane,
   useMap,
 } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "./WorldMap.css";
 import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
@@ -194,6 +194,11 @@ const WorldMap = ({ height = "60vh" }) => {
     getInitialValueInEffect: true,
   });
 
+  // One canvas for all routes, padded a full screen on each side. Leaflet only
+  // draws what sits inside the padded area, so routes are already there while
+  // the map is dragged, instead of appearing when the mouse is released.
+  const renderer = useMemo(() => L.canvas({ padding: 1 }), []);
+
   // Use the new smart bounds logic
   const bounds = useMemo(
     () => getFlightsBounds(filteredFlights),
@@ -210,14 +215,23 @@ const WorldMap = ({ height = "60vh" }) => {
   // CARTO now requires a (free) API key on its raster tiles: https://carto.com/basemaps/apikey/
   // {r} + detectRetina below requests @2x tiles on HiDPI screens, which is where the free
   // rasters previously looked washed out/blurry.
-  // CARTO changed dark_all's ocean from neutral #262626 to blue-grey #2C353C,
-  // but browsers kept serving some old tiles from their HTTP cache, so the
-  // filtered map mixed grey and blue ocean squares (#70). Bump TILE_CACHE_BUST
-  // whenever CARTO restyles, so every browser refetches all tiles.
+  // Light mode only: CARTO changed light_all's colours at some point, but browsers
+  // kept serving old tiles from their HTTP cache. Bump TILE_CACHE_BUST
+  // whenever CARTO restyles light_all, so every browser refetches all tiles.
+  // Dark mode uses Esri's Dark Gray Canvas (no key needed), which keeps the
+  // ocean and land apart without a CSS filter. Its place names are a second
+  // layer on top, so they stay readable.
   const cartoApiKey = import.meta.env.VITE_CARTO_API_KEY;
-  const tileUrl = `https://basemaps.cartocdn.com/rastertiles/${computedColorScheme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png?key=${cartoApiKey}&v=${TILE_CACHE_BUST}`;
+  const isDark = computedColorScheme === "dark";
+  const tileUrl = isDark
+    ? "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+    : `https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=${cartoApiKey}&v=${TILE_CACHE_BUST}`;
+  const labelsUrl =
+    "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}";
 
-  const attribution = "&copy; OpenStreetMap &copy; CARTO";
+  const attribution = isDark
+    ? "Esri | &copy; OpenStreetMap"
+    : "&copy; OpenStreetMap &copy; CARTO";
 
   // Helper to shift coordinates for ghost copies
   const shiftCoords = (coords, offset) => {
@@ -230,7 +244,7 @@ const WorldMap = ({ height = "60vh" }) => {
 
   // One flight's route and airports, drawn on each of the three world
   // copies.
-  const renderRoute = (flight, weight) => {
+  const renderRoute = (flight, weight, renderer) => {
     const greatCirclePath = getGreatCirclePath(
       flight.departure_coordinates,
       flight.arrival_coordinates,
@@ -260,6 +274,7 @@ const WorldMap = ({ height = "60vh" }) => {
                 positions={shiftCoords(segment, offset)}
                 color={flightColor}
                 weight={weight}
+                renderer={renderer}
               />
             ))}
 
@@ -273,6 +288,7 @@ const WorldMap = ({ height = "60vh" }) => {
               color={flightColor}
               fillColor={flightColor}
               fillOpacity={1}
+              renderer={renderer}
             />
 
             {/* Render Markers (Arrival) */}
@@ -285,6 +301,7 @@ const WorldMap = ({ height = "60vh" }) => {
               color={flightColor}
               fillColor={flightColor}
               fillOpacity={1}
+              renderer={renderer}
             />
           </React.Fragment>
         ))}
@@ -315,21 +332,23 @@ const WorldMap = ({ height = "60vh" }) => {
           credit and leaves a stray white corner next to the expand button. */}
       <AttributionControl position="topright" />
       <FitMapToBounds bounds={bounds} />
+      {/* keepBuffer keeps loaded tiles around the view (Leaflet's default is
+          2 rings), so panning back over an area shows it at once. */}
       <TileLayer
         key={computedColorScheme}
         url={tileUrl}
         attribution={attribution}
         detectRetina
-        // CARTO's dark_all land (#0E0E0E) and ocean (#2C353C) are close in
-        // luminance; this filter widens that gap so water reads clearly
-        // against near-black land.
-        className={computedColorScheme === "dark" ? "map-tiles-dark" : ""}
+        keepBuffer={4}
       />
+      {isDark && <TileLayer url={labelsUrl} keepBuffer={4} />}
 
       {/* With a filter on, the other routes sit underneath in their own pane.
           The pane is faded as a whole, so routes flown many times don't stack
           up into solid lines. */}
       {filtering && (
+        // No canvas renderer here: a canvas ignores the pane, so the
+        // pane's opacity would not fade these routes.
         <Pane name="faded-routes" style={{ zIndex: 390, opacity: 0.15 }}>
           {fadedFlights
             .filter(isValidFlight)
@@ -338,7 +357,7 @@ const WorldMap = ({ height = "60vh" }) => {
       )}
       {filteredFlights
         .filter(isValidFlight)
-        .map((flight) => renderRoute(flight, filtering ? 2 : 1))}
+        .map((flight) => renderRoute(flight, filtering ? 2 : 1, renderer))}
     </MapContainer>
   );
 };
