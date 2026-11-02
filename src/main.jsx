@@ -35,6 +35,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import HomeIndex from "./components/HomeIndex.jsx";
 import MyAppShell from "./pages/MyAppShell.jsx";
 import PageSkeleton from "./components/PageSkeleton.jsx";
+import FlightsListSkeleton from "./components/FlightsListSkeleton.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 
@@ -77,8 +78,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.FLIGHTS,
         element: (
-          <ProtectedRoute>
-            <Flights />
+          <ProtectedRoute fallback={<FlightsListSkeleton />}>
+            <Suspense fallback={<FlightsListSkeleton />}>
+              <Flights />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
