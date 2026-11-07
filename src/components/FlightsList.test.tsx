@@ -13,7 +13,7 @@ vi.mock("../utils/airportUtils", () => ({
 }));
 
 import React from "react";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, within } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach, type Mock } from "vitest";
 import FlightsList from "./FlightsList";
 import { enrichFlightData } from "../utils/flightService";
@@ -39,143 +39,108 @@ type StoreShape = {
   filteredFlights: enhancedFlight[];
 };
 
+const renderWith = (filteredFlights: enhancedFlight[]) => {
+  const mockedUseFlightStore = useFlightStore as unknown as Mock;
+  mockedUseFlightStore.mockImplementation(
+    (selector: (state: StoreShape) => unknown) => selector({ filteredFlights }),
+  );
+  render(<FlightsList />, {
+    wrapper: ({ children }: { children: React.ReactNode }) => (
+      <MemoryRouter>{children}</MemoryRouter>
+    ),
+  });
+};
+
 describe("FlightsList", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders table rows for flights when flights are available", () => {
-    // Mock the store to return flights
-    const mockedUseFlightStore = useFlightStore as unknown as Mock;
+  it("shows each flight as a row with codes, cities, date and flight number", () => {
+    renderWith([
+      {
+        ...enrichedFlight,
+        departure_airport_iata: "SYD",
+        arrival_airport_iata: "LHR",
+        airline_name: "Delta",
+        distance_km: 16993.4,
+      },
+    ]);
 
-    mockedUseFlightStore.mockImplementation(
-      (selector: (state: StoreShape) => unknown) =>
-        selector({
-          filteredFlights: [enrichedFlight],
-        }),
+    const row = screen.getByTestId("flight-row-1");
+    expect(row.tagName).toBe("BUTTON");
+    expect(row).toHaveTextContent("SYD");
+    expect(row).toHaveTextContent("LHR");
+    expect(row).toHaveTextContent("Sydney to London");
+    expect(row).toHaveTextContent("10 Mar");
+    expect(row).toHaveTextContent("DL3");
+    // Screen readers hear the whole flight in one sentence.
+    expect(row).toHaveAccessibleName(
+      "Sydney to London, 10 Mar 2024, Delta DL3, 16,993 km",
     );
-
-    render(<FlightsList />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter>{children}</MemoryRouter>
-      ),
-    });
-
-    expect(screen.getByText(/SFO → SEA/));
-    expect(screen.getByText(/DL/));
-    expect(screen.getByText(/10 Mar 24/));
   });
 
   it("renders empty state when no flights are available", () => {
-    // Mock the store to return no flights
-    const mockedUseFlightStore = useFlightStore as unknown as Mock;
-
-    mockedUseFlightStore.mockImplementation(
-      (selector: (state: StoreShape) => unknown) =>
-        selector({
-          filteredFlights: [],
-        }),
-    );
-
-    render(<FlightsList />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter>{children}</MemoryRouter>
-      ),
-    });
-
+    renderWith([]);
     expect(screen.getByText(/No flights to display for this selection/));
   });
 
-  it("leads with city and country names, keeping the codes in the tooltip", () => {
-    const mockedUseFlightStore = useFlightStore as unknown as Mock;
-    const international = {
-      ...enrichedFlight,
-      id: "2",
-      departure_airport_iata: "SYD",
-      arrival_airport_iata: "LHR",
-      departure_country: "AU",
-      arrival_country: "GB",
-    };
-    const domestic = {
-      ...enrichedFlight,
-      id: "3",
-      departure_airport_iata: "SYD",
-      arrival_airport_iata: "MEL",
-      departure_country: "AU",
-      arrival_country: "AU",
-    };
-    mockedUseFlightStore.mockImplementation(
-      (selector: (state: StoreShape) => unknown) =>
-        selector({ filteredFlights: [international, domestic] }),
-    );
+  it("groups flights by year under headings with count and distance", () => {
+    renderWith([
+      {
+        ...enrichedFlight,
+        id: "a",
+        departure_date: "2024-03-10",
+        distance_km: 1000,
+      },
+      {
+        ...enrichedFlight,
+        id: "b",
+        departure_date: "2099-01-05",
+        distance_km: 500,
+      },
+      {
+        ...enrichedFlight,
+        id: "c",
+        departure_date: "2024-07-01",
+        distance_km: 1234,
+      },
+      {
+        ...enrichedFlight,
+        id: "d",
+        departure_date: "2023-02-01",
+        distance_km: 10,
+      },
+    ]);
 
-    render(<FlightsList />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter>{children}</MemoryRouter>
-      ),
-    });
-
-    expect(screen.getByText("Sydney → London")).toHaveAttribute(
-      "title",
-      "SYD → LHR",
-    );
-    expect(screen.getByText("Australia → United Kingdom")).toBeInTheDocument();
-    // A domestic flight names its country once, not "Australia → Australia".
-    expect(screen.getByText("Sydney → Melbourne")).toBeInTheDocument();
-    expect(screen.getByText("Australia")).toBeInTheDocument();
-    expect(screen.getByTestId("flight-details-open-2")).toHaveAttribute(
-      "aria-label",
-      "View flight details: Sydney to London",
-    );
+    const headings = screen.getAllByRole("heading", { level: 2 });
+    expect(headings.map((h) => h.textContent)).toEqual([
+      "Upcoming1 flight · 500 km",
+      "20242 flights · 2,234 km",
+      "20231 flight · 10 km",
+    ]);
+    // Newest first inside a year.
+    const rows = screen
+      .getAllByRole("button")
+      .map((b) => b.getAttribute("data-testid"));
+    expect(rows).toEqual([
+      "flight-row-b",
+      "flight-row-c",
+      "flight-row-a",
+      "flight-row-d",
+    ]);
   });
 
-  it("opens the flight details modal from the row's chevron button", async () => {
-    const mockedUseFlightStore = useFlightStore as unknown as Mock;
-    mockedUseFlightStore.mockImplementation(
-      (selector: (state: StoreShape) => unknown) =>
-        selector({
-          filteredFlights: [enrichedFlight],
-        }),
-    );
+  it("opens the flight details modal when the row is clicked", async () => {
+    renderWith([enrichedFlight]);
 
-    render(<FlightsList />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter>{children}</MemoryRouter>
-      ),
-    });
-
-    expect(screen.getByTestId("flight-row-1")).not.toHaveAttribute("role");
-    expect(screen.getByTestId("flight-details-open-1")).toHaveAttribute(
-      "aria-label",
-      "View flight details: SFO to SEA",
-    );
-    fireEvent.click(screen.getByTestId("flight-details-open-1"));
+    fireEvent.click(screen.getByTestId("flight-row-1"));
 
     expect(
       await screen.findByTestId("flight-details-edit-1"),
     ).toBeInTheDocument();
-    expect(await screen.findByText("DL3")).toBeInTheDocument();
-  });
-
-  it("opens the flight details modal when anywhere on the row is clicked", async () => {
-    const mockedUseFlightStore = useFlightStore as unknown as Mock;
-    mockedUseFlightStore.mockImplementation(
-      (selector: (state: StoreShape) => unknown) =>
-        selector({
-          filteredFlights: [enrichedFlight],
-        }),
-    );
-
-    render(<FlightsList />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => (
-        <MemoryRouter>{children}</MemoryRouter>
-      ),
-    });
-
-    fireEvent.click(screen.getByText(/SFO →/));
-
     expect(
-      await screen.findByTestId("flight-details-edit-1"),
+      within(await screen.findByRole("dialog")).getByText("DL3"),
     ).toBeInTheDocument();
   });
 });

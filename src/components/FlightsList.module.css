@@ -1,0 +1,118 @@
+/* The Flights page list: year headings pinned while their rows scroll, and
+ * each flight as a two-line boarding-pass row. */
+
+.heading {
+  position: sticky;
+  z-index: 1;
+  margin: 0;
+  padding: 8px 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  background: var(--fl-page);
+  transition: top 220ms ease;
+}
+
+.year {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.year[data-upcoming] {
+  color: var(--fl-accent-text);
+}
+
+.summary {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--fl-muted);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--fl-surface);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.list li + li {
+  border-top: 1px solid var(--fl-divider);
+}
+
+.row {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  color: var(--fl-ink);
+}
+
+.row:hover {
+  background: var(--fl-surface-2);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: -2px;
+}
+
+.logo {
+  border: 1px solid var(--fl-border);
+  background: var(--fl-subtle);
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.route {
+  min-width: 0;
+}
+
+.codes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.arrow {
+  color: var(--fl-accent);
+}
+
+.cities {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--fl-muted);
+}
+
+.when {
+  text-align: right;
+  font-family: var(--mantine-font-family-monospace);
+  line-height: 1.3;
+}
+
+.date {
+  display: block;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.date[data-upcoming] {
+  color: var(--fl-accent-text);
+}
+
+.number {
+  display: block;
+  font-size: 13px;
+  color: var(--fl-muted);
+}

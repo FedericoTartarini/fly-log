@@ -1,38 +1,34 @@
 import React, { lazy, Suspense } from "react";
 import {
-  Image,
   Avatar,
   Group,
-  Table,
   Text,
-  ActionIcon,
-  Center,
   Modal,
-  Pagination,
   Loader,
   Stack,
-  ThemeIcon,
+  UnstyledButton,
 } from "@mantine/core";
-import { IconChevronRight, IconPlaneInflight } from "@tabler/icons-react";
+import { useHeadroom } from "@mantine/hooks";
+import { IconArrowRight, IconPlaneInflight } from "@tabler/icons-react";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import {
-  formatCalendarDate,
-  formatTimeRange,
-  parseToDate,
-} from "../utils/dateUtils";
+import { formatCalendarDate } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
-import { getCountryName } from "../utils/countryUtils";
+import { groupFlightsByYear } from "../utils/groupFlights";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
+import classes from "./FlightsList.module.css";
 
 const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
 const FlightDetailsModal = lazy(() => import("./FlightDetailsModal"));
 
-const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
-  const flightNumber = flight.flight_number
+const flightNumberOf = (flight: enhancedFlight): string | null =>
+  flight.flight_number
     ? `${flight.airline_iata ?? ""}${flight.flight_number}`
     : null;
+
+const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
+  const flightNumber = flightNumberOf(flight);
   const identity =
     flightNumber ??
     flight.airline_name ??
@@ -62,29 +58,86 @@ const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
 };
 
 /**
- * "Australia → United Kingdom" for an international flight, a single country
- * for a domestic one, so the row does not say "Australia → Australia".
+ * One flight as a two-line boarding-pass row. The whole row is one button
+ * that opens the details, and its accessible name reads the whole flight.
  */
-const formatCountries = (flight: enhancedFlight): string => {
-  const from = flight.departure_country
-    ? getCountryName(flight.departure_country)
-    : null;
-  const to = flight.arrival_country
-    ? getCountryName(flight.arrival_country)
-    : null;
-  if (from && to && from !== to) return `${from} → ${to}`;
-  return from ?? to ?? "";
+const FlightRow: React.FC<{
+  flight: enhancedFlight;
+  upcoming: boolean;
+  onOpen: (flight: enhancedFlight) => void;
+}> = ({ flight, upcoming, onOpen }) => {
+  const { t, i18n } = useTranslation("flights");
+  const from = getAirportCity(flight.departure_airport_iata);
+  const to = getAirportCity(flight.arrival_airport_iata);
+  const flightNumber = flightNumberOf(flight);
+  const km =
+    typeof flight.distance_km === "number" &&
+    Number.isFinite(flight.distance_km)
+      ? t("km", {
+          value: Math.round(flight.distance_km).toLocaleString(i18n.language),
+        })
+      : null;
+  const label = [
+    t("list.cities", { from, to }),
+    formatCalendarDate(flight.departure_date, "D MMM YYYY"),
+    [flight.airline_name, flightNumber].filter(Boolean).join(" "),
+    km,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return (
+    <UnstyledButton
+      className={classes.row}
+      onClick={() => onOpen(flight)}
+      aria-label={label}
+      data-testid={`flight-row-${flight.id}`}
+    >
+      <Avatar
+        src={
+          flight.airline_icon_path
+            ? `/logos/${flight.airline_icon_path}`
+            : undefined
+        }
+        alt=""
+        radius="xl"
+        size={36}
+        className={classes.logo}
+        aria-hidden
+      >
+        {flight.airline_iata || <IconPlaneInflight size={18} />}
+      </Avatar>
+      <span className={classes.route} aria-hidden>
+        <span className={classes.codes}>
+          {flight.departure_airport_iata}
+          <IconArrowRight size={16} stroke={2.4} className={classes.arrow} />
+          {flight.arrival_airport_iata}
+        </span>
+        <span className={classes.cities}>{t("list.cities", { from, to })}</span>
+      </span>
+      <span className={classes.when} aria-hidden>
+        <span className={classes.date} data-upcoming={upcoming || undefined}>
+          {formatCalendarDate(flight.departure_date, "D MMM")}
+        </span>
+        {flightNumber && <span className={classes.number}>{flightNumber}</span>}
+      </span>
+    </UnstyledButton>
+  );
 };
 
 /**
- * Renders a paginated list of flights in a table.
+ * The filtered flights as one long list, grouped by year with upcoming
+ * flights first. Each group's heading stays pinned while its rows scroll.
  */
 const FlightsList: React.FC = () => {
   const filteredFlights = useFlightStore(
     (s: FlightStoreState) => s.filteredFlights as enhancedFlight[],
   );
 
-  const { t } = useTranslation("flights");
+  const { t, i18n } = useTranslation("flights");
+  // Same headroom as the app shell, so a pinned heading sits under the
+  // header while it shows and moves up when it hides.
+  const headerPinned = useHeadroom({ fixedAt: 120 });
   const [editOpen, setEditOpen] = React.useState(false);
   const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
     null,
@@ -104,242 +157,63 @@ const FlightsList: React.FC = () => {
     }
   }, [detailsOpen, detailsFlightId, detailsFlight]);
 
-  const PAGE_SIZE = 20;
-  const [page, setPage] = React.useState(1);
-  const totalPages = Math.max(1, Math.ceil(filteredFlights.length / PAGE_SIZE));
-
-  // reset to first page if filteredFlights changes (e.g., new fetch or filter applied)
-  const filterKey = React.useMemo(
-    () => JSON.stringify(filteredFlights.map((f) => f.id).sort()),
+  const groups = React.useMemo(
+    () => groupFlightsByYear(filteredFlights),
     [filteredFlights],
   );
-  React.useEffect(() => {
-    setPage(1);
-  }, [filterKey]);
-
-  const [failedImages, setFailedImages] = React.useState(new Set<string>());
-
-  const hasResults = filteredFlights.length > 0;
-
-  // Helper to get epoch ms for various departure_date representations
-  const getDepartureEpoch = (flight: enhancedFlight): number => {
-    const dt = parseToDate(flight?.departure_date);
-    if (!dt) return -Infinity;
-    const t = dt.getTime();
-    return isNaN(t) ? -Infinity : t;
-  };
-
-  // Sort flights by departure date descending (newest first)
-  const sortedFlights = [...filteredFlights].sort(
-    (a, b) => getDepartureEpoch(b) - getDepartureEpoch(a),
-  );
-
-  // compute the flights to show on the current page (after sorting)
-  const startIndex = (page - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const paginatedFlights = sortedFlights.slice(startIndex, endIndex);
 
   const openDetails = (flight: enhancedFlight) => {
     setDetailsFlightId(flight.id);
     setDetailsOpen(true);
   };
 
-  /**
-   * Returns the airline logo or a non-interactive fallback icon.
-   * @param {enhancedFlight} flight
-   * @returns {JSX.Element}
-   */
-  const getAirlineIcon = (flight: enhancedFlight): React.ReactElement => {
-    if (failedImages.has(flight.id)) {
-      return (
-        <ThemeIcon
-          aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
-          color="gray"
-        >
-          <IconPlaneInflight
-            style={{ width: "70%", height: "70%" }}
-            stroke={1.5}
-          />
-        </ThemeIcon>
-      );
-    }
-
-    const sourcePath = flight.airline_icon_path;
-
-    if (!sourcePath) {
-      return (
-        <ThemeIcon
-          aria-label={`${flight.airline_name || flight.airline_iata || "Airline"} icon`}
-          color="gray"
-        >
-          <IconPlaneInflight
-            style={{ width: "70%", height: "70%" }}
-            stroke={1.5}
-          />
-        </ThemeIcon>
-      );
-    }
-
-    const imageUrl = `/logos/${sourcePath}`;
-
-    // Provide a safe fallback image using onError to swap src to the airlines_info icon, then to a generic default
-    return (
-      <Image
-        src={imageUrl}
-        alt=""
-        h={40}
-        w="auto"
-        fit="contain"
-        loading="lazy"
-        p={4}
-        onError={() => setFailedImages((prev) => new Set(prev).add(flight.id))}
-      />
-    );
-  };
-
   return (
     <Stack gap="md">
-      {!hasResults ? (
+      {groups.length === 0 ? (
         <Text mt="md" ta="center">
           {t("no_flights")}
         </Text>
       ) : (
-        <>
-          <Table striped highlightOnHover withTableBorder layout="fixed">
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th style={{ width: "4rem" }}>
-                  <Center>{t("table.icon")}</Center>
-                </Table.Th>
-                <Table.Th style={{ width: "38%" }}>
-                  {t("table.from_to")}
-                </Table.Th>
-                <Table.Th>{t("table.date_duration_distance")}</Table.Th>
-                <Table.Th style={{ width: "3rem" }} />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {paginatedFlights.map((flight) => {
-                const departureDateStr = formatCalendarDate(
-                  flight.departure_date,
-                );
-
-                // Safe formatting for flight time and distance
-                const ft = flight.flight_time ?? null;
-                const distValue =
-                  typeof flight.distance_km === "number"
-                    ? flight.distance_km
-                    : null;
-                const dist =
-                  distValue !== null && Number.isFinite(distValue)
-                    ? Math.round(distValue)
-                    : null;
-                let durationDistanceStr = "";
-                if (ft !== null) {
-                  let hours = Math.floor(ft);
-                  let minutes = Math.round((ft % 1) * 60);
-                  if (minutes === 60) {
-                    hours += 1;
-                    minutes = 0;
-                  }
-                  if (dist !== null) {
-                    durationDistanceStr = `${hours}h ${minutes}m, ${dist.toLocaleString()} km`;
-                  } else {
-                    durationDistanceStr = `${hours}h ${minutes}m`;
-                  }
-                } else if (dist !== null) {
-                  durationDistanceStr = `${dist.toLocaleString()} km`;
-                }
-
-                const timeRange = formatTimeRange(flight);
-
-                // Cities lead because few people know IATA codes. The codes
-                // stay in the tooltip for those who do. getAirportCity falls
-                // back to the code itself when the airport is unknown.
-                const departureCity = getAirportCity(
-                  flight.departure_airport_iata,
-                );
-                const arrivalCity = getAirportCity(flight.arrival_airport_iata);
-                const countries = formatCountries(flight);
-
-                const rowLabel = t("table.view_row_details", {
-                  from: departureCity,
-                  to: arrivalCity,
-                });
-
-                return (
-                  // The whole row opens the details for mouse and touch users;
-                  // the chevron button at the end is the visible cue and the
-                  // keyboard/screen-reader path (a <tr> can't be a button).
-                  // Browsers don't fire click after a scroll gesture, so
-                  // scrolling the list on a phone won't open a flight.
-                  <Table.Tr
-                    key={flight.id}
-                    data-testid={`flight-row-${flight.id}`}
-                    onClick={() => openDetails(flight)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <Table.Td p={"0.5rem"}>
-                      <Center>{getAirlineIcon(flight)}</Center>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text
-                        size="sm"
-                        truncate="end"
-                        title={`${flight.departure_airport_iata} → ${flight.arrival_airport_iata}`}
-                      >
-                        {departureCity} → {arrivalCity}
-                      </Text>
-                      {countries && (
-                        <Text size="xs" c="dimmed" truncate="end">
-                          {countries}
-                        </Text>
-                      )}
-                      <Text size="xs" c="dimmed">
-                        {flight.airline_iata || flight.airline_name}{" "}
-                        {flight.flight_number
-                          ? `: ${flight.flight_number}`
-                          : ""}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="sm">
-                        {departureDateStr}
-                        {timeRange ? `, ${timeRange}` : ""}
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        {durationDistanceStr}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td p={0}>
-                      <Center>
-                        <ActionIcon
-                          aria-label={rowLabel}
-                          variant="subtle"
-                          size="lg"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            openDetails(flight);
-                          }}
-                          data-testid={`flight-details-open-${flight.id}`}
-                        >
-                          <IconChevronRight size={20} />
-                        </ActionIcon>
-                      </Center>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-
-          {/* Pagination control */}
-          {totalPages > 1 && (
-            <Center mt="md">
-              <Pagination total={totalPages} value={page} onChange={setPage} />
-            </Center>
-          )}
-        </>
+        groups.map((group) => {
+          const id = `flights-${group.key ?? "undated"}`;
+          return (
+            <section key={id} aria-labelledby={id}>
+              <h2
+                id={id}
+                className={classes.heading}
+                style={{
+                  top: headerPinned ? "var(--app-shell-header-height)" : 0,
+                }}
+              >
+                <span
+                  className={classes.year}
+                  data-upcoming={group.key === "upcoming" || undefined}
+                >
+                  {group.key === "upcoming"
+                    ? t("list.upcoming")
+                    : (group.key ?? t("list.no_date"))}
+                </span>
+                <span className={classes.summary}>
+                  {t("list.summary", {
+                    count: group.flights.length,
+                    km: Math.round(group.km).toLocaleString(i18n.language),
+                  })}
+                </span>
+              </h2>
+              <ul className={classes.list}>
+                {group.flights.map((flight) => (
+                  <li key={flight.id}>
+                    <FlightRow
+                      flight={flight}
+                      upcoming={group.key === "upcoming"}
+                      onOpen={openDetails}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })
       )}
 
       <Modal
