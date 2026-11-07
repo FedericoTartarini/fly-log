@@ -1,5 +1,5 @@
 {
-  "title": "Detailed Flight Statistics",
+  "title": "Flights",
   "image_alt": "plane wing",
   "no_flights": "No flights to display for this selection.",
   "timeline": {
@@ -25,11 +25,18 @@
       "busiest_month_co2": "Month with most CO₂e"
     }
   },
-  "table": {
-    "icon": "Icon",
-    "from_to": "From → To",
-    "date_duration_distance": "Date, Duration & Distance",
-    "view_row_details": "View flight details: {{from}} to {{to}}"
+  "list": {
+    "count_all_one": "{{count}} flight since {{year}}",
+    "count_all_other": "{{count}} flights since {{year}}",
+    "count_undated_one": "{{count}} flight",
+    "count_undated_other": "{{count}} flights",
+    "count_filtered_one": "{{count}} of {{total}} flights matches your filters",
+    "count_filtered_other": "{{count}} of {{total}} flights match your filters",
+    "upcoming": "Upcoming",
+    "no_date": "No date",
+    "summary_one": "{{count}} flight · {{km}} km",
+    "summary_other": "{{count}} flights · {{km}} km",
+    "cities": "{{from}} to {{to}}"
   },
   "airline_label": "Airline:",
   "aircraft_label": "Aircraft:",

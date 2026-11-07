@@ -74,5 +74,12 @@ describe("StatsSummary Component", () => {
     cy.get('[data-cy="all-stats-link"]').click();
     cy.location("pathname").should("eq", "/stats/all");
     cy.get('[data-cy="total-co2-value"]').should("be.visible");
+
+    // The Flights list: year headings over rows, and a row opens the details.
+    cy.visit("/flights");
+    cy.contains("h1", /^Flights$/).should("be.visible");
+    cy.contains("h2", /\d+ flights? · [\d,]+ km/).should("exist");
+    cy.get('[data-testid^="flight-row-"]').first().click();
+    cy.get('[role="dialog"]').should("be.visible");
   });
 });

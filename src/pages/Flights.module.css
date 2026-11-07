@@ -1,0 +1,20 @@
+/* Room at the bottom for the floating add button. */
+.page {
+  padding-bottom: 96px;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+/* The shared filter tags, as a card of their own. Empty while no filter is
+ * on, so the Stack's gap does not leave a hole. */
+.tags {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tags:empty {
+  display: none;
+}
