@@ -201,6 +201,8 @@ describe("FlightsList", () => {
       ).toBeNull();
       fireEvent.click(screen.getByRole("button", { name: "Clear search" }));
       expect(search()).toHaveValue("");
+      // The button is gone, so focus goes back to the search box.
+      expect(search()).toHaveFocus();
       expect(screen.getByTestId("flight-row-a")).toBeInTheDocument();
     });
 
@@ -226,6 +228,7 @@ describe("FlightsList", () => {
         screen.getByRole("button", { name: "Search all flights" }),
       );
       expect(clearFilters).toHaveBeenCalledOnce();
+      expect(search()).toHaveFocus();
       expect(search()).toHaveValue("perth");
     });
   });

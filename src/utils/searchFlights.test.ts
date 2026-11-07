@@ -54,4 +54,10 @@ describe("searchFlights", () => {
     expect(ids("qf 81")).toEqual(["qf"]);
     expect(ids("QF82")).toEqual([]);
   });
+
+  it("needs every word to match, in any field and either direction", () => {
+    expect(ids("syd sin")).toEqual(["qf"]);
+    expect(ids("singapore  sydney")).toEqual(["qf"]);
+    expect(ids("qantas zurich")).toEqual([]);
+  });
 });

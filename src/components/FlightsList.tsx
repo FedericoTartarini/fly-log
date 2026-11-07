@@ -148,6 +148,9 @@ const FlightsList: React.FC = () => {
     })),
   );
   const [query, setQuery] = React.useState("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  // The no-match buttons vanish once pressed, so focus returns to the search box.
+  const refocus = () => inputRef.current?.focus();
 
   const { t, i18n } = useTranslation("flights");
   // Same headroom as the app shell, so a pinned heading sits under the
@@ -188,6 +191,7 @@ const FlightsList: React.FC = () => {
     <Stack gap="md">
       <div role="search">
         <TextInput
+          ref={inputRef}
           type="search"
           size="md"
           value={query}
@@ -229,14 +233,23 @@ const FlightsList: React.FC = () => {
             {t(filtered ? "list.no_match_filtered" : "list.no_match_hint")}
           </Text>
           <Group gap="xs">
-            <Button variant="default" onClick={() => setQuery("")}>
+            <Button
+              variant="default"
+              onClick={() => {
+                setQuery("");
+                refocus();
+              }}
+            >
               {t("list.clear_search")}
             </Button>
             {filtered && (
               <Button
                 color="var(--fl-ink)"
                 c="var(--fl-surface)"
-                onClick={clearFilters}
+                onClick={() => {
+                  clearFilters();
+                  refocus();
+                }}
               >
                 {t("list.search_all")}
               </Button>
