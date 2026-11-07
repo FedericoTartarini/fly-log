@@ -6,15 +6,24 @@ import {
   Modal,
   Loader,
   Stack,
+  TextInput,
+  Button,
   UnstyledButton,
 } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
-import { IconArrowRight, IconPlaneInflight } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconPlaneInflight,
+  IconSearch,
+} from "@tabler/icons-react";
+import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatCalendarDate } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
 import { groupFlightsByYear } from "../utils/groupFlights";
+import { searchFlights } from "../utils/searchFlights";
+import { getActiveFilters } from "../utils/activeFilters";
 import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 import classes from "./FlightsList.module.css";
@@ -128,11 +137,17 @@ const FlightRow: React.FC<{
 /**
  * The filtered flights as one long list, grouped by year with upcoming
  * flights first. Each group's heading stays pinned while its rows scroll.
+ * The search box narrows the filtered flights and never changes the filters.
  */
 const FlightsList: React.FC = () => {
-  const filteredFlights = useFlightStore(
-    (s: FlightStoreState) => s.filteredFlights as enhancedFlight[],
+  const { filteredFlights, filtered, clearFilters } = useFlightStore(
+    useShallow((s: FlightStoreState) => ({
+      filteredFlights: s.filteredFlights as enhancedFlight[],
+      filtered: getActiveFilters(s.filters).length > 0,
+      clearFilters: s.clearFilters,
+    })),
   );
+  const [query, setQuery] = React.useState("");
 
   const { t, i18n } = useTranslation("flights");
   // Same headroom as the app shell, so a pinned heading sits under the
@@ -157,10 +172,12 @@ const FlightsList: React.FC = () => {
     }
   }, [detailsOpen, detailsFlightId, detailsFlight]);
 
-  const groups = React.useMemo(
-    () => groupFlightsByYear(filteredFlights),
-    [filteredFlights],
+  const hits = React.useMemo(
+    () => searchFlights(filteredFlights, query),
+    [filteredFlights, query],
   );
+  const groups = React.useMemo(() => groupFlightsByYear(hits), [hits]);
+  const searching = query.trim() !== "";
 
   const openDetails = (flight: enhancedFlight) => {
     setDetailsFlightId(flight.id);
@@ -169,7 +186,64 @@ const FlightsList: React.FC = () => {
 
   return (
     <Stack gap="md">
-      {groups.length === 0 ? (
+      <div role="search">
+        <TextInput
+          type="search"
+          size="md"
+          value={query}
+          onChange={(event) => setQuery(event.currentTarget.value)}
+          aria-label={t(
+            filtered ? "list.search_label_filtered" : "list.search_label",
+          )}
+          placeholder={
+            filtered
+              ? t("list.search_placeholder_filtered", {
+                  count: filteredFlights.length,
+                })
+              : t("list.search_placeholder")
+          }
+          leftSection={<IconSearch size={18} aria-hidden />}
+          autoComplete="off"
+        />
+        {/* Always rendered, so screen readers announce each new count. */}
+        <Text aria-live="polite" size="sm" c="var(--fl-muted)" mt={4}>
+          {searching &&
+            t(filtered ? "list.matches_filtered" : "list.matches", {
+              count: hits.length,
+              query: query.trim(),
+              // React escapes the text already; i18next would show "&" as "&amp;".
+              interpolation: { escapeValue: false },
+            })}
+        </Text>
+      </div>
+
+      {searching && hits.length === 0 ? (
+        <Stack gap="sm" align="flex-start" className={classes.noMatch}>
+          <Text fw={600}>
+            {t("list.no_match", {
+              query: query.trim(),
+              interpolation: { escapeValue: false },
+            })}
+          </Text>
+          <Text c="var(--fl-muted)">
+            {t(filtered ? "list.no_match_filtered" : "list.no_match_hint")}
+          </Text>
+          <Group gap="xs">
+            <Button variant="default" onClick={() => setQuery("")}>
+              {t("list.clear_search")}
+            </Button>
+            {filtered && (
+              <Button
+                color="var(--fl-ink)"
+                c="var(--fl-surface)"
+                onClick={clearFilters}
+              >
+                {t("list.search_all")}
+              </Button>
+            )}
+          </Group>
+        </Stack>
+      ) : groups.length === 0 ? (
         <Text mt="md" ta="center">
           {t("no_flights")}
         </Text>

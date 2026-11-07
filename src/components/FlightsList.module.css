@@ -116,3 +116,9 @@
   font-size: 13px;
   color: var(--fl-muted);
 }
+
+.noMatch {
+  padding: 24px 20px;
+  border: 1px dashed var(--fl-input-border);
+  border-radius: 12px;
+}

@@ -81,5 +81,14 @@ describe("StatsSummary Component", () => {
     cy.contains("h2", /\d+ flights? · [\d,]+ km/).should("exist");
     cy.get('[data-testid^="flight-row-"]').first().click();
     cy.get('[role="dialog"]').should("be.visible");
+    cy.get("body").type("{esc}");
+    cy.get('[role="dialog"]').should("not.exist");
+
+    // Search narrows the list, and a search with no match offers to clear it.
+    cy.get('input[type="search"]').type("zzzz");
+    cy.contains("No flights match “zzzz”").should("be.visible");
+    cy.get('[data-testid^="flight-row-"]').should("not.exist");
+    cy.contains("button", "Clear search").click();
+    cy.get('[data-testid^="flight-row-"]').should("exist");
   });
 });
