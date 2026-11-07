@@ -15,7 +15,7 @@ const summary = (flights: enhancedFlight[], now: Date) =>
 describe("groupFlightsByYear", () => {
   const now = new Date(2026, 10, 8, 15, 0); // 8 Nov 2026, 3 pm local
 
-  it("puts upcoming flights first, then one group per year, newest first", () => {
+  it("puts upcoming flights first, soonest first, then one group per year, newest first", () => {
     const flights = [
       flight("a", "2025-03-01"),
       flight("b", "2026-11-11", 6293),
@@ -24,7 +24,7 @@ describe("groupFlightsByYear", () => {
       flight("e", "2025-12-20"),
     ];
     expect(summary(flights, now)).toEqual([
-      { key: "upcoming", ids: ["d", "b"], km: 12586 },
+      { key: "upcoming", ids: ["b", "d"], km: 12586 },
       { key: 2026, ids: ["c"], km: 100 },
       { key: 2025, ids: ["e", "a"], km: 200 },
     ]);

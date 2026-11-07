@@ -39,10 +39,12 @@ function Flights() {
         count: filteredFlights.length,
         total: number(allFlights.length),
       })
-    : t("list.count_all", {
-        count: allFlights?.length ?? 0,
-        year: years.length ? Math.min(...years) : "",
-      });
+    : years.length
+      ? t("list.count_all", {
+          count: allFlights.length,
+          year: Math.min(...years),
+        })
+      : t("list.count_undated", { count: allFlights?.length ?? 0 });
 
   const loader = (
     <Center>

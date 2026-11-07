@@ -28,6 +28,8 @@
   "list": {
     "count_all_one": "{{count}} volo dal {{year}}",
     "count_all_other": "{{count}} voli dal {{year}}",
+    "count_undated_one": "{{count}} volo",
+    "count_undated_other": "{{count}} voli",
     "count_filtered_one": "{{count}} di {{total}} voli corrisponde ai filtri",
     "count_filtered_other": "{{count}} di {{total}} voli corrispondono ai filtri",
     "upcoming": "Futuri",

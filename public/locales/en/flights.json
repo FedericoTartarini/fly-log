@@ -28,6 +28,8 @@
   "list": {
     "count_all_one": "{{count}} flight since {{year}}",
     "count_all_other": "{{count}} flights since {{year}}",
+    "count_undated_one": "{{count}} flight",
+    "count_undated_other": "{{count}} flights",
     "count_filtered_one": "{{count}} of {{total}} flights matches your filters",
     "count_filtered_other": "{{count}} of {{total}} flights match your filters",
     "upcoming": "Upcoming",
