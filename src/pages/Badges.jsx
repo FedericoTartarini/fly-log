@@ -19,7 +19,7 @@ import {
   BADGE_CATEGORIES,
 } from "../utils/badges.ts";
 import BadgeTile from "../components/BadgeTile.jsx";
-import PageSkeleton from "../components/PageSkeleton.jsx";
+import BadgesSkeleton from "../components/BadgesSkeleton.jsx";
 
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
@@ -50,7 +50,7 @@ function Badges() {
     [sections],
   );
 
-  if (isLoading) return <PageSkeleton />;
+  if (isLoading) return <BadgesSkeleton />;
 
   if (error) {
     return (

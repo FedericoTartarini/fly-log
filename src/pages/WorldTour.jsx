@@ -102,9 +102,10 @@ const getRoutesFocus = (routes) => {
 // Animated globe tour for flights over time.
 function WorldTour() {
   const { t } = useTranslation("tour");
-  const { allFlights } = useFlightStore(
+  const { allFlights, isLoading } = useFlightStore(
     useShallow((s) => ({
       allFlights: s.allFlights,
+      isLoading: s.isLoading,
     })),
   );
 
@@ -902,7 +903,8 @@ function WorldTour() {
               </Alert>
             )}
 
-            {!routes.length && !loadError && (
+            {/* Not while flights load, or it flashes before the routes arrive */}
+            {!routes.length && !loadError && !isLoading && (
               <Alert
                 icon={<IconInfoCircle size={16} />}
                 color="blue"

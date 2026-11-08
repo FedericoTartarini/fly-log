@@ -30,7 +30,9 @@ describe("NoFlightsCard", () => {
 
   it("uses the page's own title and text elsewhere", () => {
     render(<NoFlightsCard title="Your badges" text="Earn them." />);
-    expect(screen.getByRole("heading", { level: 2, name: "Your badges" }));
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Your badges" }),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Kilometres")).toBeNull();
   });
 
