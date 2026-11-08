@@ -1,30 +1,23 @@
 import React from "react";
-import { Card, Group, Stack, Text, Progress, ThemeIcon } from "@mantine/core";
+import { VisuallyHidden } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { IconExternalLink, IconMedal } from "@tabler/icons-react";
 import { BADGE_ICONS } from "../constants/badgeIcons.ts";
-import { DISTANCE_BADGES } from "../utils/badges.ts";
+import { formatBadgeProgress } from "../utils/badges.ts";
 import { barcodePattern } from "../utils/barcode.ts";
 import { formatCalendarDate } from "../utils/dateUtils";
 import classes from "./BadgeTile.module.css";
 
-// Kilometres read better rounded and grouped; counts are already small.
-const formatProgress = (badge, language) => {
-  const value = Math.round(badge.current).toLocaleString(language);
-  const target = Math.round(badge.target).toLocaleString(language);
-  const suffix = DISTANCE_BADGES.has(badge.id) ? " km" : "";
-  return `${value} / ${target}${suffix}`;
-};
-
 /**
- * One badge, drawn as a boarding pass with a torn-off stub. A badge with a
- * Wikipedia article behind it is a link to that article, the whole card.
+ * One badge, drawn as a boarding pass with a torn-off stub. A badge
+ * with a Wikipedia article behind it is a link to that article, the whole card.
+ * Locked badges are dashed and greyed.
  */
 const BadgeTile = ({ badge }) => {
   const { t, i18n } = useTranslation("flights");
   const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
-  const hasProgress = typeof badge.target === "number";
-  const percent = hasProgress ? (badge.current / badge.target) * 100 : 0;
+  const name = t(`badges.items.${badge.id}.name`);
+  const hasProgress = !badge.unlocked && typeof badge.target === "number";
   const date = formatCalendarDate(
     badge.unlockedOn,
     "DD MMM YYYY",
@@ -32,101 +25,88 @@ const BadgeTile = ({ badge }) => {
   );
   // Each language links its own Wikipedia; most badges have no link.
   const link = t(`badges.items.${badge.id}.link`, { defaultValue: "" });
+  const Root = link ? "a" : "div";
   const linkProps = link
     ? {
-        component: "a",
         href: link,
         target: "_blank",
         rel: "noopener noreferrer",
-        "aria-label": t("badges.link_label", {
-          name: t(`badges.items.${badge.id}.name`),
-        }),
+        "aria-label": badge.unlocked
+          ? t("badges.link_label_earned", { name, date })
+          : t("badges.link_label_locked", { name }),
       }
     : {};
 
-  const header = (
-    <Group gap="sm" align="flex-start" wrap="nowrap">
-      <ThemeIcon
-        variant="light"
-        size={46}
-        radius="md"
-        color={badge.unlocked ? "primary" : "gray"}
-      >
-        <Icon size={26} stroke={1.6} />
-      </ThemeIcon>
-      <Stack gap={2}>
-        <Text fw={700} lh={1.2} c={badge.unlocked ? undefined : "dimmed"}>
-          {t(`badges.items.${badge.id}.name`)}
-        </Text>
-        <Text size="xs" c="dimmed" lh={1.3}>
-          {t(`badges.items.${badge.id}.criterion`)}
-        </Text>
-      </Stack>
-    </Group>
-  );
+  let stub;
+  if (badge.unlocked) {
+    stub = (
+      <span className={`${classes.stubText} ${classes.earned}`}>{date}</span>
+    );
+  } else if (hasProgress) {
+    stub = (
+      <span className={classes.progress}>
+        <span
+          role="progressbar"
+          aria-label={t("badges.progress_label", { name })}
+          aria-valuemin={0}
+          aria-valuemax={badge.target}
+          aria-valuenow={badge.current}
+          className={classes.track}
+        >
+          <span
+            className={classes.fill}
+            style={{ width: `${(badge.current / badge.target) * 100}%` }}
+          />
+        </span>
+        <span className={classes.stubText}>
+          {formatBadgeProgress(badge, i18n.language)}
+        </span>
+      </span>
+    );
+  } else {
+    stub = <span className={classes.stubText}>{t("badges.not_yet")}</span>;
+  }
 
-  const progress = (
-    <Stack gap={3} miw="46%">
-      <Progress value={percent} size="sm" color="gray" radius="xl" />
-      <Text size="xs" c="dimmed" ff="monospace" ta="right" style={{ whiteSpace: "nowrap" }}>
-        {formatProgress(badge, i18n.language)}
-      </Text>
-    </Stack>
-  );
-
-  const footer = (
-    <div className={classes.stub} style={{ marginTop: "auto" }}>
-      {/* One height for the date, "not yet" and the progress bar, so the
-          perforation sits at the same height on every card in a row. */}
-      <Group
-        gap="sm"
-        justify="space-between"
-        wrap="nowrap"
-        align="center"
-        mih={30}
-      >
-        <div
+  return (
+    <Root
+      data-cy={`badge-${badge.id}`}
+      className={`${classes.tile} ${badge.unlocked ? "" : classes.locked}`}
+      {...linkProps}
+    >
+      <span className={classes.body}>
+        <span className={classes.icon} aria-hidden="true">
+          <Icon size={22} stroke={1.8} />
+        </span>
+        <span className={classes.text}>
+          <span className={classes.name}>
+            {name}
+            {!badge.unlocked && (
+              <VisuallyHidden component="span">
+                , {t("badges.not_earned")}
+              </VisuallyHidden>
+            )}
+          </span>
+          <span className={classes.criterion}>
+            {t(`badges.items.${badge.id}.criterion`)}
+          </span>
+        </span>
+        {link && (
+          <IconExternalLink
+            size={16}
+            className={classes.linkIcon}
+            aria-hidden="true"
+          />
+        )}
+      </span>
+      <span className={classes.stub}>
+        <span
           className={classes.barcode}
           style={{ backgroundImage: barcodePattern(badge.id) }}
           aria-hidden="true"
         />
-        {badge.unlocked ? (
-          <Text size="xs" c="var(--fl-accent-text)" fw={600} tt="uppercase" ff="monospace">
-            {date}
-          </Text>
-        ) : hasProgress ? (
-          progress
-        ) : (
-          <Text size="xs" c="dimmed" tt="uppercase" ff="monospace">
-            {t("badges.not_yet")}
-          </Text>
-        )}
-      </Group>
-    </div>
-  );
-
-  return (
-    <Card
-      shadow={badge.unlocked ? "sm" : undefined}
-      radius="md"
-      withBorder
-      padding="sm"
-      data-cy={`badge-${badge.id}`}
-      className={`${classes.tile} ${badge.unlocked ? "" : classes.locked} ${link ? classes.linked : ""}`}
-      {...linkProps}
-    >
-      {link && (
-        <IconExternalLink
-          size={14}
-          className={classes.linkIcon}
-          aria-hidden="true"
-        />
-      )}
-      <Stack gap="xs" h="100%">
-        {header}
-        {footer}
-      </Stack>
-    </Card>
+        {stub}
+      </span>
+    </Root>
   );
 };
 

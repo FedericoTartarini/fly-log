@@ -2,8 +2,16 @@
 
 .tile {
   position: relative;
-  height: 100%;
+  /* A column, so the stub sits at the bottom when a grid row stretches the
+   * pass, and clipped, so each notch shows as a half circle. */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  border-radius: 12px;
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  color: inherit;
+  text-decoration: none;
 }
 
 .locked {
@@ -13,63 +21,115 @@
 
 /* A badge that opens its Wikipedia article. The corner icon says so, because
  * a boarding pass doesn't otherwise look like something you can click. */
-.linked {
-  color: inherit;
-  text-decoration: none;
-  transition: border-color 150ms ease;
+.tile[href]:hover {
+  border-color: var(--fl-accent);
 }
 
-.linked:hover,
-.linked:focus-visible {
-  border-color: var(--mantine-primary-color-filled);
+.tile:focus-visible {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: 2px;
+}
+
+.body {
+  flex: 1;
+  padding: 12px 14px 10px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fl-accent-tint);
+  color: var(--fl-accent-text);
+}
+
+.locked .icon {
+  background: var(--fl-subtle);
+  color: var(--fl-muted);
+}
+
+.text {
+  min-width: 0;
+}
+
+.name,
+.criterion {
+  display: block;
+}
+
+.name {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.locked .name {
+  color: var(--fl-muted);
+}
+
+.criterion {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--fl-muted);
 }
 
 .linkIcon {
-  position: absolute;
-  top: var(--mantine-spacing-xs);
-  right: var(--mantine-spacing-xs);
-  color: var(--mantine-color-dimmed);
+  align-self: start;
+  color: var(--fl-muted);
 }
 
-/* The perforation the stub tears along. The notches are positioned against the
- * card, not the stub, so they stay centred on the dashed line. */
+/* The perforation the stub tears along, with a notch at each end. */
 .stub {
   position: relative;
-  border-top: 1px dashed var(--mantine-color-default-border);
-  margin: 0 calc(-1 * var(--mantine-spacing-sm));
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+  padding: 6px 14px 8px;
+  border-top: 1px dashed var(--fl-input-border);
 }
 
 .stub::before,
 .stub::after {
   content: "";
   position: absolute;
-  top: 0;
-  width: 12px;
-  height: 12px;
+  top: -10px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--mantine-color-body);
-  border: 1px solid var(--mantine-color-default-border);
-  /* Half the notch height plus the border, so its centre sits on the dash. */
-  transform: translateY(-7px);
+  background: var(--fl-page);
+  border: 1px solid var(--fl-border);
+}
+
+.locked .stub::before,
+.locked .stub::after {
+  border-style: dashed;
 }
 
 .stub::before {
-  left: -7px;
+  left: -10px;
 }
 
 .stub::after {
-  right: -7px;
+  right: -10px;
 }
 
-/* Decorative barcode. The bar pattern itself is generated per badge in
- * BadgeTile, so no two badges carry the same stripes. */
+/* Decorative barcode. The bar pattern is generated per badge in BadgeTile,
+ * so no two badges carry the same stripes. */
 .barcode {
-  height: 22px;
-  flex: 1;
-  min-width: 72px;
-  max-width: 140px;
-  color: var(--mantine-color-text);
+  height: 18px;
+  flex: 0 1 96px;
+  min-width: 48px;
+  color: var(--fl-ink);
   opacity: 0.55;
 }
 
@@ -77,3 +137,36 @@
   opacity: 0.18;
 }
 
+.stubText {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fl-muted);
+}
+
+.earned {
+  font-weight: 600;
+  color: var(--fl-accent-text);
+}
+
+.progress {
+  flex: 0 1 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track {
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fl-subtle);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--fl-muted);
+}
