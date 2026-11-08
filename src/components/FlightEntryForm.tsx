@@ -73,7 +73,12 @@ const legIndex = (path: string) => Number(path.split(".")[1]);
 
 interface FlightEntryFormProps {
   onSaved?: () => void;
-  /** The tab the form opens on. Ignored when editing. */
+  /**
+   * The tab the form opens on. Ignored when editing. Read once, when the form
+   * mounts: the add-flight Modal unmounts its content on close, so each open
+   * starts fresh. If the Modal ever keeps its content mounted, a later open
+   * on a different tab would be ignored.
+   */
   initialTab?: FlightEntryTab;
   flight?: {
     id: string;
