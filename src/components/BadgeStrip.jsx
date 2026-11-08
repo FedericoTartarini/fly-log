@@ -144,7 +144,10 @@ function BadgeStrip() {
                 DISTANCE_BADGES.has(next.id)
                   ? "badges.to_go_km"
                   : "badges.to_go",
-                { value: remaining },
+                {
+                  value: remaining,
+                  count: Math.round(next.target - next.current),
+                },
               )}
             />
           )}

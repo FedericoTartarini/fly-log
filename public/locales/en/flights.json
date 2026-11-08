@@ -328,7 +328,8 @@
     "view_all": "All badges",
     "collected": "{{count}} of {{total}} collected",
     "not_yet": "Not yet",
-    "to_go": "{{value}} to go",
+    "to_go_one": "{{value}} to go",
+    "to_go_other": "{{value}} to go",
     "to_go_km": "{{value}} km to go",
     "items": {
       "first_flight": {
@@ -435,7 +436,11 @@
       "habit": "Habit"
     },
     "section_count": "{{unlocked}} of {{total}}",
-    "link_label": "Read about {{name}} on Wikipedia"
+    "closest_next": "Closest next",
+    "not_earned": "not earned yet",
+    "link_label_earned": "{{name}}, earned {{date}}. Opens Wikipedia.",
+    "link_label_locked": "{{name}}, not earned yet. Opens Wikipedia.",
+    "progress_label": "Progress towards {{name}}"
   },
   "cabin": {
     "economy": "Economy",

@@ -259,14 +259,45 @@ export const pickStripBadges = (badges: Badge[], limit = 2): Badge[] => {
     recent.push(badge);
   }
 
-  const isCandidate = (badge: Badge) =>
-    !badge.unlocked && typeof badge.target === "number";
+  const candidates = closestFirst(badges);
   // Prefer an unshown category, but never drop the "what's next" line: for
   // someone whose only locked badges share a category with an earned one, a
   // repeated category beats showing nothing to aim at.
   const next =
-    badges.find((b) => isCandidate(b) && !shownCategories.has(b.category)) ??
-    badges.find(isCandidate);
+    candidates.find((b) => !shownCategories.has(b.category)) ?? candidates[0];
 
   return next ? [...recent, next] : recent;
+};
+
+/**
+ * Steps still to go before a badge is earned. Each target splits into at most
+ * 10 steps, so 812,400 of 1,000,000 km is 2 steps of 100,000 km away, while
+ * 4 of 5 countries is 1 step away. That makes kilometres and counts comparable.
+ */
+export const stepsLeft = (badge: Badge): number => {
+  const target = badge.target ?? 0;
+  const steps = Math.min(target, 10);
+  return Math.ceil(((target - (badge.current ?? 0)) / target) * steps);
+};
+
+// Locked badges with a target, fewest steps left first, then furthest along.
+const closestFirst = (badges: Badge[]): Badge[] =>
+  badges
+    .filter((badge) => !badge.unlocked && typeof badge.target === "number")
+    .sort(
+      (a, b) =>
+        stepsLeft(a) - stepsLeft(b) ||
+        b.current! / b.target! - a.current! / a.target!,
+    );
+
+/** The "Closest next" badge: the locked badge fewest steps from being earned. */
+export const pickClosestNext = (badges: Badge[]): Badge | undefined =>
+  closestFirst(badges)[0];
+
+/** "195 / 250", or "812,400 / 1,000,000 km". Kilometres read better rounded and grouped. */
+export const formatBadgeProgress = (badge: Badge, language: string): string => {
+  const value = Math.round(badge.current ?? 0).toLocaleString(language);
+  const target = Math.round(badge.target ?? 0).toLocaleString(language);
+  const suffix = DISTANCE_BADGES.has(badge.id) ? " km" : "";
+  return `${value} / ${target}${suffix}`;
 };
