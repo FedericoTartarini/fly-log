@@ -21,6 +21,12 @@ export const tokens = {
     "accent-text": "#B30E17",
     "accent-tint": "#FDE7E8",
     "on-accent": "#FFFFFF",
+    // The Timeline heatmap, a sequential scale from an empty month to the busiest.
+    "heat-0": "#EEF1F5",
+    "heat-1": "#F9CDCF",
+    "heat-2": "#F08A8F",
+    "heat-3": "#DA111B",
+    "heat-4": "#8E0B12",
   },
   dark: {
     page: "#0E1218",
@@ -38,6 +44,11 @@ export const tokens = {
     "accent-text": "#FF7A80",
     "accent-tint": "#3B1B20",
     "on-accent": "#FFFFFF",
+    "heat-0": "#232A37",
+    "heat-1": "#6B2229",
+    "heat-2": "#A3242D",
+    "heat-3": "#DA111B",
+    "heat-4": "#FF4D55",
   },
 };
 

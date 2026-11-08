@@ -2,26 +2,28 @@
   "title": "Flights",
   "no_flights": "No flights to display for this selection.",
   "timeline": {
-    "title": "Flight Timeline",
-    "subtitle": "Your flight activity across every year, one row per year and one square per month. Darker squares mean more flights — hover for the count.",
-    "subtitle_distance": "The distance you flew each month, one row per year and one square per month. Darker squares mean more kilometres — hover for the total.",
-    "subtitle_co2": "The CO₂e your flights emitted each month, one row per year and one square per month. Darker squares mean more emissions — hover for the total.",
-    "tooltip_one": "{{date}} · {{count}} flight",
-    "tooltip_other": "{{date}} · {{count}} flights",
-    "tooltip_value": "{{date}} · {{value}}",
-    "legend_none": "No flights",
-    "legend_max_one": "{{count}} flight",
-    "legend_max_other": "{{count}} flights",
-    "legend_max_plus": "{{count}}+ flights",
+    "title": "Timeline",
+    "subtitle": "Every month you have flown. It always shows all your flights, so filters do not change it.",
+    "grid_title": {
+      "flights": "Flights each month",
+      "distance": "Kilometres each month",
+      "co2": "CO₂e each month"
+    },
+    "grid_label": "{{title}}, one row per year, newest year first",
+    "value_none": "no flights",
+    "value_one": "{{count}} flight",
+    "value_other": "{{count}} flights",
+    "cell": "{{date}} · {{value}}",
+    "legend_none": "None",
     "error": "Error loading flight data: {{error}}",
     "stats": {
       "total_flights": "Flights",
-      "active_months": "Months flown",
-      "busiest_month": "Busiest month",
       "total_distance": "Kilometres",
-      "busiest_month_distance": "Month with most km",
-      "total_co2": "Emissions",
-      "busiest_month_co2": "Month with most CO₂e"
+      "total_co2": "Kg CO₂e",
+      "since": "since {{year}}",
+      "active_months": "Months flown",
+      "of_months": "of {{count}}",
+      "busiest_month": "Busiest month"
     }
   },
   "list": {
