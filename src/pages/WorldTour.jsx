@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   Divider,
   Group,
+  VisuallyHidden,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
@@ -102,9 +103,10 @@ const getRoutesFocus = (routes) => {
 // Animated globe tour for flights over time.
 function WorldTour() {
   const { t } = useTranslation("tour");
-  const { allFlights } = useFlightStore(
+  const { allFlights, isLoading } = useFlightStore(
     useShallow((s) => ({
       allFlights: s.allFlights,
+      isLoading: s.isLoading,
     })),
   );
 
@@ -902,7 +904,15 @@ function WorldTour() {
               </Alert>
             )}
 
-            {!routes.length && !loadError && (
+            {/* The page keeps its real layout while flights load, so this
+                tells screen readers it is loading. The no-routes alert waits
+                until then, or it flashes before the routes arrive. */}
+            {isLoading && (
+              <VisuallyHidden role="status">
+                {t("flights:loading")}
+              </VisuallyHidden>
+            )}
+            {!routes.length && !loadError && !isLoading && (
               <Alert
                 icon={<IconInfoCircle size={16} />}
                 color="blue"

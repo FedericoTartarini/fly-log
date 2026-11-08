@@ -44,12 +44,10 @@ describe("Timeline", () => {
     vi.clearAllMocks();
   });
 
-  it("shows a loader while flights are being fetched", async () => {
+  it("shows a skeleton while flights are being fetched", () => {
     applyMockState({ isLoading: true });
     render(<Timeline />);
-    await waitFor(() => {
-      expect(document.querySelector(".mantine-Loader-root")).toBeInTheDocument();
-    });
+    expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
   it("shows an error message instead of the empty state when the fetch failed", () => {
