@@ -17,6 +17,7 @@ import {
   sortForShelf,
   pickClosestNext,
   formatBadgeProgress,
+  amountLeft,
   BADGE_CATEGORIES,
   DISTANCE_BADGES,
 } from "../utils/badges.ts";
@@ -32,7 +33,7 @@ const ClosestNext = ({ badge }) => {
   const { t, i18n } = useTranslation("flights");
   const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
   const name = t(`badges.items.${badge.id}.name`);
-  const remaining = Math.round(badge.target - badge.current);
+  const remaining = amountLeft(badge);
 
   return (
     <section className={classes.next} aria-labelledby="badges-next">

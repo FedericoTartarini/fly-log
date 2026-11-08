@@ -5,6 +5,8 @@ import {
   pickStripBadges,
   pickClosestNext,
   stepsLeft,
+  amountLeft,
+  formatBadgeProgress,
   BADGE_DEFS,
   BADGE_CATEGORIES,
   type Badge,
@@ -265,5 +267,24 @@ describe("pickClosestNext", () => {
     expect(
       pickClosestNext([badge("first_flight"), badge("ten_up", 10, 10, true)]),
     ).toBeUndefined();
+  });
+});
+
+describe("amountLeft and formatBadgeProgress", () => {
+  // 0.4 km short of a million: still locked, so neither text may say done.
+  const almost: Badge = {
+    id: "million_club",
+    category: BADGE_CATEGORIES.DISTANCE,
+    unlocked: false,
+    current: 999_999.6,
+    target: 1_000_000,
+  };
+
+  it("rounds what is left up, never to 0", () => {
+    expect(amountLeft(almost)).toBe(1);
+  });
+
+  it("rounds progress down, never to the target", () => {
+    expect(formatBadgeProgress(almost, "en-AU")).toBe("999,999 / 1,000,000 km");
   });
 });

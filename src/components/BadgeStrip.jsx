@@ -17,6 +17,7 @@ import {
   evaluateBadges,
   sortForShelf,
   pickStripBadges,
+  amountLeft,
   DISTANCE_BADGES,
 } from "../utils/badges.ts";
 import { BADGE_ICONS } from "../constants/badgeIcons.ts";
@@ -96,7 +97,7 @@ function BadgeStrip() {
   if (recent.length === 0 && !next) return null;
 
   const remaining = next
-    ? Math.round(next.target - next.current).toLocaleString(i18n.language)
+    ? amountLeft(next).toLocaleString(i18n.language)
     : null;
 
   return (
@@ -146,7 +147,7 @@ function BadgeStrip() {
                   : "badges.to_go",
                 {
                   value: remaining,
-                  count: Math.round(next.target - next.current),
+                  count: amountLeft(next),
                 },
               )}
             />

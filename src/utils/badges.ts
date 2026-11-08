@@ -296,8 +296,13 @@ export const pickClosestNext = (badges: Badge[]): Badge | undefined =>
 
 /** "195 / 250", or "812,400 / 1,000,000 km". Kilometres read better rounded and grouped. */
 export const formatBadgeProgress = (badge: Badge, language: string): string => {
-  const value = Math.round(badge.current ?? 0).toLocaleString(language);
+  // Rounded down, so a badge still locked never reads as complete.
+  const value = Math.floor(badge.current ?? 0).toLocaleString(language);
   const target = Math.round(badge.target ?? 0).toLocaleString(language);
   const suffix = DISTANCE_BADGES.has(badge.id) ? " km" : "";
   return `${value} / ${target}${suffix}`;
 };
+
+/** What is still to go, rounded up so a locked badge never reads "0 to go". */
+export const amountLeft = (badge: Badge): number =>
+  Math.ceil((badge.target ?? 0) - (badge.current ?? 0));
