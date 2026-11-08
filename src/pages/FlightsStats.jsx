@@ -77,9 +77,11 @@ const FlightsStats = () => {
 
   if (allFlights.length === 0) {
     return (
-      <Suspense fallback={<Skeleton height={36} radius="xl" />}>
-        <NoFlightsCard />
-      </Suspense>
+      <Container size="sm" mt="md" pb={96}>
+        <Suspense fallback={<Skeleton height={480} radius={16} />}>
+          <NoFlightsCard welcome />
+        </Suspense>
+      </Container>
     );
   }
 

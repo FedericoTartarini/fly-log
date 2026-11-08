@@ -1,6 +1,5 @@
 {
   "title": "Voli",
-  "image_alt": "ala dell'aereo",
   "no_flights": "Nessun volo da visualizzare per questa selezione.",
   "timeline": {
     "title": "Cronologia dei voli",
@@ -30,6 +29,7 @@
     "count_all_other": "{{count}} voli dal {{year}}",
     "count_undated_one": "{{count}} volo",
     "count_undated_other": "{{count}} voli",
+    "none": "Ancora nessun volo",
     "count_filtered_one": "{{count}} di {{total}} voli corrisponde ai filtri",
     "count_filtered_other": "{{count}} di {{total}} voli corrispondono ai filtri",
     "upcoming": "Futuri",
@@ -168,9 +168,22 @@
     "source": "Fonte: AeroDataBox"
   },
   "no_flights_card": {
-    "title": "Benvenuto",
-    "description": "Sembra che non hai ancora aggiunto voli. Non preoccuparti, è facile iniziare! Clicca il pulsante qui sotto per aggiungere il tuo primo volo.",
-    "cta": "Aggiungi nuovo volo"
+    "welcome_title": "Benvenuto in FlyLog",
+    "welcome_text": "Aggiungi i tuoi voli e questa carta d’imbarco si riempie con quanta strada hai fatto, dove sei stato e i tuoi viaggi più lunghi.",
+    "kilometres": "Chilometri",
+    "add_first": "Aggiungi il tuo primo volo",
+    "ai_title": "Descrivi il tuo viaggio",
+    "ai_text": "Scrivilo con parole tue, per esempio “Da Sydney a Singapore con QF1, 11 nov”.",
+    "manual_title": "Compila un modulo",
+    "manual_text": "Scegli tu data, aeroporti e compagnia.",
+    "csv_title": "Carica un file CSV",
+    "csv_text": "Importa molti voli insieme da un foglio di calcolo o da un’altra app.",
+    "flights_title": "Qui troverai l’elenco dei tuoi voli",
+    "flights_text": "Raggruppati per anno, con il prossimo viaggio in cima. Aggiungine uno per iniziare.",
+    "timeline_title": "Qui i tuoi voli appariranno come un calendario",
+    "timeline_text": "Una riga per anno e un quadrato per mese, più scuro dove hai volato di più.",
+    "badges_title": "Qui appariranno i tuoi traguardi",
+    "badges_text": "Li ottieni per distanze, paesi e tappe importanti man mano che aggiungi voli."
   },
   "stats": {
     "shortest_flight": "Volo più corto",

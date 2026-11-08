@@ -59,18 +59,23 @@ function Flights() {
           <Title order={1} className={classes.title}>
             {t("title")}
           </Title>
-          {hasFlights && (
-            <Text c="var(--fl-muted)" mt={2}>
-              {countLine}
-            </Text>
-          )}
+          <Text c="var(--fl-muted)" mt={2}>
+            {hasFlights ? countLine : t("list.none")}
+          </Text>
         </div>
         <div className={classes.tags}>
           <FilterTags />
         </div>
 
         <Suspense fallback={loader}>
-          {hasFlights ? <FlightsList /> : <NoFlightsCard />}
+          {hasFlights ? (
+            <FlightsList />
+          ) : (
+            <NoFlightsCard
+              title={t("no_flights_card.flights_title")}
+              text={t("no_flights_card.flights_text")}
+            />
+          )}
         </Suspense>
       </Stack>
     </Container>

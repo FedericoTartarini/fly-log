@@ -15,7 +15,9 @@ vi.mock("../context/AuthContext.jsx", () => ({
   }),
 }));
 vi.mock("../components/FlightEntryForm.tsx", () => ({
-  default: () => <div data-testid="flight-entry-form" />,
+  default: ({ initialTab }) => (
+    <div data-testid="flight-entry-form" data-tab={initialTab} />
+  ),
 }));
 
 // A phone-sized screen, so the tab bar and the floating add button show.
@@ -71,10 +73,19 @@ describe("MyAppShell on a phone", () => {
   });
 
   it("shows the filter button only on pages that filter", () => {
+    useFlightStore.setState({ isLoading: false, allFlights: [{ id: "1" }] });
     renderAt("/stats");
     expect(
       screen.getByRole("button", { name: "Filter flights" }),
     ).toBeInTheDocument();
+  });
+
+  it("hides the filter button while there are no flights to filter", () => {
+    useFlightStore.setState({ isLoading: false, allFlights: [] });
+    renderAt("/stats");
+    expect(
+      screen.queryByRole("button", { name: /filter flights/i }),
+    ).toBeNull();
   });
 
   it("hides the filter button on pages that don't filter", () => {
@@ -88,5 +99,14 @@ describe("MyAppShell on a phone", () => {
     renderAt("/stats");
     await userEvent.click(screen.getByRole("button", { name: "Add flight" }));
     expect(await screen.findByTestId("flight-entry-form")).toBeInTheDocument();
+  });
+
+  it("opens the add-flight form on the tab a page asks for", async () => {
+    renderAt("/stats");
+    useFlightStore.getState().setAddFlightOpened(true, "csv");
+    expect(await screen.findByTestId("flight-entry-form")).toHaveAttribute(
+      "data-tab",
+      "csv",
+    );
   });
 });

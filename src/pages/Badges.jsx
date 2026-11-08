@@ -65,9 +65,9 @@ function Badges() {
   // No flights at all: show the shared add-flight call to action, as Timeline does.
   if (!allFlights || allFlights.length === 0) {
     return (
-      <Container mt="md">
-        <Stack gap="xl">
-          <Title order={2} ta="center">
+      <Container size="sm" mt="md" pb={96}>
+        <Stack gap="md">
+          <Title order={1} fz={28}>
             {t("badges.title")}
           </Title>
           <Suspense
@@ -77,7 +77,10 @@ function Badges() {
               </Center>
             }
           >
-            <NoFlightsCard />
+            <NoFlightsCard
+              title={t("no_flights_card.badges_title")}
+              text={t("no_flights_card.badges_text")}
+            />
           </Suspense>
         </Stack>
       </Container>
