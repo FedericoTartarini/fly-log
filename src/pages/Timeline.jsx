@@ -1,65 +1,43 @@
-import React, { lazy, Suspense, useMemo } from "react";
+import React, { lazy, Suspense, useMemo, useState } from "react";
 import {
   Container,
   Title,
   Stack,
-  Card,
-  Group,
   Center,
   Loader,
   Text,
-  Box,
-  Tooltip,
   SegmentedControl,
-  rem,
-  useMantineTheme,
-  useComputedColorScheme,
+  SimpleGrid,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store.ts";
-import StatDisplay from "../components/StatDisplay.jsx";
 import TimelineSkeleton from "../components/TimelineSkeleton.jsx";
 import {
   getFlightMonthMatrix,
   getMonthMatrixStats,
   getLocalizedMonthLabels,
   formatMetricValue,
+  formatCompactValue,
+  heatStep,
 } from "../utils/chartUtils.js";
 import { CHART_METRIC } from "../constants/filters.ts";
+import classes from "./Timeline.module.css";
 
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
-// Grid template: a fixed year-label column followed by 12 equal month columns.
-const GRID_COLUMNS = `2.5rem repeat(12, 1fr)`;
-
-// Copy differs per metric, so look the keys up rather than nesting ternaries.
-const METRIC_KEYS = {
-  [CHART_METRIC.FLIGHTS]: {
-    subtitle: "timeline.subtitle",
-    total: "timeline.stats.total_flights",
-    busiest: "timeline.stats.busiest_month",
-  },
-  [CHART_METRIC.DISTANCE]: {
-    subtitle: "timeline.subtitle_distance",
-    total: "timeline.stats.total_distance",
-    busiest: "timeline.stats.busiest_month_distance",
-  },
-  [CHART_METRIC.CO2]: {
-    subtitle: "timeline.subtitle_co2",
-    total: "timeline.stats.total_co2",
-    busiest: "timeline.stats.busiest_month_co2",
-  },
+const TOTAL_KEYS = {
+  [CHART_METRIC.FLIGHTS]: "timeline.stats.total_flights",
+  [CHART_METRIC.DISTANCE]: "timeline.stats.total_distance",
+  [CHART_METRIC.CO2]: "timeline.stats.total_co2",
 };
 
-// Timeline page: a year x month matrix heatmap of flight activity. Each row is
-// a year, each column a month, shaded by either the number of flights that
-// month or the distance flown, depending on the shared chart metric.
+// Timeline page: a year x month heatmap of flight activity, newest year on
+// top, shaded by flights, kilometres or CO₂e. Tapping a month reads its value
+// out above the grid, because hover tooltips do not work on phones.
 function Timeline() {
   const { t, i18n } = useTranslation("flights");
-  const theme = useMantineTheme();
-  const colorScheme = useComputedColorScheme("light");
-  const isDark = colorScheme === "dark";
+  const [picked, setPicked] = useState(null);
 
   // The grid's vertical axis is the year, so it always plots the complete
   // history: applying the shared year filter would collapse it to one row.
@@ -72,60 +50,30 @@ function Timeline() {
       setMetric: s.setChartMetric,
     })),
   );
-  // Flight counts are small whole numbers; kilometres and kilograms are not,
-  // which is what the shading and the legend branch on.
   const isCount =
     metric !== CHART_METRIC.DISTANCE && metric !== CHART_METRIC.CO2;
-  const keys = METRIC_KEYS[metric] ?? METRIC_KEYS[CHART_METRIC.FLIGHTS];
+  const metricKey = isCount ? CHART_METRIC.FLIGHTS : metric;
 
   const matrix = useMemo(
     () => getFlightMonthMatrix(allFlights, metric),
     [allFlights, metric],
   );
   const stats = useMemo(() => getMonthMatrixStats(matrix), [matrix]);
-  const monthLabels = useMemo(
-    () => getLocalizedMonthLabels(i18n.language),
+  const months = useMemo(
+    () => ({
+      narrow: getLocalizedMonthLabels(i18n.language, "narrow"),
+      short: getLocalizedMonthLabels(i18n.language),
+      long: getLocalizedMonthLabels(i18n.language, "long"),
+    }),
     [i18n.language],
   );
-
-  // Five shades, from an empty month to the darkest. Falls back to Mantine's
-  // built-in red palette if the brand color is absent.
-  const shades = useMemo(() => {
-    const reds = theme.colors?.primary ?? theme.colors.red;
-    const emptyFill = isDark ? theme.colors.dark[5] : theme.colors.gray[1];
-    return [emptyFill, reds[3], reds[5], reds[7], reds[9]];
-  }, [theme, isDark]);
-
-  // Flight counts use fixed buckets, so one shade always means one number.
-  // Kilometres and kilograms have no natural step size, so they scale against
-  // the busiest month instead.
-  const bucketOf = useMemo(() => {
-    if (isCount) return (value) => Math.min(value, 4);
-    const max = stats.busiestValue || 1;
-    return (value) => (value ? Math.ceil((value / max) * 4) : 0);
-  }, [isCount, stats.busiestValue]);
-
-  const formatValue = (value) =>
-    formatMetricValue(value, metric, i18n.language);
-
-  // The darkest shade is the "4 or more" bucket, so a busier month than that
-  // must be labelled 4+ rather than its own total.
-  const legendMaxLabel = !isCount
-    ? formatValue(stats.busiestValue)
-    : stats.busiestValue > 4
-      ? t("timeline.legend_max_plus", { count: 4 })
-      : t("timeline.legend_max", { count: stats.busiestValue });
-
-  const busiestLabel = stats.busiestMonth
-    ? `${monthLabels[stats.busiestMonth.month]} ${stats.busiestMonth.year} (${formatValue(stats.busiestValue)})`
-    : "—";
 
   if (isLoading) return <TimelineSkeleton />;
 
   if (error) {
     return (
       <Container mt="md">
-        <Text c="red" size="lg" ta="center">
+        <Text c="red" size="lg" ta="center" role="alert">
           {t("timeline.error", { error })}
         </Text>
       </Container>
@@ -157,140 +105,205 @@ function Timeline() {
     );
   }
 
-  const renderCell = (year, value, month) => {
-    const label = isCount
-      ? t("timeline.tooltip", {
-          date: `${monthLabels[month]} ${year}`,
-          count: value,
-        })
-      : t("timeline.tooltip_value", {
-          date: `${monthLabels[month]} ${year}`,
-          value: formatValue(value),
-        });
-    return (
-      <Tooltip key={month} label={label} withinPortal withArrow>
-        <Box
-          role={value ? "img" : undefined}
-          aria-label={value ? label : undefined}
-          style={{
-            height: rem(14),
-            borderRadius: rem(3),
-            backgroundColor: shades[bucketOf(value)],
-          }}
-        />
-      </Tooltip>
-    );
+  // Every year from the newest down to the oldest, including years with no
+  // flights, so the rows read as an unbroken calendar.
+  const newest = matrix.years.at(-1);
+  const oldest = matrix.years[0];
+  const years = matrix.years.length
+    ? Array.from({ length: newest - oldest + 1 }, (_, i) => newest - i)
+    : [];
+  const valueAt = (year, month) => matrix.counts[year]?.[month] ?? 0;
+
+  // Months flown out of the months from the first flown month to the last.
+  const flown = [...years]
+    .reverse()
+    .flatMap((year) => Array.from({ length: 12 }, (_, m) => valueAt(year, m)))
+    .map((value) => value > 0);
+  // No month has a value when, say, no flight has a distance yet.
+  const spanMonths = flown.includes(true)
+    ? flown.lastIndexOf(true) - flown.indexOf(true) + 1
+    : 0;
+
+  const describe = (value) => {
+    if (!value) return t("timeline.value_none");
+    return isCount
+      ? t("timeline.value", { count: value })
+      : formatMetricValue(value, metric, i18n.language);
   };
+  const compact = (value) => formatCompactValue(value, i18n.language);
+
+  // The busiest month is selected until the visitor taps another.
+  const selected = picked ?? stats.busiestMonth;
+  const busiest = stats.busiestMonth;
+  // Built by hand rather than with Intl's 2-digit year, which writes "Mar ’25"
+  // on some systems and "Mar 25" on others.
+  const busiestLabel = busiest
+    ? `${months.short[busiest.month]} ${String(busiest.year).slice(2)}`
+    : "—";
+
+  const gridTitle = t(`timeline.grid_title.${metricKey}`);
+  const tiles = [
+    {
+      id: "timeline-total-flights",
+      label: t(TOTAL_KEYS[metricKey]),
+      value: compact(stats.total),
+      note: t("timeline.stats.since", { year: oldest }),
+    },
+    {
+      id: "timeline-active-months",
+      label: t("timeline.stats.active_months"),
+      value: stats.activeMonths,
+      note: t("timeline.stats.of_months", { count: spanMonths }),
+    },
+    {
+      id: "timeline-busiest-month",
+      label: t("timeline.stats.busiest_month"),
+      value: busiestLabel,
+      note: compact(stats.busiestValue),
+    },
+  ];
 
   return (
-    <Container mt="md" size="sm">
-      <Stack gap="sm">
-        <Title order={2} ta="center">
-          {t("timeline.title")}
-        </Title>
-        <Text size="sm" c="dimmed" ta="center">
-          {t(keys.subtitle)}
-        </Text>
-        <Group justify="center">
-          <SegmentedControl
-            value={metric}
-            onChange={setMetric}
-            data={[
-              { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
-              { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
-              { label: t("metric.co2"), value: CHART_METRIC.CO2 },
-            ]}
-          />
-        </Group>
+    <Container mt="md" size="sm" pb={96}>
+      <Stack gap="md">
+        <div>
+          <Title order={1} fz={28}>
+            {t("timeline.title")}
+          </Title>
+          <Text c="var(--fl-muted)" mt={2}>
+            {t("timeline.subtitle")}
+          </Text>
+        </div>
 
-        {matrix.years.length > 0 ? (
+        <SegmentedControl
+          fullWidth
+          classNames={{
+            root: classes.switch,
+            indicator: classes.switchIndicator,
+          }}
+          value={metric}
+          onChange={setMetric}
+          aria-label={t("charts.measure")}
+          data={[
+            { label: t("metric.flights"), value: CHART_METRIC.FLIGHTS },
+            { label: t("metric.distance"), value: CHART_METRIC.DISTANCE },
+            { label: t("metric.co2"), value: CHART_METRIC.CO2 },
+          ]}
+        />
+
+        {years.length > 0 ? (
           <>
-            <Group justify="space-around" gap="xs">
-              <StatDisplay
-                id="timeline-total-flights"
-                label={t(keys.total)}
-                value={formatValue(stats.total)}
-              />
-              <StatDisplay
-                id="timeline-active-months"
-                label={t("timeline.stats.active_months")}
-                value={stats.activeMonths}
-              />
-              <StatDisplay
-                id="timeline-busiest-month"
-                label={t(keys.busiest)}
-                value={busiestLabel}
-              />
-            </Group>
-
-            <Card shadow="sm" radius="md" withBorder p="xs">
-              <Box>
-                {/* Month label header row */}
-                <Box
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: GRID_COLUMNS,
-                    gap: rem(3),
-                    alignItems: "center",
-                  }}
-                >
-                  <div />
-                  {monthLabels.map((month) => (
-                    <Text key={month} size="xs" c="dimmed" ta="center">
-                      {month}
-                    </Text>
-                  ))}
-                </Box>
-
-                {/* One row per year */}
-                {matrix.years.map((year) => (
-                  <Box
-                    key={year}
-                    mt={rem(2)}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: GRID_COLUMNS,
-                      gap: rem(3),
-                      alignItems: "center",
-                    }}
+            <SimpleGrid cols={3} spacing={8}>
+              {tiles.map((tile) => (
+                <div key={tile.id} className={classes.tile}>
+                  <span
+                    className={classes.tileLabel}
+                    data-cy={`${tile.id}-label`}
                   >
-                    <Text size="xs" fw={600}>
-                      {year}
-                    </Text>
-                    {matrix.counts[year].map((count, month) =>
-                      renderCell(year, count, month),
-                    )}
-                  </Box>
-                ))}
-              </Box>
+                    {tile.label}
+                  </span>
+                  <span
+                    className={classes.tileValue}
+                    data-cy={`${tile.id}-value`}
+                  >
+                    {tile.value}
+                  </span>
+                  <span className={classes.tileNote}>{tile.note}</span>
+                </div>
+              ))}
+            </SimpleGrid>
 
-              {/* Legend: an empty month -> the busiest month in the data */}
-              <Group gap={rem(4)} justify="flex-end" mt={rem(6)} align="center">
-                <Text size="xs" c="dimmed">
-                  {isCount ? t("timeline.legend_none") : formatValue(0)}
-                </Text>
-                {/* In flights mode the shades are fixed buckets, so hide any
-                    the data never reaches: the right-hand label must describe
-                    the darkest square shown. The other metrics scale to the
-                    busiest month, so every shade is always in play. */}
-                {[0, 1, 2, 3, 4]
-                  .filter((bucket) => !isCount || bucket <= stats.busiestValue)
-                  .map((bucket) => (
-                    <Box
-                      key={bucket}
-                      style={{
-                        width: rem(10),
-                        height: rem(10),
-                        borderRadius: rem(2),
-                        backgroundColor: shades[bucket],
-                      }}
-                    />
-                  ))}
-                <Text size="xs" c="dimmed">
-                  {legendMaxLabel}
-                </Text>
-              </Group>
-            </Card>
+            <section
+              className={classes.grid}
+              aria-labelledby="timeline-grid-title"
+            >
+              <div className={classes.gridHead}>
+                <Title order={2} fz={17} id="timeline-grid-title">
+                  {gridTitle}
+                </Title>
+                {/* Read out whenever the visitor picks another month. */}
+                <p className={classes.pick} aria-live="polite">
+                  {selected && (
+                    <>
+                      <strong>
+                        {months.long[selected.month]} {selected.year}
+                      </strong>{" "}
+                      <Text span inherit c="var(--fl-muted)">
+                        · {describe(valueAt(selected.year, selected.month))}
+                      </Text>
+                    </>
+                  )}
+                </p>
+              </div>
+
+              <div className={classes.row} aria-hidden="true">
+                <span />
+                {months.narrow.map((letter, month) => (
+                  <abbr
+                    key={month}
+                    title={months.long[month]}
+                    className={classes.month}
+                  >
+                    {letter}
+                  </abbr>
+                ))}
+              </div>
+
+              <div
+                className={classes.rows}
+                role="group"
+                aria-label={t("timeline.grid_label", { title: gridTitle })}
+              >
+                {years.map((year) => (
+                  <div key={year} className={classes.row}>
+                    <span
+                      className={classes.year}
+                      data-active={matrix.counts[year] ? true : undefined}
+                    >
+                      {year}
+                    </span>
+                    {Array.from({ length: 12 }, (_, month) => {
+                      const value = valueAt(year, month);
+                      const isSelected =
+                        selected?.year === year && selected?.month === month;
+                      return (
+                        <button
+                          key={month}
+                          type="button"
+                          className={classes.cell}
+                          aria-pressed={isSelected}
+                          aria-label={t("timeline.cell", {
+                            date: `${months.short[month]} ${year}`,
+                            value: describe(value),
+                          })}
+                          onClick={() => setPicked({ year, month })}
+                          style={{
+                            background: `var(--fl-heat-${heatStep(value, isCount, stats.busiestValue)})`,
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+
+              <div className={classes.legend}>
+                <span style={{ marginRight: 4 }}>
+                  {isCount ? t("timeline.legend_none") : compact(0)}
+                </span>
+                {[0, 1, 2, 3, 4].map((step) => (
+                  <span
+                    key={step}
+                    aria-hidden="true"
+                    className={classes.swatch}
+                    style={{ background: `var(--fl-heat-${step})` }}
+                  />
+                ))}
+                <span style={{ marginLeft: 4 }}>
+                  {isCount ? "4+" : compact(stats.busiestValue)}
+                </span>
+              </div>
+            </section>
           </>
         ) : (
           <Text c="dimmed" ta="center">
