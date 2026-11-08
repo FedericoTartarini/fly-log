@@ -24,9 +24,21 @@ describe("manifest.json icons", () => {
     }
   });
 
-  it("does not declare maskable icons without dedicated padded assets", () => {
+  it("gives maskable icons their own files, separate from the any icons", () => {
+    // `purpose` is a space-separated list and defaults to "any".
+    const purposes = (icon: { purpose?: string }) =>
+      (icon.purpose ?? "any").split(/\s+/).filter(Boolean);
+    const anySources = new Set(
+      manifest.icons
+        .filter((icon: { purpose?: string }) => purposes(icon).includes("any"))
+        .map((icon: { src: string }) => icon.src),
+    );
+
     for (const icon of manifest.icons) {
-      expect(icon.purpose).not.toBe("maskable");
+      if (!purposes(icon).includes("maskable")) continue;
+      // Maskable artwork needs a safe-zone padding that the any icons don't have.
+      expect(purposes(icon)).not.toContain("any");
+      expect(anySources.has(icon.src)).toBe(false);
     }
   });
 });
