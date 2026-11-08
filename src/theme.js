@@ -45,10 +45,10 @@ export const tokens = {
     "accent-tint": "#3B1B20",
     "on-accent": "#FFFFFF",
     "heat-0": "#232A37",
-    "heat-1": "#4A1C22",
-    "heat-2": "#8A2A31",
-    "heat-3": "#E0444C",
-    "heat-4": "#FFA3A8",
+    "heat-1": "#6B2229",
+    "heat-2": "#A3242D",
+    "heat-3": "#DA111B",
+    "heat-4": "#FF4D55",
   },
 };
 

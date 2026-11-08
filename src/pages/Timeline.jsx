@@ -179,6 +179,10 @@ function Timeline() {
 
         <SegmentedControl
           fullWidth
+          classNames={{
+            root: classes.switch,
+            indicator: classes.switchIndicator,
+          }}
           value={metric}
           onChange={setMetric}
           aria-label={t("charts.measure")}
