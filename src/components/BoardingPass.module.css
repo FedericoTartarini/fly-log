@@ -168,10 +168,14 @@
   font-weight: 500;
 }
 
-.barcode {
-  margin-top: 10px;
-  height: 34px;
-  color: var(--fl-ink);
+/* Only beside the pass on wide screens. On a phone the stripes look out of
+ * place under the stub, so the empty div takes no space there. */
+@media (min-width: 53.75em) {
+  .barcode {
+    margin-top: 10px;
+    height: 34px;
+    color: var(--fl-ink);
+  }
 }
 
 /* Same switch as the app shell: from 860 px the stub moves to the right and
