@@ -57,6 +57,12 @@ function MyAppShell() {
   const location = useLocation();
   const { t } = useTranslation("common");
   const addFlightOpened = useFlightStore((s) => s.addFlightOpened);
+  const addFlightTab = useFlightStore((s) => s.addFlightTab);
+  // Nothing to filter yet, so a new user gets no filter button. Kept while
+  // loading, so it does not flash away and back for everyone else.
+  const hasFlights = useFlightStore(
+    (s) => s.isLoading || s.allFlights.length > 0,
+  );
   const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
 
   const pinned = useHeadroom({ fixedAt: 120 });
@@ -68,7 +74,8 @@ function MyAppShell() {
     getInitialValueInEffect: false,
   });
   const showTabs = Boolean(user) && isPhone;
-  const showFilter = Boolean(user) && FILTER_PAGES.includes(location.pathname);
+  const showFilter =
+    Boolean(user) && hasFlights && FILTER_PAGES.includes(location.pathname);
 
   const openAddFlight = () => setAddFlightOpened(true);
   const closeAddFlight = () => setAddFlightOpened(false);
@@ -194,7 +201,7 @@ function MyAppShell() {
         >
           {/* No refetch: the Firestore listener picks the new flight up from
               the local write before the server has even acknowledged it. */}
-          <FlightEntryForm onSaved={closeAddFlight} />
+          <FlightEntryForm onSaved={closeAddFlight} initialTab={addFlightTab} />
         </Suspense>
       </Modal>
 

@@ -1,6 +1,5 @@
 {
   "title": "Flights",
-  "image_alt": "plane wing",
   "no_flights": "No flights to display for this selection.",
   "timeline": {
     "title": "Flight Timeline",
@@ -30,6 +29,7 @@
     "count_all_other": "{{count}} flights since {{year}}",
     "count_undated_one": "{{count}} flight",
     "count_undated_other": "{{count}} flights",
+    "none": "No flights yet",
     "count_filtered_one": "{{count}} of {{total}} flights matches your filters",
     "count_filtered_other": "{{count}} of {{total}} flights match your filters",
     "upcoming": "Upcoming",
@@ -168,9 +168,22 @@
     "source": "Source: AeroDataBox"
   },
   "no_flights_card": {
-    "title": "Welcome",
-    "description": "It looks like you haven't added any flights yet. Don't worry, it's easy to get started! Click the button below to add your first flight.",
-    "cta": "Add New Flight"
+    "welcome_title": "Welcome to FlyLog",
+    "welcome_text": "Add your flights and this pass fills in with how far you have flown, where you have been and your longest trips.",
+    "kilometres": "Kilometres",
+    "add_first": "Add your first flight",
+    "ai_title": "Describe your trip",
+    "ai_text": "Type it in your own words, for example “Sydney to Singapore on QF1, 11 Nov”.",
+    "manual_title": "Fill in a form",
+    "manual_text": "Pick the date, airports and airline yourself.",
+    "csv_title": "Upload a CSV file",
+    "csv_text": "Bring many flights at once from a spreadsheet or another app.",
+    "flights_title": "Your flights will be listed here",
+    "flights_text": "Grouped by year, with your next trip at the top. Add one to start.",
+    "timeline_title": "Your flights will appear here as a calendar",
+    "timeline_text": "One row per year and one square per month, darker where you flew more.",
+    "badges_title": "Your badges will appear here",
+    "badges_text": "Earn them for distances, countries and milestones as you add flights."
   },
   "stats": {
     "shortest_flight": "Shortest Flight",
