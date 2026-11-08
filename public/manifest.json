@@ -2,6 +2,7 @@
   "name": "Fly Log",
   "short_name": "FlyLog",
   "description": "Log and track your flights",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
