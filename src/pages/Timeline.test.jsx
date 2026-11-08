@@ -9,7 +9,7 @@ vi.mock("../components/NoFlightsCard.jsx", () => ({
   default: () => <div data-testid="no-flights-card" />,
 }));
 
-import { render, screen, waitFor } from "../../test-utils/index.js";
+import { render, screen, userEvent, waitFor } from "../../test-utils/index.js";
 import Timeline from "./Timeline";
 import useFlightStore from "../store.ts";
 import { CHART_METRIC } from "../constants/filters.ts";
@@ -67,50 +67,76 @@ describe("Timeline", () => {
     });
   });
 
-  it("renders a year row per year with matrix stats", async () => {
+  it("lists every year newest first, with matrix stats in the tiles", async () => {
+    applyMockState({
+      allFlights: [
+        ...flights,
+        { id: "4", departure_date: "2022-01-05T08:00:00Z" },
+      ],
+    });
+    render(<Timeline />);
+
+    // 2023 has no flights but still gets a row, so the calendar is unbroken.
+    await waitFor(() => {
+      expect(screen.getByText("2023")).toBeInTheDocument();
+    });
+    const years = ["2025", "2024", "2023", "2022"].map((y) =>
+      screen.getByText(y),
+    );
+    years.reduce((above, below) => {
+      expect(above.compareDocumentPosition(below)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+      return below;
+    });
+
+    expect(cy("timeline-total-flights")).toHaveTextContent("4");
+    expect(cy("timeline-active-months")).toHaveTextContent("3");
+    // Jan 2022 to Mar 2025 is 39 months.
+    expect(screen.getByText("of 39")).toBeInTheDocument();
+    expect(screen.getByText("since 2022")).toBeInTheDocument();
+    expect(cy("timeline-busiest-month")).toHaveTextContent("Mar ’25");
+  });
+
+  it("selects the busiest month when the page opens", async () => {
     applyMockState({ allFlights: flights });
     render(<Timeline />);
 
-    // One row per year present in the data.
-    await waitFor(() => {
-      expect(screen.getByText("2024")).toBeInTheDocument();
+    const busiest = await screen.findByRole("button", {
+      name: "Mar 2025 · 2 flights",
     });
-    expect(screen.getByText("2025")).toBeInTheDocument();
-
-    // Stats reflect 3 flights across 2 active months (Jul 2024, Mar 2025).
-    expect(cy("timeline-total-flights")).toHaveTextContent("3");
-    expect(cy("timeline-active-months")).toHaveTextContent("2");
-    // Busiest month is March 2025 with 2 flights.
-    expect(cy("timeline-busiest-month")).toHaveTextContent("2025");
-    expect(cy("timeline-busiest-month")).toHaveTextContent("(2)");
+    expect(busiest).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("March 2025")).toBeInTheDocument();
+    expect(screen.getByText("· 2 flights")).toBeInTheDocument();
   });
 
-  it("labels the legend from zero up to the busiest month's count", async () => {
+  it("reads out a month when it is tapped", async () => {
+    applyMockState({ allFlights: flights });
+    render(<Timeline />);
+
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Jul 2024 · 1 flight" }),
+    );
+    expect(screen.getByText("July 2024")).toBeInTheDocument();
+    expect(screen.getByText("· 1 flight")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Mar 2025 · 2 flights" }),
+    ).toHaveAttribute("aria-pressed", "false");
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Jan 2025 · no flights" }),
+    );
+    expect(screen.getByText("· no flights")).toBeInTheDocument();
+  });
+
+  it("labels the flights legend from None to 4+", async () => {
     applyMockState({ allFlights: flights });
     render(<Timeline />);
 
     await waitFor(() => {
-      expect(screen.getByText("No flights")).toBeInTheDocument();
+      expect(screen.getByText("None")).toBeInTheDocument();
     });
-    // The darkest swatch shown must be the one the right-hand label describes,
-    // so the label tracks the data rather than the fixed 4+ bucket.
-    expect(screen.getByText("2 flights")).toBeInTheDocument();
-  });
-
-  it("caps the legend at 4+ once a month passes the fixed bucket count", async () => {
-    // 5 flights in one month all clamp to the same darkest shade as a
-    // 4-flight month, so the legend must say "4+", not the exact count.
-    const busyMonth = Array.from({ length: 5 }, (_, i) => ({
-      id: `busy-${i}`,
-      departure_date: "2025-03-10T08:00:00Z",
-    }));
-    applyMockState({ allFlights: busyMonth });
-    render(<Timeline />);
-
-    await waitFor(() => {
-      expect(screen.getByText("4+ flights")).toBeInTheDocument();
-    });
-    expect(screen.queryByText("5 flights")).not.toBeInTheDocument();
+    expect(screen.getByText("4+")).toBeInTheDocument();
   });
 
   it("switches the heatmap to kilometres", async () => {
@@ -120,13 +146,14 @@ describe("Timeline", () => {
     });
     render(<Timeline />);
 
-    // Totals and the legend are in kilometres, not flight counts.
     await waitFor(() => {
-      expect(cy("timeline-total-flights")).toHaveTextContent("13,500 km");
+      expect(cy("timeline-total-flights")).toHaveTextContent("13.5K");
     });
-    expect(screen.getByText("12,000 km")).toBeInTheDocument();
     // Jul 2024 (12,000 km) beats Mar 2025 (1,500 km), the reverse of the
-    // flight-count ranking.
-    expect(cy("timeline-busiest-month")).toHaveTextContent("2024");
+    // flight-count ranking, so it is the month selected and the legend top.
+    expect(cy("timeline-busiest-month")).toHaveTextContent("Jul ’24");
+    expect(screen.getByText("· 12,000 km")).toBeInTheDocument();
+    expect(screen.getAllByText("12K")).toHaveLength(2);
+    expect(screen.getByText("0")).toBeInTheDocument();
   });
 });

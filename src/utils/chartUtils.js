@@ -56,10 +56,11 @@ const localizedWeekdays = (locale) => {
   });
 };
 
-// Helper: build localized month names January..December
-const localizedMonths = (locale) => {
+// Helper: build localized month names January..December. `width` is an
+// Intl month style: "short" (Jan), "long" (January) or "narrow" (J).
+const localizedMonths = (locale, width = "short") => {
   const fmt = new Intl.DateTimeFormat(locale, {
-    month: "short",
+    month: width,
     timeZone: "UTC",
   });
   return Array.from({ length: 12 }).map((_, i) =>
@@ -241,8 +242,18 @@ export const formatMetricValue = (value, metric, locale) => {
 
 // Localized month labels (Jan..Dec). Callers pass the active language so the
 // labels can be recomputed when it changes; falls back to the i18n current one.
-export const getLocalizedMonthLabels = (locale) =>
-  localizedMonths(locale || (i18n && i18n.language) || "en-AU");
+export const getLocalizedMonthLabels = (locale, width) =>
+  localizedMonths(locale || (i18n && i18n.language) || "en-AU", width);
+
+// The Timeline shade, 0 (no flights) to 4, for one month. Flight counts use
+// fixed steps, so one shade always means one number and 4 or more is the
+// darkest. Kilometres and kilograms have no natural step size, so they scale
+// against the busiest month instead.
+export const heatStep = (value, isCount, busiestValue) => {
+  if (!value) return 0;
+  if (isCount) return Math.min(value, 4);
+  return Math.max(1, Math.ceil((value / busiestValue) * 4));
+};
 
 export const getFlightsByAirport = (flights, metric) => {
   if (!flights) return [];

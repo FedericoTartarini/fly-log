@@ -8,6 +8,7 @@ import {
   getMonthMatrixStats,
   formatMetricValue,
   formatCompactValue,
+  heatStep,
 } from "./chartUtils";
 import { capitalize } from "./stringUtils";
 import { CHART_METRIC, TIME_GROUPING } from "../constants/filters.ts";
@@ -411,5 +412,21 @@ describe("getFlightsByAircraft", () => {
         { flight_status: { aircraft: { model: " airbus a320 " } } },
       ]),
     ).toEqual([{ aircraft: "Airbus A320", flights: 2 }]);
+  });
+});
+
+describe("heatStep", () => {
+  it("gives flight counts fixed steps, with 4 or more the darkest", () => {
+    expect([0, 1, 2, 3, 4, 5, 9].map((n) => heatStep(n, true, 9))).toEqual([
+      0, 1, 2, 3, 4, 4, 4,
+    ]);
+  });
+
+  it("scales kilometres and CO₂e against the busiest month", () => {
+    expect(
+      [0, 1, 2500, 2501, 5000, 7500, 10000].map((km) =>
+        heatStep(km, false, 10000),
+      ),
+    ).toEqual([0, 1, 1, 2, 2, 3, 4]);
   });
 });

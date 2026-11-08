@@ -2,26 +2,28 @@
   "title": "Voli",
   "no_flights": "Nessun volo da visualizzare per questa selezione.",
   "timeline": {
-    "title": "Cronologia dei voli",
-    "subtitle": "La tua attività di volo per ogni anno, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più voli — passa il mouse per il conteggio.",
-    "subtitle_distance": "I chilometri percorsi ogni mese, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più chilometri — passa il mouse per il totale.",
-    "subtitle_co2": "La CO₂e emessa dai tuoi voli ogni mese, una riga per anno e un quadrato per mese. I quadrati più scuri indicano più emissioni — passa il mouse per il totale.",
-    "tooltip_one": "{{date}} · {{count}} volo",
-    "tooltip_other": "{{date}} · {{count}} voli",
-    "tooltip_value": "{{date}} · {{value}}",
-    "legend_none": "Nessun volo",
-    "legend_max_one": "{{count}} volo",
-    "legend_max_other": "{{count}} voli",
-    "legend_max_plus": "{{count}}+ voli",
+    "title": "Cronologia",
+    "subtitle": "Ogni mese in cui hai volato. Mostra sempre tutti i tuoi voli, quindi i filtri non la cambiano.",
+    "grid_title": {
+      "flights": "Voli ogni mese",
+      "distance": "Chilometri ogni mese",
+      "co2": "CO₂e ogni mese"
+    },
+    "grid_label": "{{title}}, una riga per anno, dal più recente",
+    "value_none": "nessun volo",
+    "value_one": "{{count}} volo",
+    "value_other": "{{count}} voli",
+    "cell": "{{date}} · {{value}}",
+    "legend_none": "Nessuno",
     "error": "Errore nel caricamento dei dati di volo: {{error}}",
     "stats": {
       "total_flights": "Voli",
-      "active_months": "Mesi volati",
-      "busiest_month": "Mese con più voli",
       "total_distance": "Chilometri",
-      "busiest_month_distance": "Mese con più km",
-      "total_co2": "Emissioni",
-      "busiest_month_co2": "Mese con più CO₂e"
+      "total_co2": "Kg di CO₂e",
+      "since": "dal {{year}}",
+      "active_months": "Mesi volati",
+      "of_months": "su {{count}}",
+      "busiest_month": "Mese di punta"
     }
   },
   "list": {
