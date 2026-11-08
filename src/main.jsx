@@ -24,6 +24,7 @@ import "./i18n"; // initialize i18n
 const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
 const AllStats = lazy(() => import("./pages/AllStats.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
+const Changelog = lazy(() => import("./pages/Changelog.jsx"));
 const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Timeline = lazy(() => import("./pages/Timeline.jsx"));
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.ABOUT,
         element: <About />,
+      },
+      {
+        path: PATHS.CHANGELOG,
+        element: <Changelog />,
       },
       {
         path: PATHS.STATS,

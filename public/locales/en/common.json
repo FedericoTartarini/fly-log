@@ -27,6 +27,11 @@
     "settings": "Settings",
     "about": "About FlyLog"
   },
+  "changelog": {
+    "link": "What's new",
+    "title": "What's new",
+    "intro": "What changed in each release of FlyLog, newest first."
+  },
   "error": {
     "title": "Something went wrong",
     "message": "This page hit an unexpected error. Try reloading — your flights are safe.",

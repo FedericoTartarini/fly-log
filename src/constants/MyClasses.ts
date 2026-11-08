@@ -45,6 +45,7 @@ export const PATHS = {
   ADD_FLIGHT: "/add-flight",
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",
+  CHANGELOG: "/changelog",
   LOGIN: "/login",
   // Add more paths as needed
 } as const;
