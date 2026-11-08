@@ -21,7 +21,6 @@ import {
   formatCompactValue,
   heatStep,
 } from "../utils/chartUtils.js";
-import { capitalize } from "../utils/stringUtils";
 import { CHART_METRIC } from "../constants/filters.ts";
 import classes from "./Timeline.module.css";
 
@@ -120,7 +119,10 @@ function Timeline() {
     .reverse()
     .flatMap((year) => Array.from({ length: 12 }, (_, m) => valueAt(year, m)))
     .map((value) => value > 0);
-  const spanMonths = flown.lastIndexOf(true) - flown.indexOf(true) + 1;
+  // No month has a value when, say, no flight has a distance yet.
+  const spanMonths = flown.includes(true)
+    ? flown.lastIndexOf(true) - flown.indexOf(true) + 1
+    : 0;
 
   const describe = (value) => {
     if (!value) return t("timeline.value_none");
@@ -133,14 +135,10 @@ function Timeline() {
   // The busiest month is selected until the visitor taps another.
   const selected = picked ?? stats.busiestMonth;
   const busiest = stats.busiestMonth;
+  // Built by hand rather than with Intl's 2-digit year, which writes "Mar ’25"
+  // on some systems and "Mar 25" on others.
   const busiestLabel = busiest
-    ? capitalize(
-        new Intl.DateTimeFormat(i18n.language, {
-          month: "short",
-          year: "2-digit",
-          timeZone: "UTC",
-        }).format(new Date(Date.UTC(busiest.year, busiest.month, 1))),
-      )
+    ? `${months.short[busiest.month]} ${String(busiest.year).slice(2)}`
     : "—";
 
   const gridTitle = t(`timeline.grid_title.${metricKey}`);

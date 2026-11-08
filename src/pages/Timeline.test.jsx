@@ -95,7 +95,7 @@ describe("Timeline", () => {
     // Jan 2022 to Mar 2025 is 39 months.
     expect(screen.getByText("of 39")).toBeInTheDocument();
     expect(screen.getByText("since 2022")).toBeInTheDocument();
-    expect(cy("timeline-busiest-month")).toHaveTextContent("Mar ’25");
+    expect(cy("timeline-busiest-month")).toHaveTextContent("Mar 25");
   });
 
   it("selects the busiest month when the page opens", async () => {
@@ -151,9 +151,22 @@ describe("Timeline", () => {
     });
     // Jul 2024 (12,000 km) beats Mar 2025 (1,500 km), the reverse of the
     // flight-count ranking, so it is the month selected and the legend top.
-    expect(cy("timeline-busiest-month")).toHaveTextContent("Jul ’24");
+    expect(cy("timeline-busiest-month")).toHaveTextContent("Jul 24");
     expect(screen.getByText("· 12,000 km")).toBeInTheDocument();
     expect(screen.getAllByText("12K")).toHaveLength(2);
     expect(screen.getByText("0")).toBeInTheDocument();
+  });
+
+  it("counts no months when no flight has a distance yet", async () => {
+    applyMockState({
+      allFlights: [{ id: "1", departure_date: "2025-03-10T08:00:00Z" }],
+      chartMetric: CHART_METRIC.DISTANCE,
+    });
+    render(<Timeline />);
+
+    await waitFor(() => {
+      expect(cy("timeline-active-months")).toHaveTextContent("0");
+    });
+    expect(screen.getByText("of 0")).toBeInTheDocument();
   });
 });
