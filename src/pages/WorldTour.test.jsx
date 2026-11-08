@@ -101,6 +101,7 @@ describe("WorldTour", () => {
     useFlightStore.setState({
       allFlights: [],
       filteredFlights: [],
+      isLoading: false,
       filters: {
         airline: null,
         departureAirport: null,
@@ -127,6 +128,16 @@ describe("WorldTour", () => {
     expect(
       screen.getByRole("button", { name: "Start animation" }),
     ).toBeDisabled();
+  });
+
+  it("announces loading and holds back the no-routes alert while flights load", () => {
+    useFlightStore.setState({ isLoading: true });
+    render(<WorldTour />);
+
+    expect(screen.getByRole("status")).toHaveTextContent("Loading...");
+    expect(
+      screen.queryByText("No valid routes found for this filter."),
+    ).toBeNull();
   });
 
   it("keeps route label hidden before start and shows it after start", async () => {
