@@ -21,5 +21,6 @@ describe("Changelog", () => {
       entries.length,
     );
     expect(screen.getByText("8 November 2026")).toBeInTheDocument();
+    expect(screen.getByText(entries[0].items[0])).toBeInTheDocument();
   });
 });
