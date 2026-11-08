@@ -6,6 +6,7 @@ import {
   Modal,
   Loader,
   Stack,
+  NativeSelect,
   TextInput,
   Button,
   UnstyledButton,
@@ -21,7 +22,7 @@ import useFlightStore from "../store";
 import type { enhancedFlight } from "../types/enhancedFlight";
 import { formatCalendarDate } from "../utils/dateUtils";
 import { getAirportCity } from "../utils/airportUtils";
-import { groupFlightsByYear } from "../utils/groupFlights";
+import { groupFlights, type FlightSort } from "../utils/groupFlights";
 import { searchFlights } from "../utils/searchFlights";
 import { getActiveFilters } from "../utils/activeFilters";
 import { useTranslation } from "react-i18next";
@@ -73,8 +74,10 @@ const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
 const FlightRow: React.FC<{
   flight: enhancedFlight;
   upcoming: boolean;
+  /** Distance sorts show the distance, then the date with its year. */
+  byDistance?: boolean;
   onOpen: (flight: enhancedFlight) => void;
-}> = ({ flight, upcoming, onOpen }) => {
+}> = ({ flight, upcoming, byDistance = false, onOpen }) => {
   const { t, i18n } = useTranslation("flights");
   const from = getAirportCity(flight.departure_airport_iata);
   const to = getAirportCity(flight.arrival_airport_iata);
@@ -125,10 +128,26 @@ const FlightRow: React.FC<{
         <span className={classes.cities}>{t("list.cities", { from, to })}</span>
       </span>
       <span className={classes.when} aria-hidden>
-        <span className={classes.date} data-upcoming={upcoming || undefined}>
-          {formatCalendarDate(flight.departure_date, "D MMM")}
-        </span>
-        {flightNumber && <span className={classes.number}>{flightNumber}</span>}
+        {byDistance ? (
+          <>
+            <span className={classes.date}>{km}</span>
+            <span className={classes.number}>
+              {formatCalendarDate(flight.departure_date, "D MMM YYYY")}
+            </span>
+          </>
+        ) : (
+          <>
+            <span
+              className={classes.date}
+              data-upcoming={upcoming || undefined}
+            >
+              {formatCalendarDate(flight.departure_date, "D MMM")}
+            </span>
+            {flightNumber && (
+              <span className={classes.number}>{flightNumber}</span>
+            )}
+          </>
+        )}
       </span>
     </UnstyledButton>
   );
@@ -148,6 +167,7 @@ const FlightsList: React.FC = () => {
     })),
   );
   const [query, setQuery] = React.useState("");
+  const [sort, setSort] = React.useState<FlightSort>("newest");
   const inputRef = React.useRef<HTMLInputElement>(null);
   // The no-match buttons vanish once pressed, so focus returns to the search box.
   const refocus = () => inputRef.current?.focus();
@@ -179,7 +199,8 @@ const FlightsList: React.FC = () => {
     () => searchFlights(filteredFlights, query),
     [filteredFlights, query],
   );
-  const groups = React.useMemo(() => groupFlightsByYear(hits), [hits]);
+  const groups = React.useMemo(() => groupFlights(hits, sort), [hits, sort]);
+  const byDistance = sort === "longest" || sort === "shortest";
   const searching = query.trim() !== "";
 
   const openDetails = (flight: enhancedFlight) => {
@@ -190,25 +211,39 @@ const FlightsList: React.FC = () => {
   return (
     <Stack gap="md">
       <div role="search">
-        <TextInput
-          ref={inputRef}
-          type="search"
-          size="md"
-          value={query}
-          onChange={(event) => setQuery(event.currentTarget.value)}
-          aria-label={t(
-            filtered ? "list.search_label_filtered" : "list.search_label",
-          )}
-          placeholder={
-            filtered
-              ? t("list.search_placeholder_filtered", {
-                  count: filteredFlights.length,
-                })
-              : t("list.search_placeholder")
-          }
-          leftSection={<IconSearch size={18} aria-hidden />}
-          autoComplete="off"
-        />
+        <Group gap="xs" wrap="nowrap" align="flex-start">
+          <TextInput
+            style={{ flex: 1, minWidth: 0 }}
+            ref={inputRef}
+            type="search"
+            size="md"
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+            aria-label={t(
+              filtered ? "list.search_label_filtered" : "list.search_label",
+            )}
+            placeholder={
+              filtered
+                ? t("list.search_placeholder_filtered", {
+                    count: filteredFlights.length,
+                  })
+                : t("list.search_placeholder")
+            }
+            leftSection={<IconSearch size={18} aria-hidden />}
+            autoComplete="off"
+          />
+          <NativeSelect
+            size="md"
+            aria-label={t("list.sort_label")}
+            value={sort}
+            onChange={(event) =>
+              setSort(event.currentTarget.value as FlightSort)
+            }
+            data={(["newest", "oldest", "longest", "shortest"] as const).map(
+              (value) => ({ value, label: t(`list.sort_${value}`) }),
+            )}
+          />
+        </Group>
         {/* Always rendered, so screen readers announce each new count. */}
         <Text aria-live="polite" size="sm" c="var(--fl-muted)" mt={4}>
           {searching &&
@@ -278,7 +313,9 @@ const FlightsList: React.FC = () => {
                 >
                   {group.key === "upcoming"
                     ? t("list.upcoming")
-                    : (group.key ?? t("list.no_date"))}
+                    : group.key === "longest" || group.key === "shortest"
+                      ? t(`list.${group.key}_first`)
+                      : (group.key ?? t("list.no_date"))}
                 </span>
                 <span className={classes.summary}>
                   {t("list.summary", {
@@ -293,6 +330,7 @@ const FlightsList: React.FC = () => {
                     <FlightRow
                       flight={flight}
                       upcoming={group.key === "upcoming"}
+                      byDistance={byDistance}
                       onOpen={openDetails}
                     />
                   </li>
