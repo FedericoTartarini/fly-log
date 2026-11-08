@@ -10,9 +10,9 @@
 - [ ] Conduct user testing to gather feedback on usability.
 - [ ] Improve Multi-language support (i18n) currently only English and Italian.
 - [ ] check what happens if the user uploads a bad csv with wrong dates, time, airport or airlines codes.
-- [ ] Accessibility pass: add skip link/landmarks, ARIA live error messaging, reduced-motion support.
+- [x] Accessibility pass: add skip link/landmarks, ARIA live error messaging, reduced-motion support.
 - [ ] Accessibility pass: add keyboard alternatives + text summaries for map visualizations.
-- [ ] Accessibility pass: verify and fix color contrast across light/dark themes.
+- [x] Accessibility pass: verify and fix color contrast across light/dark themes.
 
 ### Maintenance and DevOps
 
