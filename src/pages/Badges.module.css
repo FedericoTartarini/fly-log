@@ -1,0 +1,104 @@
+/* One tick per badge, earned ticks in red. */
+.ticks {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 3px;
+}
+
+.tick {
+  height: 8px;
+  border-radius: 2px;
+  background: var(--fl-input-border);
+}
+
+.tick[data-earned] {
+  background: var(--fl-accent);
+}
+
+.next {
+  background: var(--fl-surface);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: center;
+}
+
+.nextIcon {
+  grid-row: span 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--fl-subtle);
+  color: var(--fl-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label,
+.sectionTitle {
+  margin: 0;
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fl-muted);
+}
+
+.nextName {
+  margin: 0;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.muted {
+  font-weight: 400;
+  color: var(--fl-muted);
+}
+
+.nextProgress {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  color: var(--fl-muted);
+  white-space: nowrap;
+}
+
+.track {
+  flex: 1 1 auto;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--fl-subtle);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--fl-accent);
+}
+
+.sectionTitle {
+  padding: 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sectionTitle .muted {
+  font-family: var(--mantine-font-family);
+  font-size: 14px;
+}

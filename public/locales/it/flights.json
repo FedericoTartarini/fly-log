@@ -331,7 +331,8 @@
     "view_all": "Tutti i traguardi",
     "collected": "{{count}} di {{total}} conquistati",
     "not_yet": "Non ancora",
-    "to_go": "ne mancano {{value}}",
+    "to_go_one": "ne manca {{value}}",
+    "to_go_other": "ne mancano {{value}}",
     "to_go_km": "mancano {{value}} km",
     "items": {
       "first_flight": {
@@ -438,7 +439,11 @@
       "habit": "Costanza"
     },
     "section_count": "{{unlocked}} di {{total}}",
-    "link_label": "Approfondisci {{name}} su Wikipedia"
+    "closest_next": "Il prossimo",
+    "not_earned": "non ancora conquistato",
+    "link_label_earned": "{{name}}, conquistato il {{date}}. Apre Wikipedia.",
+    "link_label_locked": "{{name}}, non ancora conquistato. Apre Wikipedia.",
+    "progress_label": "Avanzamento verso {{name}}"
   },
   "cabin": {
     "economy": "Economy",

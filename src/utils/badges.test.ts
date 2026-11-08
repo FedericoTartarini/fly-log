@@ -3,7 +3,13 @@ import {
   evaluateBadges,
   sortForShelf,
   pickStripBadges,
+  pickClosestNext,
+  stepsLeft,
+  amountLeft,
+  formatBadgeProgress,
   BADGE_DEFS,
+  BADGE_CATEGORIES,
+  type Badge,
 } from "./badges";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
@@ -88,7 +94,11 @@ describe("evaluateBadges", () => {
     expect(byId(consecutive, "ten_years_running").current).toBe(3);
 
     // A missing year restarts the run: 2020, 2021, then a gap, then 2024.
-    const gapped = [flight("2020-04-02"), flight("2021-04-02"), flight("2024-04-02")];
+    const gapped = [
+      flight("2020-04-02"),
+      flight("2021-04-02"),
+      flight("2024-04-02"),
+    ];
     expect(byId(gapped, "ten_years_running").current).toBe(2);
   });
 
@@ -130,7 +140,9 @@ describe("evaluateBadges", () => {
   });
 
   it("survives an empty or missing history", () => {
-    expect(evaluateBadges([], NOW).every((badge) => !badge.unlocked)).toBe(true);
+    expect(evaluateBadges([], NOW).every((badge) => !badge.unlocked)).toBe(
+      true,
+    );
     expect(evaluateBadges(null, NOW)).toHaveLength(BADGE_DEFS.length);
   });
 });
@@ -151,7 +163,10 @@ describe("sortForShelf", () => {
     // the 2020 pair (first_flight, border_crossed), so they lead.
     const unlocked = order.slice(0, 4);
     expect(unlocked.slice(0, 2).sort()).toEqual(["long_hauler", "once_around"]);
-    expect(unlocked.slice(2).sort()).toEqual(["border_crossed", "first_flight"]);
+    expect(unlocked.slice(2).sort()).toEqual([
+      "border_crossed",
+      "first_flight",
+    ]);
 
     // Locked: closest first. 41,000 km is 20% of the way to five laps but only
     // 11% of the way to the Moon.
@@ -199,5 +214,77 @@ describe("pickStripBadges", () => {
     );
     const picked = pickStripBadges(distanceOnly, 2);
     expect(picked.some((badge) => !badge.unlocked)).toBe(true);
+  });
+});
+
+describe("pickClosestNext", () => {
+  const badge = (
+    id: string,
+    current = 0,
+    target = 0,
+    unlocked = false,
+  ): Badge => ({
+    id,
+    category: BADGE_CATEGORIES.FLIGHTS,
+    unlocked,
+    ...(target ? { current, target } : {}),
+  });
+
+  it("splits each target into at most 10 steps", () => {
+    expect(stepsLeft(badge("million_club", 812_400, 1_000_000))).toBe(2);
+    expect(stepsLeft(badge("two_fifty", 195, 250))).toBe(3);
+    expect(stepsLeft(badge("explorer", 4, 5))).toBe(1);
+    expect(stepsLeft(badge("six_continents", 2, 6))).toBe(4);
+  });
+
+  it("picks the badge fewest steps away, not the one furthest along", () => {
+    expect(
+      pickClosestNext([
+        badge("century", 100, 100, true),
+        badge("two_fifty", 195, 250), // 78%, 3 steps
+        badge("million_club", 812_400, 1_000_000), // 81%, 2 steps
+        badge("explorer", 4, 5), // 80%, 1 step
+      ])?.id,
+    ).toBe("explorer");
+  });
+
+  it("breaks a tie in steps by how far along each badge is", () => {
+    expect(
+      pickClosestNext([
+        badge("ten_up", 9, 10), // 90%, 1 step
+        badge("million_club", 950_000, 1_000_000), // 95%, 1 step
+      ])?.id,
+    ).toBe("million_club");
+  });
+
+  it("skips binary badges, which have no target", () => {
+    expect(
+      pickClosestNext([badge("first_flight"), badge("ten_up", 1, 10)])?.id,
+    ).toBe("ten_up");
+  });
+
+  it("returns nothing when every badge with a target is earned", () => {
+    expect(
+      pickClosestNext([badge("first_flight"), badge("ten_up", 10, 10, true)]),
+    ).toBeUndefined();
+  });
+});
+
+describe("amountLeft and formatBadgeProgress", () => {
+  // 0.4 km short of a million: still locked, so neither text may say done.
+  const almost: Badge = {
+    id: "million_club",
+    category: BADGE_CATEGORIES.DISTANCE,
+    unlocked: false,
+    current: 999_999.6,
+    target: 1_000_000,
+  };
+
+  it("rounds what is left up, never to 0", () => {
+    expect(amountLeft(almost)).toBe(1);
+  });
+
+  it("rounds progress down, never to the target", () => {
+    expect(formatBadgeProgress(almost, "en-AU")).toBe("999,999 / 1,000,000 km");
   });
 });
