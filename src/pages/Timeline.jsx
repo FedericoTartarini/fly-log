@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store.ts";
 import StatDisplay from "../components/StatDisplay.jsx";
+import TimelineSkeleton from "../components/TimelineSkeleton.jsx";
 import {
   getFlightMonthMatrix,
   getMonthMatrixStats,
@@ -119,20 +120,7 @@ function Timeline() {
     ? `${monthLabels[stats.busiestMonth.month]} ${stats.busiestMonth.year} (${formatValue(stats.busiestValue)})`
     : "—";
 
-  if (isLoading) {
-    return (
-      <Container mt="md">
-        <Stack gap="xl">
-          <Title order={2} ta="center">
-            {t("timeline.title")}
-          </Title>
-          <Center>
-            <Loader aria-label={t("loading")} />
-          </Center>
-        </Stack>
-      </Container>
-    );
-  }
+  if (isLoading) return <TimelineSkeleton />;
 
   if (error) {
     return (

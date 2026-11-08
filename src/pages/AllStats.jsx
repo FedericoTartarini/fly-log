@@ -31,7 +31,7 @@ import useFlightStore from "../store.ts";
 import { useFlightStats } from "../hooks/useFlightStats.js";
 import { DISTANCE_TO_MOON, EARTH_CIRCUMFERENCE } from "../constants/distances";
 import { IDS, PATHS } from "../constants/MyClasses.ts";
-import PageSkeleton from "../components/PageSkeleton.jsx";
+import AllStatsSkeleton from "../components/AllStatsSkeleton.jsx";
 import classes from "./AllStats.module.css";
 
 const reducedMotion = () =>
@@ -148,7 +148,7 @@ const AllStats = () => {
   }, []);
 
   if (isLoading) {
-    return <PageSkeleton />;
+    return <AllStatsSkeleton />;
   }
 
   if (error) {

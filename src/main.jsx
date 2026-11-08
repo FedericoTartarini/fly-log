@@ -36,6 +36,10 @@ import HomeIndex from "./components/HomeIndex.jsx";
 import MyAppShell from "./pages/MyAppShell.jsx";
 import PageSkeleton from "./components/PageSkeleton.jsx";
 import FlightsListSkeleton from "./components/FlightsListSkeleton.jsx";
+import AllStatsSkeleton from "./components/AllStatsSkeleton.jsx";
+import TourSkeleton from "./components/TourSkeleton.jsx";
+import TimelineSkeleton from "./components/TimelineSkeleton.jsx";
+import BadgesSkeleton from "./components/BadgesSkeleton.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
 import AuthProvider from "./context/AuthContext";
 
@@ -70,8 +74,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.ALL_STATS,
         element: (
-          <ProtectedRoute>
-            <AllStats />
+          <ProtectedRoute fallback={<AllStatsSkeleton />}>
+            <Suspense fallback={<AllStatsSkeleton />}>
+              <AllStats />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -88,24 +94,30 @@ const router = createBrowserRouter([
       {
         path: PATHS.TOUR,
         element: (
-          <ProtectedRoute>
-            <WorldTour />
+          <ProtectedRoute fallback={<TourSkeleton />}>
+            <Suspense fallback={<TourSkeleton />}>
+              <WorldTour />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
       {
         path: PATHS.TIMELINE,
         element: (
-          <ProtectedRoute>
-            <Timeline />
+          <ProtectedRoute fallback={<TimelineSkeleton />}>
+            <Suspense fallback={<TimelineSkeleton />}>
+              <Timeline />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
       {
         path: PATHS.BADGES,
         element: (
-          <ProtectedRoute>
-            <Badges />
+          <ProtectedRoute fallback={<BadgesSkeleton />}>
+            <Suspense fallback={<BadgesSkeleton />}>
+              <Badges />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
