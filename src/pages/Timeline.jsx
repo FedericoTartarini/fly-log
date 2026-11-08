@@ -147,9 +147,9 @@ function Timeline() {
   // No flights at all: show the shared add-flight call to action.
   if (!allFlights || allFlights.length === 0) {
     return (
-      <Container mt="md">
-        <Stack gap="xl">
-          <Title order={2} ta="center">
+      <Container size="sm" mt="md" pb={96}>
+        <Stack gap="md">
+          <Title order={1} fz={28}>
             {t("timeline.title")}
           </Title>
           <Suspense
@@ -159,7 +159,10 @@ function Timeline() {
               </Center>
             }
           >
-            <NoFlightsCard />
+            <NoFlightsCard
+              title={t("no_flights_card.timeline_title")}
+              text={t("no_flights_card.timeline_text")}
+            />
           </Suspense>
         </Stack>
       </Container>

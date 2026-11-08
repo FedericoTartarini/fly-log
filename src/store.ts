@@ -15,6 +15,7 @@ import {
 } from "./constants/filters";
 import { filterFlightsForFacetOptions } from "./utils/flightFilterFacets";
 import { DEFAULT_FILTERS } from "./utils/activeFilters";
+import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "./constants/tabs";
 import type { enhancedFlight } from "./types/enhancedFlight";
 
 // Current auth subscription + user id used for fetching flights.
@@ -64,9 +65,11 @@ export interface FlightStoreState {
   setChartMetric: (metric: ChartMetric) => void;
   setFilters: (filters: Partial<StoreFlightFilters>) => void;
   clearFilters: () => void;
-  // The add-flight form lives in the app shell, so any page can open it.
+  // The add-flight form lives in the app shell, so any page can open it,
+  // on a chosen tab (AI chat unless the caller asks for another).
   addFlightOpened: boolean;
-  setAddFlightOpened: (opened: boolean) => void;
+  addFlightTab: FlightEntryTab;
+  setAddFlightOpened: (opened: boolean, tab?: FlightEntryTab) => void;
 }
 
 // Attach a live listener for the user's flights. The first callback comes
@@ -117,7 +120,11 @@ const useFlightStore = create<FlightStoreState>((set) => ({
   isLoading: true,
   error: null,
   addFlightOpened: false,
-  setAddFlightOpened: (opened: boolean) => set({ addFlightOpened: opened }),
+  addFlightTab: FLIGHT_ENTRY_TABS.AI,
+  setAddFlightOpened: (
+    opened: boolean,
+    tab: FlightEntryTab = FLIGHT_ENTRY_TABS.AI,
+  ) => set({ addFlightOpened: opened, addFlightTab: tab }),
 
   setChartMetric: (metric: ChartMetric) => {
     set({ chartMetric: metric });
