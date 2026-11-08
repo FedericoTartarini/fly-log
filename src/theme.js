@@ -11,7 +11,9 @@ export const tokens = {
     ink: "#171C26",
     muted: "#535B6B",
     border: "#CDD2DA",
-    "input-border": "#A9B0BC",
+    // At least 3:1 against surface in both schemes, the minimum for the
+    // outline that shows where a text field is (WCAG 1.4.11).
+    "input-border": "#828B99",
     divider: "#E1E4EA",
     map: "#DCE4EA",
     grid: "#C3CED8",
@@ -28,7 +30,7 @@ export const tokens = {
     ink: "#ECEEF2",
     muted: "#A3ABB9",
     border: "#2E3645",
-    "input-border": "#4A5466",
+    "input-border": "#687387",
     divider: "#0B0E13",
     map: "#131A26",
     grid: "#222C3D",
