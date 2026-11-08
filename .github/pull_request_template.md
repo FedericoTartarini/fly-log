@@ -13,3 +13,4 @@ Closes #
 ## Checklist
 - [ ] `npm run lint` and `npm run vitest` pass
 - [ ] Tested in the browser (or the Netlify preview)
+- [ ] For a change users will notice: an entry in `src/constants/changelog.json`, newest first

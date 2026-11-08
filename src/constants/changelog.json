@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2026-11-08",
+    "title": "A new Flights list",
+    "items": [
+      "The Flights list shows each flight as a compact row, grouped by year.",
+      "Search the list by city, airport code, airline or flight number. Type two cities to find the flights between them.",
+      "Sort your flights by date or by distance.",
+      "A new account shows a blank boarding pass with three ways to add your first flight."
+    ]
+  },
+  {
+    "date": "2026-11-02",
+    "title": "A new look, built for phones",
+    "items": [
+      "FlyLog has a new design, with a tab bar at the bottom of the screen on phones and an add button that is always in reach.",
+      "The Stats page opens on your map, with your next or last flight as a boarding pass, your longest and shortest flights, and your charts.",
+      "All stats lists every number about your flights, including how many times your distance would go around the Earth or to the Moon.",
+      "One filter panel now filters the Stats and Flights pages, and the filters you picked show as tags.",
+      "Choose a light or dark appearance, or follow your device, from the account menu."
+    ]
+  },
+  {
+    "date": "2026-10-25",
+    "title": "Cabin class, aircraft and automatic status checks",
+    "items": [
+      "Record the cabin class of each flight. CO₂ estimates now use a different factor for each cabin.",
+      "Record the aircraft you flew on, and chart your flights by aircraft family.",
+      "When you save a flight that departs within a week, FlyLog checks its status once. A manual status check now offers any schedule changes it finds.",
+      "Some badges link to a Wikipedia article about what they celebrate.",
+      "The Route tour turns the short way across the Pacific."
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "Multi-city trips and arrival times",
+    "items": [
+      "Add a multi-city trip in one go, by hand or by describing it to the AI.",
+      "Record the arrival date and time of a flight.",
+      "Earn badges for the continents you have visited.",
+      "The flights table shows cities and countries instead of airport codes."
+    ]
+  }
+]
