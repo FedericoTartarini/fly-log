@@ -125,13 +125,3 @@
     transition: none;
   }
 }
-
-/* A grey track with a border, so the options not picked still read as buttons. */
-.switch {
-  background: var(--fl-subtle);
-  border: 1px solid var(--fl-border);
-}
-
-.switchIndicator {
-  background: var(--fl-surface);
-}

@@ -1,4 +1,10 @@
-import { createTheme, Popover, Modal, Input } from "@mantine/core";
+import {
+  createTheme,
+  Popover,
+  Modal,
+  Input,
+  SegmentedControl,
+} from "@mantine/core";
 
 // Colour tokens from the redesign in issue #120. Each becomes a CSS variable
 // (`--fl-page`, `--fl-ink`, ...) whose value follows the colour scheme.
@@ -126,6 +132,17 @@ export const theme = createTheme({
     // The fixed AppShell header sits at 400, so a modal at Mantine's default
     // (200) opened under it, hiding its title and close button on phones.
     Modal: Modal.extend({ defaultProps: { zIndex: 500 } }),
+    // A grey track with a border, so the options not picked still read as
+    // buttons. Mantine's dark track matched the page and vanished.
+    SegmentedControl: SegmentedControl.extend({
+      styles: {
+        root: {
+          background: "var(--fl-subtle)",
+          border: "1px solid var(--fl-border)",
+        },
+        indicator: { background: "var(--fl-surface)" },
+      },
+    }),
     Input: Input.extend({
       vars: (_theme, props) => ({
         wrapper: {
