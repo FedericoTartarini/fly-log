@@ -27,6 +27,11 @@
     "settings": "Impostazioni",
     "about": "Informazioni su FlyLog"
   },
+  "changelog": {
+    "link": "Novità",
+    "title": "Novità",
+    "intro": "Cosa è cambiato in ogni versione di FlyLog, dalla più recente. Le note sono in inglese."
+  },
   "error": {
     "title": "Si è verificato un errore",
     "message": "Questa pagina ha riscontrato un errore imprevisto. Prova a ricaricare: i tuoi voli sono al sicuro.",
