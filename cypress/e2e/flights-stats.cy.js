@@ -90,5 +90,10 @@ describe("StatsSummary Component", () => {
     cy.get('[data-testid^="flight-row-"]').should("not.exist");
     cy.contains("button", "Clear search").click();
     cy.get('[data-testid^="flight-row-"]').should("exist");
+
+    // A distance sort turns the year groups into one list.
+    cy.get('select[aria-label="Sort flights"]').select("Longest");
+    cy.contains("h2", "Longest first").should("be.visible");
+    cy.get("h2").should("have.length", 1);
   });
 });

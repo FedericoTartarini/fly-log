@@ -175,7 +175,7 @@ describe("FlightsList", () => {
       renderWith([sydLhr, sydMel]);
       expect(search()).toHaveAttribute(
         "placeholder",
-        "Airline, airport or flight no.",
+        "City, airline, flight no.",
       );
 
       fireEvent.change(search(), { target: { value: "QF 409" } });
@@ -230,6 +230,74 @@ describe("FlightsList", () => {
       expect(clearFilters).toHaveBeenCalledOnce();
       expect(search()).toHaveFocus();
       expect(search()).toHaveValue("perth");
+    });
+  });
+
+  describe("sort", () => {
+    const flights = [
+      {
+        ...enrichedFlight,
+        id: "short",
+        departure_date: "2024-03-10",
+        distance_km: 163,
+      },
+      {
+        ...enrichedFlight,
+        id: "long",
+        departure_date: "2023-05-01",
+        distance_km: 13581,
+      },
+    ];
+    const sortBy = (label: string) =>
+      fireEvent.change(screen.getByRole("combobox", { name: "Sort flights" }), {
+        target: { value: label },
+      });
+    const rowIds = () =>
+      screen
+        .getAllByTestId(/^flight-row-/)
+        .map((row) => row.getAttribute("data-testid"));
+    const headings = () =>
+      screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
+
+    it("runs the years backwards for Oldest", () => {
+      renderWith(flights);
+      expect(headings()).toEqual([
+        "20241 flight · 163 km",
+        "20231 flight · 13,581 km",
+      ]);
+
+      sortBy("oldest");
+      expect(headings()).toEqual([
+        "20231 flight · 13,581 km",
+        "20241 flight · 163 km",
+      ]);
+    });
+
+    it("shows one list with distances for Longest and Shortest", () => {
+      renderWith(flights);
+
+      sortBy("longest");
+      expect(headings()).toEqual(["Longest first2 flights · 13,744 km"]);
+      expect(rowIds()).toEqual(["flight-row-long", "flight-row-short"]);
+      const row = screen.getByTestId("flight-row-long");
+      expect(row).toHaveTextContent("13,581 km");
+      expect(row).toHaveTextContent("1 May 2023");
+
+      sortBy("shortest");
+      expect(headings()).toEqual(["Shortest first2 flights · 13,744 km"]);
+      expect(rowIds()).toEqual(["flight-row-short", "flight-row-long"]);
+    });
+
+    it("sorts the search results", () => {
+      renderWith([
+        ...flights,
+        { ...flights[0], id: "other", departure_airport_iata: "LHR" },
+      ]);
+      fireEvent.change(screen.getByRole("searchbox"), {
+        target: { value: "SFO" },
+      });
+      sortBy("longest");
+      expect(rowIds()).toEqual(["flight-row-long", "flight-row-short"]);
     });
   });
 });
