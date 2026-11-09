@@ -137,7 +137,7 @@ function MyAppShell() {
                   {t("nav.add_flight")}
                 </Button>
               )}
-              {!loading && !user && (
+              {!loading && !user && location.pathname !== PATHS.LOGIN && (
                 <Button
                   variant="default"
                   radius="xl"
