@@ -4,12 +4,10 @@ import {
   PasswordInput,
   Button,
   Container,
-  Paper,
   Title,
+  Text,
   Stack,
   Anchor,
-  Center,
-  Divider,
 } from "@mantine/core";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
@@ -24,8 +22,10 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
+import classes from "./Login.module.css";
 
-// Email/password auth page (sign in + sign up).
+// Sign-in page, drawn as a boarding pass: Google first, then email and
+// password. The stub switches between signing in and creating an account.
 function Login() {
   const { user } = useAuth();
   const { t } = useTranslation("login");
@@ -35,6 +35,7 @@ function Login() {
   const [error, setError] = useState(null);
   const [mode, setMode] = useState("signin"); // 'signin' or 'signup'
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   if (user) return <Navigate to={PATHS.STATS} />;
 
@@ -172,80 +173,55 @@ function Login() {
     }
   };
 
+  const signingUp = mode === "signup";
+  const switchMode = () => {
+    setMode(signingUp ? "signin" : "signup");
+    setError(null);
+  };
+  // One switch shows both password fields, so they can be compared.
+  const passwordProps = {
+    visible: showPassword,
+    onVisibilityChange: setShowPassword,
+    classNames: { input: classes.input },
+    visibilityToggleButtonProps: {
+      "aria-label": t("show_password"),
+      "aria-pressed": showPassword,
+      // Mantine leaves the toggle out of the tab order unless told otherwise.
+      tabIndex: 0,
+    },
+  };
+
   return (
-    <Container size="xs" mt="xl">
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={handleSubmit}>
-          <Stack>
-            <Title ta="center">{t("title")}</Title>
-            <TextInput
-              name="email"
-              label={t("email")}
-              placeholder={t("emailPlaceholder")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              data-cy="login-email"
-            />
-            <PasswordInput
-              name="password"
-              label={t("password")}
-              placeholder={t("passwordPlaceholder")}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              data-cy="login-password"
-            />
-            {mode === "signin" && (
-              <div style={{ textAlign: "right" }}>
-                <Anchor
-                  component="button"
-                  type="button"
-                  size="sm"
-                  onClick={handleForgotPassword}
-                  disabled={loading}
-                  data-cy="login-forgot-password"
-                >
-                  {t("forgotPassword")}
-                </Anchor>
-              </div>
-            )}
-            {error && (
-              <div
-                style={{ color: "red" }}
-                role="alert"
-                aria-live="assertive"
-                data-cy="login-error"
-              >
-                {String(error)}
-              </div>
-            )}
+    <Container size="xs" mt="md" pb="xl">
+      <Stack gap={20}>
+        <div>
+          <Title order={1} fz={30}>
+            {t(signingUp ? "title_signup" : "title")}
+          </Title>
+          <Text c="var(--fl-muted)" mt={4}>
+            {t(signingUp ? "subtitle_signup" : "subtitle")}
+          </Text>
+        </div>
 
-            {mode === "signup" && (
-              <PasswordInput
-                name="confirmPassword"
-                label={t("confirm_password")}
-                placeholder={t("confirmPasswordPlaceholder")}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                data-cy="login-confirm-password"
-              />
-            )}
+        <form
+          onSubmit={handleSubmit}
+          className={classes.card}
+          aria-labelledby="login-band"
+        >
+          <div className={classes.band}>
+            <span id="login-band">
+              {t(signingUp ? "band_signup" : "band_signin")}
+            </span>
+            <span aria-hidden="true">FlyLog</span>
+          </div>
 
-            <Center>
-              <Button type="submit" loading={loading} data-cy="login-submit">
-                {mode === "signin" ? t("sign_in") : t("sign_up")}
-              </Button>
-            </Center>
-
-            <Divider label={t("or")} labelPosition="center" />
-
+          <div className={classes.body}>
             <Button
               type="button"
               variant="default"
-              fullWidth
-              leftSection={<IconBrandGoogle size={16} />}
+              size="lg"
+              fz={16}
+              leftSection={<IconBrandGoogle size={18} aria-hidden />}
               onClick={handleGoogleSignIn}
               disabled={loading}
               data-cy="login-google"
@@ -253,32 +229,94 @@ function Login() {
               {t("continue_with_google")}
             </Button>
 
-            <div style={{ textAlign: "center" }}>
-              {mode === "signin" ? (
-                <Anchor
-                  component="button"
-                  type="button"
-                  size="sm"
-                  onClick={() => setMode("signup")}
-                  data-cy="login-to-signup"
-                >
-                  {t("dont_have_account")}
-                </Anchor>
-              ) : (
-                <Anchor
-                  component="button"
-                  type="button"
-                  size="sm"
-                  onClick={() => setMode("signin")}
-                  data-cy="login-to-signin"
-                >
-                  {t("already_have_account")}
-                </Anchor>
-              )}
+            <div className={classes.or} aria-hidden="true">
+              {t("or_email")}
             </div>
-          </Stack>
+
+            <TextInput
+              name="email"
+              type="email"
+              autoComplete="email"
+              label={t("email")}
+              placeholder={t("emailPlaceholder")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              withAsterisk={false}
+              classNames={{ input: classes.input }}
+              data-cy="login-email"
+            />
+            <PasswordInput
+              name="password"
+              autoComplete={signingUp ? "new-password" : "current-password"}
+              label={t("password")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              withAsterisk={false}
+              data-cy="login-password"
+              {...passwordProps}
+            />
+            {signingUp ? (
+              <PasswordInput
+                name="confirmPassword"
+                autoComplete="new-password"
+                label={t("confirm_password")}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                withAsterisk={false}
+                data-cy="login-confirm-password"
+                {...passwordProps}
+              />
+            ) : (
+              <Anchor
+                component="button"
+                type="button"
+                size="sm"
+                fw={500}
+                underline="always"
+                className={classes.forgot}
+                onClick={handleForgotPassword}
+                disabled={loading}
+                data-cy="login-forgot-password"
+              >
+                {t("forgotPassword")}
+              </Anchor>
+            )}
+
+            {error && (
+              <p className={classes.error} role="alert" data-cy="login-error">
+                {String(error)}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              size="lg"
+              radius={10}
+              loading={loading}
+              data-cy="login-submit"
+            >
+              {t(signingUp ? "sign_up" : "sign_in")}
+            </Button>
+          </div>
+
+          <div className={classes.stub}>
+            <Text fz={15}>{t(signingUp ? "have_account" : "new_here")}</Text>
+            <Button
+              type="button"
+              variant="default"
+              radius="xl"
+              h={44}
+              onClick={switchMode}
+              data-cy={signingUp ? "login-to-signin" : "login-to-signup"}
+            >
+              {t(signingUp ? "sign_in" : "sign_up")}
+            </Button>
+          </div>
         </form>
-      </Paper>
+      </Stack>
     </Container>
   );
 }
