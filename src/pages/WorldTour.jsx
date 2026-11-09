@@ -951,7 +951,7 @@ function WorldTour() {
               <div
                 style={{
                   position: "absolute",
-                  right: 16,
+                  left: 16,
                   bottom: 16,
                   display: "flex",
                   flexDirection: "column",
