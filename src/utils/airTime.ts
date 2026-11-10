@@ -1,4 +1,6 @@
-type RunwayLeg = { runwayTime?: { utc?: string } | undefined } | undefined;
+export type RunwayLeg =
+  | { runwayTime?: { utc?: string } | undefined }
+  | undefined;
 
 /** AeroDataBox's UTC strings, such as "2026-09-20 06:08Z", as a Date. */
 export const parseUtc = (value: unknown): Date | null => {
