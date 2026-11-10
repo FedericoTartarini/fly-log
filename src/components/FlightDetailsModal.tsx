@@ -102,8 +102,7 @@ const DetailsPass: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
           <IconArrowNarrowRight
             size={36}
             color="var(--fl-accent)"
-            role="img"
-            aria-label={t("to")}
+            aria-hidden
           />
           {minutes !== null &&
             t("details.duration", {
