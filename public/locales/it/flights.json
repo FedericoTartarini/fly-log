@@ -132,42 +132,44 @@
   },
   "actions": {
     "edit": "Modifica",
-    "delete": "Elimina",
-    "confirm_delete_title": "Elimina volo",
-    "confirm_delete_message": "Sei sicuro di voler eliminare definitivamente questo volo? Questa azione non può essere annullata.",
-    "cancel": "Annulla",
     "deleted_title": "Eliminato",
     "deleted_message": "Volo eliminato",
     "delete_error_title": "Errore durante l'eliminazione",
     "delete_error_message": "Non è stato possibile eliminare il volo. Riprova.",
-    "not_signed_in": "Devi essere autenticato per eseguire questa azione"
+    "not_signed_in": "Devi essere autenticato per eseguire questa azione",
+    "delete_flight": "Elimina volo",
+    "delete_question": "Eliminare {{flight}}, {{route}}?",
+    "delete_question_no_number": "Eliminare questo volo, {{route}}?",
+    "delete_warning": "Verrà rimosso da statistiche, mappa e badge. Non puoi annullare.",
+    "keep": "Tienilo"
   },
   "status": {
     "title": "Stato del volo",
     "status_label": "Stato:",
     "unknown": "Sconosciuto",
-    "no_data": "Nessuno stato in tempo reale ancora verificato.",
+    "no_data": "Nessuno stato ancora. Verifica stato cerca orari, gate e ritardi per questo numero di volo.",
     "no_flight_number": "Questo volo non ha un numero di volo, quindi lo stato non può essere verificato.",
     "check_button": "Verifica stato",
     "check_success_title": "Stato aggiornato",
     "check_error_title": "Impossibile verificare lo stato",
-    "checked_at": "Ultimo controllo: {{value}}",
+    "checked_at": "Verificato il {{value}}",
     "next_check_at": "Disponibile di nuovo alle {{value}}",
-    "no_further_checks": "Questo volo ha raggiunto il suo stato finale - nessun ulteriore controllo necessario",
+    "no_further_checks": "Questo volo ha raggiunto il suo stato finale, quindi non c'è altro da verificare.",
     "error_not_found": "Nessun volo corrispondente trovato per questa data",
     "error_unauthorized": "L'app non è riuscita a verificare la propria identità. Ricarica la pagina e riprova.",
     "error_quota": "Il servizio di stato dei voli non è momentaneamente disponibile. Riprova più tardi.",
     "error_generic": "Si è verificato un errore durante la verifica dello stato. Riprova più tardi.",
-    "aircraft": "Aereo: {{model}} ({{reg}})",
-    "check_in_desk": "Banco check-in: {{value}}",
+    "check_in_desk": "Banco check-in {{value}}",
     "departure_heading": "Partenza",
     "arrival_heading": "Arrivo",
-    "gate_terminal": "Gate {{gate}}, terminal {{terminal}}",
     "on_time": "In orario",
-    "delay_late": "+{{value}} min",
-    "delay_early": "-{{value}} min",
+    "delay_late": "{{value}} min di ritardo",
+    "delay_early": "{{value}} min di anticipo",
     "scheduled_time": "Previsto {{value}}",
-    "source": "Fonte: AeroDataBox"
+    "source": "Fonte: AeroDataBox",
+    "check_hint": "Puoi verificare una volta al giorno, oppure ogni ora vicino alla partenza.",
+    "terminal": "Terminal {{value}}",
+    "gate": "Gate {{value}}"
   },
   "no_flights_card": {
     "welcome_title": "Benvenuto in FlyLog",
@@ -511,5 +513,12 @@
     "earth_next": "{{percent}}% del giro {{lap}}",
     "moon_aria": "Avanzamento verso il viaggio {{trip}} sulla Luna",
     "moon_next": "{{percent}}% del viaggio {{trip}}"
+  },
+  "details": {
+    "pass_label": "Carta d'imbarco",
+    "distance": "Distanza",
+    "cabin": "Classe",
+    "aircraft": "Aereo",
+    "duration": "{{hours}} h {{minutes}} m"
   }
 }

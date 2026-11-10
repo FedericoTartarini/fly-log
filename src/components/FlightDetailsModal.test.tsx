@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { render } from "../../test-utils";
 import FlightDetailsModal from "./FlightDetailsModal";
 import type { enhancedFlight } from "../types/enhancedFlight";
@@ -65,16 +65,13 @@ describe("FlightDetailsModal", () => {
     showNotificationMock.mockReset();
   });
 
-  it("renders the saved flight route without repeating its identity", () => {
+  it("shows the flight as a boarding pass", () => {
     render(<FlightDetailsModal flight={baseFlight} onEdit={vi.fn()} />);
-    expect(
-      screen.getByText(
-        (_, element) =>
-          element?.tagName === "P" &&
-          element.textContent === "SYD (SYD) → SIN (SIN)",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("QF1")).not.toBeInTheDocument();
+    const pass = screen.getByRole("article", { name: "Boarding pass" });
+    expect(within(pass).getByText("QF1")).toBeInTheDocument();
+    expect(within(pass).getAllByText("SYD")[0]).toBeInTheDocument();
+    expect(within(pass).getAllByText("SIN")[0]).toBeInTheDocument();
+    expect(within(pass).getByText("14:30")).toBeInTheDocument();
   });
 
   it("calls onEdit with the flight when Edit is clicked", () => {
@@ -164,6 +161,22 @@ describe("FlightDetailsModal", () => {
     await waitFor(() =>
       expect(deleteFlightForUserMock).toHaveBeenCalledWith("uid-1", "1"),
     );
+  });
+
+  it("asks inline before deleting, instead of opening a second modal", () => {
+    render(<FlightDetailsModal flight={baseFlight} onEdit={vi.fn()} />);
+
+    fireEvent.click(screen.getByTestId("flight-details-delete-1"));
+
+    const confirm = screen.getByRole("alertdialog");
+    expect(confirm).toHaveAccessibleName(/^Delete QF1, .+ to .+\?$/);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.queryByTestId("flight-details-delete-1")).toBeNull();
+    expect(screen.getByTestId("flight-delete-cancel-1")).toHaveFocus();
+
+    fireEvent.click(screen.getByTestId("flight-delete-cancel-1"));
+    expect(screen.queryByRole("alertdialog")).toBeNull();
+    expect(screen.getByTestId("flight-details-delete-1")).toHaveFocus();
   });
 
   it("does not delete when the confirm dialog is cancelled", () => {

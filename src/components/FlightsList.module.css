@@ -122,3 +122,29 @@
   border: 1px dashed var(--fl-input-border);
   border-radius: 12px;
 }
+
+/* The flight details: a centred modal on the page colour, so the boarding
+ * pass and status card stand out as white cards. */
+.sheet,
+.sheetHeader {
+  background: var(--fl-page);
+}
+
+.sheetTitle {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* On phones it becomes a sheet from the bottom, clear of the status bar. */
+@media (max-width: 53.74em) {
+  .sheetInner {
+    padding: 48px 0 0;
+    align-items: flex-end;
+  }
+
+  .sheet {
+    flex: 1 1 100%;
+    max-height: 100%;
+    border-radius: 16px 16px 0 0;
+  }
+}
