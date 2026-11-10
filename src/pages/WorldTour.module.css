@@ -1,0 +1,172 @@
+/* The route tour: the globe in a card, then the current flight as a
+ * boarding pass whose stub holds the playback controls. */
+
+.mono {
+  font-family: var(--mantine-font-family-monospace);
+}
+
+/* The shared filter tags, on a rounded card. Empty while no filter is on. */
+.tags {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tags:empty {
+  display: none;
+}
+
+.globe {
+  position: relative;
+  margin: 0;
+  background: var(--fl-surface);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.globe svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+}
+
+/* Bottom left, clear of the floating add button on phones (#179). */
+.zoom {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pass {
+  background: var(--fl-surface);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.head {
+  padding: 14px 16px 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 4px 12px;
+}
+
+.leg {
+  grid-column: 1 / -1;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fl-muted);
+}
+
+.leg[data-upcoming] {
+  color: var(--fl-accent-text);
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.date {
+  text-align: right;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.cities {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--fl-muted);
+}
+
+.meta {
+  text-align: right;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  color: var(--fl-muted);
+}
+
+/* The tear-off stub, with notches cut in the page colour along the dashes. */
+.stub {
+  position: relative;
+  border-top: 1px dashed var(--fl-input-border);
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stub::before,
+.stub::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fl-page);
+}
+
+.stub::before {
+  left: -9px;
+}
+
+.stub::after {
+  right: -9px;
+}
+
+.scrub {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scrubHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--fl-muted);
+}
+
+.scrub input {
+  width: 100%;
+  min-height: 32px;
+  margin: 0;
+  accent-color: var(--fl-accent);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.restart {
+  justify-self: start;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.speed {
+  justify-self: end;
+  font-family: var(--mantine-font-family-monospace);
+}

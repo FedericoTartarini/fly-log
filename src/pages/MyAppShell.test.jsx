@@ -89,7 +89,7 @@ describe("MyAppShell on a phone", () => {
   });
 
   it("hides the filter button on pages that don't filter", () => {
-    renderAt("/tour");
+    renderAt("/timeline");
     expect(
       screen.queryByRole("button", { name: /filter flights/i }),
     ).toBeNull();

@@ -1,6 +1,6 @@
 /* global describe, it, before, cy, Cypress */
 
-describe("WorldTour Globe Animation Controls", () => {
+describe("Route tour playback", () => {
   before(function () {
     // Pull requests from forks don't get the repo's secrets, so there is no
     // account to log in with. The full suite runs again after merging.
@@ -32,66 +32,31 @@ describe("WorldTour Globe Animation Controls", () => {
     // The header's page links; the Stats page no longer has a tour button.
     cy.contains("nav a", /^tour$/i).click();
     cy.location("pathname").should("eq", "/tour");
-    cy.scrollTo(0, 500);
   });
 
-  it("should load the globe UI, and show all city markers by default", () => {
-    // Basic title/content check
-    cy.contains(/route tour/i).should("exist");
-    // Assume that city dots are SVG circle elements with a certain class or role
-    cy.get("svg").find("circle").its("length").should("be.gte", 2); // Expect at least some dots
+  it("shows the globe and plays on to flight 2", () => {
+    cy.contains("h1", /route tour/i).should("exist");
+    cy.contains(/played oldest first/i).should("exist");
+    // Before play, every airport has a dot.
+    cy.get("figure svg").find("circle").its("length").should("be.gte", 2);
+    cy.contains(/^Flight 1 of \d+$/).should("be.visible");
 
-    cy.contains("button", /start/i).should("be.enabled");
-    cy.contains("button", /pause/i).should("not.exist"); // Pause should not exist yet
-    cy.contains("button", /stop/i).should("not.be.enabled"); // Stop should not be enabled
-    cy.contains("button", /start/i).click();
-    cy.contains("button", /pause/i).should("be.visible").and("be.enabled");
-    cy.contains("button", /stop/i).should("be.visible").and("be.enabled");
-    cy.contains("button", /resume/i).should("not.exist");
-    cy.contains("button", /stop/i).click();
+    cy.get('[data-cy="tour-play"]')
+      .should("have.attr", "aria-label", "Play the tour")
+      .click();
+    cy.get('[data-cy="tour-play"]').should(
+      "have.attr",
+      "aria-label",
+      "Pause the tour",
+    );
+    cy.contains(/Flight 2 of \d+$/, { timeout: 5000 }).should("be.visible");
 
-    cy.contains("button", /start/i).click();
-    // There should be only 2 city markers visible for active step
-    cy.get("svg").find("circle").filter(":visible").should("have.length", 2);
-    cy.contains("button", /stop/i).click();
-
-    cy.contains("button", /start/i).click();
-    cy.contains("button", /pause/i).click();
-    cy.contains("button", /resume/i)
-      .should("be.visible")
-      .and("be.enabled");
-    cy.get("svg").find("circle").filter(":visible").should("have.length", 2);
-    cy.contains("button", /resume/i).click();
-    cy.contains("button", /pause/i).should("be.visible").and("be.enabled");
-    cy.contains("button", /stop/i).click();
-
-    cy.contains("button", /start/i).click();
-    cy.contains("button", /stop/i).click();
-    // All city markers should be visible again
-    cy.get("svg")
-      .find("circle")
-      .filter(":visible")
-      .its("length")
-      .should("be.gte", 2);
-
-    // Animation controls return to idle
-    cy.contains("button", /start/i).should("be.enabled");
-    cy.contains("button", /pause/i).should("not.exist");
-    cy.contains("button", /resume/i).should("not.exist");
-    cy.contains("button", /stop/i).should("not.be.enabled");
-
-    // // Zoom logic usually involves D3 mouse events on the globe SVG
-    // // Try triggering zoom via wheel or custom control
-    // // This is a placeholder test; class/tags may need to be adapted
-    // cy.get("svg").trigger("wheel", { deltaY: -500 });
-    // cy.wait(600);
-    // cy.get("svg")
-    //   .find("text")
-    //   .filter(":visible")
-    //   .its("length")
-    //   .should("be.gte", 1);
-    // // Then zoom OUT again
-    // cy.get("svg").trigger("wheel", { deltaY: 500 });
-    // cy.wait(600);
+    cy.get('[data-cy="tour-play"]').click();
+    cy.get('[data-cy="tour-play"]').should(
+      "have.attr",
+      "aria-label",
+      "Resume the tour",
+    );
+    cy.get('[data-cy="tour-scrub"]').should("have.value", "2");
   });
 });

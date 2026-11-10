@@ -10,6 +10,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import classes from "./WorldMap.module.css";
 import { useComputedColorScheme } from "@mantine/core";
 import LatLon from "geodesy/latlon-spherical.js";
 import useFlightStore from "../store.ts";
@@ -311,6 +312,7 @@ const WorldMap = ({ height = "60vh" }) => {
 
   return (
     <MapContainer
+      className={classes.map}
       center={center}
       zoom={2}
       minZoom={2}

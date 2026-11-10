@@ -48,7 +48,7 @@ const PAGES = [
 ];
 
 // Pages whose flights the header's filter button narrows down.
-const FILTER_PAGES = [PATHS.STATS, PATHS.ALL_STATS, PATHS.FLIGHTS];
+const FILTER_PAGES = [PATHS.STATS, PATHS.ALL_STATS, PATHS.FLIGHTS, PATHS.TOUR];
 
 // App layout: header, bottom tab bar on phones, the add-flight form, and the
 // routed page.

@@ -6,9 +6,11 @@ import {
   waitFor,
   within,
   userEvent,
+  act,
 } from "../../test-utils/index.js";
 import WorldTour from "./WorldTour";
 import useFlightStore from "../store";
+import { DEFAULT_FILTERS } from "../utils/activeFilters";
 
 vi.mock("d3", async () => {
   const actual = await vi.importActual("d3");
@@ -48,67 +50,13 @@ const sampleFlights = [
   },
 ];
 
-const sameDayFlights = [
-  {
-    id: "early",
-    departure_date: "2024-06-01",
-    departure_time: "03:15",
-    departure_airport_iata: "BNE",
-    arrival_airport_iata: "PER",
-    departure_coordinates: [-27.3928, 153.1175],
-    arrival_coordinates: [-31.9403, 115.9669],
-  },
-  {
-    id: "late",
-    departure_date: "2024-06-01",
-    departure_time: "08:30",
-    departure_airport_iata: "SYD",
-    arrival_airport_iata: "MEL",
-    departure_coordinates: [-33.9399, 151.1753],
-    arrival_coordinates: [-37.6733, 144.8433],
-  },
-];
-
-const multiYearFlights = [
-  {
-    id: "y1",
-    departure_date: "2020-02-10",
-    departure_airport_iata: "SYD",
-    arrival_airport_iata: "MEL",
-    departure_coordinates: [-33.9399, 151.1753],
-    arrival_coordinates: [-37.6733, 144.8433],
-  },
-  {
-    id: "y2",
-    departure_date: "2024-05-21",
-    departure_airport_iata: "MEL",
-    arrival_airport_iata: "PER",
-    departure_coordinates: [-37.6733, 144.8433],
-    arrival_coordinates: [-31.9403, 115.9669],
-  },
-  {
-    id: "y3",
-    departure_date: "2025-11-05",
-    departure_airport_iata: "BNE",
-    arrival_airport_iata: "LAX",
-    departure_coordinates: [-27.3928, 153.1175],
-    arrival_coordinates: [33.9416, -118.4085],
-  },
-];
-
 describe("WorldTour", () => {
   beforeEach(() => {
     useFlightStore.setState({
       allFlights: [],
       filteredFlights: [],
       isLoading: false,
-      filters: {
-        airline: null,
-        departureAirport: null,
-        arrivalAirport: null,
-        minDuration: null,
-        maxDuration: null,
-      },
+      filters: DEFAULT_FILTERS,
     });
   });
 
@@ -116,18 +64,18 @@ describe("WorldTour", () => {
     vi.clearAllMocks();
   });
 
-  it("shows no-routes state and disables start when there are no flights", async () => {
+  const withFlights = (flights) =>
+    useFlightStore.setState({ allFlights: flights, filteredFlights: flights });
+
+  it("says there is nothing to play when there are no flights", async () => {
     render(<WorldTour />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText("No valid routes found for this filter."),
-      ).toBeInTheDocument();
-    });
-
     expect(
-      screen.getByRole("button", { name: "Start animation" }),
-    ).toBeDisabled();
+      await screen.findByText(/No flights to play yet/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Play the tour" }),
+    ).not.toBeInTheDocument();
   });
 
   it("announces loading and holds back the no-routes alert while flights load", () => {
@@ -135,93 +83,96 @@ describe("WorldTour", () => {
     render(<WorldTour />);
 
     expect(screen.getByRole("status")).toHaveTextContent("Loading...");
+    expect(screen.queryByText(/No flights to play yet/)).toBeNull();
+  });
+
+  it("plays the filtered flights, not every flight", () => {
+    useFlightStore.setState({
+      allFlights: sampleFlights,
+      filteredFlights: sampleFlights.slice(0, 2),
+    });
+    render(<WorldTour />);
+
     expect(
-      screen.queryByText("No valid routes found for this filter."),
-    ).toBeNull();
+      screen.getByText("2 flights, played oldest first"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Flight 1 of 2")).toBeInTheDocument();
   });
 
-  it("keeps route label hidden before start and shows it after start", async () => {
-    useFlightStore.setState({
-      allFlights: sampleFlights,
-      filteredFlights: sampleFlights,
-    });
-
+  it("steps through the flights with next, previous and restart", async () => {
+    withFlights(sampleFlights);
     render(<WorldTour />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: "Start animation" }),
-      ).toBeEnabled();
-    });
+    const pass = screen.getByRole("region", { name: "Current flight" });
+    expect(within(pass).getByText("Flight 1 of 3")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Previous flight" }),
+    ).toBeDisabled();
 
-    expect(screen.queryByText(/Route \d+\/\d+:/)).not.toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getByRole("button", { name: "Start animation" }),
+    await userEvent.click(screen.getByRole("button", { name: "Next flight" }));
+    await userEvent.click(screen.getByRole("button", { name: "Next flight" }));
+    // The last flight is in 2099, so it is upcoming.
+    expect(
+      within(pass).getByText("Upcoming · Flight 3 of 3"),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Next flight" })).toBeDisabled();
+    expect(screen.getByRole("slider")).toHaveAttribute(
+      "aria-valuetext",
+      "Flight 3 of 3, SYD to LAX",
     );
 
-    expect(screen.getByText(/Route 1\/\d+:/)).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Back to the first flight" }),
+    );
+    expect(within(pass).getByText("Flight 1 of 3")).toBeInTheDocument();
   });
 
-  it("switches scope to past flights and hides year range controls", async () => {
-    useFlightStore.setState({
-      allFlights: sampleFlights,
-      filteredFlights: sampleFlights,
-    });
-
+  it("advances to the next flight while playing, and pauses", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    withFlights(sampleFlights);
     render(<WorldTour />);
-
-    await waitFor(() => {
-      expect(screen.getByLabelText("From year")).toBeInTheDocument();
-      expect(screen.getByLabelText("To year")).toBeInTheDocument();
-    });
-
-    await userEvent.selectOptions(screen.getByLabelText("Flights"), "past");
-
-    expect(screen.queryByLabelText("From year")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("To year")).not.toBeInTheDocument();
-  });
-
-  it("orders flights on the same day by departure time", async () => {
-    useFlightStore.setState({
-      allFlights: sameDayFlights,
-      filteredFlights: sameDayFlights,
-    });
-
-    render(<WorldTour />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: "Start animation" }),
-      ).toBeEnabled();
-    });
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Start animation" }),
+      screen.getByRole("button", { name: "Play the tour" }),
+    );
+    expect(
+      screen.getByRole("button", { name: "Pause the tour" }),
+    ).toBeInTheDocument();
+
+    await act(() => vi.advanceTimersByTimeAsync(1700));
+    expect(screen.getByText("Flight 2 of 3")).toBeInTheDocument();
+    // Silent during play, so it does not read out every flight.
+    expect(screen.getByText("Flight 2 of 3").parentElement).toHaveAttribute(
+      "aria-live",
+      "off",
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/Route 1\/2: BNE -> PER/)).toBeInTheDocument();
-    });
+    await userEvent.click(
+      screen.getByRole("button", { name: "Pause the tour" }),
+    );
+    expect(
+      screen.getByRole("button", { name: "Resume the tour" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Flight 2 of 3").parentElement).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
+    vi.useRealTimers();
   });
 
-  it("limits To year options to years >= From year", async () => {
-    useFlightStore.setState({
-      allFlights: multiYearFlights,
-      filteredFlights: multiYearFlights,
-    });
-
+  it("cycles the speed chip through 0.5×, 1× and 2×", async () => {
+    withFlights(sampleFlights);
     render(<WorldTour />);
 
-    const fromSelect = await screen.findByLabelText("From year");
-    const toSelect = screen.getByLabelText("To year");
-
-    await userEvent.selectOptions(fromSelect, "2024");
-
-    await waitFor(() => {
-      const toOptions = within(toSelect).getAllByRole("option");
-      expect(toOptions.map((option) => option.value)).toEqual(["2024", "2025"]);
+    const chip = screen.getByRole("button", {
+      name: "1× (normal). Change speed",
     });
+    expect(chip).toHaveTextContent("1×");
+    await userEvent.click(chip);
+    expect(chip).toHaveTextContent("2×");
+    await userEvent.click(chip);
+    expect(chip).toHaveTextContent("0.5×");
+    expect(chip).toHaveAccessibleName("0.5× (slow). Change speed");
   });
 
   it("initialises zoom with correct scale constraints", async () => {
@@ -232,11 +183,7 @@ describe("WorldTour", () => {
     });
     const zoomSpy = vi.spyOn(d3, "zoom").mockReturnValue(mockZoomInstance);
 
-    useFlightStore.setState({
-      allFlights: sampleFlights,
-      filteredFlights: sampleFlights,
-    });
-
+    withFlights(sampleFlights);
     render(<WorldTour />);
 
     await waitFor(() => expect(zoomSpy).toHaveBeenCalled());
