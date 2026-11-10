@@ -132,42 +132,44 @@
   },
   "actions": {
     "edit": "Edit",
-    "delete": "Delete",
-    "confirm_delete_title": "Delete flight",
-    "confirm_delete_message": "Are you sure you want to permanently delete this flight? This action cannot be undone.",
-    "cancel": "Cancel",
     "deleted_title": "Deleted",
     "deleted_message": "Flight deleted",
     "delete_error_title": "Error deleting flight",
     "delete_error_message": "The flight could not be deleted. Try again.",
-    "not_signed_in": "You must be signed in to perform this action"
+    "not_signed_in": "You must be signed in to perform this action",
+    "delete_flight": "Delete flight",
+    "delete_question": "Delete {{flight}}, {{route}}?",
+    "delete_question_no_number": "Delete this flight, {{route}}?",
+    "delete_warning": "This removes it from your stats, map and badges. You cannot undo it.",
+    "keep": "Keep it"
   },
   "status": {
     "title": "Flight status",
     "status_label": "Status:",
     "unknown": "Unknown",
-    "no_data": "No live status checked yet.",
+    "no_data": "No status yet. Check status looks up times, gates and delays for this flight number.",
     "no_flight_number": "This flight has no flight number, so status can't be looked up.",
     "check_button": "Check status",
     "check_success_title": "Status updated",
     "check_error_title": "Could not check status",
-    "checked_at": "Last checked: {{value}}",
+    "checked_at": "Checked {{value}}",
     "next_check_at": "Available again at {{value}}",
-    "no_further_checks": "This flight has reached its final status - no further checks needed",
+    "no_further_checks": "This flight has reached its final status, so there is nothing more to check.",
     "error_not_found": "No matching flight was found for this date",
     "error_unauthorized": "This app could not verify itself. Reload the page and try again.",
     "error_quota": "The flight status service is temporarily unavailable. Try again later.",
     "error_generic": "Something went wrong while checking the status. Try again later.",
-    "aircraft": "Aircraft: {{model}} ({{reg}})",
-    "check_in_desk": "Check-in desk: {{value}}",
+    "check_in_desk": "Check-in desk {{value}}",
     "departure_heading": "Departure",
     "arrival_heading": "Arrival",
-    "gate_terminal": "Gate {{gate}}, terminal {{terminal}}",
     "on_time": "On time",
-    "delay_late": "+{{value}} min",
-    "delay_early": "-{{value}} min",
+    "delay_late": "{{value}} min late",
+    "delay_early": "{{value}} min early",
     "scheduled_time": "Scheduled {{value}}",
-    "source": "Source: AeroDataBox"
+    "source": "Source: AeroDataBox",
+    "check_hint": "You can check once a day, or hourly close to departure.",
+    "terminal": "Terminal {{value}}",
+    "gate": "Gate {{value}}"
   },
   "no_flights_card": {
     "welcome_title": "Welcome to FlyLog",
@@ -514,5 +516,12 @@
     "earth_next": "{{percent}}% of the way to lap {{lap}}",
     "moon_aria": "Progress towards trip {{trip}} to the Moon",
     "moon_next": "{{percent}}% of the way to trip {{trip}}"
+  },
+  "details": {
+    "pass_label": "Boarding pass",
+    "distance": "Distance",
+    "cabin": "Cabin",
+    "aircraft": "Aircraft",
+    "duration": "{{hours}} h {{minutes}} m"
   }
 }
