@@ -30,7 +30,11 @@ const baseFlight: enhancedFlight = {
 describe("FlightDetailsPanel", () => {
   it("shows a placeholder message when no status has been checked", () => {
     render(<FlightDetailsPanel flight={baseFlight} />);
-    expect(screen.getByText("No live status checked yet.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "No status yet. Check status looks up times, gates and delays for this flight number.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("renders stored status data", () => {
@@ -85,7 +89,7 @@ describe("FlightDetailsPanel", () => {
       />,
     );
 
-    expect(screen.getByText(/Check-in desk: 12-18/)).toBeInTheDocument();
+    expect(screen.getByText(/Check-in desk 12-18/)).toBeInTheDocument();
     expect(screen.queryByText("Sydney Intl")).not.toBeInTheDocument();
     expect(screen.queryByText("Changi Airport")).not.toBeInTheDocument();
   });
@@ -115,10 +119,10 @@ describe("FlightDetailsPanel", () => {
 
     expect(screen.getByText("Scheduled 14:30")).toBeInTheDocument();
     expect(screen.getByText("14:44")).toBeInTheDocument();
-    expect(screen.getByText("+14 min")).toBeInTheDocument();
+    expect(screen.getByText("14 min late")).toBeInTheDocument();
   });
 
-  it("shows a green on-time badge when scheduled and revised times match", () => {
+  it("shows a on-time chip when scheduled and revised times match", () => {
     render(
       <FlightDetailsPanel
         flight={{
@@ -145,7 +149,7 @@ describe("FlightDetailsPanel", () => {
     expect(screen.getByText("On time")).toBeInTheDocument();
   });
 
-  it("shows a green early badge for a negative delay", () => {
+  it("shows an early chip for a negative delay", () => {
     render(
       <FlightDetailsPanel
         flight={{
@@ -168,7 +172,7 @@ describe("FlightDetailsPanel", () => {
       />,
     );
 
-    expect(screen.getByText("-12 min")).toBeInTheDocument();
+    expect(screen.getByText("12 min early")).toBeInTheDocument();
   });
 
   it("uses the actual time for a landed flight when the API supplies it", () => {
@@ -196,10 +200,10 @@ describe("FlightDetailsPanel", () => {
 
     expect(screen.getByText("Scheduled 15:00")).toBeInTheDocument();
     expect(screen.getByText("15:12")).toBeInTheDocument();
-    expect(screen.getByText("+12 min")).toBeInTheDocument();
+    expect(screen.getByText("12 min late")).toBeInTheDocument();
   });
 
-  it("shows a red badge for a long delay", () => {
+  it("shows an amber late chip for a long delay", () => {
     render(
       <FlightDetailsPanel
         flight={{
@@ -222,6 +226,6 @@ describe("FlightDetailsPanel", () => {
       />,
     );
 
-    expect(screen.getByText("+30 min")).toBeInTheDocument();
+    expect(screen.getByText("30 min late")).toBeInTheDocument();
   });
 });

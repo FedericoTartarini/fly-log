@@ -27,6 +27,11 @@ export const tokens = {
     "accent-text": "#B30E17",
     "accent-tint": "#FDE7E8",
     "on-accent": "#FFFFFF",
+    // Chips in the flight status card: on time or landed, and late.
+    "ok-text": "#1A7346",
+    "ok-tint": "#E2F3E9",
+    "warn-text": "#8A5300",
+    "warn-tint": "#FFF0D4",
     // The Timeline heatmap, a sequential scale from an empty month to the busiest.
     "heat-0": "#EEF1F5",
     "heat-1": "#F9CDCF",
@@ -50,6 +55,10 @@ export const tokens = {
     "accent-text": "#FF7A80",
     "accent-tint": "#3B1B20",
     "on-accent": "#FFFFFF",
+    "ok-text": "#74D8A0",
+    "ok-tint": "#15301F",
+    "warn-text": "#F4C46A",
+    "warn-tint": "#33270E",
     "heat-0": "#232A37",
     "heat-1": "#6B2229",
     "heat-2": "#A3242D",

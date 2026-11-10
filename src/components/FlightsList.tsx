@@ -11,7 +11,7 @@ import {
   Button,
   UnstyledButton,
 } from "@mantine/core";
-import { useHeadroom } from "@mantine/hooks";
+import { useHeadroom, useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowRight,
   IconPlaneInflight,
@@ -36,36 +36,6 @@ const flightNumberOf = (flight: enhancedFlight): string | null =>
   flight.flight_number
     ? `${flight.airline_iata ?? ""}${flight.flight_number}`
     : null;
-
-const FlightModalTitle: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
-  const flightNumber = flightNumberOf(flight);
-  const identity =
-    flightNumber ??
-    flight.airline_name ??
-    `${flight.departure_airport_iata} → ${flight.arrival_airport_iata}`;
-
-  return (
-    <Group gap="xs" wrap="nowrap">
-      <Avatar
-        src={
-          flight.airline_icon_path
-            ? `/logos/${flight.airline_icon_path}`
-            : undefined
-        }
-        alt=""
-        color="gray"
-        radius="xl"
-        size="sm"
-      >
-        <IconPlaneInflight size={16} />
-      </Avatar>
-      <Text fw={600} size="lg">
-        {identity}
-        {flightNumber && flight.airline_name ? ` · ${flight.airline_name}` : ""}
-      </Text>
-    </Group>
-  );
-};
 
 /**
  * One flight as a two-line boarding-pass row. The whole row is one button
@@ -176,6 +146,7 @@ const FlightsList: React.FC = () => {
   // Same headroom as the app shell, so a pinned heading sits under the
   // header while it shows and moves up when it hides.
   const headerPinned = useHeadroom({ fixedAt: 120 });
+  const isPhone = useMediaQuery("(max-width: 53.74em)");
   const [editOpen, setEditOpen] = React.useState(false);
   const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
     null,
@@ -364,9 +335,29 @@ const FlightsList: React.FC = () => {
       <Modal
         opened={detailsOpen}
         onClose={() => setDetailsOpen(false)}
-        title={detailsFlight ? <FlightModalTitle flight={detailsFlight} /> : ""}
+        title={
+          detailsFlight
+            ? t("list.cities", {
+                from:
+                  getAirportCity(detailsFlight.departure_airport_iata) ??
+                  detailsFlight.departure_airport_iata,
+                to:
+                  getAirportCity(detailsFlight.arrival_airport_iata) ??
+                  detailsFlight.arrival_airport_iata,
+              })
+            : ""
+        }
         size="lg"
         zIndex={600}
+        // A sheet from the bottom on phones, a centred modal on wider screens.
+        {...(isPhone && { transitionProps: { transition: "slide-up" } })}
+        closeButtonProps={{ size: "lg" }}
+        classNames={{
+          inner: classes.sheetInner,
+          content: classes.sheet,
+          header: classes.sheetHeader,
+          title: classes.sheetTitle,
+        }}
       >
         {detailsFlight && (
           <Suspense fallback={<Loader size="sm" />}>

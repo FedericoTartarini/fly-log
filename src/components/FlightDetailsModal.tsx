@@ -1,11 +1,16 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { Button, Group, Modal, Stack, Text, Tooltip } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
+import { Avatar, Button } from "@mantine/core";
+import {
+  IconArrowNarrowRight,
+  IconPencil,
+  IconPlaneInflight,
+  IconRefresh,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../context/AuthContext";
 import type { enhancedFlight } from "../types/enhancedFlight";
-import FlightCard from "./FlightCard";
 import FlightDetailsPanel from "./FlightDetailsPanel";
 import { deleteFlightForUser } from "../utils/flightService";
 import { getFlightStatusCooldown } from "../utils/flightStatusCooldown";
@@ -14,11 +19,120 @@ import {
   FlightStatusError,
 } from "../utils/flightStatusService";
 import { offerStatusChanges } from "../utils/autoStatusCheck";
+import { getAirportCity } from "../utils/airportUtils";
+import {
+  arrivalDayOffset,
+  formatCalendarDate,
+  normalizeTimeString,
+} from "../utils/dateUtils";
+import classes from "./FlightDetails.module.css";
 
 interface FlightDetailsModalProps {
   flight: enhancedFlight;
   onEdit: (flight: enhancedFlight) => void;
 }
+
+const flightNumberOf = (flight: enhancedFlight): string | null =>
+  flight.flight_number
+    ? `${flight.airline_iata ?? ""}${flight.flight_number}`
+    : null;
+
+/**
+ * The flight as a boarding pass: airline band, the two airports with their
+ * times, and a stub with date, distance, cabin and aircraft.
+ */
+const DetailsPass: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
+  const { t, i18n } = useTranslation(["flights"]);
+  const from = flight.departure_airport_iata;
+  const to = flight.arrival_airport_iata;
+  const offset = arrivalDayOffset(flight.departure_date, flight.arrival_date);
+  const arrival = normalizeTimeString(flight.arrival_time);
+  const minutes =
+    typeof flight.flight_time === "number"
+      ? Math.round(flight.flight_time * 60)
+      : null;
+  const fields = [
+    [
+      t("pass.date"),
+      formatCalendarDate(flight.departure_date, "D MMM YYYY", i18n.language),
+    ],
+    [
+      t("details.distance"),
+      typeof flight.distance_km === "number"
+        ? t("km", {
+            value: Math.round(flight.distance_km).toLocaleString(i18n.language),
+          })
+        : null,
+    ],
+    // No cabin saved means economy, the same rule the emissions use.
+    [t("details.cabin"), t(`cabin.${flight.cabin_class ?? "economy"}`)],
+    [t("details.aircraft"), flight.aircraft_type_name],
+  ];
+
+  return (
+    <article aria-label={t("details.pass_label")} className={classes.pass}>
+      <div className={classes.band}>
+        <span className={classes.airline}>
+          <Avatar
+            src={
+              flight.airline_icon_path
+                ? `/logos/${flight.airline_icon_path}`
+                : undefined
+            }
+            alt=""
+            radius="xl"
+            size={28}
+            aria-hidden
+          >
+            {flight.airline_iata || <IconPlaneInflight size={16} />}
+          </Avatar>
+          {flight.airline_name}
+        </span>
+        <span className={classes.mono}>{flightNumberOf(flight)}</span>
+      </div>
+      <div className={classes.route}>
+        <div>
+          <p className={classes.code}>{from}</p>
+          <p className={classes.city}>{getAirportCity(from) ?? from}</p>
+          <p className={classes.time}>
+            {normalizeTimeString(flight.departure_time)}
+          </p>
+        </div>
+        <div className={classes.duration}>
+          <IconArrowNarrowRight
+            size={36}
+            color="var(--fl-accent)"
+            role="img"
+            aria-label={t("to")}
+          />
+          {minutes !== null &&
+            t("details.duration", {
+              hours: Math.floor(minutes / 60),
+              minutes: minutes % 60,
+            })}
+        </div>
+        <div className={classes.end}>
+          <p className={classes.code}>{to}</p>
+          <p className={classes.city}>{getAirportCity(to) ?? to}</p>
+          <p className={classes.time}>
+            {arrival}
+            {arrival && offset !== 0 && (
+              <sup>{`${offset > 0 ? "+" : "−"}${Math.abs(offset)}`}</sup>
+            )}
+          </p>
+        </div>
+      </div>
+      <dl className={classes.stub}>
+        {fields.map(([label, value]) => (
+          <div key={label}>
+            <dt className={classes.label}>{label}</dt>
+            <dd>{value || "–"}</dd>
+          </div>
+        ))}
+      </dl>
+    </article>
+  );
+};
 
 const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
   flight,
@@ -28,11 +142,14 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
   const { user } = useAuth();
   const [isChecking, setIsChecking] = useState(false);
   const [, recheckCooldown] = useReducer((n: number) => n + 1, 0);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const keepRef = useRef<HTMLButtonElement>(null);
+  const deleteRef = useRef<HTMLButtonElement>(null);
+  const wasConfirming = useRef(false);
 
   const cooldown = getFlightStatusCooldown(flight);
-  const hasFlightNumber = Boolean(flight.flight_number);
+  const flightNumber = flightNumberOf(flight);
 
   // The cooldown is evaluated against `new Date()` at render time, so without
   // this the button stays disabled after the cooldown expires until something
@@ -45,6 +162,14 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
     const timer = setTimeout(recheckCooldown, delay);
     return () => clearTimeout(timer);
   }, [nextCheckMs]);
+
+  // The confirmation replaces the buttons, so focus moves into it and back to
+  // Delete when the user keeps the flight.
+  useEffect(() => {
+    if (confirming) keepRef.current?.focus();
+    else if (wasConfirming.current) deleteRef.current?.focus();
+    wasConfirming.current = confirming;
+  }, [confirming]);
 
   // 404 and 429 are the two failures a user can act on, so they get their own
   // wording; everything else would only expose an internal English string.
@@ -121,101 +246,124 @@ const FlightDetailsModal: React.FC<FlightDetailsModalProps> = ({
       });
     } finally {
       setIsDeleting(false);
-      setConfirmOpen(false);
+      setConfirming(false);
     }
   };
 
-  const checkButtonDisabled = !cooldown.allowed || isChecking;
+  const route = t("list.cities", {
+    from:
+      getAirportCity(flight.departure_airport_iata) ??
+      flight.departure_airport_iata,
+    to:
+      getAirportCity(flight.arrival_airport_iata) ??
+      flight.arrival_airport_iata,
+  });
+  const checkHint = cooldown.allowed
+    ? t("status.check_hint")
+    : cooldown.nextCheckAt
+      ? t("status.next_check_at", {
+          value: cooldown.nextCheckAt.toLocaleString(),
+          interpolation: { escapeValue: false },
+        })
+      : t("status.no_further_checks");
+
   return (
-    <Stack gap="md">
-      <FlightCard flight={flight} showAirline={false} />
+    <div className={classes.details}>
+      <DetailsPass flight={flight} />
 
       <FlightDetailsPanel flight={flight} />
 
-      <Group justify="flex-end">
-        <Button
-          variant="default"
-          leftSection={<IconPencil size={14} />}
-          onClick={() => onEdit(flight)}
-          data-testid={`flight-details-edit-${flight.id}`}
+      {confirming ? (
+        <div
+          role="alertdialog"
+          aria-labelledby="flight-delete-question"
+          aria-describedby="flight-delete-warning"
+          className={classes.confirm}
         >
-          {t("actions.edit")}
-        </Button>
-
-        {!hasFlightNumber ? (
-          <Text size="sm" c="dimmed">
-            {t("status.no_flight_number")}
-          </Text>
-        ) : (
-          <Tooltip
-            disabled={cooldown.allowed}
-            label={
-              cooldown.nextCheckAt
-                ? t("status.next_check_at", {
-                    value: cooldown.nextCheckAt.toLocaleString(),
-                    interpolation: { escapeValue: false },
-                  })
-                : t("status.no_further_checks")
-            }
-          >
-            <span>
+          <p id="flight-delete-question" className={classes.question}>
+            {flightNumber
+              ? t("actions.delete_question", {
+                  flight: flightNumber,
+                  route,
+                  interpolation: { escapeValue: false },
+                })
+              : t("actions.delete_question_no_number", {
+                  route,
+                  interpolation: { escapeValue: false },
+                })}
+          </p>
+          <p id="flight-delete-warning" className={classes.muted}>
+            {t("actions.delete_warning")}
+          </p>
+          <div className={classes.pair}>
+            <Button
+              ref={keepRef}
+              variant="default"
+              size="md"
+              onClick={() => setConfirming(false)}
+              disabled={isDeleting}
+              data-testid={`flight-delete-cancel-${flight.id}`}
+            >
+              {t("actions.keep")}
+            </Button>
+            <Button
+              size="md"
+              onClick={handleDelete}
+              loading={isDeleting}
+              data-testid={`flight-delete-confirm-${flight.id}`}
+            >
+              {t("actions.delete_flight")}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className={classes.actions}>
+          <div className={classes.pair}>
+            <Button
+              variant="default"
+              size="md"
+              leftSection={<IconPencil size={18} aria-hidden />}
+              onClick={() => onEdit(flight)}
+              data-testid={`flight-details-edit-${flight.id}`}
+            >
+              {t("actions.edit")}
+            </Button>
+            {flightNumber && (
               <Button
+                size="md"
+                color="var(--fl-ink)"
+                c={cooldown.allowed ? "var(--fl-surface)" : "var(--fl-muted)"}
+                leftSection={<IconRefresh size={18} aria-hidden />}
                 onClick={handleCheck}
                 loading={isChecking}
-                disabled={checkButtonDisabled}
-                style={
-                  checkButtonDisabled ? { pointerEvents: "none" } : undefined
-                }
+                disabled={!cooldown.allowed || isChecking}
+                aria-describedby="flight-check-hint"
                 data-testid={`flight-status-check-${flight.id}`}
               >
                 {t("status.check_button")}
               </Button>
-            </span>
-          </Tooltip>
-        )}
-
-        <Button
-          color="red"
-          variant="light"
-          leftSection={<IconTrash size={14} />}
-          onClick={() => setConfirmOpen(true)}
-          data-testid={`flight-details-delete-${flight.id}`}
-        >
-          {t("actions.delete")}
-        </Button>
-      </Group>
-
-      <Modal
-        opened={confirmOpen}
-        onClose={() => !isDeleting && setConfirmOpen(false)}
-        closeOnClickOutside={!isDeleting}
-        closeOnEscape={!isDeleting}
-        withCloseButton={!isDeleting}
-        title={t("actions.confirm_delete_title")}
-        centered
-        zIndex={700}
-      >
-        <Text>{t("actions.confirm_delete_message")}</Text>
-        <Group justify="flex-end" mt="md">
+            )}
+          </div>
+          {flightNumber && (
+            <p id="flight-check-hint" className={classes.hint}>
+              {checkHint}
+            </p>
+          )}
           <Button
-            variant="default"
-            onClick={() => !isDeleting && setConfirmOpen(false)}
-            disabled={isDeleting}
-            data-testid={`flight-delete-cancel-${flight.id}`}
+            ref={deleteRef}
+            variant="subtle"
+            size="md"
+            c="var(--fl-accent-text)"
+            leftSection={<IconTrash size={18} aria-hidden />}
+            onClick={() => setConfirming(true)}
+            className={classes.delete}
+            data-testid={`flight-details-delete-${flight.id}`}
           >
-            {t("actions.cancel")}
+            {t("actions.delete_flight")}
           </Button>
-          <Button
-            color="red"
-            onClick={handleDelete}
-            loading={isDeleting}
-            data-testid={`flight-delete-confirm-${flight.id}`}
-          >
-            {t("actions.delete")}
-          </Button>
-        </Group>
-      </Modal>
-    </Stack>
+        </div>
+      )}
+    </div>
   );
 };
 

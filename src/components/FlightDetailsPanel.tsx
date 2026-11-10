@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  Badge,
-  Card,
-  Group,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
+import classes from "./FlightDetails.module.css";
 
 interface FlightDetailsPanelProps {
   flight: enhancedFlight;
@@ -38,7 +30,7 @@ const parseUtc = (value: unknown): Date | null => {
 
 // AeroDataBox doesn't return a delay field directly - it's the gap between
 // the original schedule and the revised one. An exact match returns 0 (not
-// null) so "on time" renders as its own badge rather than silently showing
+// null) so "on time" renders as its own chip rather than silently showing
 // nothing; null means the comparison isn't possible (one side missing).
 const getDelayMinutes = (
   scheduledTime: FlightLegTime["scheduledTime"] | undefined,
@@ -59,27 +51,18 @@ const extractLocalTime = (value: string | undefined): string | null => {
   return match?.[1] ?? null;
 };
 
-type DelayTier = "green" | "yellow" | "red";
-type StatusColor = "blue" | "green" | "red" | "yellow";
-
-const getStatusColor = (status: string | undefined): StatusColor => {
-  if (/landed|arrived/i.test(status ?? "")) return "green";
-  if (/cancelled|diverted/i.test(status ?? "")) return "red";
-  if (/expected|scheduled/i.test(status ?? "")) return "yellow";
-  return "blue";
-};
-
-const getDelayColor = (delay: number): DelayTier => {
-  if (delay <= 0) return "green";
-  if (delay < 15) return "yellow";
-  return "red";
+// Green for a finished flight, red for one that never arrived as planned,
+// grey for everything still in progress.
+const getStatusTone = (status: string | undefined) => {
+  if (/landed|arrived/i.test(status ?? "")) return "ok";
+  if (/cancelled|diverted/i.test(status ?? "")) return "bad";
+  return undefined;
 };
 
 const LegBlock: React.FC<{
   heading: string;
   leg: FlightLegTime | undefined;
-  checkInDeskLabel?: (value: string) => string;
-}> = ({ heading, leg, checkInDeskLabel }) => {
+}> = ({ heading, leg }) => {
   const { t } = useTranslation(["flights"]);
   const scheduled = extractLocalTime(leg?.scheduledTime?.local);
   const revised = extractLocalTime(leg?.revisedTime?.local);
@@ -93,123 +76,125 @@ const LegBlock: React.FC<{
   // delay means they're the same instant, just spelled out twice.
   const showScheduledSeparately =
     delay !== null && delay !== 0 && scheduled && scheduled !== primaryTime;
-  const hasGateInfo = Boolean(leg?.gate || leg?.terminal);
+  const place = [
+    leg?.terminal && t("status.terminal", { value: leg.terminal }),
+    leg?.gate && t("status.gate", { value: leg.gate }),
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-  if (!primaryTime && !hasGateInfo && !leg?.checkInDesk) {
+  if (!primaryTime && !place && !leg?.checkInDesk) {
     return null;
   }
 
   return (
-    <Stack gap={4}>
-      <Text size="xs" fw={700} tt="uppercase" c="dimmed">
-        {heading}
-      </Text>
-      {showScheduledSeparately && (
-        <Text size="xs" c="dimmed">
-          {t("status.scheduled_time", { value: scheduled })}
-        </Text>
-      )}
+    <div className={classes.leg}>
+      <span className={classes.label}>{heading}</span>
       {(primaryTime || delay !== null) && (
-        <Group gap="xs">
-          {primaryTime && (
-            <Text size="sm" fw={500}>
-              {primaryTime}
-            </Text>
-          )}
+        <span className={classes.legTime}>
+          {primaryTime && <span className={classes.time}>{primaryTime}</span>}
           {delay !== null && (
-            <Badge color={getDelayColor(delay)} variant="light" size="sm">
+            <span
+              className={classes.chip}
+              data-tone={delay > 0 ? "warn" : "ok"}
+            >
               {delay === 0
                 ? t("status.on_time")
                 : delay > 0
                   ? t("status.delay_late", { value: delay })
                   : t("status.delay_early", { value: Math.abs(delay) })}
-            </Badge>
+            </span>
           )}
-        </Group>
+        </span>
       )}
-      {hasGateInfo && (
-        <Text size="sm" c="dimmed">
-          {t("status.gate_terminal", {
-            gate: leg?.gate ?? "-",
-            terminal: leg?.terminal ?? "-",
-          })}
-        </Text>
+      {showScheduledSeparately && (
+        <span className={classes.note}>
+          {t("status.scheduled_time", { value: scheduled })}
+        </span>
       )}
-      {leg?.checkInDesk && checkInDeskLabel && (
-        <Text size="sm" c="dimmed">
-          {checkInDeskLabel(leg.checkInDesk)}
-        </Text>
+      {place && <span className={classes.note}>{place}</span>}
+      {leg?.checkInDesk && (
+        <span className={classes.note}>
+          {t("status.check_in_desk", { value: leg.checkInDesk })}
+        </span>
       )}
-    </Stack>
+    </div>
   );
 };
 
 const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
-  const { t } = useTranslation(["flights"]);
+  const { t, i18n } = useTranslation(["flights"]);
   const statusData = flight.flight_status as FlightLeg | null | undefined;
 
   if (!statusData) {
     return (
-      <Card shadow="sm" radius="md" withBorder>
-        <Text size="sm" c="dimmed">
-          {t("status.no_data")}
-        </Text>
-      </Card>
+      <section aria-labelledby="flight-status-title" className={classes.card}>
+        <h3 id="flight-status-title" className={classes.cardTitle}>
+          {t("status.title")}
+        </h3>
+        <p className={classes.empty}>
+          {t(
+            flight.flight_number ? "status.no_data" : "status.no_flight_number",
+          )}
+        </p>
+      </section>
     );
   }
 
+  const tone = getStatusTone(statusData.status);
+  const { model, reg } = statusData.aircraft ?? {};
+
   return (
-    <Card shadow="sm" radius="md" withBorder>
-      <Stack gap="sm">
-        <Group justify="space-between" align="flex-start">
-          <Stack gap={0}>
-            <Title order={4}>{t("status.title")}</Title>
-            {flight.flight_status_checked_at && (
-              <Text size="xs" c="dimmed">
-                {t("status.checked_at", {
-                  value: new Date(
-                    flight.flight_status_checked_at,
-                  ).toLocaleString(),
-                  interpolation: { escapeValue: false },
-                })}
-              </Text>
-            )}
-          </Stack>
-          <Badge color={getStatusColor(statusData.status)} variant="light">
-            {statusData.status ?? t("status.unknown")}
-          </Badge>
-        </Group>
+    <section aria-labelledby="flight-status-title" className={classes.card}>
+      <div className={classes.cardHead}>
+        <div>
+          <h3 id="flight-status-title" className={classes.cardTitle}>
+            {t("status.title")}
+          </h3>
+          {flight.flight_status_checked_at && (
+            <p className={classes.note}>
+              {t("status.checked_at", {
+                value: new Date(flight.flight_status_checked_at).toLocaleString(
+                  i18n.language,
+                  { dateStyle: "medium", timeStyle: "short" },
+                ),
+                interpolation: { escapeValue: false },
+              })}
+            </p>
+          )}
+        </div>
+        <span className={classes.chip} data-tone={tone}>
+          {statusData.status ?? t("status.unknown")}
+        </span>
+      </div>
 
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-          <LegBlock
-            heading={t("status.departure_heading")}
-            leg={statusData.departure}
-            checkInDeskLabel={(value) => t("status.check_in_desk", { value })}
-          />
-          <LegBlock
-            heading={t("status.arrival_heading")}
-            leg={statusData.arrival}
-          />
-        </SimpleGrid>
+      <div className={classes.legs}>
+        <LegBlock
+          heading={t("status.departure_heading")}
+          leg={statusData.departure}
+        />
+        <LegBlock
+          heading={t("status.arrival_heading")}
+          leg={statusData.arrival}
+        />
+      </div>
 
-        {(statusData.aircraft?.model || statusData.aircraft?.reg) && (
-          <Text size="sm">
-            {t("status.aircraft", {
-              model: statusData.aircraft?.model ?? "-",
-              reg: statusData.aircraft?.reg ?? "-",
-            })}
-          </Text>
-        )}
+      {(model || reg) && (
+        <p className={classes.aircraft}>
+          {model}
+          {reg && (
+            <span className={classes.muted}>
+              {model && " · "}
+              {reg}
+            </span>
+          )}
+        </p>
+      )}
 
-        {flight.flight_status_checked_at && (
-          <Stack gap={0}>
-            <Text size="xs" c="dimmed">
-              {t("status.source")}
-            </Text>
-          </Stack>
-        )}
-      </Stack>
-    </Card>
+      {flight.flight_status_checked_at && (
+        <p className={classes.note}>{t("status.source")}</p>
+      )}
+    </section>
   );
 };
 
