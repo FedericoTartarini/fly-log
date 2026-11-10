@@ -449,19 +449,21 @@ function WorldTour() {
           <div role="group" aria-label={t("zoom")} className={classes.zoom}>
             <ActionIcon
               variant="default"
-              size={44}
+              size={38}
+              radius="md"
               aria-label={t("zoom_in")}
               onClick={() => zoomBy(1.25)}
             >
-              <IconPlus size={20} aria-hidden />
+              <IconPlus size={18} aria-hidden />
             </ActionIcon>
             <ActionIcon
               variant="default"
-              size={44}
+              size={38}
+              radius="md"
               aria-label={t("zoom_out")}
               onClick={() => zoomBy(1 / 1.25)}
             >
-              <IconMinus size={20} aria-hidden />
+              <IconMinus size={18} aria-hidden />
             </ActionIcon>
           </div>
         </figure>
