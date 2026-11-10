@@ -169,7 +169,11 @@
     "source": "Fonte: AeroDataBox",
     "check_hint": "Puoi verificare una volta al giorno, oppure ogni ora vicino alla partenza.",
     "terminal": "Terminal {{value}}",
-    "gate": "Gate {{value}}"
+    "gate": "Gate {{value}}",
+    "wheels_up": "Decollo",
+    "touchdown": "Atterraggio",
+    "in_the_air": "In volo",
+    "baggage_belt": "Nastro bagagli {{value}}"
   },
   "no_flights_card": {
     "welcome_title": "Benvenuto in FlyLog",

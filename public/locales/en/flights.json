@@ -169,7 +169,11 @@
     "source": "Source: AeroDataBox",
     "check_hint": "You can check once a day, or hourly close to departure.",
     "terminal": "Terminal {{value}}",
-    "gate": "Gate {{value}}"
+    "gate": "Gate {{value}}",
+    "wheels_up": "Wheels up",
+    "touchdown": "Touchdown",
+    "in_the_air": "In the air",
+    "baggage_belt": "Baggage belt {{value}}"
   },
   "no_flights_card": {
     "welcome_title": "Welcome to FlyLog",
