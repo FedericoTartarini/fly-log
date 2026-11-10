@@ -48,12 +48,7 @@ const Stub = ({ entry }) => {
       </Text>
       <p className={`${classes.route} ${classes.mono}`}>
         <span>{from}</span>
-        <IconArrowNarrowRight
-          size={28}
-          color="var(--fl-accent)"
-          role="img"
-          aria-label={t("to")}
-        />
+        <IconArrowNarrowRight size={28} color="var(--fl-accent)" aria-hidden />
         <span>{to}</span>
       </p>
       <Text m={0} c="var(--fl-muted)">

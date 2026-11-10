@@ -25,6 +25,7 @@ import {
   formatCalendarDate,
   normalizeTimeString,
 } from "../utils/dateUtils";
+import { getAirMinutes, type RunwayLeg } from "../utils/airTime";
 import classes from "./FlightDetails.module.css";
 
 interface FlightDetailsModalProps {
@@ -47,10 +48,21 @@ const DetailsPass: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
   const to = flight.arrival_airport_iata;
   const offset = arrivalDayOffset(flight.departure_date, flight.arrival_date);
   const arrival = normalizeTimeString(flight.arrival_time);
+  // The real time in the air once a status check has the runway times, else
+  // the estimate from the distance.
+  const status = flight.flight_status as
+    | {
+        departure?: RunwayLeg;
+        arrival?: RunwayLeg;
+        aircraft?: { model?: string };
+      }
+    | null
+    | undefined;
   const minutes =
-    typeof flight.flight_time === "number"
+    getAirMinutes(status?.departure, status?.arrival) ??
+    (typeof flight.flight_time === "number"
       ? Math.round(flight.flight_time * 60)
-      : null;
+      : null);
   const fields = [
     [
       t("pass.date"),
@@ -66,7 +78,11 @@ const DetailsPass: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
     ],
     // No cabin saved means economy, the same rule the emissions use.
     [t("details.cabin"), t(`cabin.${flight.cabin_class ?? "economy"}`)],
-    [t("details.aircraft"), flight.aircraft_type_name],
+    // What the user entered wins; otherwise the model the status check found.
+    [
+      t("details.aircraft"),
+      flight.aircraft_type_name || status?.aircraft?.model,
+    ],
   ];
 
   return (
@@ -102,8 +118,7 @@ const DetailsPass: React.FC<{ flight: enhancedFlight }> = ({ flight }) => {
           <IconArrowNarrowRight
             size={36}
             color="var(--fl-accent)"
-            role="img"
-            aria-label={t("to")}
+            aria-hidden
           />
           {minutes !== null &&
             t("details.duration", {

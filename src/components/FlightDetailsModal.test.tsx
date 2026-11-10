@@ -74,6 +74,33 @@ describe("FlightDetailsModal", () => {
     expect(within(pass).getByText("14:30")).toBeInTheDocument();
   });
 
+  it("shows the real time in the air under the arrow once runway times are known", () => {
+    const flight = { ...baseFlight, flight_time: 8.35 };
+    const { rerender } = render(
+      <FlightDetailsModal flight={flight} onEdit={vi.fn()} />,
+    );
+    const pass = () => screen.getByRole("article", { name: "Boarding pass" });
+    expect(within(pass()).getByText("8 h 21 m")).toBeInTheDocument();
+
+    rerender(
+      <FlightDetailsModal
+        flight={{
+          ...flight,
+          flight_status: {
+            departure: { runwayTime: { utc: "2026-10-12 11:44Z" } },
+            arrival: { runwayTime: { utc: "2026-10-12 20:27Z" } },
+            aircraft: { model: "Airbus A330-300" },
+          },
+          flight_status_checked_at: "2026-10-22T13:19:00.000Z",
+        }}
+        onEdit={vi.fn()}
+      />,
+    );
+    expect(within(pass()).getByText("8 h 43 m")).toBeInTheDocument();
+    // No aircraft was entered, so the pass shows the one the check found.
+    expect(within(pass()).getByText("Airbus A330-300")).toBeInTheDocument();
+  });
+
   it("calls onEdit with the flight when Edit is clicked", () => {
     const onEdit = vi.fn();
     render(<FlightDetailsModal flight={baseFlight} onEdit={onEdit} />);

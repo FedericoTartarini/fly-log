@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { render } from "../../test-utils";
 import FlightDetailsPanel from "./FlightDetailsPanel";
+import { getAirMinutes } from "../utils/airTime";
 import type { enhancedFlight } from "../types/enhancedFlight";
 
 const baseFlight: enhancedFlight = {
@@ -227,5 +228,87 @@ describe("FlightDetailsPanel", () => {
     );
 
     expect(screen.getByText("30 min late")).toBeInTheDocument();
+  });
+
+  describe("runway times and baggage belt", () => {
+    const withLegs = (departure: object, arrival: object) => ({
+      ...baseFlight,
+      flight_status: { status: "Arrived", departure, arrival },
+      flight_status_checked_at: "2026-09-20T12:00:00.000Z",
+    });
+
+    it("shows wheels up, touchdown, air time and the baggage belt", () => {
+      render(
+        <FlightDetailsPanel
+          flight={withLegs(
+            {
+              runwayTime: {
+                utc: "2026-09-20 06:08Z",
+                local: "2026-09-20 16:08+10:00",
+              },
+            },
+            {
+              runwayTime: {
+                utc: "2026-09-20 13:59Z",
+                local: "2026-09-20 21:59+08:00",
+              },
+              baggageBelt: "3",
+            },
+          )}
+        />,
+      );
+
+      expect(screen.getByText("Wheels up")).toBeInTheDocument();
+      expect(screen.getByText("16:08")).toBeInTheDocument();
+      expect(screen.getByText("21:59")).toBeInTheDocument();
+      // 7 h 51 m in UTC, although the local clocks differ by 5 h 51 m.
+      expect(screen.getByText("7 h 51 m")).toBeInTheDocument();
+      expect(screen.getByText("Baggage belt 3")).toBeInTheDocument();
+    });
+
+    it("hides each missing figure instead of showing a dash", () => {
+      render(
+        <FlightDetailsPanel
+          flight={withLegs(
+            {
+              runwayTime: {
+                utc: "2026-09-20 06:08Z",
+                local: "2026-09-20 16:08+10:00",
+              },
+            },
+            {},
+          )}
+        />,
+      );
+
+      expect(screen.getByText("Wheels up")).toBeInTheDocument();
+      expect(screen.queryByText("Touchdown")).not.toBeInTheDocument();
+      expect(screen.queryByText("In the air")).not.toBeInTheDocument();
+      expect(screen.queryByText(/Baggage belt/)).not.toBeInTheDocument();
+      expect(screen.queryByText("–")).not.toBeInTheDocument();
+    });
+
+    it("leaves the strip out when there are no runway times", () => {
+      render(<FlightDetailsPanel flight={withLegs({}, {})} />);
+      expect(screen.queryByText("Wheels up")).not.toBeInTheDocument();
+    });
+  });
+});
+
+describe("getAirMinutes", () => {
+  const leg = (utc?: string) => ({ runwayTime: utc ? { utc } : undefined });
+
+  it("counts minutes between the UTC runway times", () => {
+    expect(
+      getAirMinutes(leg("2026-09-20 23:30Z"), leg("2026-09-21 01:05Z")),
+    ).toBe(95);
+  });
+
+  it("returns null when a time is missing or the order is wrong", () => {
+    expect(getAirMinutes(leg("2026-09-20 06:08Z"), leg())).toBeNull();
+    expect(getAirMinutes(undefined, leg("2026-09-20 06:08Z"))).toBeNull();
+    expect(
+      getAirMinutes(leg("2026-09-20 08:00Z"), leg("2026-09-20 07:00Z")),
+    ).toBeNull();
   });
 });

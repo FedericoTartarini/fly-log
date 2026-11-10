@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import type { enhancedFlight } from "../types/enhancedFlight";
+import { getAirMinutes, parseUtc } from "../utils/airTime";
 import classes from "./FlightDetails.module.css";
 
 interface FlightDetailsPanelProps {
@@ -11,21 +12,18 @@ type FlightLegTime = {
   scheduledTime?: { utc?: string; local?: string };
   revisedTime?: { utc?: string; local?: string };
   actualTime?: { utc?: string; local?: string };
+  /** When the wheels left or touched the runway. */
+  runwayTime?: { utc?: string; local?: string };
   terminal?: string;
   gate?: string;
   checkInDesk?: string;
+  baggageBelt?: string;
 };
 type FlightLeg = {
   status?: string;
   departure?: FlightLegTime;
   arrival?: FlightLegTime;
   aircraft?: { model?: string; reg?: string };
-};
-
-const parseUtc = (value: unknown): Date | null => {
-  if (typeof value !== "string") return null;
-  const d = new Date(value.replace(" ", "T"));
-  return Number.isNaN(d.getTime()) ? null : d;
 };
 
 // AeroDataBox doesn't return a delay field directly - it's the gap between
@@ -83,7 +81,7 @@ const LegBlock: React.FC<{
     .filter(Boolean)
     .join(" · ");
 
-  if (!primaryTime && !place && !leg?.checkInDesk) {
+  if (!primaryTime && !place && !leg?.checkInDesk && !leg?.baggageBelt) {
     return null;
   }
 
@@ -118,6 +116,11 @@ const LegBlock: React.FC<{
           {t("status.check_in_desk", { value: leg.checkInDesk })}
         </span>
       )}
+      {leg?.baggageBelt && (
+        <span className={classes.note}>
+          {t("status.baggage_belt", { value: leg.baggageBelt })}
+        </span>
+      )}
     </div>
   );
 };
@@ -143,6 +146,26 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
 
   const tone = getStatusTone(statusData.status);
   const { model, reg } = statusData.aircraft ?? {};
+  const airMinutes = getAirMinutes(statusData.departure, statusData.arrival);
+  // Each runway figure shows only when AeroDataBox sent it.
+  const runway = [
+    [
+      t("status.wheels_up"),
+      extractLocalTime(statusData.departure?.runwayTime?.local),
+    ],
+    [
+      t("status.touchdown"),
+      extractLocalTime(statusData.arrival?.runwayTime?.local),
+    ],
+    [
+      t("status.in_the_air"),
+      airMinutes !== null &&
+        t("details.duration", {
+          hours: Math.floor(airMinutes / 60),
+          minutes: airMinutes % 60,
+        }),
+    ],
+  ].filter(([, value]) => value);
 
   return (
     <section aria-labelledby="flight-status-title" className={classes.card}>
@@ -178,6 +201,17 @@ const FlightDetailsPanel: React.FC<FlightDetailsPanelProps> = ({ flight }) => {
           leg={statusData.arrival}
         />
       </div>
+
+      {runway.length > 0 && (
+        <dl className={classes.runway}>
+          {runway.map(([label, value]) => (
+            <div key={label as string}>
+              <dt className={classes.label}>{label}</dt>
+              <dd className={classes.time}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
       {(model || reg) && (
         <p className={classes.aircraft}>
