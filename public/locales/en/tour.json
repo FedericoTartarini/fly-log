@@ -22,7 +22,7 @@
   "play": "Play the tour",
   "pause": "Pause the tour",
   "resume": "Resume the tour",
-  "speed": "Speed: {{value}}. Change speed",
+  "speed": "{{value}} ({{name}}). Change speed",
   "speed_slow": "slow",
   "speed_normal": "normal",
   "speed_fast": "fast"

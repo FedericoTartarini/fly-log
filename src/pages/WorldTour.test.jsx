@@ -141,6 +141,11 @@ describe("WorldTour", () => {
 
     await act(() => vi.advanceTimersByTimeAsync(1700));
     expect(screen.getByText("Flight 2 of 3")).toBeInTheDocument();
+    // Silent during play, so it does not read out every flight.
+    expect(screen.getByText("Flight 2 of 3").parentElement).toHaveAttribute(
+      "aria-live",
+      "off",
+    );
 
     await userEvent.click(
       screen.getByRole("button", { name: "Pause the tour" }),
@@ -148,6 +153,10 @@ describe("WorldTour", () => {
     expect(
       screen.getByRole("button", { name: "Resume the tour" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("Flight 2 of 3").parentElement).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
     vi.useRealTimers();
   });
 
@@ -156,14 +165,14 @@ describe("WorldTour", () => {
     render(<WorldTour />);
 
     const chip = screen.getByRole("button", {
-      name: "Speed: normal. Change speed",
+      name: "1× (normal). Change speed",
     });
     expect(chip).toHaveTextContent("1×");
     await userEvent.click(chip);
     expect(chip).toHaveTextContent("2×");
     await userEvent.click(chip);
     expect(chip).toHaveTextContent("0.5×");
-    expect(chip).toHaveAccessibleName("Speed: slow. Change speed");
+    expect(chip).toHaveAccessibleName("0.5× (slow). Change speed");
   });
 
   it("initialises zoom with correct scale constraints", async () => {

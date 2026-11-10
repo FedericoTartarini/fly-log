@@ -470,7 +470,12 @@ function WorldTour() {
 
         {current && (
           <section aria-label={t("current_flight")} className={classes.pass}>
-            <div aria-live="polite" className={classes.head}>
+            {/* Announces a flight the user steps to, but not every flight
+                during play, which would talk over the screen reader. */}
+            <div
+              aria-live={playing ? "off" : "polite"}
+              className={classes.head}
+            >
               <span
                 className={classes.leg}
                 data-upcoming={current.upcoming || undefined}
@@ -587,7 +592,10 @@ function WorldTour() {
                   h={44}
                   miw={44}
                   px={10}
-                  aria-label={t("speed", { value: t(`speed_${speed.key}`) })}
+                  aria-label={t("speed", {
+                    value: speed.text,
+                    name: t(`speed_${speed.key}`),
+                  })}
                   onClick={cycleSpeed}
                   className={classes.speed}
                 >

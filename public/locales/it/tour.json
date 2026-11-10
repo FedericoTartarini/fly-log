@@ -22,7 +22,7 @@
   "play": "Avvia il tour",
   "pause": "Metti in pausa il tour",
   "resume": "Riprendi il tour",
-  "speed": "Velocità: {{value}}. Cambia velocità",
+  "speed": "{{value}} ({{name}}). Cambia velocità",
   "speed_slow": "lenta",
   "speed_normal": "normale",
   "speed_fast": "veloce"
