@@ -273,3 +273,19 @@
   margin: 0;
   font-weight: 600;
 }
+
+/* Runway times and time in the air, as a grey strip under the two legs. */
+.runway {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--fl-subtle);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.runway dd {
+  margin: 0;
+  font-size: 16px;
+}
