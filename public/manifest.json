@@ -36,5 +36,49 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/narrow-stats.webp",
+      "sizes": "780x1440",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Stats page with a map of every flight and the total distance flown"
+    },
+    {
+      "src": "/screenshots/narrow-flights.webp",
+      "sizes": "780x1440",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Flights list grouped by year, with search and sort"
+    },
+    {
+      "src": "/screenshots/narrow-tour.webp",
+      "sizes": "780x1440",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Route tour replaying each flight on a globe"
+    },
+    {
+      "src": "/screenshots/wide-stats.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Stats page with a map of every flight and the total distance flown"
+    },
+    {
+      "src": "/screenshots/wide-flights.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Flights list grouped by year, with search and sort"
+    },
+    {
+      "src": "/screenshots/wide-tour.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Route tour replaying each flight on a globe"
+    }
   ]
 }
