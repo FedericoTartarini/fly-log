@@ -1,0 +1,246 @@
+/* The add-flight form: Describe, Form and CSV file tabs, each ending in a
+ * footer whose button stays at the bottom of the modal while it scrolls. */
+
+.tab {
+  min-height: 48px;
+  color: var(--fl-muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.tab[data-active] {
+  color: var(--fl-ink);
+  font-weight: 600;
+}
+
+/* The tabs and the open panel grow to fill the modal, so the footer's
+ * margin-top: auto can push it to the bottom. */
+.tabs,
+.tabPanel {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel {
+  flex: 1 0 auto;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.muted {
+  margin: 0;
+  color: var(--fl-muted);
+}
+
+.small {
+  font-size: 14px;
+}
+
+.mono {
+  font-family: var(--mantine-font-family-monospace);
+}
+
+/* The modal body scrolls, so a sticky footer keeps the main button in reach.
+ * Negative margins stretch it over the body's padding, edge to edge. */
+.footer {
+  position: sticky;
+  bottom: calc(-1 * var(--mb-padding, var(--mantine-spacing-md)));
+  z-index: 2;
+  margin: auto calc(-1 * var(--mb-padding, var(--mantine-spacing-md)))
+    calc(-1 * var(--mb-padding, var(--mantine-spacing-md)));
+  padding: 12px var(--mb-padding, var(--mantine-spacing-md)) 16px;
+  background: var(--fl-surface);
+  border-top: 1px solid var(--fl-border);
+}
+
+/* "What to include" on the Describe tab, and the CSV columns. */
+.note {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--fl-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.note p {
+  margin: 0;
+}
+
+.noteTitle {
+  font-weight: 600;
+}
+
+.found {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--fl-surface);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.found li {
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  align-items: center;
+}
+
+.found li + li {
+  border-top: 1px solid var(--fl-divider);
+}
+
+.codes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.arrow {
+  color: var(--fl-accent);
+}
+
+.right {
+  text-align: right;
+}
+
+/* One flight on the Form tab. */
+.card {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--fl-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cardTitle {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardTitle h5 {
+  margin: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.airports {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  gap: 8px;
+  align-items: center;
+}
+
+.swap {
+  width: 40px;
+  height: 64px;
+  margin-top: 22px;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.optional {
+  border-top: 1px solid var(--fl-divider);
+  padding-top: 4px;
+}
+
+.optional summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 500;
+  list-style: none;
+  cursor: pointer;
+}
+
+.optional summary::-webkit-details-marker {
+  display: none;
+}
+
+.optional summary:focus-visible {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: 2px;
+}
+
+.optional[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.optionalFields {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashed {
+  border-style: dashed;
+  border-color: var(--fl-input-border);
+  background: transparent;
+}
+
+/* The CSV file picker: a large target that also takes a dropped file. */
+.drop {
+  position: relative;
+  padding: 28px 16px;
+  border: 2px dashed var(--fl-input-border);
+  border-radius: 12px;
+  background: var(--fl-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drop[data-dragging] {
+  border-color: var(--fl-accent);
+}
+
+.drop:focus-within {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: 2px;
+}
+
+.drop input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.columns {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+}

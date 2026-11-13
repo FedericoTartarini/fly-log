@@ -28,7 +28,7 @@ describe("FlightEntryForm", () => {
       </MantineProvider>,
     );
 
-    const dateInput = screen.getByLabelText(/departure date/i);
+    const dateInput = screen.getByLabelText(/^date$/i);
     expect(dateInput).toBeInTheDocument();
 
     // The DatePickerInput from Mantine renders an input-like control; ensure it's focusable and interactive.
@@ -41,5 +41,34 @@ describe("FlightEntryForm", () => {
     await userEvent.keyboard("{Tab}");
     // Assert that the dateInput no longer has focus after tabbing away
     expect(dateInput).not.toHaveFocus();
+  });
+
+  it("keeps the optional section open when its last value is cleared", async () => {
+    render(<FlightEntryForm />);
+    const details = screen
+      .getByText(/arrival time and cabin/i)
+      .closest("details") as HTMLDetailsElement;
+    expect(details.open).toBe(false);
+
+    await userEvent.click(screen.getByText(/arrival time and cabin/i));
+    const arrives = screen.getByLabelText(/^arrives$/i);
+    await userEvent.type(arrives, "1430");
+    await userEvent.clear(arrives);
+
+    expect(details.open).toBe(true);
+  });
+
+  it("stays closed after the user folds a section that holds a value", async () => {
+    render(<FlightEntryForm />);
+    const summary = screen.getByText(/arrival time and cabin/i);
+    const details = summary.closest("details") as HTMLDetailsElement;
+    await userEvent.click(summary);
+    await userEvent.type(screen.getByLabelText(/^arrives$/i), "1430");
+
+    await userEvent.click(summary);
+    expect(details.open).toBe(false);
+    // Typing elsewhere re-renders the form.
+    await userEvent.type(screen.getByLabelText(/^flight no\./i), "QF1");
+    expect(details.open).toBe(false);
   });
 });

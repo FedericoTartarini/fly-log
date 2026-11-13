@@ -316,6 +316,11 @@ const FlightsList: React.FC = () => {
         opened={editOpen}
         onClose={() => setEditOpen(false)}
         title={t("form.labels.edit_flight")}
+        // Only the page colour of the details sheet, not its phone layout.
+        classNames={{
+          content: classes.sheetHeader,
+          header: classes.sheetHeader,
+        }}
         // Opened from inside the details modal below, so it must stack above
         // it regardless of DOM order - Mantine gives every Modal the same
         // default z-index (200), and same-z-index elements paint in DOM

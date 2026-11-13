@@ -191,6 +191,11 @@ function MyAppShell() {
         size="lg"
         // Full screen on phones: the form is long and needs the whole width.
         fullScreen={isPhone}
+        classNames={{
+          content: `${classes.formModal} ${classes.formContent}`,
+          header: classes.formModal,
+          body: classes.formBody,
+        }}
       >
         <Suspense
           fallback={

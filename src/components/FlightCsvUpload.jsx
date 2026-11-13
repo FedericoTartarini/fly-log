@@ -1,15 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState } from "react";
-import {
-  Button,
-  Group,
-  Text,
-  Stack,
-  FileInput,
-  Paper,
-  Alert,
-  Progress,
-} from "@mantine/core";
+import { Button, Alert, Progress } from "@mantine/core";
 import { IconUpload, IconAlertCircle, IconCheck } from "@tabler/icons-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { addFlightsForUser } from "../firebaseClient";
@@ -19,6 +10,7 @@ import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
 import { validateAndNormalizeCsvRows } from "../utils/iataValidation";
 import { CABIN_CLASSES } from "../utils/emissions";
+import classes from "./FlightEntryForm.module.css";
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -106,8 +98,20 @@ const FlightCsvUpload = ({ onComplete }) => {
   const [parsing, setParsing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
+  const [dragging, setDragging] = useState(false);
   const { user } = useAuth();
   const { t } = useTranslation("flights");
+
+  const pickFile = (picked) => {
+    if (!picked) return;
+    // The input's `accept` filter does not apply to a dropped file.
+    if (!/\.csv$/i.test(picked.name)) {
+      setError(t("csv.errors.no_file"));
+      return;
+    }
+    setFile(picked);
+    setError(null);
+  };
 
   const handleUpload = async () => {
     if (!file) {
@@ -225,53 +229,104 @@ const FlightCsvUpload = ({ onComplete }) => {
   };
 
   return (
-    <Paper p="md" withBorder>
-      <Stack>
-        <Text size="lg" fw={500}>
-          {t("csv.title")}
-        </Text>
-
-        <Text size="sm" c="dimmed">
+    <div className={classes.panel}>
+      <div>
+        <h2 className={classes.heading}>{t("csv.title")}</h2>
+        <p className={classes.muted} style={{ marginTop: 4 }}>
           {t("csv.description")}
-        </Text>
+        </p>
+      </div>
 
-        <FileInput
-          accept=".csv"
-          placeholder={t("csv.file_input.placeholder")}
-          label={t("csv.file_input.label")}
-          description={t("csv.file_input.description")}
-          icon={<IconUpload size={14} />}
-          value={file}
-          onChange={setFile}
-          disabled={parsing}
+      <label
+        className={classes.drop}
+        data-dragging={dragging || undefined}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          if (parsing) return;
+          pickFile(e.dataTransfer.files[0]);
+        }}
+      >
+        <IconUpload
+          size={32}
+          stroke={1.8}
+          color="var(--fl-muted)"
+          aria-hidden
         />
+        <span style={{ fontWeight: 600 }}>
+          {file ? file.name : t("csv.file_input.label")}
+        </span>
+        <span className={`${classes.muted} ${classes.small}`}>
+          {file ? t("csv.file_input.change") : t("csv.file_input.drop")}
+        </span>
+        <input
+          type="file"
+          accept=".csv,text/csv"
+          disabled={parsing}
+          onChange={(e) => pickFile(e.currentTarget.files?.[0])}
+        />
+      </label>
 
-        {error && (
-          <Alert
-            color="red"
-            title={t("csv.errors.error")}
-            icon={<IconAlertCircle size={16} />}
-          >
-            {error}
-          </Alert>
-        )}
+      <section aria-labelledby="csv-columns" className={classes.note}>
+        <h3
+          id="csv-columns"
+          className={classes.noteTitle}
+          style={{ margin: 0, fontSize: 15 }}
+        >
+          {t("csv.columns.title")}
+        </h3>
+        <p className={classes.muted}>{t("csv.columns.required")}</p>
+        <p className={classes.columns}>
+          departure_date, departure_airport_iata, arrival_airport_iata,
+          airline_iata
+        </p>
+        <p className={classes.muted} style={{ marginTop: 4 }}>
+          {t("csv.columns.optional")}
+        </p>
+        <p className={classes.columns}>
+          departure_time, flight_number, arrival_date, arrival_time, cabin_class
+        </p>
+        <p className={`${classes.muted} ${classes.small}`}>
+          {t("csv.columns.formats")}
+        </p>
+      </section>
 
-        {parsing && (
-          <Progress
-            value={uploadProgress}
-            size="sm"
-            label={`${uploadProgress}%`}
-            color={uploadProgress === 100 ? "green" : "blue"}
-          />
-        )}
+      {error && (
+        <Alert
+          color="red"
+          title={t("csv.errors.error")}
+          icon={<IconAlertCircle size={16} />}
+          style={{ whiteSpace: "pre-line" }}
+        >
+          {error}
+        </Alert>
+      )}
 
-        <Group justify="flex-end">
-          <Button onClick={handleUpload} loading={parsing} disabled={!file}>
-            {t("csv.upload_button")}
-          </Button>
-        </Group>
-      </Stack>
-    </Paper>
+      {parsing && (
+        <Progress
+          value={uploadProgress}
+          size="sm"
+          aria-label={t("csv.progress")}
+        />
+      )}
+
+      <div className={classes.footer}>
+        <Button
+          fullWidth
+          size="lg"
+          onClick={handleUpload}
+          loading={parsing}
+          disabled={!file}
+        >
+          {t("csv.upload_button")}
+        </Button>
+      </div>
+    </div>
   );
 };
 
