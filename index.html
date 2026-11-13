@@ -20,6 +20,11 @@
         document.documentElement.setAttribute("data-mantine-color-scheme", scheme);
       } catch (e) {}
     </script>
+    <!-- The hero heading's font. When the static h1 already paints in it, the
+         app's identical h1 is not a larger paint, so Lighthouse counts the
+         static one as the Largest Contentful Paint. Vite gives it the same
+         hashed file as the @font-face in shell.css. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2" />
     <link rel="stylesheet" href="/src/shell.css" />
     <!-- SEO and Social Meta Tags -->
     <meta name="keywords" content="flights, logbook, travel, aviation, Fly-Log, flight tracking" />
