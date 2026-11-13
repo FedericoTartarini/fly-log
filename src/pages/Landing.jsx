@@ -19,6 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PATHS } from "../constants/MyClasses.ts";
+import exampleMap from "../assets/landingMap.json";
 import classes from "./Landing.module.css";
 
 // d3 and the globe maths load only as the visitor nears the tour section.
@@ -27,26 +28,6 @@ const LandingGlobe = lazy(() => import("../components/LandingGlobe.jsx"));
 // Example data, drawn the same as the Stats page but not anyone's real log.
 const YEARS = [8, 11, 14, 12, 16, 19, 2, 4, 13, 15, 17, 14, 12]; // 2014–2026
 const BUSIEST = Math.max(...YEARS);
-const MAP_ROUTES = [
-  "M296 130 Q250 95 214 98",
-  "M214 98 Q150 40 100 52",
-  "M214 98 Q170 70 132 58",
-  "M296 130 Q330 60 352 52",
-  "M6 56 Q30 40 46 60",
-  "M214 98 Q205 85 208 78",
-  "M296 130 Q316 128 330 136",
-  "M296 130 Q270 120 262 126",
-];
-const MAP_DOTS = [
-  [296, 130, 5],
-  [214, 98, 5],
-  [100, 52, 3.5],
-  [132, 58, 3.5],
-  [46, 60, 3.5],
-  [208, 78, 3.5],
-  [330, 136, 3.5],
-  [262, 126, 3.5],
-];
 const FEATURES = [
   ["map", IconMap2],
   ["distance", IconMoon],
@@ -136,11 +117,12 @@ function Landing() {
             <span>{t("example.band")}</span>
             <span>1993 – 2026</span>
           </div>
-          <svg viewBox="0 0 358 170" aria-hidden="true" className={classes.map}>
-            <path
-              d="M0 42h358M0 85h358M0 128h358M60 0v170M120 0v170M180 0v170M240 0v170M300 0v170"
-              stroke="var(--fl-grid)"
-            />
+          <svg
+            viewBox={`0 0 ${exampleMap.width} ${exampleMap.height}`}
+            aria-hidden="true"
+            className={classes.map}
+          >
+            <path d={exampleMap.land} fill="var(--fl-grid)" />
             <g
               fill="none"
               stroke="var(--fl-accent)"
@@ -150,12 +132,12 @@ function Landing() {
               strokeDasharray="1 1"
               strokeDashoffset={1 - intro}
             >
-              {MAP_ROUTES.map((d) => (
+              {exampleMap.routes.map((d) => (
                 <path key={d} d={d} pathLength="1" />
               ))}
             </g>
             <g fill="var(--fl-ink)" stroke="var(--fl-map)" strokeWidth="2">
-              {MAP_DOTS.map(([cx, cy, r]) => (
+              {exampleMap.dots.map(([cx, cy, r]) => (
                 <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={r} />
               ))}
             </g>

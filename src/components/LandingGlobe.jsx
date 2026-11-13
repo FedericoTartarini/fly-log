@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as d3 from "d3";
 import { motion as Motion, useMotionValueEvent } from "framer-motion";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import classes from "../pages/Landing.module.css";
 
+// Same shapes as the route tour (src/pages/WorldTour.jsx).
+const WORLD_GEOJSON_URL =
+  "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
 const AIRPORTS = {
   SYD: [151.18, -33.95],
   SIN: [103.99, 1.36],
@@ -39,6 +42,17 @@ function LandingGlobe({ progress, still }) {
   const { t } = useTranslation("landing");
   const [p, setP] = useState(progress.get());
   useMotionValueEvent(progress, "change", setP);
+  // Land arrives a moment after the globe; without it the grid alone still reads.
+  const [world, setWorld] = useState(null);
+  useEffect(() => {
+    let mounted = true;
+    d3.json(WORLD_GEOJSON_URL)
+      .then((data) => mounted && setWorld(data))
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Finish the last leg a little before the section unpins.
   const pos = Math.min(LEGS.length - 1e-4, p * LEGS.length * 1.08);
@@ -101,6 +115,14 @@ function LandingGlobe({ progress, still }) {
           fill="none"
           stroke="var(--fl-grid)"
         />
+        {world && (
+          <path
+            d={path(world)}
+            fill="var(--fl-grid)"
+            stroke="var(--fl-map)"
+            strokeWidth="0.5"
+          />
+        )}
         <path
           d={done}
           fill="none"
