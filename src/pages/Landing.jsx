@@ -286,6 +286,8 @@ function Landing() {
 
       <section
         id="features"
+        // Clear the fixed 61 px app header when the hero link jumps here.
+        style={{ scrollMarginTop: 72 }}
         className={classes.narrow}
         aria-labelledby="landing-features"
       >
