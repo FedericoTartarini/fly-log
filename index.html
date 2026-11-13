@@ -136,7 +136,8 @@
       anywhere but "/", and on "/" too for returning signed-in users
       (AuthContext sets the hint), who are about to be redirected to /stats.
       On "/" the Landing page drops it once it has rendered. The timeout is a
-      safety net in case it never does, for example if its code fails to load.
+      safety net in case it never does, for example if its code fails to load
+      and the error page is waiting behind the shell.
       Googlebot's non-rendering pass does not run this, so the indexed copy is
       untouched.
     -->
@@ -150,8 +151,14 @@
           var shell = document.getElementById("shell");
           if (shell) shell.remove();
         };
+        // Only once React has drawn something, so a slow bundle never
+        // swaps the shell for an empty page.
+        var dropOnceMounted = function () {
+          if (document.getElementById("root").childElementCount) drop();
+          else setTimeout(dropOnceMounted, 5000);
+        };
         if (location.pathname !== "/" || signedIn) drop();
-        else setTimeout(drop, 15000);
+        else setTimeout(dropOnceMounted, 15000);
       })();
     </script>
     <script type="module" src="/src/main.jsx"></script>
