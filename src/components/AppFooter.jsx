@@ -26,6 +26,12 @@ const AppFooter = () => {
           <Text size="sm" c="dimmed">
             &middot;
           </Text>
+          <Anchor component={Link} to={PATHS.ABOUT} size="sm" c="dimmed">
+            {t("nav.about")}
+          </Anchor>
+          <Text size="sm" c="dimmed">
+            &middot;
+          </Text>
           <Anchor component={Link} to={PATHS.CHANGELOG} size="sm" c="dimmed">
             {t("changelog.link")}
           </Anchor>

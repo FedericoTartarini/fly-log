@@ -10,8 +10,8 @@ vi.mock("../context/AuthContext", () => ({
   useAuth: () => mockAuth(),
 }));
 
-// Landing pulls in framer-motion, images and a lazy FeatureSection; none of
-// that is what this test is about.
+// Landing pulls in framer-motion and a lazy globe; none of that is what this
+// test is about.
 vi.mock("../pages/Landing.jsx", () => ({
   default: () => <div>landing page</div>,
 }));

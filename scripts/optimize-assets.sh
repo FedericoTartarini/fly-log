@@ -27,12 +27,6 @@ create_variants() {
   done
 }
 
-if [ -f "${ASSETS_DIR}/showcase.png" ]; then
-  create_variants "${ASSETS_DIR}/showcase.png" "showcase"
-else
-  echo "Warning: showcase.png not found in ${ASSETS_DIR}" >&2
-fi
-
 while IFS= read -r img; do
   filename="$(basename "${img}")"
   stem="${filename%.*}"
@@ -40,7 +34,6 @@ while IFS= read -r img; do
 done < <(
   find "${ASSETS_DIR}" -maxdepth 1 -type f \
     \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" \) \
-    ! -name "showcase.png" \
     -not -regex ".*-[0-9]+\.webp"
 )
 

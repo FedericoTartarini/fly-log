@@ -1,0 +1,396 @@
+/* Phone first. From 48em the hero sits beside the example log and the other
+   sections keep a readable width. */
+.page {
+  padding: 12px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--fl-accent-text);
+}
+
+.muted,
+.subtitle,
+.small {
+  margin: 0;
+  color: var(--fl-muted);
+}
+
+.small {
+  display: block;
+  font-size: 15px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.narrow {
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.subtitle {
+  font-size: 17px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+@media (min-width: 48em) {
+  .page {
+    padding-top: 48px;
+    gap: 72px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    align-items: center;
+    gap: 48px;
+  }
+
+  .actions {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+/* The example log, a boarding pass like the sign-in card. */
+.pass {
+  margin: 0;
+  position: relative;
+  background: var(--fl-surface);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgb(23 28 38 / 12%);
+}
+
+.band {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  background: var(--fl-ink);
+  color: var(--fl-surface);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--fl-map);
+}
+
+.totals {
+  margin: 0;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.totals dt {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fl-muted);
+}
+
+.totals dd {
+  margin: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* The perforation, with a half-circle notch cut into each edge. */
+.stub {
+  position: relative;
+  border-top: 1px dashed var(--fl-input-border);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--fl-muted);
+}
+
+.stub::before,
+.stub::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fl-page);
+}
+
+.stub::before {
+  left: -9px;
+}
+
+.stub::after {
+  right: -9px;
+}
+
+/* Pinned globe: the section is tall, and its content sticks to the top of
+   the screen while the visitor scrolls through it. */
+.tour {
+  position: relative;
+  height: 280vh;
+}
+
+.tourPin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  max-width: 40rem;
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+/* Holds the globe's space before its code loads, so nothing shifts. */
+.globe {
+  width: min(100%, 358px, 52svh);
+  aspect-ratio: 358 / 410;
+  margin: 8px auto 0;
+}
+
+.globeInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.globeInner svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--fl-surface);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.chipTag {
+  font-size: 13px;
+  color: var(--fl-muted);
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Chart card */
+.card {
+  padding: 20px 16px;
+  border-radius: 14px;
+  background: var(--fl-surface);
+}
+
+.card svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.axis,
+.peak {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 11px;
+  fill: var(--fl-muted);
+}
+
+.peak {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--fl-ink);
+}
+
+/* AI demo */
+.chat {
+  background: var(--fl-surface);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.request {
+  margin: 0;
+  align-self: flex-end;
+  max-width: 85%;
+  min-height: 1.45em;
+  padding: 10px 12px;
+  border-radius: 12px 12px 2px 12px;
+  background: var(--fl-subtle);
+  font-size: 15px;
+}
+
+.caret {
+  animation: blink 0.9s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.found {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--fl-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.found li {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.found li + li {
+  border-top: 1px solid var(--fl-border);
+}
+
+.when {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fl-muted);
+}
+
+/* Features */
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+@media (min-width: 48em) {
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.features li {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--fl-surface);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--fl-accent-tint);
+  color: var(--fl-accent-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureTitle {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Closing card */
+.closing {
+  padding: 24px 20px;
+  border-radius: 14px;
+  background: var(--fl-ink);
+  color: var(--fl-surface);
+  gap: 14px;
+}
+
+.closingTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}

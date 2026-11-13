@@ -5,34 +5,37 @@ describe("Landing Page", () => {
     cy.visit("/");
     // index.html seeds #root with the same landing copy so crawlers can index
     // it, which means cy.contains matches before React mounts. Scrolling then
-    // runs against a layout that is about to be thrown away, and the cards
-    // never enter the viewport for framer-motion's whileInView. Wait for a
-    // Mantine-rendered node, which only exists once Landing has hydrated.
-    cy.get(".mantine-Title-root", { timeout: 10000 }).should("exist");
+    // runs against a layout that is about to be thrown away, and the features
+    // never enter the viewport for framer-motion's whileInView. Wait for
+    // #features, which only exists once Landing has hydrated.
+    cy.get("#features", { timeout: 10000 }).should("exist");
   });
 
-  /**
-   * Test that all flight statistics features are visible on the landing page.
-   */
-  it("should display flight statistics", () => {
-    cy.contains("Welcome to Your Personal Flight Tracker").should("be.visible");
-    cy.contains("Get Started").should("be.visible");
-    cy.contains("Learn More").should("be.visible");
-
-    // Scroll down in steps to trigger all animations
-    cy.scrollTo("center", { duration: 200 });
-    cy.wait(200);
-    cy.scrollTo("bottom", { duration: 200 });
-    cy.wait(200);
-
-    // Assert all feature cards are visible
-    cy.contains("What are your stats?", { timeout: 2000 }).should("be.visible");
-    cy.contains("How far did you fly?", { timeout: 2000 }).should("be.visible");
-    cy.contains("Where did you fly?", { timeout: 2000 }).should("be.visible");
-    cy.contains("Flight Details", { timeout: 2000 }).should("be.visible");
-    cy.contains("When did you fly?", { timeout: 2000 }).should("be.visible");
-    cy.contains("Which countries did you visit?", { timeout: 2000 }).should(
+  it("shows the hero, the example log and every feature", () => {
+    cy.contains("h1", "Every flight you take, logged and mapped.").should(
       "be.visible",
+    );
+    cy.contains("a", "Start your log").should("be.visible");
+    cy.contains("Twice the distance to the Moon").should("be.visible");
+
+    // "See what it shows" jumps to the feature list.
+    cy.contains("a", "See what it shows").click();
+    [
+      "Where did you fly?",
+      "How far did you fly?",
+      "When did you fly?",
+      "Every flight, searchable",
+      "Live flight status",
+      "Collect badges",
+    ].forEach((title) => {
+      cy.contains(title, { timeout: 2000 }).should("be.visible");
+    });
+  });
+
+  it("draws the trip on the globe while the tour section is pinned", () => {
+    cy.contains("h2", "Replay your travels on a globe.").scrollIntoView();
+    cy.get('[aria-label^="A globe tracing a trip"]', { timeout: 5000 }).should(
+      "exist",
     );
   });
 });
