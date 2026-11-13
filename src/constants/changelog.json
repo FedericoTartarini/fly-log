@@ -1,12 +1,46 @@
 [
   {
+    "date": "2026-11-13",
+    "title": "A new home page and a faster way to add flights",
+    "items": [
+      "The home page has a new design. It shows an example flight log on a world map, a globe that replays a trip as you scroll, and what each part of FlyLog shows you.",
+      "Adding a flight has three tabs. Describe your trip in your own words and the AI fills in the flights, use the form, or import a CSV file from your computer.",
+      "The form asks for the route first, with a button to swap the two airports. Arrival time and cabin class sit in an optional section, and connecting and return flights are one tap away.",
+      "When you install FlyLog on your phone or computer, the install window now shows screenshots of the app.",
+      "The home page loads faster on phones, and it no longer flashes plain text before it appears."
+    ]
+  },
+  {
+    "date": "2026-11-10",
+    "title": "Flight details, runway times and a new Route tour",
+    "items": [
+      "Open a flight to see it as a boarding pass, in a sheet that slides up from the bottom on phones.",
+      "The flight status shows delays as chips such as \"17 min late\", with the terminal, gate, check-in desk and aircraft registration when the airline publishes them.",
+      "When the data is available, the status also shows the take-off and landing times on the runway, the time in the air and the baggage belt.",
+      "Deleting a flight asks you to confirm in place, so you cannot remove one by accident.",
+      "The Route tour plays the flights your filters leave, oldest first. A boarding pass under the globe shows the current flight, with a slider to jump to any flight and three playback speeds.",
+      "The Route tour works in dark mode."
+    ]
+  },
+  {
+    "date": "2026-11-09",
+    "title": "A new sign-in page",
+    "items": [
+      "Sign in or create an account on a card designed as a boarding pass, with Google first and email below.",
+      "A show password button reveals both password fields when you sign up, so you can check they match.",
+      "Error messages are clearer, for example when an email and password do not match."
+    ]
+  },
+  {
     "date": "2026-11-08",
-    "title": "A new Flights list",
+    "title": "A new Flights list, Timeline and Badges",
     "items": [
       "The Flights list shows each flight as a compact row, grouped by year.",
       "Search the list by city, airport code, airline or flight number. Type two cities to find the flights between them.",
       "Sort your flights by date or by distance.",
-      "A new account shows a blank boarding pass with three ways to add your first flight."
+      "A new account shows a blank boarding pass with three ways to add your first flight.",
+      "The Timeline shows every month you have flown as a calendar heatmap, newest year on top. Switch it between flights, kilometres and CO₂e, and tap a month to see its total.",
+      "The Badges page shows each badge as a boarding pass with the date you earned it or how far you have to go, and a Closest next card tells you which badge you will earn soonest."
     ]
   },
   {
