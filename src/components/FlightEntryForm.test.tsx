@@ -57,4 +57,18 @@ describe("FlightEntryForm", () => {
 
     expect(details.open).toBe(true);
   });
+
+  it("stays closed after the user folds a section that holds a value", async () => {
+    render(<FlightEntryForm />);
+    const summary = screen.getByText(/arrival time and cabin/i);
+    const details = summary.closest("details") as HTMLDetailsElement;
+    await userEvent.click(summary);
+    await userEvent.type(screen.getByLabelText(/^arrives$/i), "1430");
+
+    await userEvent.click(summary);
+    expect(details.open).toBe(false);
+    // Typing elsewhere re-renders the form.
+    await userEvent.type(screen.getByLabelText(/^flight no\./i), "QF1");
+    expect(details.open).toBe(false);
+  });
 });

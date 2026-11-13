@@ -460,14 +460,20 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           />
         </div>
 
-        {/* Folded away, but open when it already holds something, as when
-            editing a flight or after the AI filled in an arrival time. The
-            ref only ever opens it, so clearing a field does not shut it. */}
+        {/* Folded away, but opened once when it first holds something, as
+            when editing a flight or after the AI filled in an arrival time.
+            After that the user's own toggling wins. */}
         <details
           className={classes.optional}
           ref={(el) => {
-            if (el && (leg.arrivalDate || leg.arrivalTime || leg.cabinClass))
+            if (
+              el &&
+              !el.dataset.opened &&
+              (leg.arrivalDate || leg.arrivalTime || leg.cabinClass)
+            ) {
               el.open = true;
+              el.dataset.opened = "true";
+            }
           }}
         >
           <summary>
