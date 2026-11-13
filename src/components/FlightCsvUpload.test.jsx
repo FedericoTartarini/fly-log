@@ -85,6 +85,20 @@ describe("FlightCsvUpload", () => {
     expect(button).not.toBeDisabled();
   });
 
+  it("refuses a dropped file that is not a CSV", () => {
+    render(<FlightCsvUpload />);
+    const file = new File(["x"], "photo.png", { type: "image/png" });
+    fireEvent.drop(screen.getByText(/or drop it here/i), {
+      dataTransfer: { files: [file] },
+    });
+
+    expect(screen.queryByText("photo.png")).toBeNull();
+    expect(screen.getByText(/Please choose a CSV file/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Import flights/i }),
+    ).toBeDisabled();
+  });
+
   it("validateCsvData returns errors for missing/invalid fields", () => {
     const errors = validateCsvData([
       { departure_date: "2024-01-01", departure_airport_iata: "JFK" },

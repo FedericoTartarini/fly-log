@@ -461,10 +461,14 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         </div>
 
         {/* Folded away, but open when it already holds something, as when
-            editing a flight or after the AI filled in an arrival time. */}
+            editing a flight or after the AI filled in an arrival time. The
+            ref only ever opens it, so clearing a field does not shut it. */}
         <details
           className={classes.optional}
-          open={Boolean(leg.arrivalDate || leg.arrivalTime || leg.cabinClass)}
+          ref={(el) => {
+            if (el && (leg.arrivalDate || leg.arrivalTime || leg.cabinClass))
+              el.open = true;
+          }}
         >
           <summary>
             <span>

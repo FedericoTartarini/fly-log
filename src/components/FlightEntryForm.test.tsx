@@ -42,4 +42,19 @@ describe("FlightEntryForm", () => {
     // Assert that the dateInput no longer has focus after tabbing away
     expect(dateInput).not.toHaveFocus();
   });
+
+  it("keeps the optional section open when its last value is cleared", async () => {
+    render(<FlightEntryForm />);
+    const details = screen
+      .getByText(/arrival time and cabin/i)
+      .closest("details") as HTMLDetailsElement;
+    expect(details.open).toBe(false);
+
+    await userEvent.click(screen.getByText(/arrival time and cabin/i));
+    const arrives = screen.getByLabelText(/^arrives$/i);
+    await userEvent.type(arrives, "1430");
+    await userEvent.clear(arrives);
+
+    expect(details.open).toBe(true);
+  });
 });

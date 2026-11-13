@@ -104,6 +104,11 @@ const FlightCsvUpload = ({ onComplete }) => {
 
   const pickFile = (picked) => {
     if (!picked) return;
+    // The input's `accept` filter does not apply to a dropped file.
+    if (!/\.csv$/i.test(picked.name)) {
+      setError(t("csv.errors.no_file"));
+      return;
+    }
     setFile(picked);
     setError(null);
   };
@@ -243,6 +248,7 @@ const FlightCsvUpload = ({ onComplete }) => {
         onDrop={(e) => {
           e.preventDefault();
           setDragging(false);
+          if (parsing) return;
           pickFile(e.dataTransfer.files[0]);
         }}
       >
