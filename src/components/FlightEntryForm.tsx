@@ -7,13 +7,18 @@ import {
   Title,
   Stack,
   Tabs,
-  Paper,
   ActionIcon,
 } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
+import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import { IconArrowBackUp, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+  IconArrowBackUp,
+  IconArrowsUpDown,
+  IconChevronDown,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { addFlightsForUser } from "../firebaseClient";
 import { autoCheckSavedFlights } from "../utils/autoStatusCheck";
 import { updateFlightForUser } from "../utils/flightService";
@@ -31,6 +36,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
 import { CABIN_CLASSES } from "../utils/emissions";
+import classes from "./FlightEntryForm.module.css";
 
 type SelectOption = {
   value: string;
@@ -366,234 +372,275 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
     label: t(`cabin.${value}`),
   }));
 
-  const legFields = (index: number) => (
-    <Stack>
-      <Group grow>
-        <DatePickerInput
-          label={t("form.labels.departure_date")}
-          placeholder={t("form.placeholders.select_date")}
-          required
-          clearable={false}
-          {...form.getInputProps(`legs.${index}.departureDate`)}
-        />
-        <TextInput
-          label={t("form.labels.departure_time")}
-          placeholder={t("form.placeholders.time_example")}
-          {...form.getInputProps(`legs.${index}.departureTime`)}
-        />
-      </Group>
+  const swapAirports = (index: number) => {
+    const leg = legs[index]!;
+    form.setFieldValue(`legs.${index}.departureAirport`, leg.arrivalAirport);
+    form.setFieldValue(`legs.${index}.arrivalAirport`, leg.departureAirport);
+  };
 
-      <Group grow>
-        <DatePickerInput
-          label={t("form.labels.arrival_date")}
-          placeholder={t("form.placeholders.same_day")}
-          clearable
-          {...form.getInputProps(`legs.${index}.arrivalDate`)}
-        />
-        <TextInput
-          label={t("form.labels.arrival_time")}
-          placeholder={t("form.placeholders.time_example")}
-          {...form.getInputProps(`legs.${index}.arrivalTime`)}
-        />
-      </Group>
-
-      <Select
-        label={t("form.labels.departure_airport")}
-        placeholder={t("form.placeholders.search_airports")}
-        searchable
-        limit={5}
-        required
-        data={airportOptions}
-        maxDropdownHeight={280}
-        nothingFoundMessage={t("form.placeholders.no_matching_airports")}
-        {...form.getInputProps(`legs.${index}.departureAirport`)}
-        clearable={true}
-      />
-
-      <Select
-        label={t("form.labels.arrival_airport")}
-        placeholder={t("form.placeholders.search_airports")}
-        searchable
-        limit={5}
-        required
-        data={airportOptions}
-        maxDropdownHeight={280}
-        nothingFoundMessage={t("form.placeholders.no_matching_airports")}
-        {...form.getInputProps(`legs.${index}.arrivalAirport`)}
-        clearable={true}
-      />
-
-      <Group grow>
-        <Select
-          label={t("form.labels.airline")}
-          placeholder={t("form.placeholders.search_airlines")}
-          searchable
-          limit={5}
-          required
-          data={airlineOptions}
-          maxDropdownHeight={280}
-          nothingFoundMessage={t("form.placeholders.no_matching_airlines")}
-          {...form.getInputProps(`legs.${index}.airline`)}
-          clearable={true}
-        />
-        <TextInput
-          label={t("form.labels.flight_number")}
-          placeholder={t("form.placeholders.flight_number_example")}
-          {...form.getInputProps(`legs.${index}.flightNumber`)}
-        />
-      </Group>
-
-      <Select
-        label={t("form.labels.cabin_class")}
-        placeholder={t("cabin.economy")}
-        description={t("form.descriptions.cabin_class")}
-        clearable
-        data={cabinOptions}
-        {...form.getInputProps(`legs.${index}.cabinClass`)}
-      />
-    </Stack>
+  const airportSelect = (index: number, field: keyof Leg, label: string) => (
+    <Select
+      label={label}
+      placeholder={t("form.placeholders.search_airports")}
+      searchable
+      limit={5}
+      required
+      withAsterisk={false}
+      data={airportOptions}
+      maxDropdownHeight={280}
+      nothingFoundMessage={t("form.placeholders.no_matching_airports")}
+      {...form.getInputProps(`legs.${index}.${field}`)}
+      clearable={true}
+    />
   );
+
+  const legFields = (index: number) => {
+    const leg = legs[index]!;
+    return (
+      <>
+        <div className={classes.airports}>
+          <Stack gap={8}>
+            {airportSelect(
+              index,
+              "departureAirport",
+              t("form.labels.departure_airport"),
+            )}
+            {airportSelect(
+              index,
+              "arrivalAirport",
+              t("form.labels.arrival_airport"),
+            )}
+          </Stack>
+          <ActionIcon
+            variant="default"
+            radius="xl"
+            className={classes.swap}
+            aria-label={t("form.buttons.swap")}
+            onClick={() => swapAirports(index)}
+          >
+            <IconArrowsUpDown size={18} aria-hidden />
+          </ActionIcon>
+        </div>
+
+        <div className={classes.pair}>
+          <DatePickerInput
+            label={t("form.labels.departure_date")}
+            placeholder={t("form.placeholders.select_date")}
+            required
+            withAsterisk={false}
+            clearable={false}
+            {...form.getInputProps(`legs.${index}.departureDate`)}
+          />
+          <TimeInput
+            label={t("form.labels.departure_time")}
+            {...form.getInputProps(`legs.${index}.departureTime`)}
+          />
+        </div>
+
+        <div className={classes.pair}>
+          <Select
+            label={t("form.labels.airline")}
+            placeholder={t("form.placeholders.search_airlines")}
+            searchable
+            limit={5}
+            required
+            withAsterisk={false}
+            data={airlineOptions}
+            maxDropdownHeight={280}
+            nothingFoundMessage={t("form.placeholders.no_matching_airlines")}
+            {...form.getInputProps(`legs.${index}.airline`)}
+            clearable={true}
+          />
+          <TextInput
+            label={t("form.labels.flight_number")}
+            placeholder={t("form.placeholders.flight_number_example")}
+            autoCapitalize="characters"
+            classNames={{ input: classes.mono }}
+            {...form.getInputProps(`legs.${index}.flightNumber`)}
+          />
+        </div>
+
+        {/* Folded away, but open when it already holds something, as when
+            editing a flight or after the AI filled in an arrival time. */}
+        <details
+          className={classes.optional}
+          open={Boolean(leg.arrivalDate || leg.arrivalTime || leg.cabinClass)}
+        >
+          <summary>
+            <span>
+              {t("form.labels.optional_section")}{" "}
+              <span className={classes.muted} style={{ fontWeight: 400 }}>
+                · {t("form.labels.optional")}
+              </span>
+            </span>
+            <IconChevronDown
+              size={18}
+              className={classes.chevron}
+              aria-hidden
+            />
+          </summary>
+          <div className={classes.optionalFields}>
+            <div className={classes.pair}>
+              <DatePickerInput
+                label={t("form.labels.arrival_date")}
+                placeholder={t("form.placeholders.same_day")}
+                clearable
+                {...form.getInputProps(`legs.${index}.arrivalDate`)}
+              />
+              <TimeInput
+                label={t("form.labels.arrival_time")}
+                {...form.getInputProps(`legs.${index}.arrivalTime`)}
+              />
+            </div>
+            <Select
+              label={t("form.labels.cabin_class")}
+              placeholder={t("cabin.economy")}
+              description={t("form.descriptions.cabin_class")}
+              inputWrapperOrder={["label", "input", "description", "error"]}
+              clearable
+              data={cabinOptions}
+              {...form.getInputProps(`legs.${index}.cabinClass`)}
+            />
+          </div>
+        </details>
+      </>
+    );
+  };
+
+  const saveLabel = isEditing
+    ? t("form.buttons.update")
+    : t("form.buttons.save", { count: legs.length });
 
   // Manual entry panel JSX - reused for both edit mode (rendered directly) and tabs mode
   const manualPanel = (
-    <Stack>
-      <form onSubmit={form.onSubmit(handleSubmit, handleValidationErrors)}>
-        <Stack>
-          {/* Same wrapper for one leg or many, so leg 1 never remounts */}
-          {legs.map((leg, index) => (
-            <Paper
-              key={leg.key}
-              withBorder={legs.length > 1}
-              p={legs.length > 1 ? "sm" : 0}
-              radius="md"
+    <form
+      onSubmit={form.onSubmit(handleSubmit, handleValidationErrors)}
+      className={classes.panel}
+    >
+      {/* Same wrapper for one leg or many, so leg 1 never remounts */}
+      {legs.map((leg, index) => (
+        <div key={leg.key} className={classes.card}>
+          <div className={classes.cardTitle}>
+            <Title order={5}>
+              {legs.length > 1
+                ? t("form.labels.flight_n", { n: index + 1 })
+                : t("form.labels.flight")}
+            </Title>
+            {legs.length > 1 && (
+              <ActionIcon
+                variant="subtle"
+                size="lg"
+                aria-label={t("form.buttons.remove_flight", {
+                  n: index + 1,
+                })}
+                onClick={() => form.removeListItem("legs", index)}
+              >
+                <IconTrash size={18} aria-hidden />
+              </ActionIcon>
+            )}
+          </div>
+          {legFields(index)}
+        </div>
+      ))}
+
+      {/* Adding legs only makes sense when creating new flights */}
+      {!isEditing && (
+        <Group gap="xs">
+          <Button
+            variant="default"
+            className={classes.dashed}
+            leftSection={<IconPlus size={18} aria-hidden />}
+            onClick={addNextLeg}
+          >
+            {t("form.buttons.add_flight")}
+          </Button>
+          {!hasReturn && completeLegs.length > 0 && (
+            <Button
+              variant="default"
+              className={classes.dashed}
+              leftSection={<IconArrowBackUp size={18} aria-hidden />}
+              onClick={addReturnTrip}
             >
-              {legs.length > 1 && (
-                <Group justify="space-between" mb="xs">
-                  <Title order={5}>
-                    {t("form.labels.flight_n", { n: index + 1 })}
-                  </Title>
-                  <ActionIcon
-                    variant="subtle"
-                    color="red"
-                    aria-label={t("form.buttons.remove_flight", {
-                      n: index + 1,
-                    })}
-                    onClick={() => form.removeListItem("legs", index)}
-                  >
-                    <IconTrash size={16} />
-                  </ActionIcon>
-                </Group>
-              )}
-              {legFields(index)}
-            </Paper>
-          ))}
-
-          {/* Adding legs only makes sense when creating new flights */}
-          {!isEditing && (
-            <Group gap="xs">
-              <Button
-                variant="light"
-                leftSection={<IconPlus size={16} />}
-                onClick={addNextLeg}
-              >
-                {t("form.buttons.add_flight")}
-              </Button>
-              {!hasReturn && completeLegs.length > 0 && (
-                <Button
-                  variant="light"
-                  leftSection={<IconArrowBackUp size={16} />}
-                  onClick={addReturnTrip}
-                >
-                  {t("form.buttons.add_return")}
-                </Button>
-              )}
-            </Group>
-          )}
-
-          {!user && (
-            <div style={{ marginTop: 8 }}>
-              <div
-                id={notSignedInId}
-                style={{ color: "orange" }}
-                role="status"
-                aria-live="polite"
-              >
-                {t("form.labels.not_signed_in")}
-              </div>
-            </div>
-          )}
-
-          {submitError && (
-            <div style={{ marginTop: 8 }}>
-              <div
-                id={submitErrorId}
-                style={{ color: "red" }}
-                role="alert"
-                aria-live="assertive"
-              >
-                {submitError}
-              </div>
-            </div>
-          )}
-
-          <Group justify="flex-end" mt="md">
-            <Button type="submit" loading={loading} disabled={!user}>
-              {isEditing
-                ? t("form.buttons.update") || "Update"
-                : legs.length > 1
-                  ? t("form.buttons.save_multiple")
-                  : t("form.buttons.save_single")}
+              {t("form.buttons.add_return")}
             </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Stack>
+          )}
+        </Group>
+      )}
+
+      {!user && (
+        <div
+          id={notSignedInId}
+          style={{ color: "var(--fl-warn-text)" }}
+          role="status"
+          aria-live="polite"
+        >
+          {t("form.labels.not_signed_in")}
+        </div>
+      )}
+
+      {submitError && (
+        <div
+          id={submitErrorId}
+          style={{ color: "var(--fl-accent-text)" }}
+          role="alert"
+          aria-live="assertive"
+        >
+          {submitError}
+        </div>
+      )}
+
+      <div className={classes.footer}>
+        <Button
+          type="submit"
+          fullWidth
+          size="lg"
+          loading={loading}
+          disabled={!user}
+        >
+          {saveLabel}
+        </Button>
+      </div>
+    </form>
   );
 
+  // Editing shows only the form, without the tabs or the CSV option.
+  if (isEditing) return manualPanel;
+
   return (
-    <>
-      {isEditing ? (
-        // When editing, render only the manual panel without the Tabs header or CSV option
-        manualPanel
-      ) : (
-        <Tabs
-          value={activeTab}
-          onChange={(v) => setActiveTab(v as FlightEntryTab | null)}
-          variant={"outline"}
-        >
-          <Tabs.List>
-            <Tabs.Tab value={FLIGHT_ENTRY_TABS.AI}>
-              {t("form.tabs.ai")}
-            </Tabs.Tab>
-            <Tabs.Tab value={FLIGHT_ENTRY_TABS.MANUAL}>
-              {t("form.tabs.manual")}
-            </Tabs.Tab>
-            <Tabs.Tab value={FLIGHT_ENTRY_TABS.CSV}>
-              {t("form.tabs.csv")}
-            </Tabs.Tab>
-          </Tabs.List>
+    <Tabs
+      value={activeTab}
+      onChange={(v) => setActiveTab(v as FlightEntryTab | null)}
+      classNames={{
+        root: classes.tabs,
+        tab: classes.tab,
+        panel: classes.tabPanel,
+      }}
+    >
+      <Tabs.List grow>
+        <Tabs.Tab value={FLIGHT_ENTRY_TABS.AI}>{t("form.tabs.ai")}</Tabs.Tab>
+        <Tabs.Tab value={FLIGHT_ENTRY_TABS.MANUAL}>
+          {t("form.tabs.manual")}
+        </Tabs.Tab>
+        <Tabs.Tab value={FLIGHT_ENTRY_TABS.CSV}>{t("form.tabs.csv")}</Tabs.Tab>
+      </Tabs.List>
 
-          <Tabs.Panel value={FLIGHT_ENTRY_TABS.MANUAL} pt="xs">
-            {manualPanel}
-          </Tabs.Panel>
+      <Tabs.Panel value={FLIGHT_ENTRY_TABS.MANUAL}>{manualPanel}</Tabs.Panel>
 
-          <Tabs.Panel value={FLIGHT_ENTRY_TABS.AI} pt="xs">
-            <FlightChatInput
-              onParsed={handleAiParsed}
-              onConfirm={() => setActiveTab(FLIGHT_ENTRY_TABS.MANUAL)}
-            />
-          </Tabs.Panel>
+      <Tabs.Panel value={FLIGHT_ENTRY_TABS.AI}>
+        <FlightChatInput
+          onParsed={handleAiParsed}
+          onConfirm={() => setActiveTab(FLIGHT_ENTRY_TABS.MANUAL)}
+        />
+      </Tabs.Panel>
 
-          <Tabs.Panel value={FLIGHT_ENTRY_TABS.CSV} pt="xs">
-            {onSaved ? (
-              <FlightCsvUpload onComplete={onSaved} />
-            ) : (
-              <FlightCsvUpload />
-            )}
-          </Tabs.Panel>
-        </Tabs>
-      )}
-    </>
+      <Tabs.Panel value={FLIGHT_ENTRY_TABS.CSV}>
+        {onSaved ? (
+          <FlightCsvUpload onComplete={onSaved} />
+        ) : (
+          <FlightCsvUpload />
+        )}
+      </Tabs.Panel>
+    </Tabs>
   );
 };
 

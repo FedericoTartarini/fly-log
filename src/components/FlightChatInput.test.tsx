@@ -2,18 +2,17 @@
  * Tests for FlightChatInput component.
  *
  * Covers:
- * - Initial render (examples, textarea, parse button)
- * - Successful parse → success alert, extracted badges, missing-fields warning
- * - Multi-leg parse → one numbered section per leg
- * - "Review and save" button calls onConfirm
- * - "Start over" / reset flow
+ * - Initial render (textarea, "What to include" note, fill-in button)
+ * - Successful parse → one row per flight found, missing-fields warning
+ * - "Review N flights" button calls onConfirm
+ * - Editing the text clears the flights found
  * - Error state when parseFlightFromText rejects
  * - Ctrl+Enter keyboard shortcut triggers parse
  */
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../test-utils";
+import { render, screen, waitFor, within } from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 
 // ─── Mock the AI parser ───────────────────────────────────────────────────────
@@ -85,21 +84,21 @@ describe("FlightChatInput", () => {
 
   // ── Initial render ──────────────────────────────────────────────────────────
 
-  it("renders the textarea, parse button, and examples", () => {
+  it("renders the textarea, fill-in button, and what to include", () => {
     renderComponent();
 
     expect(getTextarea()).not.toBeNull();
     expect(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     ).not.toBeNull();
-    expect(screen.getByText(/try one of these examples/i)).not.toBeNull();
+    expect(screen.getByText(/what to include/i)).not.toBeNull();
   });
 
   it("parse button is disabled when textarea is empty", () => {
     renderComponent();
     expect(
       screen
-        .getByRole("button", { name: /parse with ai/i })
+        .getByRole("button", { name: /fill in the flights/i })
         .hasAttribute("disabled"),
     ).toBe(true);
   });
@@ -109,77 +108,63 @@ describe("FlightChatInput", () => {
     await userEvent.type(getTextarea(), "SYD to SIN");
     expect(
       screen
-        .getByRole("button", { name: /parse with ai/i })
+        .getByRole("button", { name: /fill in the flights/i })
         .hasAttribute("disabled"),
     ).toBe(false);
   });
 
-  it("clicking an example populates the textarea", async () => {
-    renderComponent();
-    const firstExample =
-      "I will fly from Sydney to Singapore on the 10th of July 2026 with Qantas";
-    const exampleButton = screen
-      .getAllByRole("button")
-      .find((button: HTMLElement) =>
-        button.textContent?.includes(firstExample),
-      );
-    expect(exampleButton).toBeTruthy();
-    await userEvent.click(exampleButton as HTMLElement);
-    expect(getTextarea().value).toBe(firstExample);
-  });
-
   // ── Successful full parse ───────────────────────────────────────────────────
 
-  it("shows success alert with extracted field badges after a successful parse", async () => {
+  it("shows one row per flight found after a successful parse", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
     await userEvent.type(getTextarea(), "SYD to SIN on 10 July with Qantas");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/flight details extracted/i)).not.toBeNull();
+      expect(screen.getByText(/we found 1 flight/i)).not.toBeNull();
     });
 
-    expect(screen.getByText("SYD")).not.toBeNull();
-    expect(screen.getByText("SIN")).not.toBeNull();
-    expect(screen.getByText("2026-07-10")).not.toBeNull();
-    expect(screen.getByText("QF")).not.toBeNull();
+    const row = screen.getByRole("listitem");
+    expect(row.textContent).toContain("SYD→SIN");
+    expect(row.textContent).toContain("10 Jul 2026");
+    expect(row.textContent).toContain("Qantas");
     expect(onParsed).toHaveBeenCalledWith(fullFlight);
   });
 
-  it("shows the 'Review and save' button after a successful parse", async () => {
+  it("shows the 'Review 1 flight' button after a successful parse", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
     await userEvent.type(getTextarea(), "any text");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /review and save/i }),
+        screen.getByRole("button", { name: /review 1 flight/i }),
       ).not.toBeNull();
     });
   });
 
-  it("calls onConfirm when 'Review and save' is clicked", async () => {
+  it("calls onConfirm when 'Review 1 flight' is clicked", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
     await userEvent.type(getTextarea(), "any text");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review 1 flight/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review 1 flight/i }),
     );
 
     expect(onConfirm).toHaveBeenCalledOnce();
@@ -193,14 +178,14 @@ describe("FlightChatInput", () => {
 
     await userEvent.type(getTextarea(), "vague description");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() => {
       expect(screen.getByText(/some details are missing/i)).not.toBeNull();
     });
 
-    expect(screen.getByText(/Departure Date/)).not.toBeNull();
+    expect(screen.getByText(/Date/)).not.toBeNull();
     expect(screen.getByText(/Airline/)).not.toBeNull();
   });
 
@@ -210,32 +195,37 @@ describe("FlightChatInput", () => {
 
     await userEvent.type(getTextarea(), "full details");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
-    await waitFor(() => screen.getByText(/flight details extracted/i));
+    await waitFor(() => screen.getByText(/we found 1 flight/i));
 
     expect(screen.queryByText(/some details are missing/i)).toBeNull();
   });
 
   // ── Multi-leg trips ────────────────────────────────────────────────────────
 
-  it("shows one numbered section per leg for a multi-leg trip", async () => {
+  it("shows one row per leg for a multi-leg trip", async () => {
     mockParseFlightFromText.mockResolvedValue(multiLegFlight);
     renderComponent();
 
     await userEvent.type(getTextarea(), "SYD to London via Singapore");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/^flight 1$/i)).not.toBeNull();
+      expect(screen.getByText(/we found 2 flights/i)).not.toBeNull();
     });
-    expect(screen.getByText(/^flight 2$/i)).not.toBeNull();
-    expect(screen.getByText("LHR")).not.toBeNull();
-    expect(screen.getByText("14:30")).not.toBeNull();
-    expect(screen.getByText("Flight 2: Departure Date")).not.toBeNull();
+    const rows = within(
+      screen.getByRole("region", { name: /we found 2 flights/i }),
+    ).getAllByRole("listitem");
+    expect(rows).toHaveLength(2);
+    expect(rows[1]!.textContent).toContain("SIN→LHR");
+    expect(
+      screen.getByRole("button", { name: /review 2 flights/i }),
+    ).not.toBeNull();
+    expect(screen.getByText("Flight 2: Date")).not.toBeNull();
   });
 
   // ── Error state ─────────────────────────────────────────────────────────────
@@ -248,11 +238,11 @@ describe("FlightChatInput", () => {
 
     await userEvent.type(getTextarea(), "nonsense");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/could not parse flight/i)).not.toBeNull();
+      expect(screen.getByText(/could not read the trip/i)).not.toBeNull();
     });
 
     expect(
@@ -261,24 +251,23 @@ describe("FlightChatInput", () => {
     expect(onParsed).not.toHaveBeenCalled();
   });
 
-  // ── Reset flow ──────────────────────────────────────────────────────────────
+  // ── Editing the text ─────────────────────────────────────────────────────────
 
-  it("'Start over' button resets the UI back to the initial state", async () => {
+  it("editing the text clears the flights found", async () => {
     mockParseFlightFromText.mockResolvedValue(fullFlight);
     renderComponent();
 
     await userEvent.type(getTextarea(), "SYD to SIN");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
-    await waitFor(() => screen.getByRole("button", { name: /start over/i }));
+    await waitFor(() => screen.getByText(/we found 1 flight/i));
 
-    await userEvent.click(screen.getByRole("button", { name: /start over/i }));
+    await userEvent.type(getTextarea(), " with Qantas");
 
-    expect(getTextarea().value).toBe("");
-    expect(screen.queryByText(/flight details extracted/i)).toBeNull();
+    expect(screen.queryByText(/we found 1 flight/i)).toBeNull();
     expect(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     ).not.toBeNull();
   });
 

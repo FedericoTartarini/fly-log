@@ -11,6 +11,11 @@ vi.mock("../firebaseClient", () => ({
   signInWithEmail: vi.fn(),
 }));
 
+// A signed-in user, so an upload gets as far as reading the file.
+vi.mock("../context/AuthContext.jsx", () => ({
+  useAuth: () => ({ user: { uid: "test-uid" } }),
+}));
+
 // Mock notifications
 vi.mock("@mantine/notifications", () => ({
   notifications: {
@@ -37,12 +42,12 @@ describe("FlightCsvUpload", () => {
   it("renders input and button", () => {
     render(<FlightCsvUpload />);
     expect(
-      screen.getByText(/Upload Flight Data from CSV/i),
+      screen.getByRole("heading", { name: /Import a spreadsheet/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Upload Flights/i }),
+      screen.getByRole("button", { name: /Import flights/i }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText(/Flight data CSV/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Choose a CSV file/i)).toBeInTheDocument();
   });
 
   it("shows validation error for invalid CSV data", async () => {
@@ -56,16 +61,28 @@ describe("FlightCsvUpload", () => {
 
     render(<FlightCsvUpload />);
     const file = new File(["invalid"], "test.csv", { type: "text/csv" });
-    fireEvent.change(screen.getByLabelText(/Flight data CSV/i), {
+    fireEvent.change(screen.getByLabelText(/Choose a CSV file/i), {
       target: { files: [file] },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Upload Flights/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Import flights/i }));
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/Your CSV must include these columns:/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Missing fields/i)).toBeInTheDocument();
     });
+  });
+
+  it("takes a file dropped on the picker", () => {
+    render(<FlightCsvUpload />);
+    const button = screen.getByRole("button", { name: /Import flights/i });
+    expect(button).toBeDisabled();
+
+    const file = new File(["x"], "trips.csv", { type: "text/csv" });
+    fireEvent.drop(screen.getByText(/or drop it here/i), {
+      dataTransfer: { files: [file] },
+    });
+
+    expect(screen.getByText("trips.csv")).toBeInTheDocument();
+    expect(button).not.toBeDisabled();
   });
 
   it("validateCsvData returns errors for missing/invalid fields", () => {

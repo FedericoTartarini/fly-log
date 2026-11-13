@@ -28,7 +28,7 @@ describe("FlightEntryForm", () => {
       </MantineProvider>,
     );
 
-    const dateInput = screen.getByLabelText(/departure date/i);
+    const dateInput = screen.getByLabelText(/^date$/i);
     expect(dateInput).toBeInTheDocument();
 
     // The DatePickerInput from Mantine renders an input-like control; ensure it's focusable and interactive.

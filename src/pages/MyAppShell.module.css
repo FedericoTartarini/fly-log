@@ -82,3 +82,21 @@
   outline: 2px solid var(--fl-accent);
   outline-offset: -2px;
 }
+
+/* The add-flight modal sits on the page colour, so its flight cards and notes
+ * stand out on the surface colour. A flex column, so on a full-screen phone
+ * the form's footer reaches the bottom even when the tab is short. */
+.formModal {
+  background: var(--fl-page);
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.formBody {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
