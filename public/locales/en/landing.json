@@ -1,25 +1,52 @@
 {
-  "title": "Welcome to Your Personal Flight Tracker",
-  "subtitle": "Keep a detailed log of all your flights, explore your travel statistics, and visualize your journeys on a world map.",
-  "get_started": "Get Started",
-  "ai_title": "AI-Assisted Flight Entry",
-  "ai_body": "Add new flights instantly with our integrated AI assistant. Just describe your flight and let AI handle the rest.",
-  "learn_more": "Learn More",
-  "route": "Rome ➜ Paris",
-  "ai_added_flight": "AI added your flight!",
-  "flight_image_alt": "Airplane flying through clouds",
+  "eyebrow": "YOUR PERSONAL FLIGHT LOG",
+  "title": "Every flight you take, logged and mapped.",
+  "subtitle": "Keep a record of all your flights, explore your travel stats and see your journeys on a world map.",
+  "start": "Start your log",
+  "see_what": "See what it shows",
+  "example": {
+    "band": "Example log",
+    "label": "Example: a flight log summed up as a boarding pass, 195 flights, 812,400 km, 31 countries",
+    "flights": "Flights",
+    "km": "Km",
+    "countries": "Countries",
+    "moon": "Twice the distance to the Moon"
+  },
+  "tour": {
+    "eyebrow": "ROUTE TOUR",
+    "title": "Replay your travels on a globe.",
+    "body": "The tour flies every trip in order. Keep scrolling to watch one.",
+    "globe_label": "A globe tracing a trip from Sydney to Singapore, Rome, San Francisco, Honolulu and back to Sydney"
+  },
+  "chart": {
+    "eyebrow": "STATS",
+    "title": "See when you flew the most.",
+    "label": "Bar chart of flights per year from 2014 to 2026, busiest in 2019 with 19 flights, lowest in 2020 with 2",
+    "body": "Flights, kilometres and CO₂e by year, month or day of the week, plus your top airlines, airports and countries."
+  },
+  "ai": {
+    "eyebrow": "ADD FLIGHTS FAST",
+    "title": "Describe a trip. We fill in the flights.",
+    "request": "Rome to Paris on 3 May with Air France, back on the 9th",
+    "first": "3 May · AF",
+    "second": "9 May · AF",
+    "body": "Type it the way you would tell a friend, connections and return included. You check the flights before they are saved."
+  },
   "features": {
-    "where_title": "Where did you fly?",
-    "where_desc": "Visualize all your flights on a world map.",
-    "what_title": "What are your stats?",
-    "what_desc": "Get insights into your flight history and statistics.",
-    "which_title": "Which countries did you visit?",
-    "which_desc": "See your travel history and countries visited.",
-    "how_title": "How far did you fly?",
-    "how_desc": "Calculate total distance traveled across all flights and compare it with the circumference of the Earth, distance to the Moon, and Mars.",
-    "when_title": "When did you fly?",
-    "when_desc": "View your flight history by year and check in which year, month, or day you flew the most.",
-    "detail_title": "Flight Details",
-    "detail_desc": "See detailed flight information like departure/arrival airports, airline, and flight number."
-  }
+    "title": "What your log shows you",
+    "map_title": "Where did you fly?",
+    "map_desc": "Every route on a world map.",
+    "distance_title": "How far did you fly?",
+    "distance_desc": "Your distance against the Earth’s circumference and the trip to the Moon.",
+    "timeline_title": "When did you fly?",
+    "timeline_desc": "A timeline of every month you have flown.",
+    "search_title": "Every flight, searchable",
+    "search_desc": "Find any flight by airport, airline or flight number.",
+    "status_title": "Live flight status",
+    "status_desc": "Gates, delays and landing times for upcoming flights.",
+    "badges_title": "Collect badges",
+    "badges_desc": "Milestones for flights, distance, places and habits."
+  },
+  "closing": "Your first flight takes a minute to add.",
+  "to": "to"
 }

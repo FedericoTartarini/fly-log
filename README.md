@@ -78,7 +78,7 @@ Follow these instructions to get a local copy up and running.
 
 ## Asset Optimization
 
-The ImageMagick helper script in `scripts/optimize-assets.sh` generates responsive WebP variants for images in `src/assets`. It creates `-380.webp`, `-760.webp`, `-1200.webp`, and `-1800.webp` sizes for each image, and includes explicit handling for the landing showcase image so it stays up to date whenever you replace it.
+The ImageMagick helper script in `scripts/optimize-assets.sh` generates responsive WebP variants for images in `src/assets`. It creates `-380.webp`, `-760.webp`, `-1200.webp`, and `-1800.webp` sizes for each image.
 
 ```bash
 ./scripts/optimize-assets.sh
