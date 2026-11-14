@@ -140,6 +140,33 @@
   right: -13px;
 }
 
+/* The heading's button, stretched over the whole stub. */
+.stubOpen {
+  all: unset;
+  cursor: pointer;
+}
+
+.stubOpen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.stubChevron {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.stub:hover {
+  background: var(--fl-subtle);
+}
+
+.stubOpen:focus-visible::after {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: -2px;
+}
+
 .route {
   margin: 0;
   display: flex;
