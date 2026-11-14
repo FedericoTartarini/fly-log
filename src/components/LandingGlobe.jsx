@@ -95,14 +95,17 @@ function LandingGlobe({ progress, still }) {
     .map((code) => [code, ...projection(AIRPORTS[code])]);
 
   return (
-    <Motion.div
-      className={classes.globeInner}
-      initial={still ? false : { opacity: 0.15, scale: 0.82 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <svg viewBox="0 0 358 358" role="img" aria-label={t("tour.globe_label")}>
+    <div className={classes.globeInner}>
+      {/* Only the globe fades in. The chip's text stays at full contrast. */}
+      <Motion.svg
+        viewBox="0 0 358 358"
+        role="img"
+        aria-label={t("tour.globe_label")}
+        initial={still ? false : { opacity: 0.15, scale: 0.82 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <circle
           cx="179"
           cy="179"
@@ -149,7 +152,7 @@ function LandingGlobe({ progress, still }) {
             strokeWidth="2"
           />
         ))}
-      </svg>
+      </Motion.svg>
       <div className={classes.chip} aria-hidden="true">
         <span className={classes.chipTag}>
           {index + 1}/{LEGS.length}
@@ -160,7 +163,7 @@ function LandingGlobe({ progress, still }) {
           {leg.to}
         </span>
       </div>
-    </Motion.div>
+    </div>
   );
 }
 

@@ -2,39 +2,72 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/airplane.png" />
+    <link rel="icon" type="image/png" href="/airplane-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fly-Log</title>
-    <meta name="description" content="Fly-Log is a personal flight logbook and travel analytics app to track flights, map journeys, and reveal unique stats for frequent flyers." />
+    <meta name="description" content="FlyLog is a free personal flight log. Track your flights, see every route on a world map, and explore your travel stats, badges and a globe tour of every trip." />
     <meta name="theme-color" content="#DA111B" />
     <link rel="manifest" href="/manifest.json" />
+    <!-- Mantine's colour scheme, applied before the first paint so the static
+         shell below is light or dark like the app. Mantine's own
+         ColorSchemeScript only runs once React does. -->
+    <script>
+      try {
+        var scheme = localStorage.getItem("mantine-color-scheme-value");
+        if (scheme !== "light" && scheme !== "dark") {
+          scheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-mantine-color-scheme", scheme);
+      } catch (e) {}
+    </script>
+    <!-- The hero heading's font. When the static h1 already paints in it, the
+         app's identical h1 is not a larger paint, so Lighthouse counts the
+         static one as the Largest Contentful Paint. Vite gives it the same
+         hashed file as the @font-face in shell.css. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2" />
+    <link rel="stylesheet" href="/src/shell.css" />
     <!-- SEO and Social Meta Tags -->
     <meta name="keywords" content="flights, logbook, travel, aviation, Fly-Log, flight tracking" />
     <meta name="author" content="Federico Tartarini" />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph for social sharing -->
-    <meta property="og:title" content="Fly-Log" />
-    <meta property="og:description" content="Fly-Log is your personal flight logbook and travel analytics platform. Effortlessly track your flights, visualize your journeys on interactive maps, and discover unique travel statistics. Whether you're a frequent flyer or an aviation enthusiast, Fly-Log helps you explore your travel history and gain insights into your adventures." />
-    <meta property="og:image" content="https://fly-log.netlify.app/flylog.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlyLog" />
+    <meta property="og:url" content="https://fly-log.netlify.app/" />
+    <meta property="og:title" content="FlyLog: every flight you take, logged and mapped" />
+    <meta property="og:description" content="A free flight log. See every route on a world map, your distance and travel stats, badges for your milestones, and a globe tour of every trip. Add a whole trip by describing it." />
+    <!-- A new file name when the picture changes, because LinkedIn and others
+         cache the preview by URL. -->
+    <meta property="og:image" content="https://fly-log.netlify.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FlyLog on a phone: the Stats map and the Route tour globe" />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Fly-Log" />
-    <meta name="twitter:description" content="Fly-Log is a modern flight logbook and travel analytics platform. Log your flights, visualize your journeys, and discover unique travel stats." />
-    <meta name="twitter:image" content="https://fly-log.netlify.app/flylog.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FlyLog: every flight you take, logged and mapped" />
+    <meta name="twitter:description" content="A free flight log with your routes on a world map, your travel stats, badges and a globe tour of every trip." />
+    <meta name="twitter:image" content="https://fly-log.netlify.app/og-image.png" />
 
     <!-- Google Site Verification -->
     <meta name="google-site-verification" content="lGm8-WZQCy7wPnVBQC4ncdPY74UJ-laSIfxAb4loAjA" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DD8CDH64D3"></script>
+    <!-- Google tag (gtag.js). The calls queue in dataLayer straight away, but
+         the 180 kB script loads only after the page, so it does not compete
+         with the app for bandwidth on a phone. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-DD8CDH64D3');
+      addEventListener('load', function () {
+        var tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-DD8CDH64D3';
+        document.head.appendChild(tag);
+      });
     </script>
 
     <!-- Bing Webmaster Tools Verification -->
@@ -42,56 +75,99 @@
   </head>
   <body>
     <!--
-      Static shell: what Googlebot's non-rendering pass indexes. Before this the
-      crawler saw an empty #root, which is why Search Console reported 0 internal
-      links and dropped /landing from the index.
+      Static shell: what Googlebot's non-rendering pass indexes, and what
+      visitors see on "/" until the app is ready. Before it, the crawler saw an
+      empty #root, so Search Console reported 0 internal links and dropped the
+      landing page from the index.
 
-      Every string below is copied verbatim from public/locales/en/landing.json,
-      so the indexed copy and the hydrated Landing page say the same thing. If
-      you edit that file, edit this too.
+      Every string is copied from public/locales/en/landing.json, so the indexed
+      copy and the app say the same thing. If you edit that file, edit this
+      too. src/shell.css styles the header and hero to match the app, and the
+      Landing page removes the shell once it can draw itself.
     -->
-    <div id="root">
-      <main style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
-        <h1>Every flight you take, logged and mapped.</h1>
-        <p>Keep a record of all your flights, explore your travel stats and see your journeys on a world map.</p>
-        <p><a href="/login">Start your log</a></p>
-        <h2>Replay your travels on a globe.</h2>
-        <p>The tour flies every trip in order. Keep scrolling to watch one.</p>
-        <h2>See when you flew the most.</h2>
-        <p>Flights, kilometres and CO₂e by year, month or day of the week, plus your top airlines, airports and countries.</p>
-        <h2>Describe a trip. We fill in the flights.</h2>
-        <p>Type it the way you would tell a friend, connections and return included. You check the flights before they are saved.</p>
-        <h2>What your log shows you</h2>
-        <ul>
-          <li><strong>Where did you fly?</strong> Every route on a world map.</li>
-          <li><strong>How far did you fly?</strong> Your distance against the Earth’s circumference and the trip to the Moon.</li>
-          <li><strong>When did you fly?</strong> A timeline of every month you have flown.</li>
-          <li><strong>Every flight, searchable</strong> Find any flight by airport, airline or flight number.</li>
-          <li><strong>Live flight status</strong> Gates, delays and landing times for upcoming flights.</li>
-          <li><strong>Collect badges</strong> Milestones for flights, distance, places and habits.</li>
-        </ul>
-        <p>
-          <a href="/login">Start your log</a> &middot;
-          <a href="/about">About</a>
-        </p>
+    <div id="shell">
+      <header class="shell-header">
+        <div class="shell-bar">
+          <a class="shell-brand" href="/">
+            <img src="/airplane-192.png" alt="" width="30" height="30" />
+            FlyLog
+          </a>
+          <a class="shell-login" href="/login">Login</a>
+          <span class="shell-account" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+              <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+            </svg>
+          </span>
+        </div>
+      </header>
+      <main class="shell-page">
+        <div class="shell-top">
+          <div class="shell-hero">
+            <p class="shell-eyebrow">YOUR PERSONAL FLIGHT LOG</p>
+            <h1>Every flight you take, logged and mapped.</h1>
+            <p class="shell-subtitle">Keep a record of all your flights, explore your travel stats and see your journeys on a world map.</p>
+            <div class="shell-actions">
+              <a class="shell-start" href="/login">Start your log</a>
+              <a class="shell-see" href="#features">See what it shows</a>
+            </div>
+          </div>
+        </div>
+        <div class="shell-more" id="features">
+          <h2>Replay your travels on a globe.</h2>
+          <p>The tour flies every trip in order. Keep scrolling to watch one.</p>
+          <h2>See when you flew the most.</h2>
+          <p>Flights, kilometres and CO₂e by year, month or day of the week, plus your top airlines, airports and countries.</p>
+          <h2>Describe a trip. We fill in the flights.</h2>
+          <p>Type it the way you would tell a friend, connections and return included. You check the flights before they are saved.</p>
+          <h2>What your log shows you</h2>
+          <ul>
+            <li><strong>Where did you fly?</strong> Every route on a world map.</li>
+            <li><strong>How far did you fly?</strong> Your distance against the Earth’s circumference and the trip to the Moon.</li>
+            <li><strong>When did you fly?</strong> A timeline of every month you have flown.</li>
+            <li><strong>Every flight, searchable</strong> Find any flight by airport, airline or flight number.</li>
+            <li><strong>Live flight status</strong> Gates, delays and landing times for upcoming flights.</li>
+            <li><strong>Collect badges</strong> Milestones for flights, distance, places and habits.</li>
+          </ul>
+          <h2>Your first flight takes a minute to add.</h2>
+          <p>
+            <a href="/login">Start your log</a> &middot;
+            <a href="/about">About</a> &middot;
+            <a href="/changelog">Changelog</a>
+          </p>
+        </div>
       </main>
     </div>
+    <div id="root"></div>
     <!--
-      The shell above is the indexed copy of "/", but the SPA fallback serves
-      this same file for every route, so refreshing /stats painted the landing
-      copy until React mounted. Clear it anywhere but "/", and on "/" too for
-      returning signed-in users (AuthContext sets the hint), who are about to
-      be redirected to /stats. Googlebot's non-rendering pass does not run
-      this, so the indexed copy is untouched.
+      The SPA fallback serves this file for every route, so drop the shell
+      anywhere but "/", and on "/" too for returning signed-in users
+      (AuthContext sets the hint), who are about to be redirected to /stats.
+      On "/" the Landing page drops it once it has rendered. The timeout is a
+      safety net in case it never does, for example if its code fails to load
+      and the error page is waiting behind the shell.
+      Googlebot's non-rendering pass does not run this, so the indexed copy is
+      untouched.
     -->
     <script>
-      var signedIn = false;
-      try {
-        signedIn = localStorage.getItem("fly-log:signed-in") === "1";
-      } catch (e) {}
-      if (location.pathname !== "/" || signedIn) {
-        document.getElementById("root").textContent = "";
-      }
+      (function () {
+        var signedIn = false;
+        try {
+          signedIn = localStorage.getItem("fly-log:signed-in") === "1";
+        } catch (e) {}
+        var drop = function () {
+          var shell = document.getElementById("shell");
+          if (shell) shell.remove();
+        };
+        // Only once React has drawn something, so a slow bundle never
+        // swaps the shell for an empty page.
+        var dropOnceMounted = function () {
+          if (document.getElementById("root").childElementCount) drop();
+          else setTimeout(dropOnceMounted, 5000);
+        };
+        if (location.pathname !== "/" || signedIn) drop();
+        else setTimeout(dropOnceMounted, 15000);
+      })();
     </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
