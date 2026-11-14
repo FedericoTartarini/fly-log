@@ -31,8 +31,25 @@ vi.mock("papaparse", () => ({
   },
 }));
 
-import FlightCsvUpload, { validateCsvData } from "./FlightCsvUpload";
+import FlightCsvUpload, {
+  csvAircraftName,
+  validateCsvData,
+} from "./FlightCsvUpload";
 import Papa from "papaparse";
+import { addFlightsForUser } from "../firebaseClient";
+
+// Every code counts as known, so a row reaches the save without the
+// reference data being loaded.
+vi.mock("../utils/iataValidation", () => ({
+  validateAndNormalizeCsvRows: async (rows) => ({
+    errors: [],
+    normalizedRows: rows,
+  }),
+}));
+
+vi.mock("../utils/autoStatusCheck", () => ({
+  autoCheckSavedFlights: vi.fn(),
+}));
 
 describe("FlightCsvUpload", () => {
   beforeEach(() => {
@@ -69,6 +86,34 @@ describe("FlightCsvUpload", () => {
     await waitFor(() => {
       expect(screen.getByText(/Missing fields/i)).toBeInTheDocument();
     });
+  });
+
+  it("saves the aircraft column under its listed spelling", async () => {
+    Papa.parse.mockImplementation((file, opts) => {
+      opts.complete({
+        data: [
+          {
+            departure_date: "2026-07-10",
+            departure_airport_iata: "SYD",
+            arrival_airport_iata: "SIN",
+            airline_iata: "QF",
+            aircraft_type_name: "  airbus a380-800 ",
+          },
+        ],
+      });
+    });
+
+    render(<FlightCsvUpload />);
+    const file = new File(["x"], "trips.csv", { type: "text/csv" });
+    fireEvent.change(screen.getByLabelText(/Choose a CSV file/i), {
+      target: { files: [file] },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Import flights/i }));
+
+    await waitFor(() => expect(addFlightsForUser).toHaveBeenCalled());
+    expect(addFlightsForUser.mock.calls[0][1][0].aircraft_type_name).toBe(
+      "Airbus A380-800",
+    );
   });
 
   it("takes a file dropped on the picker", () => {
@@ -149,5 +194,14 @@ describe("FlightCsvUpload", () => {
         e.includes("cabin_class"),
       ),
     ).toBe(true);
+  });
+
+  it("csvAircraftName uses the listed spelling and keeps unlisted names", () => {
+    expect(csvAircraftName("airbus a380-800")).toBe("Airbus A380-800");
+    expect(csvAircraftName("  Sukhoi Superjet 100 ")).toBe(
+      "Sukhoi Superjet 100",
+    );
+    expect(csvAircraftName("")).toBeNull();
+    expect(csvAircraftName(undefined)).toBeNull();
   });
 });
