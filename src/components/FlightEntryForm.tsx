@@ -36,6 +36,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { FLIGHT_ENTRY_TABS, type FlightEntryTab } from "../constants/tabs";
 import { CABIN_CLASSES } from "../utils/emissions";
+import { AIRCRAFT_NAMES } from "../utils/aircraft";
 import classes from "./FlightEntryForm.module.css";
 
 type SelectOption = {
@@ -58,6 +59,8 @@ type Leg = {
   flightNumber: string;
   /** Empty means not recorded, which the emissions model treats as economy. */
   cabinClass: string;
+  /** One of AIRCRAFT_NAMES, or a name a status check saved; empty if unknown. */
+  aircraft: string;
 };
 
 const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
@@ -71,6 +74,7 @@ const newLeg = (overrides: Partial<Leg> = {}): Leg => ({
   airline: "",
   flightNumber: "",
   cabinClass: "",
+  aircraft: "",
   ...overrides,
 });
 
@@ -97,6 +101,7 @@ interface FlightEntryFormProps {
     airline_iata?: string;
     flight_number?: string | null;
     cabin_class?: string | null;
+    aircraft_type_name?: string | null;
   } | null;
 }
 
@@ -187,6 +192,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
           airline: flight.airline_iata || "",
           flightNumber: flight.flight_number || "",
           cabinClass: flight.cabin_class || "",
+          aircraft: flight.aircraft_type_name || "",
         }),
       ],
     });
@@ -226,6 +232,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         airline_iata: leg.airline,
         flight_number: leg.flightNumber,
         cabin_class: leg.cabinClass || null,
+        aircraft_type_name: leg.aircraft || null,
       }));
 
       if (flight && flight.id) {
@@ -355,6 +362,7 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
         airline: parsed.airline_iata ?? "",
         flightNumber: parsed.flight_number ?? "",
         cabinClass: parsed.cabin_class ?? "",
+        aircraft: parsed.aircraft_type_name ?? "",
       });
     });
     form.setValues({ legs: parsedLegs.length ? parsedLegs : [newLeg()] });
@@ -469,7 +477,10 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
             if (
               el &&
               !el.dataset.opened &&
-              (leg.arrivalDate || leg.arrivalTime || leg.cabinClass)
+              (leg.arrivalDate ||
+                leg.arrivalTime ||
+                leg.cabinClass ||
+                leg.aircraft)
             ) {
               el.open = true;
               el.dataset.opened = "true";
@@ -510,6 +521,22 @@ const FlightEntryForm: React.FC<FlightEntryFormProps> = ({
               clearable
               data={cabinOptions}
               {...form.getInputProps(`legs.${index}.cabinClass`)}
+            />
+            <Select
+              label={t("form.labels.aircraft")}
+              placeholder={t("form.placeholders.search_aircraft")}
+              searchable
+              clearable
+              limit={8}
+              maxDropdownHeight={280}
+              nothingFoundMessage={t("form.placeholders.no_matching_aircraft")}
+              // A status check can save a name that isn't listed; keep it selectable.
+              data={
+                !leg.aircraft || AIRCRAFT_NAMES.includes(leg.aircraft)
+                  ? AIRCRAFT_NAMES
+                  : [leg.aircraft, ...AIRCRAFT_NAMES]
+              }
+              {...form.getInputProps(`legs.${index}.aircraft`)}
             />
           </div>
         </details>

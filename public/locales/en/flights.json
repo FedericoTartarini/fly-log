@@ -224,8 +224,9 @@
       "arrival_date": "Arrival date",
       "arrival_time": "Arrives",
       "cabin_class": "Cabin",
+      "aircraft": "Aircraft",
       "flight": "Flight",
-      "optional_section": "Arrival time and cabin",
+      "optional_section": "Arrival time, cabin and aircraft",
       "optional": "optional"
     },
     "tabs": {
@@ -240,7 +241,9 @@
       "no_matching_airports": "No matching airports",
       "no_matching_airlines": "No matching airlines",
       "flight_number_example": "ABC123",
-      "same_day": "Same day"
+      "same_day": "Same day",
+      "search_aircraft": "Search aircraft",
+      "no_matching_aircraft": "No matching aircraft"
     },
     "validation": {
       "departure_date_required": "Departure date is required",

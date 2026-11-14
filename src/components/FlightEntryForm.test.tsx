@@ -46,11 +46,11 @@ describe("FlightEntryForm", () => {
   it("keeps the optional section open when its last value is cleared", async () => {
     render(<FlightEntryForm />);
     const details = screen
-      .getByText(/arrival time and cabin/i)
+      .getByText(/arrival time, cabin and aircraft/i)
       .closest("details") as HTMLDetailsElement;
     expect(details.open).toBe(false);
 
-    await userEvent.click(screen.getByText(/arrival time and cabin/i));
+    await userEvent.click(screen.getByText(/arrival time, cabin and aircraft/i));
     const arrives = screen.getByLabelText(/^arrives$/i);
     await userEvent.type(arrives, "1430");
     await userEvent.clear(arrives);
@@ -60,7 +60,7 @@ describe("FlightEntryForm", () => {
 
   it("stays closed after the user folds a section that holds a value", async () => {
     render(<FlightEntryForm />);
-    const summary = screen.getByText(/arrival time and cabin/i);
+    const summary = screen.getByText(/arrival time, cabin and aircraft/i);
     const details = summary.closest("details") as HTMLDetailsElement;
     await userEvent.click(summary);
     await userEvent.type(screen.getByLabelText(/^arrives$/i), "1430");
