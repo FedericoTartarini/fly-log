@@ -1,151 +1,48 @@
 // src/main.jsx
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/ibm-plex-mono/600.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "./index.css";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { theme, resolver } from "./theme.js";
-import { Notifications } from "@mantine/notifications";
-import "./i18n"; // initialize i18n
+import i18n, { i18nReady } from "./i18n";
+import App from "./App.jsx";
+import routes from "./routes.jsx";
 
-const FlightsStats = lazy(() => import("./pages/FlightsStats.jsx"));
-const AllStats = lazy(() => import("./pages/AllStats.jsx"));
-const About = lazy(() => import("./pages/About.jsx"));
-const Changelog = lazy(() => import("./pages/Changelog.jsx"));
-const Flights = lazy(() => import("./pages/Flights.jsx"));
-const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
-const Timeline = lazy(() => import("./pages/Timeline.jsx"));
-const Badges = lazy(() => import("./pages/Badges.jsx"));
-const Login = lazy(() => import("./pages/Login.jsx"));
-// MyAppShell and ProtectedRoute render on every route, so splitting them out
-// bought nothing and cost an extra loading state on the way in.
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import HomeIndex from "./components/HomeIndex.jsx";
-import MyAppShell from "./pages/MyAppShell.jsx";
-import PageSkeleton from "./components/PageSkeleton.jsx";
-import FlightsListSkeleton from "./components/FlightsListSkeleton.jsx";
-import AllStatsSkeleton from "./components/AllStatsSkeleton.jsx";
-import TourSkeleton from "./components/TourSkeleton.jsx";
-import TimelineSkeleton from "./components/TimelineSkeleton.jsx";
-import BadgesSkeleton from "./components/BadgesSkeleton.jsx";
-import { PATHS } from "./constants/MyClasses.ts";
-import AuthProvider from "./context/AuthContext";
-
-// Route tree: MyAppShell hosts the main layout and nested pages.
-const router = createBrowserRouter([
-  {
-    path: PATHS.HOME,
-    element: <MyAppShell />,
-    children: [
-      {
-        index: true, // Default route
-        element: <HomeIndex />,
-      },
-      {
-        // Kept so the previously indexed URL and any stale bookmark still
-        // land somewhere. public/_redirects serves a 301 for real navigations.
-        path: PATHS.LANDING,
-        element: <Navigate to={PATHS.HOME} replace />,
-      },
-      {
-        path: PATHS.ABOUT,
-        element: <About />,
-      },
-      {
-        path: PATHS.CHANGELOG,
-        element: <Changelog />,
-      },
-      {
-        path: PATHS.STATS,
-        element: (
-          <ProtectedRoute>
-            <FlightsStats />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.ALL_STATS,
-        element: (
-          <ProtectedRoute fallback={<AllStatsSkeleton />}>
-            <Suspense fallback={<AllStatsSkeleton />}>
-              <AllStats />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.FLIGHTS,
-        element: (
-          <ProtectedRoute fallback={<FlightsListSkeleton />}>
-            <Suspense fallback={<FlightsListSkeleton />}>
-              <Flights />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.TOUR,
-        element: (
-          <ProtectedRoute fallback={<TourSkeleton />}>
-            <Suspense fallback={<TourSkeleton />}>
-              <WorldTour />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.TIMELINE,
-        element: (
-          <ProtectedRoute fallback={<TimelineSkeleton />}>
-            <Suspense fallback={<TimelineSkeleton />}>
-              <Timeline />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.BADGES,
-        element: (
-          <ProtectedRoute fallback={<BadgesSkeleton />}>
-            <Suspense fallback={<BadgesSkeleton />}>
-              <Badges />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.LOGIN,
-        element: <Login />,
-      },
-    ],
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ColorSchemeScript defaultColorScheme="auto" />
-    <MantineProvider
-      theme={theme}
-      defaultColorScheme="auto"
-      cssVariablesResolver={resolver}
-    >
-      {/* Above every modal, so validation errors show over the form */}
-      <Notifications zIndex={2000} />
-      <AuthProvider>
-        <Suspense fallback={<PageSkeleton />}>
-          <RouterProvider router={router} />
-        </Suspense>
-      </AuthProvider>
-    </MantineProvider>
-  </React.StrictMode>,
+const router = createBrowserRouter(routes);
+const app = (
+  <App>
+    <RouterProvider router={router} />
+  </App>
 );
+const root = document.getElementById("root");
+
+// index.html holds the landing page rendered at build time, in English. The
+// inline script after #root empties it on any other route and for signed-in
+// visitors, so what is left is the landing page for a signed-out visitor on
+// "/". React adopts that HTML instead of redrawing it, once the English
+// strings it was rendered with have loaded. Any other language redraws.
+if (root.hasChildNodes()) {
+  const boot = () => {
+    if (i18n.resolvedLanguage === "en") {
+      ReactDOM.hydrateRoot(root, app);
+    } else {
+      root.textContent = "";
+      ReactDOM.createRoot(root).render(app);
+    }
+  };
+  // A failed load still boots; the language check then decides.
+  i18nReady.then(boot, boot);
+} else {
+  ReactDOM.createRoot(root).render(app);
+}
 
 // Register service worker in production to enable offline caching.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {

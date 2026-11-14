@@ -8,8 +8,8 @@
     <meta name="description" content="FlyLog is a free personal flight log. Track your flights, see every route on a world map, and explore your travel stats, badges and a globe tour of every trip." />
     <meta name="theme-color" content="#DA111B" />
     <link rel="manifest" href="/manifest.json" />
-    <!-- Mantine's colour scheme, applied before the first paint so the static
-         shell below is light or dark like the app. Mantine's own
+    <!-- Mantine's colour scheme, applied before the first paint so the
+         prerendered page below is light or dark like the app. Mantine's own
          ColorSchemeScript only runs once React does. -->
     <script>
       try {
@@ -20,12 +20,10 @@
         document.documentElement.setAttribute("data-mantine-color-scheme", scheme);
       } catch (e) {}
     </script>
-    <!-- The hero heading's font. When the static h1 already paints in it, the
-         app's identical h1 is not a larger paint, so Lighthouse counts the
-         static one as the Largest Contentful Paint. Vite gives it the same
-         hashed file as the @font-face in shell.css. -->
+    <!-- The hero heading's font, so the prerendered h1 paints in it from
+         the start rather than swapping fonts. Vite gives it the same hashed
+         file as the @font-face in the app's CSS. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2" />
-    <link rel="stylesheet" href="/src/shell.css" />
     <!-- SEO and Social Meta Tags -->
     <meta name="keywords" content="flights, logbook, travel, aviation, Fly-Log, flight tracking" />
     <meta name="author" content="Federico Tartarini" />
@@ -74,80 +72,18 @@
     <meta name="msvalidate.01" content="4B8AF8A7C60D5C0CDD039EC816B0F8E5" />
   </head>
   <body>
+  <body>
     <!--
-      Static shell: what Googlebot's non-rendering pass indexes, and what
-      visitors see on "/" until the app is ready. Before it, the crawler saw an
-      empty #root, so Search Console reported 0 internal links and dropped the
-      landing page from the index.
-
-      Every string is copied from public/locales/en/landing.json, so the indexed
-      copy and the app say the same thing. If you edit that file, edit this
-      too. src/shell.css styles the header and hero to match the app, and the
-      Landing page removes the shell once it can draw itself.
+      The build (scripts/prerender.mjs) renders the landing page into #root,
+      so Googlebot's non-rendering pass and a visitor's first paint both get
+      the real page, and React adopts it rather than drawing it again.
     -->
-    <div id="shell">
-      <header class="shell-header">
-        <div class="shell-bar">
-          <a class="shell-brand" href="/">
-            <img src="/airplane-192.png" alt="" width="30" height="30" />
-            FlyLog
-          </a>
-          <a class="shell-login" href="/login">Login</a>
-          <span class="shell-account" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-              <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-            </svg>
-          </span>
-        </div>
-      </header>
-      <main class="shell-page">
-        <div class="shell-top">
-          <div class="shell-hero">
-            <p class="shell-eyebrow">YOUR PERSONAL FLIGHT LOG</p>
-            <h1>Every flight you take, logged and mapped.</h1>
-            <p class="shell-subtitle">Keep a record of all your flights, explore your travel stats and see your journeys on a world map.</p>
-            <div class="shell-actions">
-              <a class="shell-start" href="/login">Start your log</a>
-              <a class="shell-see" href="#features">See what it shows</a>
-            </div>
-          </div>
-        </div>
-        <div class="shell-more" id="features">
-          <h2>Replay your travels on a globe.</h2>
-          <p>The tour flies every trip in order. Keep scrolling to watch one.</p>
-          <h2>See when you flew the most.</h2>
-          <p>Flights, kilometres and CO₂e by year, month or day of the week, plus your top airlines, airports and countries.</p>
-          <h2>Describe a trip. We fill in the flights.</h2>
-          <p>Type it the way you would tell a friend, connections and return included. You check the flights before they are saved.</p>
-          <h2>What your log shows you</h2>
-          <ul>
-            <li><strong>Where did you fly?</strong> Every route on a world map.</li>
-            <li><strong>How far did you fly?</strong> Your distance against the Earth’s circumference and the trip to the Moon.</li>
-            <li><strong>When did you fly?</strong> A timeline of every month you have flown.</li>
-            <li><strong>Every flight, searchable</strong> Find any flight by airport, airline or flight number.</li>
-            <li><strong>Live flight status</strong> Gates, delays and landing times for upcoming flights.</li>
-            <li><strong>Collect badges</strong> Milestones for flights, distance, places and habits.</li>
-          </ul>
-          <h2>Your first flight takes a minute to add.</h2>
-          <p>
-            <a href="/login">Start your log</a> &middot;
-            <a href="/about">About</a> &middot;
-            <a href="/changelog">Changelog</a>
-          </p>
-        </div>
-      </main>
-    </div>
     <div id="root"></div>
     <!--
-      The SPA fallback serves this file for every route, so drop the shell
-      anywhere but "/", and on "/" too for returning signed-in users
-      (AuthContext sets the hint), who are about to be redirected to /stats.
-      On "/" the Landing page drops it once it has rendered. The timeout is a
-      safety net in case it never does, for example if its code fails to load
-      and the error page is waiting behind the shell.
-      Googlebot's non-rendering pass does not run this, so the indexed copy is
-      untouched.
+      The SPA fallback serves this file for every route, so empty #root
+      anywhere but "/", and on "/" too for returning signed-in visitors
+      (AuthContext sets the hint), who are about to be sent to /stats. This
+      runs before the first paint, so neither sees the landing page.
     -->
     <script>
       (function () {
@@ -155,18 +91,9 @@
         try {
           signedIn = localStorage.getItem("fly-log:signed-in") === "1";
         } catch (e) {}
-        var drop = function () {
-          var shell = document.getElementById("shell");
-          if (shell) shell.remove();
-        };
-        // Only once React has drawn something, so a slow bundle never
-        // swaps the shell for an empty page.
-        var dropOnceMounted = function () {
-          if (document.getElementById("root").childElementCount) drop();
-          else setTimeout(dropOnceMounted, 5000);
-        };
-        if (location.pathname !== "/" || signedIn) drop();
-        else setTimeout(dropOnceMounted, 15000);
+        if (location.pathname !== "/" || signedIn) {
+          document.getElementById("root").textContent = "";
+        }
       })();
     </script>
     <script type="module" src="/src/main.jsx"></script>

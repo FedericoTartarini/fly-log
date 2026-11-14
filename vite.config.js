@@ -53,6 +53,8 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   build: {
+    // Read by scripts/prerender.mjs to link the Landing chunk's CSS, then deleted.
+    manifest: true,
     minify: "terser",
     chunkSizeWarningLimit: 1000,
     terserOptions: {
@@ -64,6 +66,10 @@ export default defineConfig({
       output: {
         // Split heavy vendor libraries to reduce the main app chunk.
         manualChunks(id) {
+          // Rollup's CommonJS helper goes with React, which needs it first.
+          // Left to Rollup, it can land in vendor-i18n, and then the two
+          // chunks import each other and React is undefined on load.
+          if (id.includes("commonjsHelpers")) return "vendor-react";
           if (!id.includes("node_modules")) return;
 
           if (id.includes("node_modules/firebase")) {

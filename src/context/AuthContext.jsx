@@ -1,5 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  startTransition,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 // AuthContext holds the current Firebase user + auth helpers.
 const AuthContext = createContext({});
@@ -8,6 +15,15 @@ const AuthContext = createContext({});
 const SIGNED_IN_HINT_KEY = "fly-log:signed-in";
 
 export const useAuth = () => useContext(AuthContext);
+
+// False on the server and when storage is blocked.
+export const hasSignedInHint = () => {
+  try {
+    return localStorage.getItem(SIGNED_IN_HINT_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -31,8 +47,13 @@ const AuthProvider = ({ children }) => {
         };
 
         unsubscribe = firebase.onAuthStateChanged((firebaseUser) => {
-          setUser(firebaseUser ?? null);
-          setLoading(false);
+          // A transition, so an answer that arrives while React is still
+          // adopting the prerendered landing page waits for it to finish.
+          // An urgent update would make React throw that HTML away.
+          startTransition(() => {
+            setUser(firebaseUser ?? null);
+            setLoading(false);
+          });
           // Read by index.html before React loads, to skip painting the
           // signed-out landing copy for returning signed-in users.
           try {
@@ -45,8 +66,10 @@ const AuthProvider = ({ children }) => {
       } catch (error) {
         console.warn("Firebase auth init failed:", error);
         if (mounted) {
-          setUser(null);
-          setLoading(false);
+          startTransition(() => {
+            setUser(null);
+            setLoading(false);
+          });
         }
       }
     };

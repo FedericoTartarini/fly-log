@@ -4,7 +4,9 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 
 // Namespaces: 'common' for shared strings (nav, footer, etc) and per-page namespaces like 'login'
-i18n
+// Resolves once the detected language's files have loaded, which main.jsx
+// waits for before it adopts the prerendered landing page.
+export const i18nReady = i18n
   .use(HttpApi)
   .use(LanguageDetector)
   .use(initReactI18next)
