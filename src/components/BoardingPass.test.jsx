@@ -5,7 +5,7 @@ vi.mock("../store.ts", () => ({
   default: vi.fn(),
 }));
 
-import { render, screen } from "../../test-utils/index.js";
+import { fireEvent, render, screen } from "../../test-utils/index.js";
 import { makeRouterWrapper } from "../../test-utils/wrappers.jsx";
 import BoardingPass from "./BoardingPass.jsx";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
@@ -85,5 +85,23 @@ describe("BoardingPass", () => {
     expect(
       screen.getByRole("link", { name: "See all your stats" }),
     ).toHaveAttribute("href", "/stats/all");
+  });
+
+  it("opens the stub's flight details when the stub is pressed", async () => {
+    const flights = [flight("next", "2099-01-02", { flight_number: "QF81" })];
+    useFlightStore.mockImplementation((selector) =>
+      selector({
+        filteredFlights: [],
+        allFlights: flights,
+        filters: DEFAULT_FILTERS,
+      }),
+    );
+
+    render(<BoardingPass />, { wrapper: makeRouterWrapper() });
+    fireEvent.click(
+      screen.getByRole("button", { name: /^Next flight, in \d+ days$/ }),
+    );
+
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
   });
 });

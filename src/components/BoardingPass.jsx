@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Text } from "@mantine/core";
 import { IconArrowNarrowRight, IconChevronRight } from "@tabler/icons-react";
@@ -16,6 +16,7 @@ import { getAirportCity } from "../utils/airportUtils";
 import { barcodePattern } from "../utils/barcode.ts";
 import { pickStubFlight } from "../utils/pickStubFlight.js";
 import FilterTags from "./FilterTags.jsx";
+import FlightDetailsSheet from "./FlightDetailsSheet.tsx";
 import classes from "./BoardingPass.module.css";
 
 // `as="dl"` for a field that stands alone, outside a list of fields.
@@ -30,8 +31,9 @@ const Field = ({ id, label, value, className, as = "div" }) => {
 };
 
 // The stub under the perforation: next flight, or the last one if none is
-// booked.
-const Stub = ({ entry }) => {
+// booked. The heading is a button whose hit area covers the whole stub, so
+// tapping anywhere on it opens the flight's details.
+const Stub = ({ entry, onOpen }) => {
   const { t, i18n } = useTranslation("flights");
   const { flight, days } = entry;
   const heading =
@@ -44,7 +46,18 @@ const Stub = ({ entry }) => {
   return (
     <div className={classes.stub}>
       <Text component="h2" fz={14} fw={500} c="var(--fl-muted)" m={0}>
-        {heading}
+        <button
+          type="button"
+          className={classes.stubOpen}
+          onClick={() => onOpen(flight)}
+        >
+          {heading}
+          <IconChevronRight
+            size={20}
+            className={classes.stubChevron}
+            aria-hidden
+          />
+        </button>
       </Text>
       <p className={`${classes.route} ${classes.mono}`}>
         <span>{from}</span>
@@ -112,6 +125,9 @@ function BoardingPass() {
       : t("pass.hours", { value: number(hours) });
 
   const stub = pickStubFlight(allFlights);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsFlightId, setDetailsFlightId] = useState(null);
+  const closeDetails = useCallback(() => setDetailsOpen(false), []);
 
   return (
     <section aria-label={t("pass.label")} className={classes.pass}>
@@ -191,7 +207,22 @@ function BoardingPass() {
           </Button>
         </div>
       </div>
-      {stub && <Stub entry={stub} />}
+      {stub && (
+        <Stub
+          entry={stub}
+          onOpen={(flight) => {
+            setDetailsFlightId(flight.id);
+            setDetailsOpen(true);
+          }}
+        />
+      )}
+      {/* allFlights, like the stub, so a filter never hides the open flight */}
+      <FlightDetailsSheet
+        flights={allFlights}
+        flightId={detailsFlightId}
+        opened={detailsOpen}
+        onClose={closeDetails}
+      />
     </section>
   );
 }

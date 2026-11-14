@@ -1,17 +1,15 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import {
   Avatar,
   Group,
   Text,
-  Modal,
-  Loader,
   Stack,
   NativeSelect,
   TextInput,
   Button,
   UnstyledButton,
 } from "@mantine/core";
-import { useHeadroom, useMediaQuery } from "@mantine/hooks";
+import { useHeadroom } from "@mantine/hooks";
 import {
   IconArrowRight,
   IconPlaneInflight,
@@ -29,8 +27,7 @@ import { useTranslation } from "react-i18next";
 import type { FlightStoreState } from "../store";
 import classes from "./FlightsList.module.css";
 
-const FlightEntryForm = lazy(() => import("./FlightEntryForm"));
-const FlightDetailsModal = lazy(() => import("./FlightDetailsModal"));
+import FlightDetailsSheet from "./FlightDetailsSheet";
 
 const flightNumberOf = (flight: enhancedFlight): string | null =>
   flight.flight_number
@@ -146,25 +143,11 @@ const FlightsList: React.FC = () => {
   // Same headroom as the app shell, so a pinned heading sits under the
   // header while it shows and moves up when it hides.
   const headerPinned = useHeadroom({ fixedAt: 120 });
-  const isPhone = useMediaQuery("(max-width: 53.74em)");
-  const [editOpen, setEditOpen] = React.useState(false);
-  const [editFlight, setEditFlight] = React.useState<enhancedFlight | null>(
-    null,
-  );
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [detailsFlightId, setDetailsFlightId] = React.useState<string | null>(
     null,
   );
-  // Derived from the live list, not snapshotted, so a status write lands in
-  // the open modal. The flip side is that the flight can vanish underneath it
-  // (deleted, or filtered out), which would leave an empty titled modal open.
-  const detailsFlight =
-    filteredFlights.find((f) => f.id === detailsFlightId) ?? null;
-  React.useEffect(() => {
-    if (detailsOpen && detailsFlightId !== null && detailsFlight === null) {
-      setDetailsOpen(false);
-    }
-  }, [detailsOpen, detailsFlightId, detailsFlight]);
+  const closeDetails = React.useCallback(() => setDetailsOpen(false), []);
 
   const hits = React.useMemo(
     () => searchFlights(filteredFlights, query),
@@ -312,70 +295,12 @@ const FlightsList: React.FC = () => {
         })
       )}
 
-      <Modal
-        opened={editOpen}
-        onClose={() => setEditOpen(false)}
-        title={t("form.labels.edit_flight")}
-        // Only the page colour of the details sheet, not its phone layout.
-        classNames={{
-          content: classes.sheetHeader,
-          header: classes.sheetHeader,
-        }}
-        // Opened from inside the details modal below, so it must stack above
-        // it regardless of DOM order - Mantine gives every Modal the same
-        // default z-index (200), and same-z-index elements paint in DOM
-        // order, which would otherwise put the later (details) modal on top.
-        zIndex={1000}
-      >
-        {editFlight && (
-          <Suspense fallback={<Loader size="sm" />}>
-            <FlightEntryForm
-              flight={editFlight}
-              onSaved={() => setEditOpen(false)}
-            />
-          </Suspense>
-        )}
-      </Modal>
-
-      <Modal
+      <FlightDetailsSheet
+        flights={filteredFlights}
+        flightId={detailsFlightId}
         opened={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-        title={
-          detailsFlight
-            ? t("list.cities", {
-                from:
-                  getAirportCity(detailsFlight.departure_airport_iata) ??
-                  detailsFlight.departure_airport_iata,
-                to:
-                  getAirportCity(detailsFlight.arrival_airport_iata) ??
-                  detailsFlight.arrival_airport_iata,
-              })
-            : ""
-        }
-        size="lg"
-        zIndex={600}
-        // A sheet from the bottom on phones, a centred modal on wider screens.
-        {...(isPhone && { transitionProps: { transition: "slide-up" } })}
-        closeButtonProps={{ size: "lg" }}
-        classNames={{
-          inner: classes.sheetInner,
-          content: classes.sheet,
-          header: classes.sheetHeader,
-          title: classes.sheetTitle,
-        }}
-      >
-        {detailsFlight && (
-          <Suspense fallback={<Loader size="sm" />}>
-            <FlightDetailsModal
-              flight={detailsFlight}
-              onEdit={(f) => {
-                setEditFlight(f);
-                setEditOpen(true);
-              }}
-            />
-          </Suspense>
-        )}
-      </Modal>
+        onClose={closeDetails}
+      />
     </Stack>
   );
 };
