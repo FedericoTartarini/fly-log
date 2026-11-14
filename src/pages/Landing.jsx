@@ -1,11 +1,4 @@
-import React, {
-  lazy,
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   animate,
   motion as Motion,
@@ -66,13 +59,13 @@ const easeOut = (x) => 1 - Math.pow(1 - x, 3);
 // globe that draws a trip as you scroll, a year chart, the AI entry, the
 // feature list and a closing call to action.
 function Landing() {
-  const { t, ready } = useTranslation(["landing", "common"]);
-  // index.html shows a static copy of the hero until this page can draw
-  // itself with its translations, then the copy goes and the app shows.
-  useLayoutEffect(() => {
-    if (ready) document.getElementById("shell")?.remove();
-  }, [ready]);
-  const still = Boolean(useReducedMotion());
+  const { t } = useTranslation(["landing", "common"]);
+  // The build renders this page without knowing the visitor's motion
+  // setting, so the first render here assumes motion too, to match it.
+  const prefersStill = useReducedMotion();
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const still = hydrated && Boolean(prefersStill);
 
   const intro = easeOut(useProgress(true, 1.4, still));
 

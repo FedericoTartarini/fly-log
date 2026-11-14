@@ -1,4 +1,4 @@
-import React, { createElement, lazy, Suspense, useEffect } from "react";
+import React, { createElement, lazy, Suspense } from "react";
 import {
   ActionIcon,
   Affix,
@@ -55,12 +55,6 @@ const FILTER_PAGES = [PATHS.STATS, PATHS.ALL_STATS, PATHS.FLIGHTS, PATHS.TOUR];
 function MyAppShell() {
   const { user, loading } = useAuth();
   const location = useLocation();
-  // The static shell in index.html stands in for "/" only. Drop it if the app
-  // lands anywhere else, such as a signed-in visitor redirected to /stats.
-  useEffect(() => {
-    if (location.pathname !== PATHS.HOME)
-      document.getElementById("shell")?.remove();
-  }, [location.pathname]);
   const { t } = useTranslation("common");
   const addFlightOpened = useFlightStore((s) => s.addFlightOpened);
   const addFlightTab = useFlightStore((s) => s.addFlightTab);
