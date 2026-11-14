@@ -9,6 +9,15 @@ const SIGNED_IN_HINT_KEY = "fly-log:signed-in";
 
 export const useAuth = () => useContext(AuthContext);
 
+// False on the server and when storage is blocked.
+export const hasSignedInHint = () => {
+  try {
+    return localStorage.getItem(SIGNED_IN_HINT_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

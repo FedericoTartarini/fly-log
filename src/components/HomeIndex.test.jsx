@@ -6,8 +6,10 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import HomeIndex from "./HomeIndex.jsx";
 
 const mockAuth = vi.fn();
+const mockHint = vi.fn();
 vi.mock("../context/AuthContext", () => ({
   useAuth: () => mockAuth(),
+  hasSignedInHint: () => mockHint(),
 }));
 
 // Landing pulls in framer-motion and a lazy globe; none of that is what this
@@ -26,7 +28,10 @@ const renderAt = () =>
     </MemoryRouter>,
   );
 
-beforeEach(() => mockAuth.mockReset());
+beforeEach(() => {
+  mockAuth.mockReset();
+  mockHint.mockReset();
+});
 
 test("shows the landing page to logged-out visitors instead of redirecting", async () => {
   mockAuth.mockReturnValue({ user: null, loading: false });
@@ -42,12 +47,22 @@ test("sends signed-in users on to their stats", async () => {
   expect(await screen.findByText("stats page")).toBeInTheDocument();
 });
 
-test("waits for auth rather than flashing the landing page", async () => {
+test("shows the landing page while auth loads, as the build rendered it", async () => {
   mockAuth.mockReturnValue({ user: null, loading: true });
   renderAt();
 
+  expect(await screen.findByText("landing page")).toBeInTheDocument();
+});
+
+test("shows a skeleton while auth loads if this browser was signed in", async () => {
+  mockAuth.mockReturnValue({ user: null, loading: true });
+  mockHint.mockReturnValue(true);
+  renderAt();
+
   await waitFor(() => {
-    expect(document.querySelector(".mantine-Skeleton-root")).toBeInTheDocument();
+    expect(
+      document.querySelector(".mantine-Skeleton-root"),
+    ).toBeInTheDocument();
   });
   expect(screen.queryByText("landing page")).not.toBeInTheDocument();
 });

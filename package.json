@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "dev:netlify": "npx netlify-cli dev --functions netlify/functions",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "vitest": "vitest run",
