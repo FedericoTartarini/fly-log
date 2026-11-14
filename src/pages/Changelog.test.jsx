@@ -23,4 +23,9 @@ describe("Changelog", () => {
     expect(screen.getByText("8 November 2026")).toBeInTheDocument();
     expect(screen.getByText(entries[0].items[0])).toBeInTheDocument();
   });
+
+  it("names the page in the browser tab", () => {
+    render(<Changelog />);
+    expect(document.title).toBe("What's new – FlyLog");
+  });
 });
