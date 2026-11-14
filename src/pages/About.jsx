@@ -36,6 +36,8 @@ function About() {
   const { t } = useTranslation("about");
   return (
     <Paper shadow="md" p="xl" radius="md">
+      {/* React 19 hoists this into <head>, ahead of the one in index.html. */}
+      <title>{`${t("title")} – FlyLog`}</title>
       <Stack spacing="xl">
         <div>
           <Title order={1} ta="center" mb="lg">
@@ -150,6 +152,8 @@ function About() {
                   aria-label="Buy Me a Coffee (opens in a new tab)"
                   color="orange"
                   variant="filled"
+                  // White on orange is 2.6:1; autoContrast picks dark text.
+                  autoContrast
                   leftSection={<IconCoffee size={14} />}
                 >
                   Buy Me a Coffee
@@ -212,7 +216,7 @@ function About() {
             <a
               href={APP_INFO.GITHUB_REPO}
               target="_blank"
-              aria-label="Fork the repository on GitHub (opens in a new tab)"
+              aria-label={`${t("contribute_link_fork")} (opens in a new tab)`}
               rel="noopener noreferrer"
             >
               {t("contribute_link_fork")}
@@ -228,7 +232,7 @@ function About() {
             <a
               href={`${APP_INFO.GITHUB_REPO}/issues`}
               target="_blank"
-              aria-label="Report issues on GitHub (opens in a new tab)"
+              aria-label={`${t("contribute_link_issues")} (opens in a new tab)`}
               rel="noopener noreferrer"
             >
               {t("contribute_link_issues")}

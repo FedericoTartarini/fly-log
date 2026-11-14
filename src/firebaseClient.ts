@@ -7,7 +7,11 @@ import {
 } from "firebase/app-check";
 import type { AppCheck } from "firebase/app-check";
 import {
-  getAuth,
+  initializeAuth,
+  indexedDBLocalPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  browserPopupRedirectResolver,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -68,8 +72,16 @@ let firestore: Firestore | null = null;
 if (firebaseConfig.apiKey) {
   app = initializeApp(firebaseConfig);
 
-  // Lazily import auth and firestore SDKs
-  auth = getAuth(app);
+  // getAuth() would also set up the popup resolver, which loads Google's
+  // ~130 kB auth iframe on every page load. Only the Google sign-in needs it,
+  // so it is passed there instead. The persistence list is getAuth()'s default.
+  auth = initializeAuth(app, {
+    persistence: [
+      indexedDBLocalPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+    ],
+  });
   try {
     firestore = initializeFirestore(app, {
       localCache: persistentLocalCache(),
@@ -164,7 +176,11 @@ const getFirebaseErrorInfo = (err: unknown) => {
 export const signInWithGoogle = async () => {
   if (!auth) throw new Error("Firebase not initialized");
   try {
-    return await signInWithPopup(auth, googleProvider);
+    return await signInWithPopup(
+      auth,
+      googleProvider,
+      browserPopupRedirectResolver,
+    );
   } catch (err: unknown) {
     console.error("signInWithGoogle error:", err);
     const { code, message } = getFirebaseErrorInfo(err);

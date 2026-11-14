@@ -3,7 +3,9 @@
 describe("Page loads", () => {
   it("loads the landing page", () => {
     cy.visit("/");
-    cy.contains("Welcome to Your Personal Flight Tracker").should("be.visible");
+    cy.contains("h1", "Every flight you take, logged and mapped.").should(
+      "be.visible",
+    );
   });
 
   it("loads the login page", () => {

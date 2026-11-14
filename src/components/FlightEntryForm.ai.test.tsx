@@ -20,16 +20,15 @@ import userEvent from "@testing-library/user-event";
 vi.mock("../utils/referenceData", () => ({
   loadAirportsInfo: vi.fn().mockResolvedValue([]),
   loadAirlinesInfo: vi.fn().mockResolvedValue([]),
+  getReferenceMapsSync: () => ({ airportByIata: new Map() }),
 }));
 
 vi.mock("../firebaseClient", () => ({
-  addFlightsForUser: vi
-    .fn()
-    .mockResolvedValue({
-      successCount: 3,
-      errorCount: 0,
-      ids: ["a", "b", "c"],
-    }),
+  addFlightsForUser: vi.fn().mockResolvedValue({
+    successCount: 3,
+    errorCount: 0,
+    ids: ["a", "b", "c"],
+  }),
   auth: null,
 }));
 
@@ -104,8 +103,12 @@ const multiLegParsed = [
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
-/** Build a case-insensitive RegExp from a tab constant value for use in role queries. */
-const tabName = (tab: string) => new RegExp(tab, "i");
+/** Accessible names of the tabs, keyed by their FLIGHT_ENTRY_TABS value. */
+const TAB_NAMES = {
+  [FLIGHT_ENTRY_TABS.AI]: /^describe$/i,
+  [FLIGHT_ENTRY_TABS.MANUAL]: /^form$/i,
+  [FLIGHT_ENTRY_TABS.CSV]: /^csv file$/i,
+};
 
 describe("FlightEntryForm – AI tab integration", () => {
   beforeEach(() => {
@@ -156,97 +159,90 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── Tab visibility ───────────────────────────────────────────────────────
 
-  it("renders all three tabs: Manual Entry, AI Chat, and CSV Upload", async () => {
+  it("renders all three tabs: Describe, Form and CSV file", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    expect(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) }),
-    ).not.toBeNull();
-    expect(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    ).not.toBeNull();
-    expect(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.CSV) }),
-    ).not.toBeNull();
+    expect(screen.getByRole("tab", { name: TAB_NAMES.manual })).not.toBeNull();
+    expect(screen.getByRole("tab", { name: TAB_NAMES.ai })).not.toBeNull();
+    expect(screen.getByRole("tab", { name: TAB_NAMES.csv })).not.toBeNull();
   });
 
-  it("shows the AI Chat panel by default for a new flight", async () => {
+  it("shows the Describe panel by default for a new flight", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
     expect(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     ).not.toBeNull();
     // Inactive tab panels stay mounted (hidden), so check the selected tab
     // rather than whether the manual fields exist.
-    expect(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    ).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: TAB_NAMES.ai })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
-  it("switching to AI Chat tab shows the FlightChatInput textarea", async () => {
+  it("switching to the Describe tab shows the FlightChatInput textarea", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    await userEvent.click(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    );
+    await userEvent.click(screen.getByRole("tab", { name: TAB_NAMES.ai }));
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /parse with ai/i }),
+        screen.getByRole("button", { name: /fill in the flights/i }),
       ).not.toBeNull();
     });
   });
 
   // ── AI parse → form pre-fill ─────────────────────────────────────────────
 
-  it("pre-fills the form and switches to Manual Entry after confirming", async () => {
+  it("pre-fills the form and switches to Form after confirming", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    await userEvent.click(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
+    await userEvent.click(screen.getByRole("tab", { name: TAB_NAMES.ai }));
+    await waitFor(() =>
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
-    await waitFor(() => screen.getByRole("button", { name: /parse with ai/i }));
 
     await userEvent.type(getAiTextarea(), "SYD to SIN on 10 July with Qantas");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
 
     await waitFor(() =>
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
 
     await waitFor(() => {
       expect(
         screen
-          .getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) })
+          .getByRole("tab", { name: TAB_NAMES.manual })
           .getAttribute("aria-selected"),
       ).toBe("true");
     });
     // Verify that parsed AI values populated the manual form inputs
     const departureAirport = screen.getAllByLabelText(
-      /^departure airport/i,
+      /^from$/i,
     )[0] as HTMLInputElement;
     const arrivalAirport = screen.getAllByLabelText(
-      /^arrival airport/i,
+      /^to$/i,
     )[0] as HTMLInputElement;
     const airline = screen.getAllByLabelText(
       /^airline/i,
     )[0] as HTMLInputElement;
     const departureTime = screen.getByLabelText(
-      /departure time/i,
+      /^departs$/i,
     ) as HTMLInputElement;
 
     expect(departureAirport.disabled).toBe(false);
@@ -260,33 +256,33 @@ describe("FlightEntryForm – AI tab integration", () => {
 
   // ── onConfirm switches tab ────────────────────────────────────────────────
 
-  it("'Review and save' makes the Manual Entry tab active", async () => {
+  it("'Review N flights' makes the Form tab active", async () => {
     mockParseFlightFromText.mockResolvedValue(fullParsed);
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    await userEvent.click(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
+    await userEvent.click(screen.getByRole("tab", { name: TAB_NAMES.ai }));
+    await waitFor(() =>
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
-    await waitFor(() => screen.getByRole("button", { name: /parse with ai/i }));
 
     await userEvent.type(getAiTextarea(), "any text");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
 
     await waitFor(() => {
       expect(
         screen
-          .getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.MANUAL) })
+          .getByRole("tab", { name: TAB_NAMES.manual })
           .getAttribute("aria-selected"),
       ).toBe("true");
     });
@@ -297,19 +293,19 @@ describe("FlightEntryForm – AI tab integration", () => {
   /** Parse with the mocked AI and go back to the manual tab. */
   const parseAndConfirm = async (parsed: unknown) => {
     mockParseFlightFromText.mockResolvedValue(parsed);
-    await userEvent.click(
-      screen.getByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
+    await userEvent.click(screen.getByRole("tab", { name: TAB_NAMES.ai }));
+    await waitFor(() =>
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
-    await waitFor(() => screen.getByRole("button", { name: /parse with ai/i }));
     await userEvent.type(getAiTextarea(), "multi-city trip");
     await userEvent.click(
-      screen.getByRole("button", { name: /parse with ai/i }),
+      screen.getByRole("button", { name: /fill in the flights/i }),
     );
     await waitFor(() =>
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: /review and save/i }),
+      screen.getByRole("button", { name: /review \d+ flights?/i }),
     );
   };
 
@@ -330,11 +326,11 @@ describe("FlightEntryForm – AI tab integration", () => {
     await waitFor(() => {
       expect(screen.getByRole("heading", { name: /flight 3/i })).not.toBeNull();
     });
-    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN", "LHR"]);
-    expect(selectCodes(/^arrival airport/i)).toEqual(["SIN", "LHR", "SYD"]);
+    expect(selectCodes(/^from$/i)).toEqual(["SYD", "SIN", "LHR"]);
+    expect(selectCodes(/^to$/i)).toEqual(["SIN", "LHR", "SYD"]);
 
     await userEvent.click(
-      screen.getByRole("button", { name: /save flights/i }),
+      screen.getByRole("button", { name: /save 3 flights/i }),
     );
 
     // All legs go in one batch write, one document per leg.
@@ -367,64 +363,48 @@ describe("FlightEntryForm – AI tab integration", () => {
     });
   });
 
-  it("'Add another flight' starts the new leg where the last one landed", async () => {
+  it("'Connecting flight' starts the new leg where the last one landed", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
     await parseAndConfirm(fullParsed);
 
     await userEvent.click(
-      screen.getByRole("button", { name: /add another flight/i }),
+      screen.getByRole("button", { name: /connecting flight/i }),
     );
 
-    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN"]);
-    expect(selectCodes(/^arrival airport/i)).toEqual(["SIN", ""]);
+    expect(selectCodes(/^from$/i)).toEqual(["SYD", "SIN"]);
+    expect(selectCodes(/^to$/i)).toEqual(["SIN", ""]);
     expect(selectCodes(/^airline/i)).toEqual(["QF", "QF"]);
   });
 
-  it("'Add return trip' appends the legs reversed, then hides itself", async () => {
+  it("'Return flight' appends the legs reversed, then hides itself", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
     await parseAndConfirm(multiLegParsed.slice(0, 2)); // SYD → SIN → LHR
 
     await userEvent.click(
-      screen.getByRole("button", { name: /add return trip/i }),
+      screen.getByRole("button", { name: /return flight/i }),
     );
 
-    expect(selectCodes(/^departure airport/i)).toEqual([
-      "SYD",
-      "SIN",
-      "LHR",
-      "SIN",
-    ]);
-    expect(selectCodes(/^arrival airport/i)).toEqual([
-      "SIN",
-      "LHR",
-      "SIN",
-      "SYD",
-    ]);
-    expect(
-      screen.queryByRole("button", { name: /add return trip/i }),
-    ).toBeNull();
+    expect(selectCodes(/^from$/i)).toEqual(["SYD", "SIN", "LHR", "SIN"]);
+    expect(selectCodes(/^to$/i)).toEqual(["SIN", "LHR", "SIN", "SYD"]);
+    expect(screen.queryByRole("button", { name: /return flight/i })).toBeNull();
 
     // Adding a further flight after the return must not bring the button back.
     await userEvent.click(
-      screen.getByRole("button", { name: /add another flight/i }),
+      screen.getByRole("button", { name: /connecting flight/i }),
     );
-    expect(
-      screen.queryByRole("button", { name: /add return trip/i }),
-    ).toBeNull();
+    expect(screen.queryByRole("button", { name: /return flight/i })).toBeNull();
   });
 
-  it("'Add return trip' is hidden until a leg has both airports", async () => {
+  it("'Return flight' is hidden until a leg has both airports", async () => {
     await act(async () => {
       render(<FlightEntryForm />);
     });
 
-    expect(
-      screen.queryByRole("button", { name: /add return trip/i }),
-    ).toBeNull();
+    expect(screen.queryByRole("button", { name: /return flight/i })).toBeNull();
   });
 
   it("keeps the form and shows an error when the batch save fails", async () => {
@@ -439,7 +419,7 @@ describe("FlightEntryForm – AI tab integration", () => {
     await parseAndConfirm(multiLegParsed);
 
     await userEvent.click(
-      screen.getByRole("button", { name: /save flights/i }),
+      screen.getByRole("button", { name: /save 3 flights/i }),
     );
 
     await waitFor(() => {
@@ -447,7 +427,7 @@ describe("FlightEntryForm – AI tab integration", () => {
         /3 flight\(s\) could not be saved/,
       );
     });
-    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "SIN", "LHR"]);
+    expect(selectCodes(/^from$/i)).toEqual(["SYD", "SIN", "LHR"]);
   });
 
   it("removing a leg drops it from the form", async () => {
@@ -460,7 +440,7 @@ describe("FlightEntryForm – AI tab integration", () => {
       screen.getByRole("button", { name: /remove flight 2/i }),
     );
 
-    expect(selectCodes(/^departure airport/i)).toEqual(["SYD", "LHR"]);
+    expect(selectCodes(/^from$/i)).toEqual(["SYD", "LHR"]);
   });
 
   // ── Edit mode hides tabs ──────────────────────────────────────────────────
@@ -479,12 +459,8 @@ describe("FlightEntryForm – AI tab integration", () => {
       render(<FlightEntryForm flight={existingFlight} />);
     });
 
-    expect(
-      screen.queryByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.AI) }),
-    ).toBeNull();
-    expect(
-      screen.queryByRole("tab", { name: tabName(FLIGHT_ENTRY_TABS.CSV) }),
-    ).toBeNull();
-    expect(screen.getByLabelText(/departure date/i)).not.toBeNull();
+    expect(screen.queryByRole("tab", { name: TAB_NAMES.ai })).toBeNull();
+    expect(screen.queryByRole("tab", { name: TAB_NAMES.csv })).toBeNull();
+    expect(screen.getByLabelText(/^date$/i)).not.toBeNull();
   });
 });
