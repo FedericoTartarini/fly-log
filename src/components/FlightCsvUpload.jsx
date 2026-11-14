@@ -10,7 +10,14 @@ import Papa from "papaparse";
 import { useTranslation } from "react-i18next";
 import { validateAndNormalizeCsvRows } from "../utils/iataValidation";
 import { CABIN_CLASSES } from "../utils/emissions";
+import { findAircraftName } from "../utils/aircraft";
 import classes from "./FlightEntryForm.module.css";
+
+// A listed aircraft is saved under its listed spelling. Any other name is kept
+// as written, like an unlisted name a status check saves, rather than failing
+// a whole import that came from an app with its own naming.
+export const csvAircraftName = (name) =>
+  findAircraftName(name) ?? (name?.trim() || null);
 
 export const validateCsvData = (data) => {
   const errors = [];
@@ -162,6 +169,7 @@ const FlightCsvUpload = ({ onComplete }) => {
             arrival_date: flight.arrival_date || null,
             arrival_time: flight.arrival_time || null,
             cabin_class: flight.cabin_class?.trim() || null,
+            aircraft_type_name: csvAircraftName(flight.aircraft_type_name),
             departure_airport_iata: flight.departure_airport_iata,
             arrival_airport_iata: flight.arrival_airport_iata,
             airline_iata: flight.airline_iata,
@@ -289,7 +297,8 @@ const FlightCsvUpload = ({ onComplete }) => {
           {t("csv.columns.optional")}
         </p>
         <p className={classes.columns}>
-          departure_time, flight_number, arrival_date, arrival_time, cabin_class
+          departure_time, flight_number, arrival_date, arrival_time,
+          cabin_class, aircraft_type_name
         </p>
         <p className={`${classes.muted} ${classes.small}`}>
           {t("csv.columns.formats")}

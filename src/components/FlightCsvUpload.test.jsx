@@ -31,7 +31,10 @@ vi.mock("papaparse", () => ({
   },
 }));
 
-import FlightCsvUpload, { validateCsvData } from "./FlightCsvUpload";
+import FlightCsvUpload, {
+  csvAircraftName,
+  validateCsvData,
+} from "./FlightCsvUpload";
 import Papa from "papaparse";
 
 describe("FlightCsvUpload", () => {
@@ -149,5 +152,14 @@ describe("FlightCsvUpload", () => {
         e.includes("cabin_class"),
       ),
     ).toBe(true);
+  });
+
+  it("csvAircraftName uses the listed spelling and keeps unlisted names", () => {
+    expect(csvAircraftName("airbus a380-800")).toBe("Airbus A380-800");
+    expect(csvAircraftName("  Sukhoi Superjet 100 ")).toBe(
+      "Sukhoi Superjet 100",
+    );
+    expect(csvAircraftName("")).toBeNull();
+    expect(csvAircraftName(undefined)).toBeNull();
   });
 });

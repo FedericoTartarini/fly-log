@@ -78,7 +78,7 @@
       "title": "Columns",
       "required": "Required",
       "optional": "Optional",
-      "formats": "Dates as YYYY-MM-DD, times as HH:mm, airports and airlines as IATA codes. cabin_class is economy, premium_economy, business or first."
+      "formats": "Dates as YYYY-MM-DD, times as HH:mm, airports and airlines as IATA codes. cabin_class is economy, premium_economy, business or first. aircraft_type_name is the aircraft model, such as Airbus A380-800."
     },
     "errors": {
       "error": "Could not import the file",

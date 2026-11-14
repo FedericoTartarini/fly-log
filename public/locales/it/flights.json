@@ -124,7 +124,7 @@
       "title": "Colonne",
       "required": "Obbligatorie",
       "optional": "Facoltative",
-      "formats": "Date come AAAA-MM-GG, orari come HH:mm, aeroporti e compagnie come codici IATA. cabin_class è economy, premium_economy, business o first."
+      "formats": "Date come AAAA-MM-GG, orari come HH:mm, aeroporti e compagnie come codici IATA. cabin_class è economy, premium_economy, business o first. aircraft_type_name è il modello di aereo, ad esempio Airbus A380-800."
     },
     "errors": {
       "error": "Impossibile importare il file",
