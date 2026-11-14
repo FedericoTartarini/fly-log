@@ -10,6 +10,8 @@ function Changelog() {
 
   return (
     <Container size="sm" mt="md" pb={96}>
+      {/* React 19 hoists this into <head>, ahead of the one in index.html. */}
+      <title>{`${t("changelog.title")} – FlyLog`}</title>
       <Stack gap="xl">
         <Stack gap={4}>
           <Title order={1} fz={28}>

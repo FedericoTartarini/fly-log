@@ -36,6 +36,8 @@ function About() {
   const { t } = useTranslation("about");
   return (
     <Paper shadow="md" p="xl" radius="md">
+      {/* React 19 hoists this into <head>, ahead of the one in index.html. */}
+      <title>{`${t("title")} – FlyLog`}</title>
       <Stack spacing="xl">
         <div>
           <Title order={1} ta="center" mb="lg">
