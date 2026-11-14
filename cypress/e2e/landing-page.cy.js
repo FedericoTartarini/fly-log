@@ -2,13 +2,18 @@
 
 describe("Landing Page", () => {
   beforeEach(() => {
-    cy.visit("/");
-    // index.html seeds #root with the same landing copy so crawlers can index
-    // it, which means cy.contains matches before React mounts. Scrolling then
-    // runs against a layout that is about to be thrown away, and the features
-    // never enter the viewport for framer-motion's whileInView. Wait for
-    // #features, which only exists once Landing has hydrated.
-    cy.get("#features", { timeout: 10000 }).should("exist");
+    // An earlier spec signs in, and Firebase keeps that session in IndexedDB,
+    // which Cypress does not clear between specs. A signed-in visitor is sent
+    // on to /stats, so start signed out.
+    cy.visit("/", {
+      onBeforeLoad(win) {
+        win.indexedDB.deleteDatabase("firebaseLocalStorageDb");
+      },
+    });
+    // The build prerenders this page, so cy.contains matches before React has
+    // adopted it and framer-motion can reveal anything. The header's Login
+    // button only appears once React runs and auth reports no user.
+    cy.contains("header a", "Login", { timeout: 10000 }).should("be.visible");
   });
 
   it("shows the hero, the example log and every feature", () => {
