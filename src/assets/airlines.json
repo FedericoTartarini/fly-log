@@ -324,7 +324,7 @@
     "icon": "https://pics.avs.io/200/200/DH@2x.png"
   },
   {
-    "name": "H\u00e9li S\u00e9curit\u00e9 H\u00e9licopter Airline",
+    "name": "Héli Sécurité Hélicopter Airline",
     "icao": null,
     "iata": "HS",
     "icon": "https://pics.avs.io/200/200/HS@2x.png"
@@ -564,7 +564,7 @@
     "icon": "https://pics.avs.io/200/200/7A@2x.png"
   },
   {
-    "name": "TAR Aerol\u00edneas",
+    "name": "TAR Aerolíneas",
     "icao": null,
     "iata": "YQ",
     "icon": "https://pics.avs.io/200/200/YQ@2x.png"
@@ -714,7 +714,7 @@
     "icon": "https://pics.avs.io/200/200/2T@2x.png"
   },
   {
-    "name": "Andes L\u00edneas A\u00e9reas",
+    "name": "Andes Líneas Aéreas",
     "icao": null,
     "iata": "O4",
     "icon": "https://pics.avs.io/200/200/O4@2x.png"
@@ -752,8 +752,8 @@
   {
     "name": "Belarusian Railway",
     "icao": null,
-    "iata": "\u04163",
-    "icon": "https://pics.avs.io/200/200/\u04163@2x.png"
+    "iata": "Ж3",
+    "icon": "https://pics.avs.io/200/200/Ж3@2x.png"
   },
   {
     "name": "Westjet",
@@ -998,8 +998,8 @@
   {
     "name": "SKOL",
     "icao": null,
-    "iata": "\u0421\u0414",
-    "icon": "https://pics.avs.io/200/200/\u0421\u0414@2x.png"
+    "iata": "СД",
+    "icon": "https://pics.avs.io/200/200/СД@2x.png"
   },
   {
     "name": "FITS Air",
@@ -1310,11 +1310,11 @@
   {
     "name": "Flybusteam",
     "icao": null,
-    "iata": "\u0413\u042d",
-    "icon": "https://pics.avs.io/200/200/\u0413\u042d@2x.png"
+    "iata": "ГЭ",
+    "icon": "https://pics.avs.io/200/200/ГЭ@2x.png"
   },
   {
-    "name": "Helic\u00f3pteros del Sureste",
+    "name": "Helicópteros del Sureste",
     "icao": null,
     "iata": "UV",
     "icon": "https://pics.avs.io/200/200/UV@2x.png"
@@ -1562,8 +1562,8 @@
   {
     "name": "Lithuanian Railways",
     "icao": null,
-    "iata": "\u04167",
-    "icon": "https://pics.avs.io/200/200/\u04167@2x.png"
+    "iata": "Ж7",
+    "icon": "https://pics.avs.io/200/200/Ж7@2x.png"
   },
   {
     "name": "Vision Air",
@@ -1578,13 +1578,13 @@
     "icon": "https://pics.avs.io/200/200/M0@2x.png"
   },
   {
-    "name": "Cubana de Aviaci\u00f3n",
+    "name": "Cubana de Aviación",
     "icao": "CUB",
     "iata": "CU",
     "icon": "https://pics.avs.io/200/200/CU@2x.png"
   },
   {
-    "name": "Air C\u00f4te d'Ivoire",
+    "name": "Air Côte d'Ivoire",
     "icao": "HLF",
     "iata": "HF",
     "icon": "https://pics.avs.io/200/200/HF@2x.png"
@@ -1938,7 +1938,7 @@
     "icon": "https://pics.avs.io/200/200/FB@2x.png"
   },
   {
-    "name": "TRIP Linhas A\u00e9reas",
+    "name": "TRIP Linhas Aéreas",
     "icao": "HEJ",
     "iata": "T4",
     "icon": "https://pics.avs.io/200/200/T4@2x.png"
@@ -2030,8 +2030,8 @@
   {
     "name": "Komiaviatrans",
     "icao": null,
-    "iata": "\u0418\u0413",
-    "icon": "https://pics.avs.io/200/200/\u0418\u0413@2x.png"
+    "iata": "ИГ",
+    "icon": "https://pics.avs.io/200/200/ИГ@2x.png"
   },
   {
     "name": "Silver Air",
@@ -2048,8 +2048,8 @@
   {
     "name": "Arktika",
     "icao": null,
-    "iata": "\u0421\u0418",
-    "icon": "https://pics.avs.io/200/200/\u0421\u0418@2x.png"
+    "iata": "СИ",
+    "icon": "https://pics.avs.io/200/200/СИ@2x.png"
   },
   {
     "name": "Air Tanzania",
@@ -2142,7 +2142,7 @@
     "icon": "https://pics.avs.io/200/200/MZ@2x.png"
   },
   {
-    "name": "Aerov\u00edas DAP",
+    "name": "Aerovías DAP",
     "icao": null,
     "iata": "V5",
     "icon": "https://pics.avs.io/200/200/V5@2x.png"
@@ -2378,8 +2378,8 @@
   {
     "name": "Transdir",
     "icao": null,
-    "iata": "\u042d2",
-    "icon": "https://pics.avs.io/200/200/\u042d2@2x.png"
+    "iata": "Э2",
+    "icon": "https://pics.avs.io/200/200/Э2@2x.png"
   },
   {
     "name": "Cyprus Airways",
@@ -2486,8 +2486,8 @@
   {
     "name": "Georgian Railway",
     "icao": null,
-    "iata": "\u04164",
-    "icon": "https://pics.avs.io/200/200/\u04164@2x.png"
+    "iata": "Ж4",
+    "icon": "https://pics.avs.io/200/200/Ж4@2x.png"
   },
   {
     "name": "Air Canada",
@@ -2616,7 +2616,7 @@
     "icon": "https://pics.avs.io/200/200/GW@2x.png"
   },
   {
-    "name": "Boliviana de Aviaci\u00f3n",
+    "name": "Boliviana de Aviación",
     "icao": "ASZ",
     "iata": "OB",
     "icon": "https://pics.avs.io/200/200/OB@2x.png"
@@ -2948,8 +2948,8 @@
   {
     "name": "Kyrgyz Railways",
     "icao": null,
-    "iata": "\u0416\u0414",
-    "icon": "https://pics.avs.io/200/200/\u0416\u0414@2x.png"
+    "iata": "ЖД",
+    "icon": "https://pics.avs.io/200/200/ЖД@2x.png"
   },
   {
     "name": "BBN Airlines",
@@ -2972,8 +2972,8 @@
   {
     "name": "Arkhangelsk-2",
     "icao": null,
-    "iata": "\u0410\u0427",
-    "icon": "https://pics.avs.io/200/200/\u0410\u0427@2x.png"
+    "iata": "АЧ",
+    "icon": "https://pics.avs.io/200/200/АЧ@2x.png"
   },
   {
     "name": "Flyadeal",
@@ -3056,8 +3056,8 @@
   {
     "name": "Russian Railways",
     "icao": null,
-    "iata": "\u0420\u0416",
-    "icon": "https://pics.avs.io/200/200/\u0420\u0416@2x.png"
+    "iata": "РЖ",
+    "icon": "https://pics.avs.io/200/200/РЖ@2x.png"
   },
   {
     "name": "Regional Sky",
@@ -3068,8 +3068,8 @@
   {
     "name": "Turkmen Railway",
     "icao": null,
-    "iata": "\u04160",
-    "icon": "https://pics.avs.io/200/200/\u04160@2x.png"
+    "iata": "Ж0",
+    "icon": "https://pics.avs.io/200/200/Ж0@2x.png"
   },
   {
     "name": "FlyKhiva",
@@ -3218,8 +3218,8 @@
   {
     "name": "Tajik Railway",
     "icao": null,
-    "iata": "\u04169",
-    "icon": "https://pics.avs.io/200/200/\u04169@2x.png"
+    "iata": "Ж9",
+    "icon": "https://pics.avs.io/200/200/Ж9@2x.png"
   },
   {
     "name": "Iraqi Airways",
@@ -3264,7 +3264,7 @@
     "icon": "https://pics.avs.io/200/200/G9@2x.png"
   },
   {
-    "name": "Globus LL\u0421",
+    "name": "Globus LLС",
     "icao": "AXL",
     "iata": "XT",
     "icon": "https://pics.avs.io/200/200/XT@2x.png"
@@ -3278,8 +3278,8 @@
   {
     "name": "Armenia Airways",
     "icao": null,
-    "iata": "\u0415\u041f",
-    "icon": "https://pics.avs.io/200/200/\u0415\u041f@2x.png"
+    "iata": "ЕП",
+    "icon": "https://pics.avs.io/200/200/ЕП@2x.png"
   },
   {
     "name": "Air New Zealand",
@@ -3516,7 +3516,7 @@
     "icon": "https://pics.avs.io/200/200/3R@2x.png"
   },
   {
-    "name": "TAB - Transportes A\u00e9reos Bolivianos",
+    "name": "TAB - Transportes Aéreos Bolivianos",
     "icao": "BA1",
     "iata": "B1",
     "icon": "https://pics.avs.io/200/200/B1@2x.png"
@@ -3662,8 +3662,8 @@
   {
     "name": "Moldovan Railway",
     "icao": null,
-    "iata": "\u04168",
-    "icon": "https://pics.avs.io/200/200/\u04168@2x.png"
+    "iata": "Ж8",
+    "icon": "https://pics.avs.io/200/200/Ж8@2x.png"
   },
   {
     "name": "Airkenya Express",
@@ -3704,8 +3704,8 @@
   {
     "name": "UTair",
     "icao": null,
-    "iata": "\u042e\u042d",
-    "icon": "https://pics.avs.io/200/200/\u042e\u042d@2x.png"
+    "iata": "ЮЭ",
+    "icon": "https://pics.avs.io/200/200/ЮЭ@2x.png"
   },
   {
     "name": "Republic Airlines",
@@ -3788,8 +3788,8 @@
   {
     "name": "Estonian Railways",
     "icao": null,
-    "iata": "\u0416\u0412",
-    "icon": "https://pics.avs.io/200/200/\u0416\u0412@2x.png"
+    "iata": "ЖВ",
+    "icon": "https://pics.avs.io/200/200/ЖВ@2x.png"
   },
   {
     "name": "Yakutia Airlines",
@@ -3834,7 +3834,7 @@
     "icon": "https://pics.avs.io/200/200/QY@2x.png"
   },
   {
-    "name": "Regional Jet O\u00dc",
+    "name": "Regional Jet OÜ",
     "icao": null,
     "iata": "EE",
     "icon": "https://pics.avs.io/200/200/EE@2x.png"
@@ -3950,8 +3950,8 @@
   {
     "name": "SiLA",
     "icao": null,
-    "iata": "\u0421\u041b",
-    "icon": "https://pics.avs.io/200/200/\u0421\u041b@2x.png"
+    "iata": "СЛ",
+    "icon": "https://pics.avs.io/200/200/СЛ@2x.png"
   },
   {
     "name": "Ernest Airline",
@@ -4080,7 +4080,7 @@
     "icon": "https://pics.avs.io/200/200/VY@2x.png"
   },
   {
-    "name": "Aserca\u00a0Airlines",
+    "name": "Aserca Airlines",
     "icao": "OCA",
     "iata": "R7",
     "icon": "https://pics.avs.io/200/200/R7@2x.png"
@@ -4430,8 +4430,8 @@
   {
     "name": "Naryan-Mar Airlines",
     "icao": null,
-    "iata": "\u041d\u042f",
-    "icon": "https://pics.avs.io/200/200/\u041d\u042f@2x.png"
+    "iata": "НЯ",
+    "icon": "https://pics.avs.io/200/200/НЯ@2x.png"
   },
   {
     "name": "Equaflight Service",
@@ -4448,8 +4448,8 @@
   {
     "name": "Taiga",
     "icao": null,
-    "iata": "\u0422\u0413",
-    "icon": "https://pics.avs.io/200/200/\u0422\u0413@2x.png"
+    "iata": "ТГ",
+    "icon": "https://pics.avs.io/200/200/ТГ@2x.png"
   },
   {
     "name": "Sky Express",
@@ -4652,8 +4652,8 @@
   {
     "name": "Moldavian Airlines",
     "icao": null,
-    "iata": "2\u041c",
-    "icon": "https://pics.avs.io/200/200/2\u041c@2x.png"
+    "iata": "2М",
+    "icon": "https://pics.avs.io/200/200/2М@2x.png"
   },
   {
     "name": "Transair Senegal",
@@ -4832,8 +4832,8 @@
   {
     "name": "Kosmos",
     "icao": null,
-    "iata": "\u0413\u041a",
-    "icon": "https://pics.avs.io/200/200/\u0413\u041a@2x.png"
+    "iata": "ГК",
+    "icon": "https://pics.avs.io/200/200/ГК@2x.png"
   },
   {
     "name": "Finistair",
@@ -4928,8 +4928,8 @@
   {
     "name": "Kostroma Air",
     "icao": null,
-    "iata": "\u041a\u0411",
-    "icon": "https://pics.avs.io/200/200/\u041a\u0411@2x.png"
+    "iata": "КБ",
+    "icon": "https://pics.avs.io/200/200/КБ@2x.png"
   },
   {
     "name": "AirAsia",
@@ -4952,8 +4952,8 @@
   {
     "name": "Armenian Railway",
     "icao": null,
-    "iata": "\u04162",
-    "icon": "https://pics.avs.io/200/200/\u04162@2x.png"
+    "iata": "Ж2",
+    "icon": "https://pics.avs.io/200/200/Ж2@2x.png"
   },
   {
     "name": "Panama Airways",
@@ -4964,8 +4964,8 @@
   {
     "name": "Ukrainian Railways",
     "icao": null,
-    "iata": "\u0416\u0411",
-    "icon": "https://pics.avs.io/200/200/\u0416\u0411@2x.png"
+    "iata": "ЖБ",
+    "icon": "https://pics.avs.io/200/200/ЖБ@2x.png"
   },
   {
     "name": "Caribbean Airlines",
@@ -5120,8 +5120,8 @@
   {
     "name": "Vologda Air",
     "icao": null,
-    "iata": "\u0412\u0413",
-    "icon": "https://pics.avs.io/200/200/\u0412\u0413@2x.png"
+    "iata": "ВГ",
+    "icon": "https://pics.avs.io/200/200/ВГ@2x.png"
   },
   {
     "name": "Jatayu Airlines",
@@ -5148,7 +5148,7 @@
     "icon": "https://pics.avs.io/200/200/8T@2x.png"
   },
   {
-    "name": "Portug\u00e1lia",
+    "name": "Portugália",
     "icao": "PGA",
     "iata": "NI",
     "icon": "https://pics.avs.io/200/200/NI@2x.png"
@@ -5180,8 +5180,8 @@
   {
     "name": "Comair",
     "icao": null,
-    "iata": "\u041c\u041d",
-    "icon": "https://pics.avs.io/200/200/\u041c\u041d@2x.png"
+    "iata": "МН",
+    "icon": "https://pics.avs.io/200/200/МН@2x.png"
   },
   {
     "name": "GP Aviation",
@@ -5352,7 +5352,7 @@
     "icon": "https://pics.avs.io/200/200/JN@2x.png"
   },
   {
-    "name": "Gol Transportes A\u00e9reos",
+    "name": "Gol Transportes Aéreos",
     "icao": "SEH",
     "iata": "G3",
     "icon": "https://pics.avs.io/200/200/G3@2x.png"
@@ -5504,8 +5504,8 @@
   {
     "name": "Avia Traffic Company",
     "icao": null,
-    "iata": "\u0422\u0424",
-    "icon": "https://pics.avs.io/200/200/\u0422\u0424@2x.png"
+    "iata": "ТФ",
+    "icon": "https://pics.avs.io/200/200/ТФ@2x.png"
   },
   {
     "name": "Flightlink",
@@ -5594,14 +5594,14 @@
   {
     "name": "Aeroservis",
     "icao": null,
-    "iata": "\u0410\u042f",
-    "icon": "https://pics.avs.io/200/200/\u0410\u042f@2x.png"
+    "iata": "АЯ",
+    "icon": "https://pics.avs.io/200/200/АЯ@2x.png"
   },
   {
     "name": "Balkan",
     "icao": null,
-    "iata": "\u0411\u0410",
-    "icon": "https://pics.avs.io/200/200/\u0411\u0410@2x.png"
+    "iata": "БА",
+    "icon": "https://pics.avs.io/200/200/БА@2x.png"
   },
   {
     "name": "One Jet, Inc.",
@@ -5652,7 +5652,7 @@
     "icon": "https://pics.avs.io/200/200/3Z@2x.png"
   },
   {
-    "name": "Aerol\u00edneas Sosa",
+    "name": "Aerolíneas Sosa",
     "icao": null,
     "iata": "P4",
     "icon": "https://pics.avs.io/200/200/P4@2x.png"
@@ -5894,14 +5894,14 @@
   {
     "name": "Uzbek railway",
     "icao": null,
-    "iata": "\u0416\u0410",
-    "icon": "https://pics.avs.io/200/200/\u0416\u0410@2x.png"
+    "iata": "ЖА",
+    "icon": "https://pics.avs.io/200/200/ЖА@2x.png"
   },
   {
     "name": "Latvian Railways",
     "icao": null,
-    "iata": "\u04166",
-    "icon": "https://pics.avs.io/200/200/\u04166@2x.png"
+    "iata": "Ж6",
+    "icon": "https://pics.avs.io/200/200/Ж6@2x.png"
   },
   {
     "name": "Western Air",
@@ -5918,8 +5918,8 @@
   {
     "name": "Kazakh Railway",
     "icao": null,
-    "iata": "\u04165",
-    "icon": "https://pics.avs.io/200/200/\u04165@2x.png"
+    "iata": "Ж5",
+    "icon": "https://pics.avs.io/200/200/Ж5@2x.png"
   },
   {
     "name": "Aviateca",
@@ -6146,8 +6146,8 @@
   {
     "name": "Azerbaijan Railways",
     "icao": null,
-    "iata": "\u04161",
-    "icon": "https://pics.avs.io/200/200/\u04161@2x.png"
+    "iata": "Ж1",
+    "icon": "https://pics.avs.io/200/200/Ж1@2x.png"
   },
   {
     "name": "Qanot Sharq",
@@ -6218,8 +6218,8 @@
   {
     "name": "Kamchatka Air",
     "icao": null,
-    "iata": "\u0414\u0415",
-    "icon": "https://pics.avs.io/200/200/\u0414\u0415@2x.png"
+    "iata": "ДЕ",
+    "icon": "https://pics.avs.io/200/200/ДЕ@2x.png"
   },
   {
     "name": "JSC Aircompany ATMA",
@@ -6296,8 +6296,8 @@
   {
     "name": "Khabavia",
     "icao": null,
-    "iata": "\u041d\u0418",
-    "icon": "https://pics.avs.io/200/200/\u041d\u0418@2x.png"
+    "iata": "НИ",
+    "icon": "https://pics.avs.io/200/200/НИ@2x.png"
   },
   {
     "name": "Air Libya",
@@ -6468,7 +6468,7 @@
     "icon": "https://pics.avs.io/200/200/2A@2x.png"
   },
   {
-    "name": "Transaero\u00a0Airlines",
+    "name": "Transaero Airlines",
     "icao": "TSO",
     "iata": "UN",
     "icon": "https://pics.avs.io/200/200/UN@2x.png"
@@ -6620,8 +6620,8 @@
   {
     "name": "Sochitransaero",
     "icao": null,
-    "iata": "\u041f\u042d",
-    "icon": "https://pics.avs.io/200/200/\u041f\u042d@2x.png"
+    "iata": "ПЭ",
+    "icon": "https://pics.avs.io/200/200/ПЭ@2x.png"
   },
   {
     "name": "Major Airline",
