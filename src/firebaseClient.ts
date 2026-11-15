@@ -12,6 +12,7 @@ import {
   browserLocalPersistence,
   browserSessionPersistence,
   browserPopupRedirectResolver,
+  connectAuthEmulator,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -22,6 +23,7 @@ import {
 import type { Auth, User } from "firebase/auth";
 import {
   initializeFirestore,
+  connectFirestoreEmulator,
   persistentLocalCache,
   collection,
   addDoc,
@@ -89,6 +91,15 @@ if (firebaseConfig.apiKey) {
   } catch (error) {
     // Persistence can fail if multiple tabs open or unsupported environment; ignore.
     console.warn("Could not enable Firestore persistence:", error);
+  }
+
+  // Only the Cypress build sets this, so the e2e suite runs against local
+  // emulators (see firebase.json) and needs no real account or secrets.
+  if (getEnv("VITE_USE_FIREBASE_EMULATOR") === "true") {
+    connectAuthEmulator(auth, "http://127.0.0.1:9099", {
+      disableWarnings: true,
+    });
+    if (firestore) connectFirestoreEmulator(firestore, "127.0.0.1", 8080);
   }
 }
 
