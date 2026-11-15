@@ -95,5 +95,13 @@ describe("StatsSummary Component", () => {
     cy.get('select[aria-label="Sort flights"]').select("Longest");
     cy.contains("h2", "Longest first").should("be.visible");
     cy.get("h2").should("have.length", 1);
+
+    // The passport: one stamp per arrival country, each with a date.
+    cy.visit("/passport");
+    cy.get('[data-cy="passport-count"]').should("contain.text", "stamped");
+    cy.get('[data-cy^="stamp-"]')
+      .first()
+      .contains(/\d{4}/)
+      .should("be.visible");
   });
 });

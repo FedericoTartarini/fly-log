@@ -1,0 +1,80 @@
+/* A generic passport page: faint ruled lines on the surface colour, with the
+ * stamps in a grid. Two columns on phones, more as the screen widens. */
+.page {
+  margin: 0;
+  padding: 16px;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--fl-border);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 31px,
+      var(--fl-divider) 31px 32px
+    ),
+    var(--fl-surface);
+}
+
+/* A rubber stamp: a double ring in one ink colour, slightly askew. The inks
+ * and angles cycle, so neighbouring stamps never look identical. */
+.stamp {
+  --ink: var(--fl-accent-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 132px;
+  padding: 12px 8px;
+  border: 3px double var(--ink);
+  border-radius: 16px;
+  color: var(--ink);
+  background: var(--fl-surface);
+  text-align: center;
+  font-family: var(--mantine-font-family-monospace);
+  transform: rotate(-3deg);
+}
+
+.stamp:nth-child(4n + 2) {
+  --ink: var(--fl-ok-text);
+  transform: rotate(2deg);
+}
+
+.stamp:nth-child(4n + 3) {
+  --ink: var(--fl-warn-text);
+  transform: rotate(-1deg);
+}
+
+.stamp:nth-child(4n + 4) {
+  --ink: var(--fl-ink);
+  transform: rotate(3deg);
+}
+
+.code {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.name {
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.date {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.visits {
+  font-size: 12px;
+}

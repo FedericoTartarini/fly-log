@@ -205,7 +205,7 @@
   }
 }
 
-/* Same switch as the app shell: from 860 px the stub moves to the right and
+/* From 860 px the stub moves to the right and
  * the fields become two rows of three. */
 @media (min-width: 53.75em) {
   .pass {

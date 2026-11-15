@@ -9,6 +9,7 @@ const Flights = lazy(() => import("./pages/Flights.jsx"));
 const WorldTour = lazy(() => import("./pages/WorldTour.jsx"));
 const Timeline = lazy(() => import("./pages/Timeline.jsx"));
 const Badges = lazy(() => import("./pages/Badges.jsx"));
+const Passport = lazy(() => import("./pages/Passport.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 // MyAppShell and ProtectedRoute render on every route, so splitting them out
 // bought nothing and cost an extra loading state on the way in.
@@ -20,6 +21,7 @@ import AllStatsSkeleton from "./components/AllStatsSkeleton.jsx";
 import TourSkeleton from "./components/TourSkeleton.jsx";
 import TimelineSkeleton from "./components/TimelineSkeleton.jsx";
 import BadgesSkeleton from "./components/BadgesSkeleton.jsx";
+import PassportSkeleton from "./components/PassportSkeleton.jsx";
 import { PATHS } from "./constants/MyClasses.ts";
 
 // Route tree: MyAppShell hosts the main layout and nested pages. Shared by
@@ -102,6 +104,16 @@ const routes = [
           <ProtectedRoute fallback={<BadgesSkeleton />}>
             <Suspense fallback={<BadgesSkeleton />}>
               <Badges />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: PATHS.PASSPORT,
+        element: (
+          <ProtectedRoute fallback={<PassportSkeleton />}>
+            <Suspense fallback={<PassportSkeleton />}>
+              <Passport />
             </Suspense>
           </ProtectedRoute>
         ),
