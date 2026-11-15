@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "vitest": "vitest run",
     "vitest:watch": "vitest",
+    "backfill:enrichment": "vite-node scripts/backfill-enrichment.mjs",
     "test:e2e": "cypress open",
     "test:e2e:headless": "cypress run"
   },
@@ -57,6 +58,7 @@
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "firebase-admin": "^14.5.1",
     "globals": "^16.3.0",
     "jsdom": "^26.1.0",
     "postcss": "^8.5.6",
@@ -66,6 +68,7 @@
     "terser": "^5.46.0",
     "typescript": "^5.9.2",
     "vite": "7.1.12",
+    "vite-node": "^3.2.4",
     "vite-plugin-static-copy": "^3.2.0",
     "vitest": "^3.2.4"
   }

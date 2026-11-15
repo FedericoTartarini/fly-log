@@ -47,12 +47,17 @@ import {
   updateFlightForUser,
 } from "./flightService";
 import { YEAR_FILTER } from "../constants/filters";
+import { ENRICHMENT_VERSION } from "./flightEnrichment";
 
 describe("flightService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     firestoreState.instance = { name: "test-firestore" };
     referenceDataMocks.loadReferenceMaps.mockResolvedValue({});
+    referenceDataMocks.getReferenceMapsSync.mockReturnValue({
+      airportByIata: new Map(),
+      airlineByIata: new Map(),
+    });
   });
 
   it("enrichFlightData merges reference data and computes distance", () => {
@@ -153,7 +158,7 @@ describe("flightService", () => {
       onError,
     );
 
-    // The listener attaches only once reference data resolves.
+    // A document saved before #41 is enriched once reference data resolves.
     await vi.waitFor(() => expect(onFlights).toHaveBeenCalledOnce());
     expect(onError).not.toHaveBeenCalled();
     expect(onFlights.mock.calls[0]?.[0]?.[0]?.airline_name).toBe("BA");
@@ -162,12 +167,53 @@ describe("flightService", () => {
     expect(unsubscribeSpy).toHaveBeenCalledOnce();
   });
 
-  it("subscribeToUserFlights does not attach if unsubscribed before reference data resolves", async () => {
+  it("subscribeToUserFlights emits stored flights before reference data resolves", async () => {
     let resolveMaps: (() => void) | undefined;
     referenceDataMocks.loadReferenceMaps.mockReturnValue(
       new Promise<void>((resolve) => {
         resolveMaps = resolve;
       }),
+    );
+    const stored = {
+      airline_iata: "BA",
+      airline_name: "British Airways",
+      co2_kg: 123,
+      enrichment_version: ENRICHMENT_VERSION,
+    };
+    firestoreMocks.onSnapshot.mockImplementation(
+      (_q: unknown, onNext: (snap: unknown) => void) => {
+        onNext({ docs: [{ id: "flight-1", data: () => stored }] });
+        return vi.fn();
+      },
+    );
+
+    const onFlights = vi.fn();
+    subscribeToUserFlights("uid-1", YEAR_FILTER.ALL, onFlights, vi.fn());
+
+    // No wait for the reference maps, and the stored fields are used as is.
+    expect(onFlights).toHaveBeenCalledOnce();
+    expect(onFlights.mock.calls[0]?.[0]?.[0]).toMatchObject({
+      id: "flight-1",
+      ...stored,
+    });
+
+    // Emitted again once the maps arrive, so city names can fill in.
+    resolveMaps?.();
+    await vi.waitFor(() => expect(onFlights).toHaveBeenCalledTimes(2));
+  });
+
+  it("subscribeToUserFlights does not emit after unsubscribing", async () => {
+    let resolveMaps: (() => void) | undefined;
+    referenceDataMocks.loadReferenceMaps.mockReturnValue(
+      new Promise<void>((resolve) => {
+        resolveMaps = resolve;
+      }),
+    );
+    firestoreMocks.onSnapshot.mockImplementation(
+      (_q: unknown, onNext: (snap: unknown) => void) => {
+        onNext({ docs: [{ id: "f", data: () => ({ airline_iata: "BA" }) }] });
+        return vi.fn();
+      },
     );
 
     const onFlights = vi.fn();
@@ -182,8 +228,71 @@ describe("flightService", () => {
     resolveMaps?.();
     await Promise.resolve();
 
-    expect(firestoreMocks.onSnapshot).not.toHaveBeenCalled();
     expect(onFlights).not.toHaveBeenCalled();
+  });
+
+  it("subscribeToUserFlights reports a reference data failure only when a flight needs it", async () => {
+    referenceDataMocks.loadReferenceMaps.mockRejectedValue(
+      new Error("offline"),
+    );
+    firestoreMocks.onSnapshot.mockImplementation(
+      (_q: unknown, onNext: (snap: unknown) => void) => {
+        onNext({ docs: [{ id: "f", data: () => ({ airline_iata: "BA" }) }] });
+        return vi.fn();
+      },
+    );
+
+    const onError = vi.fn();
+    subscribeToUserFlights("uid-1", YEAR_FILTER.ALL, vi.fn(), onError);
+
+    await vi.waitFor(() => expect(onError).toHaveBeenCalledOnce());
+    expect(onError.mock.calls[0]?.[0]?.message).toBe("offline");
+  });
+
+  it("updateFlightForUser stores fields derived from the whole flight", async () => {
+    referenceDataMocks.getReferenceMapsSync.mockReturnValue({
+      airportByIata: new Map([
+        ["BKK", { iata: "BKK", lat: 13.69, lon: 100.75, iso_country: "TH" }],
+        ["SYD", { iata: "SYD", lat: -33.94, lon: 151.18, iso_country: "AU" }],
+      ]),
+      airlineByIata: new Map([
+        ["QF", { iata: "QF", name: "Qantas", icao: "QFA" }],
+      ]),
+    });
+    firestoreMocks.getDoc.mockResolvedValue({
+      id: "flight-1",
+      exists: () => true,
+      data: () => ({
+        departure_airport_iata: "BKK",
+        arrival_airport_iata: "SYD",
+        airline_iata: "QF",
+      }),
+    });
+
+    // A status check saving runway times: QF24 was 8 h 43 m in the air.
+    const result = await updateFlightForUser("uid-1", "flight-1", {
+      flight_status: {
+        departure: { runwayTime: { utc: "2026-09-20 06:08Z" } },
+        arrival: { runwayTime: { utc: "2026-09-20 14:51Z" } },
+      },
+    });
+
+    const written = firestoreMocks.updateDoc.mock.calls[0]?.[1] as Record<
+      string,
+      unknown
+    >;
+    expect(written).toMatchObject({
+      flight_status: expect.any(Object),
+      airline_name: "Qantas",
+      departure_country: "TH",
+      arrival_country: "AU",
+      international: true,
+      enrichment_version: ENRICHMENT_VERSION,
+    });
+    expect(written.flight_time).toBeCloseTo(8 + 43 / 60);
+    expect(written.co2_kg).toBeGreaterThan(0);
+    expect(written).not.toHaveProperty("id");
+    expect(result.flight_time).toBe(written.flight_time);
   });
 
   it("updateFlightForUser throws on invalid departure_date", async () => {
