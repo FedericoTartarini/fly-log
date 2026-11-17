@@ -34,6 +34,8 @@ describe("flightEnrichment", () => {
     expect(derived.international).toBe(false);
     expect(derived.flight_time).toBeCloseTo((derived.distance_km ?? 0) / 900);
     expect(derived.enrichment_version).toBe(ENRICHMENT_VERSION);
+    // No logo file for this airline, so the app shows its IATA code instead.
+    expect(derived.airline_icon_path).toBeNull();
   });
 
   it("leaves unknown airports and airlines as null", () => {

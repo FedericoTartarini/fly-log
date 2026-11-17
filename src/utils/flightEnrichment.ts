@@ -9,10 +9,11 @@ import { getAirMinutes, type RunwayLeg } from "./airTime";
 
 /**
  * Bump this when anything below changes the stored numbers (a new emissions
- * factor, a different speed estimate). Documents with an older version are
+ * factor, a different speed estimate, new airline codes or logos). Documents with an older version are
  * enriched again on read until the backfill script rewrites them.
  */
-export const ENRICHMENT_VERSION = 1;
+// 2: ICAO codes checked against Wikidata, logos looked up by IATA code (#209).
+export const ENRICHMENT_VERSION = 2;
 
 /** The fields a flight needs to derive the rest. */
 export type FlightCore = {
@@ -132,7 +133,7 @@ export const deriveFlightFields = (
       cabin_class: flight.cabin_class,
     }),
     airline_name: airline?.name ?? null,
-    airline_icon_path: airline ? `${airline.icao}.png` : null,
+    airline_icon_path: airline?.logo ?? null,
     airline_icao: airline?.icao ?? null,
     enrichment_version: ENRICHMENT_VERSION,
   };

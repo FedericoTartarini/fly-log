@@ -28,7 +28,8 @@ export default defineConfig({
             content.replace(/__BUILD_ID__/g, String(Date.now())),
         },
         {
-          src: "src/assets/logos/*",
+          // sources.json stays out of the build. It is for review, not the app.
+          src: "src/assets/logos/*.{svg,png,jpg}",
           dest: "logos",
         },
         {
