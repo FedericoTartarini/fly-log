@@ -1,15 +1,57 @@
 import { describe, expect, it } from "vitest";
 
-import { cleanCity, mergeByIata } from "./refresh-reference-data.mjs";
+import { cityFor, mergeByIata } from "./refresh-reference-data.mjs";
 
-describe("cleanCity", () => {
-  it("uses the served city, not the suburb", () => {
-    expect(cleanCity("KUL", "Sepang", "MY")).toBe("Kuala Lumpur");
-    expect(cleanCity("SYD", "Sydney (Mascot)", "AU")).toBe("Sydney");
-    expect(cleanCity("LBA", "Leeds, West Yorkshire", "GB")).toBe("Leeds");
-    expect(cleanCity("XXX", "Shuangta, Chaoyang", "CN")).toBe(
-      "Shuangta, Chaoyang",
+const place = (name, population = 0, metro = false) => ({
+  name,
+  population,
+  metro,
+});
+
+describe("cityFor", () => {
+  it("uses a manual entry first", () => {
+    expect(cityFor("SZB", "Subang", "MY", [place("Subang Jaya")])).toBe(
+      "Kuala Lumpur",
     );
+  });
+
+  it("keeps the OurAirports municipality when Wikidata lists it too", () => {
+    expect(
+      cityFor("ARN", "Stockholm", "SE", [
+        place("Stockholm", 984748),
+        place("Uppsala", 1),
+      ]),
+    ).toBe("Stockholm");
+  });
+
+  it("uses Wikidata's only settlement", () => {
+    expect(cityFor("KUL", "Sepang", "MY", [place("Kuala Lumpur")])).toBe(
+      "Kuala Lumpur",
+    );
+  });
+
+  it("uses the most populous settlement, skipping metro areas", () => {
+    expect(
+      cityFor("LEJ", "Schkeuditz", "DE", [
+        place("Halle (Saale)", 226186),
+        place("Leipzig", 615932),
+      ]),
+    ).toBe("Leipzig");
+    expect(
+      cityFor("IAD", "Dulles", "US", [
+        place("Washington metropolitan area", 6385162, true),
+        place("Washington, D.C.", 689545),
+      ]),
+    ).toBe("Washington, D.C.");
+  });
+
+  it("falls back to the cleaned OurAirports municipality", () => {
+    expect(cityFor("SYD", "Sydney (Mascot)", "AU")).toBe("Sydney");
+    expect(cityFor("LBA", "Leeds, West Yorkshire", "GB")).toBe("Leeds");
+    expect(cityFor("ONT", "Ontario, California", "US")).toBe(
+      "Ontario, California",
+    );
+    expect(cityFor("XXX", "Lae", "PG", [place("")])).toBe("Lae");
   });
 });
 
