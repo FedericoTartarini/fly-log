@@ -92,7 +92,7 @@ describe("flightService", () => {
       ],
     ]);
     const airlineByIata = new Map([
-      ["QF", { iata: "QF", name: "Qantas", icao: "QFA" }],
+      ["QF", { iata: "QF", name: "Qantas", icao: "QFA", logo: "QF.svg" }],
     ]);
     referenceDataMocks.getReferenceMapsSync.mockReturnValue({
       airportByIata,
@@ -114,7 +114,7 @@ describe("flightService", () => {
     expect(enriched.distance_km).toBeGreaterThan(0);
     expect(enriched.flight_time).toBeGreaterThan(0);
     expect(enriched.airline_name).toBe("Qantas");
-    expect(enriched.airline_icon_path).toBe("QFA.png");
+    expect(enriched.airline_icon_path).toBe("QF.svg");
     expect(enriched.international).toBe(true);
     // Emissions are computed here, once, not at render time.
     expect(enriched.co2_kg).toBeGreaterThan(0);

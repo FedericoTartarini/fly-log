@@ -11,7 +11,9 @@ export type AirportInfo = {
 export type AirlineInfo = {
   iata: string;
   name: string;
-  icao: string;
+  icao: string | null;
+  /** File name in /logos/, such as "QF.svg", or null when there is none. */
+  logo?: string | null;
 };
 
 export type ReferenceMaps = {

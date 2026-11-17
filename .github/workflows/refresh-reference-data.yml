@@ -1,7 +1,7 @@
 name: Refresh reference data
 
-# Every six months, regenerate the bundled airport and airline lists and open a
-# PR with the changes for review. See docs/reference-data.md.
+# Every six months, regenerate the bundled airport and airline lists and the
+# airline logos, and open a PR with the changes for review. See docs/reference-data.md.
 on:
   schedule:
     - cron: "0 3 1 1,7 *" # 03:00 UTC on 1 January and 1 July
@@ -34,9 +34,10 @@ jobs:
         with:
           branch: chore/refresh-reference-data
           base: main
-          commit-message: "chore(data): refresh airport and airline lists"
-          title: "chore(data): refresh airport and airline lists"
+          commit-message: "chore(data): refresh airport and airline lists and logos"
+          title: "chore(data): refresh airport and airline lists and logos"
           body-path: ${{ runner.temp }}/pr-body.md
           add-paths: |
             src/assets/airports.json
             src/assets/airlines.json
+            src/assets/logos

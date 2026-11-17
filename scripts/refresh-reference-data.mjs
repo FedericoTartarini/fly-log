@@ -1,17 +1,33 @@
-// Refreshes the bundled airport and airline lists from their upstream sources.
-// Run with `node scripts/refresh-reference-data.mjs`. Sources, licences and the
-// review steps are in docs/reference-data.md. Airline logos are not refreshed
-// here, because their source has no licence that allows redistribution.
-import { readFile, writeFile } from "node:fs/promises";
+// Refreshes the bundled airport and airline lists and the airline logos from
+// their upstream sources. Run with `node scripts/refresh-reference-data.mjs`.
+// Sources, licences and the review steps are in docs/reference-data.md.
+import { execFileSync } from "node:child_process";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import Papa from "papaparse";
 
 const OURAIRPORTS = "https://davidmegginson.github.io/ourairports-data";
 const AIRLINES_URL =
   "https://raw.githubusercontent.com/besrourms/airlines/master/airlines.json";
-const OPENFLIGHTS_AIRLINES_URL =
-  "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat";
 
 const WIKIDATA_SPARQL = "https://query.wikidata.org/sparql";
+const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
+// Wikidata and Commons block requests without a descriptive User-Agent.
+const USER_AGENT =
+  "fly-log-reference-data/1.0 (https://github.com/FedericoTartarini/fly-log)";
+
+// The Soaring Symbols release the logos come from. Raise it by hand after
+// reading the release notes, since a release can remove a mark at its
+// owner's request.
+const SOARING_SYMBOLS_VERSION = "0.4.1";
+
+// A Commons logo counts as a square icon when its width divided by its height
+// is within this range. Wordmarks are two to six times wider than tall.
+const SQUARE_RATIO = [0.9, 1.1];
+// Commons SVGs above this size are shipped as a 128 px PNG thumbnail instead.
+const MAX_SVG_BYTES = 30_000;
+const THUMB_PX = 128;
 
 // Same filter as before: major and regional airports that have an IATA code.
 const AIRPORT_TYPES = new Set(["large_airport", "medium_airport"]);
@@ -120,14 +136,17 @@ export const mergeByIata = (oldList, freshList) => {
   return { list: [...merged, ...kept], stats };
 };
 
-const fetchText = async (url) => {
-  const res = await fetch(url);
+const fetchOk = async (url) => {
+  const res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-  return res.text();
+  return res;
 };
+const fetchText = async (url) => (await fetchOk(url)).text();
+const fetchBytes = async (url) =>
+  Buffer.from(await (await fetchOk(url)).arrayBuffer());
 
-const parseCsv = (text, header = true) =>
-  Papa.parse(text, { header, skipEmptyLines: true }).data;
+const parseCsv = (text) =>
+  Papa.parse(text, { header: true, skipEmptyLines: true }).data;
 
 const asset = (name) => new URL(`../src/assets/${name}`, import.meta.url);
 const readAsset = async (name) =>
@@ -156,9 +175,7 @@ const sparqlOnce = async (query) => {
     headers: {
       Accept: "application/sparql-results+json",
       "Content-Type": "application/x-www-form-urlencoded",
-      // Wikidata blocks requests without a descriptive User-Agent.
-      "User-Agent":
-        "fly-log-reference-data/1.0 (https://github.com/FedericoTartarini/fly-log)",
+      "User-Agent": USER_AGENT,
     },
     body: new URLSearchParams({ query }),
   });
@@ -281,26 +298,360 @@ const freshAirports = async () => {
     });
 };
 
-const freshAirlines = async () => {
-  const [airlinesJson, openflightsCsv] = await Promise.all([
-    fetchText(AIRLINES_URL),
-    fetchText(OPENFLIGHTS_AIRLINES_URL),
-  ]);
-  // OpenFlights columns: id, name, alias, IATA, ICAO, callsign, country, active.
-  const icaoByIata = new Map(
-    parseCsv(openflightsCsv, false)
-      .filter((r) => r[3] && r[3] !== "\\N" && r[4] && r[4] !== "\\N")
-      .filter((r) => r[7] === "Y")
-      .map((r) => [r[3], r[4]]),
-  );
-  return JSON.parse(airlinesJson)
+// The ICAO code is left empty here. checkIcao fills it in from Wikidata after
+// the merge, which keeps the code a record already has until then.
+const freshAirlines = async () =>
+  JSON.parse(await fetchText(AIRLINES_URL))
     .filter((a) => a.code && a.name)
     .map((a) => ({
       name: a.name,
-      icao: icaoByIata.get(a.code) ?? null,
+      icao: null,
       iata: a.code,
       icon: a.logo ?? null,
     }));
+
+// Words that many airline names share, so they say nothing about which
+// airline a name belongs to.
+const GENERIC_WORDS = new Set(
+  (
+    "air airline airlines airways aviation lines line ltd limited inc llc sa " +
+    "co company corporation the de del transport transportes linhas aereas " +
+    "aerea aereo lineas express international jsc pjsc ojsc pt plc"
+  ).split(" "),
+);
+const plain = (s) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+// "X dba Y" names two airlines' worth of name, and text in brackets is
+// usually an abbreviation, so both are split off.
+const nameParts = (name) =>
+  name
+    .replace(/\(.*?\)/g, " ")
+    .split(/\bdba\b/i)
+    .filter((p) => p.trim());
+const wordsOf = (part) => [
+  ...new Set(
+    plain(part)
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w && !GENERIC_WORDS.has(w)),
+  ),
+];
+const nameKeys = (name) =>
+  new Set(
+    nameParts(name)
+      .flatMap((p) => [
+        plain(p).replace(/[^a-z0-9]/g, ""),
+        wordsOf(p).sort().join(" "),
+      ])
+      .filter(Boolean),
+  );
+
+// Two names are the same airline when they match ignoring accents, case,
+// spaces and punctuation ("VietjetAir", "VietJet Air"), or when they have the
+// same words once generic ones are dropped ("Royal Brunei", "Royal Brunei
+// Airlines"). "Lufthansa" and "Lufthansa Cargo" are different airlines.
+export const sameName = (a, b) => {
+  const keys = nameKeys(b);
+  return [...nameKeys(a)].some((k) => keys.has(k));
+};
+
+// Looser: every distinctive word of one name is in the other ("Air
+// Wisconsin Airlines Corporation", "Air Wisconsin").
+const overlappingName = (a, b) =>
+  nameParts(a).some((p) =>
+    nameParts(b).some((q) => {
+      const [x, y] = [wordsOf(p), wordsOf(q)];
+      const [short, long] = x.length <= y.length ? [x, y] : [y, x];
+      return short.length > 0 && short.every((w) => long.includes(w));
+    }),
+  );
+
+// Checks an airline's ICAO code against the Wikidata items that have its IATA
+// code (P229). Only items with the same name count, so the code of an older
+// airline that used the same IATA code is not picked up. In order:
+// 1. "confirmed": a same-name item has the airline's code (P230).
+// 2. "confirmed": no item has the same name, but one with an overlapping name
+//    has the airline's code, so both codes and part of the name agree.
+// 3. "corrected", or "added" if the airline had no code: the same-name items
+//    that are still flying (no P576) have exactly one code between them, or,
+//    if none is still flying, all of them do.
+// 4. "removed", or "none" if the airline had no code: no item confirms a
+//    code, or they give several, so the code is left empty, not guessed.
+// items are { id, icao: [...], names: [...], dissolved }. Returns the code,
+// the verdict and the ids of the items that decided it.
+export const checkIcao = (airline, items) => {
+  const named = items.filter((it) =>
+    it.names.some((n) => sameName(n, airline.name)),
+  );
+  const ids = (list) => list.map((it) => it.id);
+  const own = airline.icao;
+  const confirming = named.filter((it) => it.icao.includes(own));
+  if (own && confirming.length)
+    return { icao: own, verdict: "confirmed", items: ids(confirming) };
+  const overlapping = items.filter(
+    (it) =>
+      it.icao.includes(own) &&
+      it.names.some((n) => overlappingName(n, airline.name)),
+  );
+  if (own && !named.length && overlapping.length)
+    return { icao: own, verdict: "confirmed", items: ids(overlapping) };
+  const live = named.filter((it) => !it.dissolved && it.icao.length);
+  const deciding = live.length ? live : named.filter((it) => it.icao.length);
+  const codes = new Set(deciding.flatMap((it) => it.icao));
+  if (codes.size === 1)
+    return {
+      icao: [...codes][0],
+      verdict: own ? "corrected" : "added",
+      items: ids(deciding),
+    };
+  return {
+    icao: null,
+    verdict: own ? "removed" : "none",
+    items: ids(deciding),
+  };
+};
+
+// Wikidata items with an IATA airline code (P229), grouped by that code, as
+// { id, icao, names, dissolved, logos }. names holds the English and
+// multilingual labels and aliases, and logos the Commons file names of the
+// logo images (P154).
+const airlineItems = async () => {
+  const rows =
+    await sparql(`SELECT ?item ?iata ?icao ?name ?dissolved ?logo WHERE {
+    ?item wdt:P229 ?iata .
+    OPTIONAL { ?item wdt:P230 ?icao }
+    OPTIONAL { ?item wdt:P576 ?dissolved }
+    OPTIONAL { ?item wdt:P154 ?logo }
+    OPTIONAL {
+      ?item rdfs:label|skos:altLabel ?name .
+      FILTER(LANG(?name) IN ("en", "mul"))
+    }
+  }`);
+  const byId = new Map();
+  for (const b of rows) {
+    const id = b.item.value.split("/").pop();
+    if (!byId.has(id))
+      byId.set(id, {
+        id,
+        iata: new Set(),
+        icao: new Set(),
+        names: new Set(),
+        dissolved: false,
+        logos: new Set(),
+      });
+    const it = byId.get(id);
+    it.iata.add(b.iata.value);
+    if (b.icao) it.icao.add(b.icao.value);
+    if (b.name) it.names.add(b.name.value);
+    if (b.dissolved) it.dissolved = true;
+    // The value is a Special:FilePath URL ending in the file name.
+    if (b.logo) it.logos.add(decodeURIComponent(b.logo.value.split("/").pop()));
+  }
+  const byIata = new Map();
+  for (const it of byId.values()) {
+    const item = {
+      ...it,
+      icao: [...it.icao],
+      names: [...it.names],
+      logos: [...it.logos],
+    };
+    for (const code of it.iata) {
+      if (!byIata.has(code)) byIata.set(code, []);
+      byIata.get(code).push(item);
+    }
+  }
+  return byIata;
+};
+
+// Unpacks the pinned Soaring Symbols release from npm. Its dist/ folder holds
+// each airline's files, including marks an airline shares with another one.
+const soaringSymbols = async () => {
+  const dir = await mkdtemp(join(tmpdir(), "soaring-symbols-"));
+  const tgz = join(dir, "package.tgz");
+  await writeFile(
+    tgz,
+    await fetchBytes(
+      `https://registry.npmjs.org/soaring-symbols/-/soaring-symbols-${SOARING_SYMBOLS_VERSION}.tgz`,
+    ),
+  );
+  execFileSync("tar", ["xzf", tgz, "-C", dir]);
+  const dist = join(dir, "package", "dist");
+  const catalog = JSON.parse(
+    await readFile(join(dist, "airlines.json"), "utf8"),
+  );
+  return { dist, catalog };
+};
+
+// The square icon Soaring Symbols has for an airline, or null. Its entry must
+// have the same IATA code, still fly, and share the name or the ICAO code, so
+// Bonza (AB) does not get Air Berlin's icon. A multicolour icon is icon.svg.
+// Qantas ships only icon-mono.svg, drawn in currentColor, so it is painted in
+// the airline's primary colour from the catalogue.
+const soaringIcon = async (airline, { dist, catalog }) => {
+  const entry = catalog.find(
+    (c) =>
+      c.iata === airline.iata &&
+      !c.ceased &&
+      (sameName(c.name, airline.name) ||
+        (airline.icao && c.icao === airline.icao)),
+  );
+  if (!entry) return null;
+  const read = (name) =>
+    readFile(join(dist, "assets", entry.slug, name), "utf8").catch(() => null);
+  const color = await read("icon.svg");
+  const mono = color ? null : await read("icon-mono.svg");
+  const primary = entry.branding?.primary_color;
+  const svg =
+    color ??
+    (mono &&
+      primary &&
+      mono.replace('fill="currentColor"', `fill="${primary}"`));
+  if (!svg) return null;
+  return {
+    data: Buffer.from(svg),
+    file: `${airline.iata}.svg`,
+    source: `Soaring Symbols ${SOARING_SYMBOLS_VERSION}`,
+    url: `https://cdn.jsdelivr.net/npm/soaring-symbols@${SOARING_SYMBOLS_VERSION}/dist/assets/${entry.slug}/${color ? "icon.svg" : "icon-mono.svg"}`,
+    licence:
+      "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+  };
+};
+
+// Size, type, URLs and licence of Commons files, by file name, asked 50 at a
+// time. thumburl is a thumbnail THUMB_PX wide (a PNG for an SVG), or the
+// original if that is smaller. author is the credit a CC licence asks for.
+const commonsInfo = async (files) => {
+  const info = new Map();
+  for (let i = 0; i < files.length; i += 50) {
+    const batch = files.slice(i, i + 50);
+    const params = new URLSearchParams({
+      action: "query",
+      format: "json",
+      formatversion: "2",
+      prop: "imageinfo",
+      iiprop: "url|size|mime|extmetadata",
+      iiextmetadatafilter: "License|LicenseShortName|Artist",
+      iiurlwidth: String(THUMB_PX),
+      titles: batch.map((f) => `File:${f}`).join("|"),
+    });
+    const { query } = await (await fetchOk(`${COMMONS_API}?${params}`)).json();
+    const asked = new Map((query.normalized ?? []).map((n) => [n.to, n.from]));
+    for (const page of query.pages) {
+      const ii = page.imageinfo?.[0];
+      if (!ii) continue;
+      info.set((asked.get(page.title) ?? page.title).replace(/^File:/, ""), {
+        ...ii,
+        licence: ii.extmetadata?.License?.value ?? "",
+        licenceName: ii.extmetadata?.LicenseShortName?.value ?? "",
+        // Artist is HTML, often a link to the uploader.
+        author: (ii.extmetadata?.Artist?.value ?? "")
+          .replace(/<[^>]*>/g, "")
+          .trim(),
+      });
+    }
+  }
+  return info;
+};
+
+// The first Commons logo of an airline's Wikidata items that is a square icon
+// (see SQUARE_RATIO) under a public domain or Creative Commons licence, as
+// the Commons `License` field gives it ("pd", "cc0", "cc-by-sa-4.0").
+const commonsIcon = async (airline, files, info) => {
+  const pick = files
+    .map((f) => info.get(f))
+    .find(
+      (ii) =>
+        ii &&
+        ii.width / ii.height >= SQUARE_RATIO[0] &&
+        ii.width / ii.height <= SQUARE_RATIO[1] &&
+        /^(pd|cc)/i.test(ii.licence),
+    );
+  if (!pick) return null;
+  const svg = pick.mime === "image/svg+xml" && pick.size <= MAX_SVG_BYTES;
+  const url = svg ? pick.url : pick.thumburl;
+  // Thumbnail URLs end in a query string, so the extension comes from the path.
+  const ext = svg ? "svg" : new URL(url).pathname.split(".").pop();
+  return {
+    data: await fetchBytes(url),
+    file: `${airline.iata}.${ext}`,
+    source: "Wikimedia Commons",
+    url: pick.descriptionurl,
+    licence: pick.licenceName,
+    // Only CC BY and CC BY-SA ask for credit.
+    author: /^cc-by/i.test(pick.licence) ? pick.author : undefined,
+  };
+};
+
+const LOGOS = new URL("../src/assets/logos/", import.meta.url);
+
+// Finds a square logo for every airline, by IATA code: Soaring Symbols first,
+// then Commons, then the RadarBox PNG the airline already had. Downloads
+// everything before it writes, then replaces the logos folder's contents and
+// its sources.json, and sets each airline's `logo` to the file name or null.
+// An entry keeps its old fetch date when the file has not changed, so a
+// refresh only shows real changes.
+const refreshLogos = async (airlines, wikidataByIata) => {
+  const today = new Date().toISOString().slice(0, 10);
+  const oldSources = JSON.parse(
+    await readFile(new URL("sources.json", LOGOS), "utf8").catch(() => "[]"),
+  );
+  const oldByIata = new Map(oldSources.map((s) => [s.iata, s]));
+  const ss = await soaringSymbols();
+
+  const filesOf = (airline) =>
+    (wikidataByIata.get(airline.iata) ?? [])
+      .filter(
+        (it) =>
+          !it.dissolved && it.names.some((n) => sameName(n, airline.name)),
+      )
+      .flatMap((it) => it.logos);
+  const found = new Map();
+  for (const airline of airlines)
+    found.set(airline.iata, await soaringIcon(airline, ss));
+  const missing = airlines.filter((a) => !found.get(a.iata));
+  const info = await commonsInfo([...new Set(missing.flatMap(filesOf))]);
+  for (const airline of missing)
+    found.set(airline.iata, await commonsIcon(airline, filesOf(airline), info));
+
+  const sources = [];
+  const writes = [];
+  for (const airline of [...airlines].sort((a, b) =>
+    a.iata.localeCompare(b.iata),
+  )) {
+    const logo = found.get(airline.iata);
+    const old = oldByIata.get(airline.iata);
+    let entry = null;
+    if (logo) {
+      const { data, ...meta } = logo;
+      const oldData = old
+        ? await readFile(new URL(old.file, LOGOS)).catch(() => null)
+        : null;
+      const same = old?.file === meta.file && oldData?.equals(data);
+      entry = {
+        iata: airline.iata,
+        ...meta,
+        fetched: same ? old.fetched : today,
+      };
+      writes.push([meta.file, data]);
+    } else if (old?.source === "RadarBox") {
+      entry = old;
+    }
+    airline.logo = entry?.file ?? null;
+    if (entry) sources.push(entry);
+  }
+
+  const keep = new Set([...sources.map((s) => s.file), "sources.json"]);
+  for (const file of await readdir(LOGOS))
+    if (!keep.has(file)) await rm(new URL(file, LOGOS));
+  for (const [file, data] of writes)
+    await writeFile(new URL(file, LOGOS), data);
+  await writeFile(
+    new URL("sources.json", LOGOS),
+    JSON.stringify(sources, null, 2) + "\n",
+  );
+  await rm(join(ss.dist, "..", ".."), { recursive: true });
+
+  const bySource = {};
+  for (const s of sources) bySource[s.source] = (bySource[s.source] ?? 0) + 1;
+  return { bySource, total: sources.length };
 };
 
 const report = (name, { list, stats }) =>
@@ -322,8 +673,51 @@ if (import.meta.main) {
     await freshAirlines(),
   );
 
+  // Every airline's ICAO code is checked against Wikidata on every run.
+  const wikidataByIata = await airlineItems();
+  const icaoChanges = [];
+  const verdicts = {};
+  for (const airline of airlines.list) {
+    const { icao, verdict, items } = checkIcao(
+      airline,
+      wikidataByIata.get(airline.iata) ?? [],
+    );
+    verdicts[verdict] = (verdicts[verdict] ?? 0) + 1;
+    if (verdict !== "confirmed" && verdict !== "none")
+      icaoChanges.push(
+        `- ${airline.iata} ${airline.name}: ${airline.icao ?? "none"} -> ` +
+          `${icao ?? "none"} (${verdict}${items.length ? ", " + items.join(" ") : ""})`,
+      );
+    airline.icao = icao;
+  }
+
+  // Logos are written as soon as they are all downloaded, and the lists
+  // right after, so a failed download leaves every file as it was.
+  const logos = await refreshLogos(airlines.list, wikidataByIata);
+
   await writeAsset("airports.json", airports.list);
   await writeAsset("airlines.json", airlines.list);
   console.log(report("airports.json", airports));
   console.log(report("airlines.json", airlines));
+  console.log(
+    `- ICAO codes checked against Wikidata: ` +
+      Object.entries(verdicts)
+        .map(([v, n]) => `${n} ${v}`)
+        .join(", ") +
+      ".",
+  );
+  console.log(
+    `- Logos: ${logos.total} airlines have one. ` +
+      Object.entries(logos.bySource)
+        .map(([s, n]) => `${n} from ${s}`)
+        .join(", ") +
+      ".",
+  );
+  if (icaoChanges.length) {
+    console.log(
+      "\n<details><summary>ICAO changes, with the Wikidata items</summary>\n",
+    );
+    console.log(icaoChanges.join("\n"));
+    console.log("\n</details>");
+  }
 }

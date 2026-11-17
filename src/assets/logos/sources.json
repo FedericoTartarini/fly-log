@@ -1,0 +1,4164 @@
+[
+  {
+    "iata": "0B",
+    "file": "0B.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BLA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2K",
+    "file": "2K.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/avianca-ecuador/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "2L",
+    "file": "2L.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OAW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2M",
+    "file": "2M.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MYD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2P",
+    "file": "2P.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GAP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2Q",
+    "file": "2Q.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SNC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2S",
+    "file": "2S.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/STW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "2Z",
+    "file": "2Z.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PTB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "3H",
+    "file": "3H.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AIE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "3K",
+    "file": "3K.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JSA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "3L",
+    "file": "3L.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-arabia-abu-dhabi/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "3M",
+    "file": "3M.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SIL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "3O",
+    "file": "3O.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-arabia-maroc/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "3U",
+    "file": "3U.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/sichuan-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "4C",
+    "file": "4C.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/latam-airlines-colombia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "4G",
+    "file": "4G.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GZP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4M",
+    "file": "4M.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MGH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4N",
+    "file": "4N.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ANT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4Q",
+    "file": "4Q.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SFW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4U",
+    "file": "4U.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GWI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4Y",
+    "file": "4Y.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OCN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "4Z",
+    "file": "4Z.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LNK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5B",
+    "file": "5B.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BSX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5C",
+    "file": "5C.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ICL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5F",
+    "file": "5F.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FIA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5J",
+    "file": "5J.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/cebu-pacific/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "5N",
+    "file": "5N.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AUL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5O",
+    "file": "5O.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FPO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5T",
+    "file": "5T.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MPE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5X",
+    "file": "5X.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UPS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5Y",
+    "file": "5Y.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GTI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "5Z",
+    "file": "5Z.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KEM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "6B",
+    "file": "6B.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BLX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "6E",
+    "file": "6E.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/indigo/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "6H",
+    "file": "6H.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ISR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "6I",
+    "file": "6I.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MMD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "6J",
+    "file": "6J.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SNJ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "6Y",
+    "file": "6Y.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ART.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7C",
+    "file": "7C.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JJA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7F",
+    "file": "7F.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FAB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7I",
+    "file": "7I.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TLR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7J",
+    "file": "7J.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TJK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7K",
+    "file": "7K.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KGL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7L",
+    "file": "7L.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AZG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7R",
+    "file": "7R.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RLU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "7W",
+    "file": "7W.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WRC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8J",
+    "file": "8J.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ECO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8L",
+    "file": "8L.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LKE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8M",
+    "file": "8M.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MMA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8P",
+    "file": "8P.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PCO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8Q",
+    "file": "8Q.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OHY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "8U",
+    "file": "8U.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AAW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9C",
+    "file": "9C.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CQH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9G",
+    "file": "9G.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/sun-phuquoc-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "9H",
+    "file": "9H.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CGN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9I",
+    "file": "9I.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LLR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9J",
+    "file": "9J.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DAN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9K",
+    "file": "9K.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KAP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9P",
+    "file": "9P.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PTR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9U",
+    "file": "9U.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MLD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9V",
+    "file": "9V.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ROI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "9W",
+    "file": "9W.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JAI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "A3",
+    "file": "A3.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/aegean-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "A5",
+    "file": "A5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/HOP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "A6",
+    "file": "A6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OTC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "A9",
+    "file": "A9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TGZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AA",
+    "file": "AA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/american-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AC",
+    "file": "AC.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-canada/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AD",
+    "file": "AD.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/azul/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AE",
+    "file": "AE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MDA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AF",
+    "file": "AF.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-france/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AH",
+    "file": "AH.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-algerie/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AI",
+    "file": "AI.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-india/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AK",
+    "file": "AK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AXM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AM",
+    "file": "AM.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/aeromexico/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AP",
+    "file": "AP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LAV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AQ",
+    "file": "AQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JYH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AR",
+    "file": "AR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/aerolineas-argentinas/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AS",
+    "file": "AS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ASA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "AT",
+    "file": "AT.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/royal-air-maroc/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AV",
+    "file": "AV.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/avianca/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AY",
+    "file": "AY.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/finnair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "AZ",
+    "file": "AZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ITY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "B0",
+    "file": "B0.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DJT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "B2",
+    "file": "B2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BRU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "B6",
+    "file": "B6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JBU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "B7",
+    "file": "B7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UIA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BA",
+    "file": "BA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/british-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "BB",
+    "file": "BB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SBS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BC",
+    "file": "BC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SKY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BE",
+    "file": "BE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BEE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BF",
+    "file": "BF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FBU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BG",
+    "file": "BG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BBC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BH",
+    "file": "BH.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BHA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BI",
+    "file": "BI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RBA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BJ",
+    "file": "BJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LBT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BK",
+    "file": "BK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OKA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BL",
+    "file": "BL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/pacific-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "BM",
+    "file": "BM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BMR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BP",
+    "file": "BP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BOT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BR",
+    "file": "BR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/eva-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "BT",
+    "file": "BT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BTI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BV",
+    "file": "BV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TOK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BW",
+    "file": "BW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BWA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BX",
+    "file": "BX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BY",
+    "file": "BY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TOM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "BZ",
+    "file": "BZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BBG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "C2",
+    "file": "C2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CEL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "C5",
+    "file": "C5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UCA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CA",
+    "file": "CA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-china/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "CD",
+    "file": "CD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CND.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CG",
+    "file": "CG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TOK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CH",
+    "file": "CH.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BMJ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CI",
+    "file": "CI.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/china-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "CJ",
+    "file": "CJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CFE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CL",
+    "file": "CL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CLH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CM",
+    "file": "CM.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/copa-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "CN",
+    "file": "CN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GDC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CP",
+    "file": "CP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CPZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CS",
+    "file": "CS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GSW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CU",
+    "file": "CU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CUB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CV",
+    "file": "CV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CLX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CX",
+    "file": "CX.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/cathay-pacific/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "CY",
+    "file": "CY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CYP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "CZ",
+    "file": "CZ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/china-southern-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "D0",
+    "file": "D0.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DHK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "D3",
+    "file": "D3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DAO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "D7",
+    "file": "D7.svg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:AirAsia_X_Logo.svg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "D9",
+    "file": "D9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DNV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DD",
+    "file": "DD.jpg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:Nokair_logo.jpg",
+    "licence": "CC BY-SA 3.0",
+    "author": "Nok Airlines Co. Ltd",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "DE",
+    "file": "DE.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/condor/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "DG",
+    "file": "DG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SRQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DI",
+    "file": "DI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MBU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DL",
+    "file": "DL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/delta-air-lines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "DM",
+    "file": "DM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DWI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DP",
+    "file": "DP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PBD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DR",
+    "file": "DR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RLH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DS",
+    "file": "DS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EZS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DT",
+    "file": "DT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DTA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DV",
+    "file": "DV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VSV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DX",
+    "file": "DX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DTR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "DY",
+    "file": "DY.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/norwegian-air-shuttle/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "DZ",
+    "file": "DZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EPA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "E4",
+    "file": "E4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ENT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "E5",
+    "file": "E5.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-arabia-egypt/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EB",
+    "file": "EB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PLM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "EC",
+    "file": "EC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EJU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "EG",
+    "file": "EG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ERN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "EI",
+    "file": "EI.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/aer-lingus/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EK",
+    "file": "EK.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/emirates/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EL",
+    "file": "EL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ELB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "EN",
+    "file": "EN.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-dolomiti/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EP",
+    "file": "EP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IRC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ES",
+    "file": "ES.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DHX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ET",
+    "file": "ET.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/ethiopian-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EV",
+    "file": "EV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ASQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "EW",
+    "file": "EW.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/eurowings/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "EY",
+    "file": "EY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ETD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "F2",
+    "file": "F2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/XLK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "F3",
+    "file": "F3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FAD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "F5",
+    "file": "F5.png",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:Atcfze_logo.png",
+    "licence": "CC BY-SA 4.0",
+    "author": "Aerotranscargo",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "F9",
+    "file": "F9.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/frontier-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FA",
+    "file": "FA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SFR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FB",
+    "file": "FB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LZB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FD",
+    "file": "FD.svg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:AirAsia_New_Logo.svg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FE",
+    "file": "FE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FEA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FG",
+    "file": "FG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AFG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FI",
+    "file": "FI.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/icelandair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FJ",
+    "file": "FJ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/fiji-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FM",
+    "file": "FM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CSH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FO",
+    "file": "FO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FBZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FR",
+    "file": "FR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/ryanair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FT",
+    "file": "FT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FEG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FU",
+    "file": "FU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FZA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FV",
+    "file": "FV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SDM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FX",
+    "file": "FX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FDX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "FY",
+    "file": "FY.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/firefly/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "FZ",
+    "file": "FZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FDB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "G3",
+    "file": "G3.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/gol/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "G4",
+    "file": "G4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AAY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "G7",
+    "file": "G7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GJS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "G9",
+    "file": "G9.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-arabia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "GA",
+    "file": "GA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/garuda-indonesia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "GB",
+    "file": "GB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GF",
+    "file": "GF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GFA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GH",
+    "file": "GH.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GLP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GJ",
+    "file": "GJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CDC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GK",
+    "file": "GK.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/jetstar-japan/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "GL",
+    "file": "GL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GRL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GQ",
+    "file": "GQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SEH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GR",
+    "file": "GR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AUR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GS",
+    "file": "GS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GCR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GW",
+    "file": "GW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GJT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GX",
+    "file": "GX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CBG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "GY",
+    "file": "GY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CGZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "H2",
+    "file": "H2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SKU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "H6",
+    "file": "H6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BUC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HA",
+    "file": "HA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/HAL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HD",
+    "file": "HD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ADO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HF",
+    "file": "HF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VRE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HG",
+    "file": "HG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NLY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HM",
+    "file": "HM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SEY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HO",
+    "file": "HO.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/juneyao-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "HQ",
+    "file": "HQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TCW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HR",
+    "file": "HR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/HHN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HU",
+    "file": "HU.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/hainan-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "HV",
+    "file": "HV.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/transavia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "HX",
+    "file": "HX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CRK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HY",
+    "file": "HY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UZB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "HZ",
+    "file": "HZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SHU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "I2",
+    "file": "I2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IBS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "I8",
+    "file": "I8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IZA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IA",
+    "file": "IA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IAW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IB",
+    "file": "IB.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/iberia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "ID",
+    "file": "ID.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BTK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IE",
+    "file": "IE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SOL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IF",
+    "file": "IF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FBA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IK",
+    "file": "IK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AKL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IL",
+    "file": "IL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TGN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IO",
+    "file": "IO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IAE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IQ",
+    "file": "IQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/QAZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IR",
+    "file": "IR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IRA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IT",
+    "file": "IT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TTW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IW",
+    "file": "IW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WON.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IX",
+    "file": "IX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AXB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IY",
+    "file": "IY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IYE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "IZ",
+    "file": "IZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AIZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "J2",
+    "file": "J2.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/azerbaijan-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "J9",
+    "file": "J9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JZR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JA",
+    "file": "JA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JAT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JC",
+    "file": "JC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JAC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JD",
+    "file": "JD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CBJ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JE",
+    "file": "JE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MNO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JF",
+    "file": "JF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JAA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JI",
+    "file": "JI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AAG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JJ",
+    "file": "JJ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/latam-airlines-brasil/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "JL",
+    "file": "JL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/japan-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "JM",
+    "file": "JM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KQA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JP",
+    "file": "JP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ADR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JQ",
+    "file": "JQ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/jetstar/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "JT",
+    "file": "JT.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/lion-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "JU",
+    "file": "JU.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-serbia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "JV",
+    "file": "JV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BLS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JW",
+    "file": "JW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VNL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "JX",
+    "file": "JX.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/starlux-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "K2",
+    "file": "K2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ELO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "K4",
+    "file": "K4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CKS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "K5",
+    "file": "K5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SQH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "K6",
+    "file": "K6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KHV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "K7",
+    "file": "K7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KBZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "K8",
+    "file": "K8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KND.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KB",
+    "file": "KB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DRK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KC",
+    "file": "KC.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-astana/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "KE",
+    "file": "KE.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/korean-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "KJ",
+    "file": "KJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AIH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KL",
+    "file": "KL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/klm/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "KN",
+    "file": "KN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CUA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KP",
+    "file": "KP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SKK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KQ",
+    "file": "KQ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/kenya-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "KR",
+    "file": "KR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KME.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "KU",
+    "file": "KU.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/kuwait-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "KX",
+    "file": "KX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CAY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LA",
+    "file": "LA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/latam-airlines-chile/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LG",
+    "file": "LG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LGL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LH",
+    "file": "LH.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/lufthansa/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LJ",
+    "file": "LJ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/jin-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LK",
+    "file": "LK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LLL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LL",
+    "file": "LL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/level/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LM",
+    "file": "LM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LOG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LN",
+    "file": "LN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LAA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LO",
+    "file": "LO.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/lot-polish-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LQ",
+    "file": "LQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MKR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LR",
+    "file": "LR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/avianca-costa-rica/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LS",
+    "file": "LS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/jet2com/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LU",
+    "file": "LU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LXP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "LX",
+    "file": "LX.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/swiss/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "LY",
+    "file": "LY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ELY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "M0",
+    "file": "M0.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MNG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "M6",
+    "file": "M6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AJT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "M7",
+    "file": "M7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MAA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MB",
+    "file": "MB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MNB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ME",
+    "file": "ME.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MEA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MF",
+    "file": "MF.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/xiamenair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "MH",
+    "file": "MH.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/malaysia-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "MI",
+    "file": "MI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SLK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MJ",
+    "file": "MJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MYW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MK",
+    "file": "MK.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-mauritius/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "MM",
+    "file": "MM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/APJ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MO",
+    "file": "MO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CAV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MQ",
+    "file": "MQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ENY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MR",
+    "file": "MR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MML.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MS",
+    "file": "MS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/egyptair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "MT",
+    "file": "MT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TCX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "MU",
+    "file": "MU.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/china-eastern-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "MX",
+    "file": "MX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MXY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "N4",
+    "file": "N4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NWS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "N8",
+    "file": "N8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NCR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NC",
+    "file": "NC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NAC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ND",
+    "file": "ND.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GSW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NE",
+    "file": "NE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NMA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NF",
+    "file": "NF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AVN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NH",
+    "file": "NH.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ANA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NI",
+    "file": "NI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PGA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NK",
+    "file": "NK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NKS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NL",
+    "file": "NL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SAI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NN",
+    "file": "NN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MOV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NO",
+    "file": "NO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NOS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NP",
+    "file": "NP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NIA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NS",
+    "file": "NS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/HBH.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NT",
+    "file": "NT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IBB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NU",
+    "file": "NU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JTA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NX",
+    "file": "NX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AMU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "NZ",
+    "file": "NZ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-new-zealand/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "O3",
+    "file": "O3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CSS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "O6",
+    "file": "O6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ONE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "O9",
+    "file": "O9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NOV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OA",
+    "file": "OA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OAL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OB",
+    "file": "OB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BOV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OD",
+    "file": "OD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MXD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OK",
+    "file": "OK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CSA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OM",
+    "file": "OM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MGL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ON",
+    "file": "ON.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RON.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OO",
+    "file": "OO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SKW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OQ",
+    "file": "OQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CQN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OR",
+    "file": "OR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TFL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OS",
+    "file": "OS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/austrian-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "OU",
+    "file": "OU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CTN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OV",
+    "file": "OV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OMS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OX",
+    "file": "OX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OEA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "OZ",
+    "file": "OZ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/asiana-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "P4",
+    "file": "P4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NSO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "P5",
+    "file": "P5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RPB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PA",
+    "file": "PA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PB",
+    "file": "PB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PVL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PC",
+    "file": "PC.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/pegasus-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "PD",
+    "file": "PD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/POE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PE",
+    "file": "PE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PEV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PF",
+    "file": "PF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PRI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PG",
+    "file": "PG.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/bangkok-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "PJ",
+    "file": "PJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SPM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PK",
+    "file": "PK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PIA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PM",
+    "file": "PM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CNF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PN",
+    "file": "PN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CHB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PQ",
+    "file": "PQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SQP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PR",
+    "file": "PR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/philippine-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "PW",
+    "file": "PW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/PRF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PX",
+    "file": "PX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ANG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PY",
+    "file": "PY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SLM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "PZ",
+    "file": "PZ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/latam-airlines-paraguay/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "QB",
+    "file": "QB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/QSM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QC",
+    "file": "QC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CRC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QF",
+    "file": "QF.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/qantas/icon-mono.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "QG",
+    "file": "QG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CTV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QH",
+    "file": "QH.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/bamboo-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "QK",
+    "file": "QK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JZA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QL",
+    "file": "QL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LER.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QP",
+    "file": "QP.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/akasa-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "QQ",
+    "file": "QQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UTY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QR",
+    "file": "QR.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/qatar-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "QS",
+    "file": "QS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TVS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QU",
+    "file": "QU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UTN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QV",
+    "file": "QV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LAO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QX",
+    "file": "QX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/QXE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QY",
+    "file": "QY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BCS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "QZ",
+    "file": "QZ.svg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:AirAsia_New_Logo.svg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "R3",
+    "file": "R3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SYL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "R6",
+    "file": "R6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/DNU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "R7",
+    "file": "R7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OCA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RA",
+    "file": "RA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RNA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RB",
+    "file": "RB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SYR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RC",
+    "file": "RC.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/atlantic-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "RF",
+    "file": "RF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EOK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RJ",
+    "file": "RJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RJA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RL",
+    "file": "RL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RO",
+    "file": "RO.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/tarom/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "RQ",
+    "file": "RQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KMF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RR",
+    "file": "RR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RYS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RS",
+    "file": "RS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ASV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RU",
+    "file": "RU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RV",
+    "file": "RV.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ROU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "RX",
+    "file": "RX.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/riyadh-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "S2",
+    "file": "S2.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JLL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "S4",
+    "file": "S4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RZO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "S7",
+    "file": "S7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SBI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SA",
+    "file": "SA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SAA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SB",
+    "file": "SB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ACI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SC",
+    "file": "SC.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/shandong-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SD",
+    "file": "SD.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SUD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SG",
+    "file": "SG.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/spicejet/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SI",
+    "file": "SI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BCI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SJ",
+    "file": "SJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SJY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SK",
+    "file": "SK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SAS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SL",
+    "file": "SL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/thai-lion-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SM",
+    "file": "SM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MSC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SN",
+    "file": "SN.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/brussels-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SP",
+    "file": "SP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SAT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SQ",
+    "file": "SQ.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/singapore-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SR",
+    "file": "SR.svg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:Logo-SundAir.svg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SS",
+    "file": "SS.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CRL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SU",
+    "file": "SU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AFL.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SV",
+    "file": "SV.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/saudia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "SW",
+    "file": "SW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NMB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SX",
+    "file": "SX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SRK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SY",
+    "file": "SY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SCX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "SZ",
+    "file": "SZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SMR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "T3",
+    "file": "T3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EZE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "T5",
+    "file": "T5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TUA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TA",
+    "file": "TA.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TAI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TB",
+    "file": "TB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/JAF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TG",
+    "file": "TG.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/thai-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "TJ",
+    "file": "TJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GPD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TK",
+    "file": "TK.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/turkish-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "TL",
+    "file": "TL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ANO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TM",
+    "file": "TM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LAM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TN",
+    "file": "TN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/THT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TO",
+    "file": "TO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TVF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TP",
+    "file": "TP.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/tap-air-portugal/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "TR",
+    "file": "TR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TGW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TS",
+    "file": "TS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-transat/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "TU",
+    "file": "TU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TAR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TW",
+    "file": "TW.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/trinity-airways/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "TX",
+    "file": "TX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/FWI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TY",
+    "file": "TY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TPC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "TZ",
+    "file": "TZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SCO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "U2",
+    "file": "U2.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/easyjet/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "U4",
+    "file": "U4.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BHA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "U6",
+    "file": "U6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SVR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "U8",
+    "file": "U8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CYF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UA",
+    "file": "UA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/united-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "UB",
+    "file": "UB.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/myanmar-national-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "UI",
+    "file": "UI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AUK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UK",
+    "file": "UK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VTI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UL",
+    "file": "UL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ALK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UM",
+    "file": "UM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AZW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UN",
+    "file": "UN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TSO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UO",
+    "file": "UO.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/hk-express/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "UP",
+    "file": "UP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BHS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "US",
+    "file": "US.jpg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:Silk-avia-1671218415-200.jpg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "UT",
+    "file": "UT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UTA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UU",
+    "file": "UU.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/REU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UX",
+    "file": "UX.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/air-europa/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "UY",
+    "file": "UY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CSG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "UZ",
+    "file": "UZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BRQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "V0",
+    "file": "V0.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VCV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "V3",
+    "file": "V3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KRP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "V7",
+    "file": "V7.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/volotea/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VA",
+    "file": "VA.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/virgin-australia/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VB",
+    "file": "VB.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/viva/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VE",
+    "file": "VE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EFY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VH",
+    "file": "VH.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VVC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VJ",
+    "file": "VJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VJC.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VN",
+    "file": "VN.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/vietnam-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VQ",
+    "file": "VQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NVQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VR",
+    "file": "VR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TCV.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VS",
+    "file": "VS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/virgin-atlantic/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VT",
+    "file": "VT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VTA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VU",
+    "file": "VU.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/vietravel-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "VW",
+    "file": "VW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TAO.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VX",
+    "file": "VX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VRD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "VY",
+    "file": "VY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VLG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "W3",
+    "file": "W3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ARA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "W5",
+    "file": "W5.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/IRM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "W6",
+    "file": "W6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WZZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "W8",
+    "file": "W8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CJT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WB",
+    "file": "WB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RWD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WE",
+    "file": "WE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/THD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WF",
+    "file": "WF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WIF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WG",
+    "file": "WG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SWG.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WK",
+    "file": "WK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/EDW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WM",
+    "file": "WM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WIA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WN",
+    "file": "WN.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/southwest-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "WO",
+    "file": "WO.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WSW.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WP",
+    "file": "WP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MKU.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WR",
+    "file": "WR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/WEN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WS",
+    "file": "WS.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/westjet/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "WT",
+    "file": "WT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SWT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WX",
+    "file": "WX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/BCY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "WY",
+    "file": "WY.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/oman-air/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "WZ",
+    "file": "WZ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RWZ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "X3",
+    "file": "X3.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TUI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "X9",
+    "file": "X9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NVD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XC",
+    "file": "XC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CAI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XG",
+    "file": "XG.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SXD.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XJ",
+    "file": "XJ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TAX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XK",
+    "file": "XK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CCM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XL",
+    "file": "XL.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/latam-airlines-ecuador/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "XN",
+    "file": "XN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/XAR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XP",
+    "file": "XP.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/VXP.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XQ",
+    "file": "XQ.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SXS.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XR",
+    "file": "XR.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CXI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XW",
+    "file": "XW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NCT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "XY",
+    "file": "XY.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/flynas/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "Y4",
+    "file": "Y4.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/volaris/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "Y7",
+    "file": "Y7.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/TYA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YC",
+    "file": "YC.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LLM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YI",
+    "file": "YI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/OYA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YK",
+    "file": "YK.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AVJ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YL",
+    "file": "YL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/LWA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YM",
+    "file": "YM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MGX.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YN",
+    "file": "YN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/CRQ.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YT",
+    "file": "YT.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/NYT.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YV",
+    "file": "YV.jpg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:MesaAirlinesLogo2.jpg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "YW",
+    "file": "YW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ANE.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "YX",
+    "file": "YX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RPA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "Z2",
+    "file": "Z2.svg",
+    "source": "Wikimedia Commons",
+    "url": "https://commons.wikimedia.org/wiki/File:AirAsia_New_Logo.svg",
+    "licence": "Public domain",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "Z6",
+    "file": "Z6.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/UDN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "Z8",
+    "file": "Z8.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AZN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "Z9",
+    "file": "Z9.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MYM.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZB",
+    "file": "ZB.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ABN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZE",
+    "file": "ZE.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/ESR.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZF",
+    "file": "ZF.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/KTK.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZH",
+    "file": "ZH.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/shenzhen-airlines/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "ZI",
+    "file": "ZI.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AAF.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZL",
+    "file": "ZL.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/RXA.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZM",
+    "file": "ZM.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/MBB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZN",
+    "file": "ZN.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AZB.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZP",
+    "file": "ZP.svg",
+    "source": "Soaring Symbols 0.4.1",
+    "url": "https://cdn.jsdelivr.net/npm/soaring-symbols@0.4.1/dist/assets/paranair/icon.svg",
+    "licence": "Trademark of the airline. No licence granted, see the Soaring Symbols DISCLAIMER.md",
+    "fetched": "2026-11-17"
+  },
+  {
+    "iata": "ZW",
+    "file": "ZW.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/AWI.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZX",
+    "file": "ZX.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/GGN.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  },
+  {
+    "iata": "ZY",
+    "file": "ZY.png",
+    "source": "RadarBox",
+    "url": "https://github.com/Jxck-S/airline-logos/blob/main/radarbox_logos/SHY.png",
+    "licence": "None stated. Copied from Jxck-S/airline-logos, which has no licence",
+    "fetched": "2025-08-10"
+  }
+]
