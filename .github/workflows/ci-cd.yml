@@ -31,6 +31,15 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      # The Firestore emulator runs on Java.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      # The specs run against the Auth and Firestore emulators, which
+      # scripts/seed-emulator.mjs fills with a test user and flights, so no
+      # secrets are needed and fork PRs run every spec. The "demo-" project
+      # id keeps the emulators from ever touching a real project.
       - name: Run Cypress
         uses: cypress-io/github-action@v7.4.8
         with:
@@ -38,18 +47,16 @@ jobs:
           build: npm run build
           start: npm run preview -- --port 5173
           wait-on: 'http://localhost:5173'
+          command: npm run test:e2e:emulator
         env:
           CI: true
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          CY_TEST_EMAIL: ${{ secrets.CY_TEST_EMAIL }}
-          CY_TEST_PASSWORD: ${{ secrets.CY_TEST_PASSWORD }}
-          CY_WRONG_EMAIL: ${{ secrets.CY_WRONG_EMAIL }}
-          CY_WRONG_PASSWORD: ${{ secrets.CY_WRONG_PASSWORD }}
+          VITE_USE_FIREBASE_EMULATOR: true
+          VITE_FIREBASE_API_KEY: demo-key
+          VITE_FIREBASE_AUTH_DOMAIN: demo-fly-log.firebaseapp.com
+          VITE_FIREBASE_PROJECT_ID: demo-fly-log
+          VITE_FIREBASE_STORAGE_BUCKET: demo-fly-log.appspot.com
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: 1:000000000000:web:0000000000000000
       - name: Upload Cypress Screenshots
         uses: actions/upload-artifact@v7
         # Cypress only saves screenshots when a test fails.

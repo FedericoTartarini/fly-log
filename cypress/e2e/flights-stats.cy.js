@@ -1,31 +1,23 @@
-/* global describe, it, beforeEach, cy, Cypress */
+/* global describe, it, beforeEach, cy */
 
 describe("StatsSummary Component", () => {
-  beforeEach(function () {
-    // Pull requests from forks don't get the repo's secrets, so there is no
-    // account to log in with. The full suite runs again after merging.
-    if (!Cypress.expose("HAS_TEST_ACCOUNT")) {
-      this.skip();
-      return;
-    }
-
+  beforeEach(() => {
     cy.visit("/login");
     cy.wait(500); // Allow React/Mantine hydration to fully complete
     cy.get('[data-cy="login-email"]')
       .should("exist")
       .should("be.visible")
       .should("not.be.disabled");
-    cy.env(["CY_TEST_EMAIL", "CY_TEST_PASSWORD"]).then(
-      ({ CY_TEST_EMAIL: email, CY_TEST_PASSWORD: password }) => {
-        cy.get('[data-cy="login-email"]').type(email, { log: false });
+    // The user scripts/seed-emulator.mjs creates.
+    cy.fixture("test-user").then(({ email, password }) => {
+      cy.get('[data-cy="login-email"]').type(email);
 
-        cy.get('[data-cy="login-password"]')
-          .should("exist")
-          .should("be.visible")
-          .should("not.be.disabled");
-        cy.get('[data-cy="login-password"]').type(password, { log: false });
-      },
-    );
+      cy.get('[data-cy="login-password"]')
+        .should("exist")
+        .should("be.visible")
+        .should("not.be.disabled");
+      cy.get('[data-cy="login-password"]').type(password);
+    });
 
     cy.get('[data-cy="login-submit"]').click();
     cy.location("pathname").should("eq", "/stats");
@@ -47,6 +39,13 @@ describe("StatsSummary Component", () => {
     cy.get('[data-cy="airlines-flown-label"]').should("be.visible");
     cy.get('[data-cy="countries-visited-value"]').should("be.visible");
     cy.get('[data-cy="countries-visited-label"]').should("be.visible");
+
+    // The flights scripts/seed-emulator.mjs adds.
+    cy.get('[data-cy="total-flights-value"]').should("have.text", "4");
+    cy.get('[data-cy="total-distance-value"]').should("contain", "34,642");
+    cy.get('[data-cy="airports-visited-value"]').should("have.text", "4");
+    cy.get('[data-cy="airlines-flown-value"]').should("have.text", "2");
+    cy.get('[data-cy="countries-visited-value"]').should("have.text", "3");
 
     // The header's filter button opens the panel. A filter shows as a tag on
     // the boarding pass, and the dot moves into the button's label. Scroll

@@ -51,7 +51,7 @@ const loadJson = async <T>(path: string): Promise<T[]> => {
   }
 };
 
-const buildMaps = (
+export const buildMaps = (
   airports: AirportInfo[],
   airlines: AirlineInfo[],
 ): ReferenceMaps => {

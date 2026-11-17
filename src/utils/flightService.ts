@@ -11,15 +11,15 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
-import {
-  getReferenceMapsSync,
-  loadReferenceMaps,
-  type AirlineInfo,
-  type AirportInfo,
-} from "./referenceData";
+import { getReferenceMapsSync, loadReferenceMaps } from "./referenceData";
 import { YEAR_FILTER } from "../constants/filters";
 import { parseToDate, type DateLike } from "./dateUtils";
-import { estimateCo2Kg } from "./emissions";
+import {
+  deriveFlightFields,
+  derivedFieldsForWrite,
+  isEnriched,
+  type DerivedFlightFields,
+} from "./flightEnrichment";
 
 type FirestoreFlightRecord = {
   id: string;
@@ -30,151 +30,19 @@ type FirestoreFlightRecord = {
   [key: string]: unknown;
 };
 
-type EnrichedFlightRecord = FirestoreFlightRecord & {
-  departure_coordinates: [number, number] | null;
-  arrival_coordinates: [number, number] | null;
-  distance_km: number | null;
-  flight_time: number | null;
-  departure_country: string | null;
-  arrival_country: string | null;
-  international: boolean;
-  airline_name: string | null;
-  airline_icon_path: string | null;
-  airline_icao: string | null;
-  co2_kg: number;
-};
+type EnrichedFlightRecord = FirestoreFlightRecord & DerivedFlightFields;
 
 /**
- * Calculate the great-circle distance between two points on Earth.
- * @param coord1 - [latitude, longitude] of the first point in decimal degrees
- * @param coord2 - [latitude, longitude] of the second point in decimal degrees
- * @returns Distance in kilometers, or null if coordinates are invalid
- */
-const haversine = (
-  coord1: [number, number] | null,
-  coord2: [number, number] | null,
-): number | null => {
-  if (!coord1 || !coord2) return null;
-
-  const R = 6371;
-  const [lat1, lon1] = coord1;
-  const [lat2, lon2] = coord2;
-
-  const phi1 = (lat1 * Math.PI) / 180;
-  const phi2 = (lat2 * Math.PI) / 180;
-  const dphi = ((lat2 - lat1) * Math.PI) / 180;
-  const dlambda = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(dphi / 2) ** 2 +
-    Math.cos(phi1) * Math.cos(phi2) * Math.sin(dlambda / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-};
-
-/**
- * Estimate flight time based on distance and average speed.
- * @param distanceKm - Distance in kilometers
- * @param avgSpeedKmh - Average speed in km/h (default: 900)
- * @returns Estimated flight time in hours, or null if distance is null
- */
-const estimateFlightTime = (
-  distanceKm: number | null,
-  avgSpeedKmh = 900,
-): number | null => {
-  if (distanceKm === null) return null;
-  return distanceKm / avgSpeedKmh;
-};
-
-/**
- * Get airport coordinates by IATA code.
- * @param iataCode - IATA code of the airport
- * @returns [latitude, longitude] if found, else null
- */
-const getAirportCoordinates = (
-  iataCode: string,
-  airportByIata: Map<string, AirportInfo>,
-): [number, number] | null => {
-  const airport = airportByIata.get(String(iataCode || "").toUpperCase());
-  return airport ? [airport.lat, airport.lon] : null;
-};
-
-/**
- * Get ISO country code by airport IATA code.
- * @param iataCode - IATA code of the airport
- * @returns ISO country code if found, else null
- */
-const getIsoCountry = (
-  iataCode: string,
-  airportByIata: Map<string, AirportInfo>,
-): string | null => {
-  const airport = airportByIata.get(String(iataCode || "").toUpperCase());
-  return airport ? airport.iso_country : null;
-};
-
-/**
- * Enrich flight data with additional information from airports and airlines data.
- * @param flight - Flight data from Firestore
- * @returns Enriched flight data
+ * Flights are enriched when they are written. This is the fallback for
+ * documents saved before that, or with an older enrichment version: it needs
+ * the reference maps to be loaded.
  */
 export const enrichFlightData = (
   flight: FirestoreFlightRecord,
-): EnrichedFlightRecord => {
-  const { airportByIata, airlineByIata } = getReferenceMapsSync();
-
-  const depCoords = getAirportCoordinates(
-    flight.departure_airport_iata,
-    airportByIata,
-  );
-  const depCountry = getIsoCountry(
-    flight.departure_airport_iata,
-    airportByIata,
-  );
-  const arrCoords = getAirportCoordinates(
-    flight.arrival_airport_iata,
-    airportByIata,
-  );
-  const arrCountry = getIsoCountry(flight.arrival_airport_iata, airportByIata);
-
-  const distance = haversine(depCoords, arrCoords);
-  const flightTime = estimateFlightTime(distance);
-
-  const airline = airlineByIata.get(
-    String(flight.airline_iata || "").toUpperCase(),
-  ) as AirlineInfo | undefined;
-
-  let airlineName: string | null = null;
-  let airlineIcao: string | null = null;
-  let airlineIconPath: string | null = null;
-
-  if (airline) {
-    airlineIcao = airline.icao;
-    airlineIconPath = `${airline.icao}.png`;
-    airlineName = airline.name;
-  }
-
-  return {
-    ...flight,
-    departure_coordinates: depCoords,
-    arrival_coordinates: arrCoords,
-    distance_km: distance,
-    flight_time: flightTime,
-    departure_country: depCountry,
-    arrival_country: arrCountry,
-    international: depCountry !== arrCountry,
-    // Computed here, once per fetch, so every part of the app reads the same
-    // number instead of each recomputing it at render time.
-    co2_kg: estimateCo2Kg({
-      distance_km: distance,
-      international: depCountry !== arrCountry,
-      cabin_class: flight.cabin_class,
-    }),
-    airline_name: airlineName,
-    airline_icon_path: airlineIconPath,
-    airline_icao: airlineIcao,
-  };
-};
+): EnrichedFlightRecord =>
+  isEnriched(flight)
+    ? (flight as EnrichedFlightRecord)
+    : { ...flight, ...deriveFlightFields(flight, getReferenceMapsSync()) };
 
 /**
  * Fetch flights filtered by year for the current user and enrich them.
@@ -253,33 +121,50 @@ export const subscribeToUserFlights = (
   onFlights: (flights: EnrichedFlightRecord[]) => void,
   onError: (error: Error) => void,
 ): (() => void) => {
-  let unsubscribe: (() => void) | null = null;
   let cancelled = false;
+  let latest: FlightsSnapshot | null = null;
+  const toError = (error: unknown) =>
+    error instanceof Error ? error : new Error(String(error));
+  const mapsReady = () => getReferenceMapsSync().airportByIata.size > 0;
+  const needsMaps = (snap: FlightsSnapshot) =>
+    snap.docs.some((d) => !isEnriched(d.data() as Record<string, unknown>));
 
-  // Reference data must be in memory before enrichment can run, so the listener
-  // is attached once it resolves. It is fetched from the service worker cache
-  // on every launch after the first, so this is not a network wait.
-  (async () => {
-    try {
-      const q = buildFlightsQuery(uid, year);
-      await loadReferenceMaps();
-      if (cancelled) return;
+  // Flights carry their derived fields, so they render without the reference
+  // maps. The maps still load alongside, for older documents that need
+  // enriching here and for city names (getAirportCity), and the latest
+  // snapshot is emitted again once they arrive.
+  let mapsError: Error | null = null;
+  loadReferenceMaps().then(
+    () => {
+      if (!cancelled && latest) onFlights(enrichSnapshot(latest));
+    },
+    (error) => {
+      mapsError = toError(error);
+      if (!cancelled && latest && needsMaps(latest)) onError(mapsError);
+    },
+  );
 
-      unsubscribe = onSnapshot(
-        q,
-        (snap) => onFlights(enrichSnapshot(snap)),
-        (error) => onError(error),
-      );
-    } catch (error) {
-      if (!cancelled) {
-        onError(error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-  })();
+  let unsubscribe: () => void;
+  try {
+    unsubscribe = onSnapshot(
+      buildFlightsQuery(uid, year),
+      (snap) => {
+        latest = snap;
+        if (mapsReady() || !needsMaps(snap)) onFlights(enrichSnapshot(snap));
+        else if (mapsError) onError(mapsError);
+      },
+      (error) => onError(error),
+    );
+  } catch (error) {
+    // Reported asynchronously, like a listener error, so callers can rely on
+    // the unsubscribe function existing first.
+    queueMicrotask(() => onError(toError(error)));
+    unsubscribe = () => {};
+  }
 
   return () => {
     cancelled = true;
-    unsubscribe?.();
+    unsubscribe();
   };
 };
 
@@ -329,14 +214,16 @@ export const updateFlightForUser = async (
   const arrivalDate = parseToDate(data.arrival_date);
   if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
 
-  await updateDoc(docRef, data);
-
-  // Return the fresh document enriched
+  // The derived fields depend on the whole flight, not just what changed.
   const snap = await getDoc(docRef);
   if (!snap.exists()) throw new Error("Updated flight not found");
   const merged = {
-    id: snap.id,
     ...(snap.data() as Omit<FirestoreFlightRecord, "id">),
+    ...data,
+    id: snap.id,
   } as FirestoreFlightRecord;
-  return enrichFlightData(merged);
+  const derived = await derivedFieldsForWrite(merged);
+
+  await updateDoc(docRef, { ...data, ...derived });
+  return enrichFlightData({ ...merged, ...derived });
 };
