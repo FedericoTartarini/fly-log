@@ -33,6 +33,32 @@ describe("stampInks", () => {
     }
   });
 
+  // The rarest family wins, so tricolours with red leave red behind, while
+  // red-and-white flags stay red.
+  it("inks in the rarest flag colour", () => {
+    const strongest = (hex) =>
+      ["red", "green", "blue"][
+        [1, 3, 5]
+          .map((i) => parseInt(hex.slice(i, i + 2), 16))
+          .reduce((best, v, i, all) => (v > all[best] ? i : best), 0)
+      ];
+    const expected = {
+      IT: "green",
+      MX: "green",
+      FR: "blue",
+      US: "blue",
+      GB: "blue",
+      JP: "red",
+      CN: "red",
+      CA: "red",
+      CH: "red",
+      TR: "red",
+    };
+    for (const [code, colour] of Object.entries(expected)) {
+      expect(strongest(stampInks[code][0]), code).toBe(colour);
+    }
+  });
+
   it("reaches 4.5:1 on the stamp background in both schemes", () => {
     for (const [code, [light, dark]] of Object.entries(stampInks)) {
       expect(

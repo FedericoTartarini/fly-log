@@ -16,6 +16,7 @@ const Login = lazy(() => import("./pages/Login.jsx"));
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import HomeIndex from "./components/HomeIndex.jsx";
 import MyAppShell from "./pages/MyAppShell.jsx";
+import BadgesLayout from "./pages/BadgesLayout.jsx";
 import FlightsListSkeleton from "./components/FlightsListSkeleton.jsx";
 import AllStatsSkeleton from "./components/AllStatsSkeleton.jsx";
 import TourSkeleton from "./components/TourSkeleton.jsx";
@@ -99,24 +100,30 @@ const routes = [
         ),
       },
       {
-        path: PATHS.BADGES,
-        element: (
-          <ProtectedRoute fallback={<BadgesSkeleton />}>
-            <Suspense fallback={<BadgesSkeleton />}>
-              <Badges />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: PATHS.PASSPORT,
-        element: (
-          <ProtectedRoute fallback={<PassportSkeleton />}>
-            <Suspense fallback={<PassportSkeleton />}>
-              <Passport />
-            </Suspense>
-          </ProtectedRoute>
-        ),
+        // Badges and Passport are two views of one page, under one switch.
+        element: <BadgesLayout />,
+        children: [
+          {
+            path: PATHS.BADGES,
+            element: (
+              <ProtectedRoute fallback={<BadgesSkeleton />}>
+                <Suspense fallback={<BadgesSkeleton />}>
+                  <Badges />
+                </Suspense>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: PATHS.PASSPORT,
+            element: (
+              <ProtectedRoute fallback={<PassportSkeleton />}>
+                <Suspense fallback={<PassportSkeleton />}>
+                  <Passport />
+                </Suspense>
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: PATHS.LOGIN,

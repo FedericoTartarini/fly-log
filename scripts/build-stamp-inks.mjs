@@ -5,14 +5,32 @@
 //
 // Source: the 4:3 flag SVGs of flag-icons 7.6.0 (MIT licence,
 // https://github.com/lipis/flag-icons), downloaded from the npm tarball.
-// The rule, where the white skip and the tie-break are our choices:
+// The rule: each stamp takes the flag colour whose hue family is rarest across
+// all flags. Most flags have red, so the largest colour made half the stamps
+// red. The white skip, the 5 % threshold, the families and the tie-break are
+// our choices, not a standard.
 // 1. Rasterise each flag at 400x300 and count the pixels of each colour.
+//    Transparent pixels count as white.
 // 2. Skip near-white (OKLCH L > 0.92 and C < 0.03), because a white ink would
 //    vanish in light mode and white is the field, not the emblem, of JP or KR.
-// 3. Among the colours within 2 percentage points of the largest share, take
-//    the most saturated (highest OKLCH chroma), so equal bands (IT, FR, DE)
-//    pick their brightest band instead of whatever the histogram lists first.
-// 4. For each theme, keep the OKLCH hue and move lightness in 0.01 steps away
+//    Keep the colours that cover at least 5 % of the flag (MIN_SHARE), so
+//    specks in an emblem don't count. A flag with none keeps its largest one.
+// 3. Put each colour in a hue family by OKLCH hue h (degrees), chroma C and
+//    lightness L, checked in this order:
+//      black/grey  C < 0.04
+//      brown       38 <= h < 100, L < 0.65 and C < 0.13 (dark ochre)
+//      red         h < 38 or h >= 345
+//      orange      38 <= h < 70
+//      yellow      70 <= h < 115
+//      green       115 <= h < 185
+//      blue        185 <= h < 295 (aquamarine and sky blue included)
+//      purple      295 <= h < 345
+//    The cut-offs sit in gaps between the flag colours, so moving one by a
+//    few degrees changes no flag.
+// 4. Count in how many flags each family appears.
+// 5. Take the colour whose family appears in the fewest flags. On a tie, for
+//    example two blues in one flag, the larger area wins.
+// 6. For each theme, keep the OKLCH hue and move lightness in 0.01 steps away
 //    from --fl-surface (src/theme.js), cutting chroma only to stay in sRGB,
 //    until the WCAG contrast is at least 4.5:1.
 import { execFileSync } from "node:child_process";
@@ -23,6 +41,7 @@ import { join } from "node:path";
 const VERSION = "7.6.0";
 const BG = ["#FFFFFF", "#181D27"]; // --fl-surface, light then dark
 const MIN = 4.5;
+const MIN_SHARE = 0.05;
 const W = 400;
 const H = 300;
 
@@ -73,7 +92,7 @@ function fromOklch([L, C, Hue]) {
   ];
 }
 
-// Step 4.
+// Step 6.
 function fit(hex, bg) {
   if (contrast(hex, bg) >= MIN) return hex;
   let [L, C, Hue] = toOklch(hex);
@@ -92,8 +111,8 @@ function fit(hex, bg) {
   throw new Error(`No ink reaches ${MIN}:1 for ${hex} on ${bg}`);
 }
 
-// Steps 1 to 3.
-function flagColour(file) {
+// Steps 1 and 2: the flag's colours, largest first.
+function flagColours(file) {
   const png = execFileSync("rsvg-convert", ["-w", W, "-h", H, file]);
   const hist = execFileSync(
     "magick",
@@ -111,16 +130,31 @@ function flagColour(file) {
     { input: png, maxBuffer: 64 << 20 },
   ).toString();
   const coloured = [...hist.matchAll(/^\s*(\d+):.*?(#[0-9A-F]{6})/gim)]
-    .map((m) => [+m[1], m[2].toUpperCase()])
-    .filter(([, h]) => {
-      const [L, C] = toOklch(h);
+    .map((m) => ({ share: +m[1] / (W * H), hex: m[2].toUpperCase() }))
+    .filter(({ hex }) => {
+      const [L, C] = toOklch(hex);
       return !(L > 0.92 && C < 0.03);
     })
-    .sort((a, b) => b[0] - a[0]);
-  if (!coloured.length) return null;
-  return coloured
-    .filter(([n]) => n >= coloured[0][0] - 0.02 * W * H)
-    .sort((a, b) => toOklch(b[1])[1] - toOklch(a[1])[1])[0][1];
+    .sort((a, b) => b.share - a.share);
+  const big = coloured.filter(({ share }) => share >= MIN_SHARE);
+  return (big.length ? big : coloured.slice(0, 1)).map((c) => ({
+    ...c,
+    family: family(c.hex),
+  }));
+}
+
+// Step 3. Hue in degrees, 0 to 360.
+function family(hex) {
+  const [L, C, rad] = toOklch(hex);
+  const h = ((rad * 180) / Math.PI + 360) % 360;
+  if (C < 0.04) return "black/grey";
+  if (h >= 38 && h < 100 && L < 0.65 && C < 0.13) return "brown";
+  if (h < 38 || h >= 345) return "red";
+  if (h < 70) return "orange";
+  if (h < 115) return "yellow";
+  if (h < 185) return "green";
+  if (h < 295) return "blue";
+  return "purple";
 }
 
 const dir = mkdtempSync(join(tmpdir(), "flag-icons-"));
@@ -132,13 +166,29 @@ try {
   ).trim();
   execFileSync("tar", ["-xzf", join(dir, tgz), "-C", dir]);
   const flags = join(dir, "package", "flags", "4x3");
-  const inks = {};
+  const colours = {};
   for (const name of readdirSync(flags).sort()) {
     // Country codes only, which skips regions such as gb-eng and the xx placeholder.
     const code = name.match(/^([a-z]{2})\.svg$/)?.[1]?.toUpperCase();
     if (!code || code === "XX") continue;
-    const hex = flagColour(join(flags, name));
-    if (hex) inks[code] = BG.map((bg) => fit(hex, bg));
+    const list = flagColours(join(flags, name));
+    if (list.length) colours[code] = list;
+  }
+  // Step 4: in how many flags each family appears.
+  const flagsWith = {};
+  for (const list of Object.values(colours)) {
+    for (const f of new Set(list.map((c) => c.family))) {
+      flagsWith[f] = (flagsWith[f] ?? 0) + 1;
+    }
+  }
+  console.log("Flags with each family:", flagsWith);
+  // Step 5. Each list is sorted by area, so the first colour of the rarest
+  // family is the pick.
+  const inks = {};
+  for (const [code, list] of Object.entries(colours)) {
+    const rarest = Math.min(...list.map((c) => flagsWith[c.family]));
+    const { hex } = list.find((c) => flagsWith[c.family] === rarest);
+    inks[code] = BG.map((bg) => fit(hex, bg));
   }
   const out = new URL("../src/assets/stampInks.json", import.meta.url);
   // One country per line, so a regenerated map diffs cleanly.
