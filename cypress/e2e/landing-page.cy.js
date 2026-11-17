@@ -1,4 +1,28 @@
-/* global describe, it, beforeEach, cy */
+/* global describe, it, beforeEach, afterEach, cy, Cypress */
+
+// On a slow CPU, auth used to answer before React had adopted the header, so
+// React threw the prerendered page away (error #418). CI runners were slow
+// enough only some of the time; an 8x slower CPU made it fail every time.
+describe("Landing Page on a slow CPU", () => {
+  const throttle = (rate) =>
+    cy.wrap(
+      Cypress.automation("remote:debugger:protocol", {
+        command: "Emulation.setCPUThrottlingRate",
+        params: { rate },
+      }),
+    );
+  afterEach(() => throttle(1));
+
+  it("adopts the prerendered page", () => {
+    throttle(8);
+    cy.visit("/", {
+      onBeforeLoad(win) {
+        win.indexedDB.deleteDatabase("firebaseLocalStorageDb");
+      },
+    });
+    cy.contains("header a", "Login", { timeout: 20000 }).should("be.visible");
+  });
+});
 
 describe("Landing Page", () => {
   beforeEach(() => {

@@ -19,9 +19,17 @@ export default function App({ children }) {
       >
         {/* Above every modal, so validation errors show over the form */}
         <Notifications zIndex={2000} />
-        <AuthProvider>
-          <Suspense fallback={<PageSkeleton />}>{children}</Suspense>
-        </AuthProvider>
+        {/* AuthProvider inside the Suspense boundary, not around it. React
+            adopts the prerendered page in two passes: first the providers
+            outside any boundary, then, later, what is inside it. Auth starts
+            in an effect, so from out here it could answer between the two
+            passes on a slow machine. The header would then draw the Login
+            button that the prerendered HTML lacks, and React would throw
+            the page away (error #418). In here, auth starts only once the
+            header has been adopted. */}
+        <Suspense fallback={<PageSkeleton />}>
+          <AuthProvider>{children}</AuthProvider>
+        </Suspense>
       </MantineProvider>
     </React.StrictMode>
   );
