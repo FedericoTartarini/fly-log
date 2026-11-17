@@ -5,6 +5,10 @@ service cloud.firestore {
     // Validate the shape of an incoming flight record: required fields, correct
     // types, IATA code lengths (3-char airports, 2-3 char airline designator),
     // and a guard against self-loop routes (departure == arrival).
+    // Other keys are not restricted, which the app relies on: it stores derived
+    // fields (coordinates, distance_km, flight_time, co2_kg, enrichment_version
+    // and more, see src/utils/flightEnrichment.ts) on every flight it writes.
+    // A hasOnly() list added here would have to include them.
     function isValidFlight(data) {
       return data.keys().hasAll([
           'departure_date',

@@ -34,6 +34,10 @@ import {
 } from "firebase/firestore";
 import type { Firestore } from "firebase/firestore";
 import { parseToDate } from "./utils/dateUtils";
+import {
+  derivedFieldsForWrite,
+  type FlightCore,
+} from "./utils/flightEnrichment";
 
 // Read Vite env vars from import.meta.env (or process.env in tests).
 const getEnv = (key: string, fallback = ""): string => {
@@ -289,6 +293,7 @@ export const addFlightsForUser = async (
       const arrivalDate = parseToDate(data.arrival_date);
       if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
       data.created_at = serverTimestamp();
+      Object.assign(data, await derivedFieldsForWrite(data as FlightCore));
       const ref = doc(recordsCol);
       chunkIds.push(ref.id);
       batch.set(ref, data);
@@ -332,6 +337,7 @@ export const addFlightForUser = async (
   const arrivalDate = parseToDate(data.arrival_date);
   if (arrivalDate) data.arrival_date = Timestamp.fromDate(arrivalDate);
   data.created_at = serverTimestamp();
+  Object.assign(data, await derivedFieldsForWrite(data as FlightCore));
   return addDoc(collection(firestore, "flights", uid, "records"), data);
 };
 
