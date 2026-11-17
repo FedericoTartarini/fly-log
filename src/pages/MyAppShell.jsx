@@ -18,6 +18,7 @@ import {
   IconAward,
   IconCalendar,
   IconChartBar,
+  IconEPassport,
   IconList,
   IconPlus,
   IconWorld,
@@ -45,6 +46,7 @@ const PAGES = [
   { to: PATHS.TOUR, key: "tour", icon: IconWorld },
   { to: PATHS.TIMELINE, key: "timeline", icon: IconCalendar },
   { to: PATHS.BADGES, key: "badges", icon: IconAward },
+  { to: PATHS.PASSPORT, key: "passport", icon: IconEPassport },
 ];
 
 // Pages whose flights the header's filter button narrows down.
@@ -66,11 +68,11 @@ function MyAppShell() {
   const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
 
   const pinned = useHeadroom({ fixedAt: 120 });
-  // One switch at 860 px: below it the tab bar, from it the page links. The
-  // links need about 790 px in Italian, so tablets in portrait and unfolded
-  // phones get the tab bar too. Read synchronously, so the first paint
-  // already has the right layout.
-  const isPhone = useMediaQuery("(max-width: 53.74em)", false, {
+  // One switch at 1024 px: below it the tab bar, from it the page links. With
+  // the filter button, the header needs about 990 px in Italian, so tablets in
+  // portrait and unfolded phones get the tab bar too. Read synchronously, so
+  // the first paint already has the right layout.
+  const isPhone = useMediaQuery("(max-width: 63.99em)", false, {
     getInitialValueInEffect: false,
   });
   const showTabs = Boolean(user) && isPhone;

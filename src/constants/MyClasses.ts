@@ -32,6 +32,7 @@ export const PATHS = {
   TOUR: "/tour",
   TIMELINE: "/timeline",
   BADGES: "/badges",
+  PASSPORT: "/passport",
   ADD_FLIGHT: "/add-flight",
   EDIT_FLIGHT: "/edit-flight/:id",
   ABOUT: "/about",

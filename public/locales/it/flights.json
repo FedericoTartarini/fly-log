@@ -201,7 +201,9 @@
     "timeline_title": "Qui i tuoi voli appariranno come un calendario",
     "timeline_text": "Una riga per anno e un quadrato per mese, più scuro dove hai volato di più.",
     "badges_title": "Qui appariranno i tuoi traguardi",
-    "badges_text": "Li ottieni per distanze, paesi e tappe importanti man mano che aggiungi voli."
+    "badges_text": "Li ottieni per distanze, paesi e tappe importanti man mano che aggiungi voli.",
+    "passport_title": "Qui appariranno i timbri del tuo passaporto",
+    "passport_text": "Ogni paese in cui atterri riceve un timbro, con la data del tuo primo arrivo."
   },
   "stats": {
     "shortest_flight": "Volo più corto",
@@ -332,6 +334,14 @@
     "flights": "Voli",
     "distance": "Chilometri",
     "co2": "CO₂e"
+  },
+  "passport": {
+    "title": "Passaporto",
+    "countries_one": "{{count}} paese timbrato",
+    "countries_other": "{{count}} paesi timbrati",
+    "first_arrival": "Primo arrivo",
+    "visits_one": "{{count}} visita",
+    "visits_other": "{{count}} visite"
   },
   "badges": {
     "title": "Traguardi",

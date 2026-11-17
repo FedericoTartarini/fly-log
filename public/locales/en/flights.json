@@ -201,7 +201,9 @@
     "timeline_title": "Your flights will appear here as a calendar",
     "timeline_text": "One row per year and one square per month, darker where you flew more.",
     "badges_title": "Your badges will appear here",
-    "badges_text": "Earn them for distances, countries and milestones as you add flights."
+    "badges_text": "Earn them for distances, countries and milestones as you add flights.",
+    "passport_title": "Your passport stamps will appear here",
+    "passport_text": "Each country you fly into gets a stamp, dated with your first arrival."
   },
   "stats": {
     "shortest_flight": "Shortest Flight",
@@ -332,6 +334,14 @@
     "flights": "Flights",
     "distance": "Kilometres",
     "co2": "CO₂e"
+  },
+  "passport": {
+    "title": "Passport",
+    "countries_one": "{{count}} country stamped",
+    "countries_other": "{{count}} countries stamped",
+    "first_arrival": "First arrival",
+    "visits_one": "{{count}} visit",
+    "visits_other": "{{count}} visits"
   },
   "badges": {
     "title": "Badges",
