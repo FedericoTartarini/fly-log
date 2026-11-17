@@ -1,0 +1,42 @@
+name: Refresh reference data
+
+# Every six months, regenerate the bundled airport and airline lists and open a
+# PR with the changes for review. See docs/reference-data.md.
+on:
+  schedule:
+    - cron: "0 3 1 1,7 *" # 03:00 UTC on 1 January and 1 July
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Refresh the data
+        run: |
+          {
+            echo "Automated six-monthly refresh of the bundled reference data."
+            echo "Sources and review steps: docs/reference-data.md."
+            echo
+            node scripts/refresh-reference-data.mjs
+          } > "$RUNNER_TEMP/pr-body.md"
+          cat "$RUNNER_TEMP/pr-body.md"
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          branch: chore/refresh-reference-data
+          base: main
+          commit-message: "chore(data): refresh airport and airline lists"
+          title: "chore(data): refresh airport and airline lists"
+          body-path: ${{ runner.temp }}/pr-body.md
+          add-paths: |
+            src/assets/airports.json
+            src/assets/airlines.json
