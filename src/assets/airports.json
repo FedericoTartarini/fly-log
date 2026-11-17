@@ -11,7 +11,7 @@
   {
     "iata": "AAC",
     "airport_name": "El Arish International Airport",
-    "city": "El Arish",
+    "city": "Arish",
     "country": "Egypt",
     "lat": 31.055324,
     "lon": 33.827964,
@@ -74,7 +74,7 @@
   {
     "iata": "AAQ",
     "airport_name": "Anapa Vityazevo Airport",
-    "city": "Krasnyi Kurgan",
+    "city": "Anapa",
     "country": "Russia",
     "lat": 45.002102,
     "lon": 37.347301,
@@ -164,7 +164,7 @@
   {
     "iata": "ABE",
     "airport_name": "Lehigh Valley International Airport",
-    "city": "Allentown/Bethlehem",
+    "city": "Allentown",
     "country": "United States",
     "lat": 40.651773,
     "lon": -75.442797,
@@ -236,7 +236,7 @@
   {
     "iata": "ABT",
     "airport_name": "King Saud Bin Abdulaziz (Al Baha) Airport",
-    "city": "Al-Baha",
+    "city": "Al Bahah",
     "country": "Saudi Arabia",
     "lat": 20.298506,
     "lon": 41.636153,
@@ -254,7 +254,7 @@
   {
     "iata": "ABX",
     "airport_name": "Albury Airport",
-    "city": "East Albury",
+    "city": "Albury",
     "country": "Australia",
     "lat": -36.066758,
     "lon": 146.959148,
@@ -281,7 +281,7 @@
   {
     "iata": "ACA",
     "airport_name": "General Juan N. Álvarez International Airport",
-    "city": "Acapulco",
+    "city": "Acapulco de Juárez",
     "country": "Mexico",
     "lat": 16.757126,
     "lon": -99.753113,
@@ -416,7 +416,7 @@
   {
     "iata": "ADB",
     "airport_name": "Adnan Menderes International Airport",
-    "city": "Izmir",
+    "city": "İzmir",
     "country": "Turkey",
     "lat": 38.2924,
     "lon": 27.157,
@@ -560,7 +560,7 @@
   {
     "iata": "AEG",
     "airport_name": "Aek Godang Airport",
-    "city": "Padang Sidempuan",
+    "city": "Padangsidimpuan",
     "country": "Indonesia",
     "lat": 1.4001,
     "lon": 99.430496,
@@ -569,7 +569,7 @@
   {
     "iata": "AEH",
     "airport_name": "Abeche Airport",
-    "city": "Abeche",
+    "city": "Abéché",
     "country": "Chad",
     "lat": 13.847,
     "lon": 20.844299,
@@ -758,7 +758,7 @@
   {
     "iata": "AGU",
     "airport_name": "Aguascalientes International Airport",
-    "city": "Aguascalientes",
+    "city": "Aguascalientes City",
     "country": "Mexico",
     "lat": 21.699589,
     "lon": -102.318372,
@@ -884,7 +884,7 @@
   {
     "iata": "AJF",
     "airport_name": "Al-Jawf International Airport",
-    "city": "Al-Jawf",
+    "city": "Sakakah",
     "country": "Saudi Arabia",
     "lat": 29.783301,
     "lon": 40.100905,
@@ -983,7 +983,7 @@
   {
     "iata": "AKJ",
     "airport_name": "Asahikawa Airport",
-    "city": "Higashikagura",
+    "city": "Asahikawa",
     "country": "Japan",
     "lat": 43.670799,
     "lon": 142.447006,
@@ -1154,7 +1154,7 @@
   {
     "iata": "ALN",
     "airport_name": "St Louis Regional Airport",
-    "city": "Alton/St Louis",
+    "city": "Alton",
     "country": "United States",
     "lat": 38.89030075069999,
     "lon": -90.0459976196,
@@ -1379,7 +1379,7 @@
   {
     "iata": "ANU",
     "airport_name": "V. C. Bird International Airport",
-    "city": "St. John's",
+    "city": "Antigua",
     "country": "Antigua and Barbuda",
     "lat": 17.1367,
     "lon": -61.792702,
@@ -1406,7 +1406,7 @@
   {
     "iata": "AOC",
     "airport_name": "Leipzig–Altenburg Airport",
-    "city": "Nobitz",
+    "city": "Altenburg",
     "country": "Germany",
     "lat": 50.981945,
     "lon": 12.506389,
@@ -1433,7 +1433,7 @@
   {
     "iata": "AOI",
     "airport_name": "Marche Airport",
-    "city": "Falconara Marittima",
+    "city": "Ancona",
     "country": "Italy",
     "lat": 43.616299,
     "lon": 13.3623,
@@ -1478,7 +1478,7 @@
   {
     "iata": "AOR",
     "airport_name": "Sultan Abdul Halim Airport",
-    "city": "Alor Satar",
+    "city": "Alor Setar",
     "country": "Malaysia",
     "lat": 6.189670085906982,
     "lon": 100.39800262451172,
@@ -1496,7 +1496,7 @@
   {
     "iata": "APA",
     "airport_name": "Centennial Airport",
-    "city": "Denver",
+    "city": "Denver metropolitan area",
     "country": "United States",
     "lat": 39.57009888,
     "lon": -104.848999,
@@ -1649,7 +1649,7 @@
   {
     "iata": "ARE",
     "airport_name": "Antonio Nery Juarbe Pol Airport",
-    "city": "Arecibo",
+    "city": "Arecibo barrio-pueblo",
     "country": "Puerto Rico",
     "lat": 18.45085,
     "lon": -66.675768,
@@ -1658,7 +1658,7 @@
   {
     "iata": "ARH",
     "airport_name": "Talagi Airport",
-    "city": "Archangelsk",
+    "city": "Arkhangelsk",
     "country": "Russia",
     "lat": 64.60030364990234,
     "lon": 40.71670150756836,
@@ -1793,7 +1793,7 @@
   {
     "iata": "ASI",
     "airport_name": "RAF Ascension Island",
-    "city": "Cat Hill",
+    "city": "Georgetown",
     "country": "Saint Helena, Ascension and Tristan da Cunha",
     "lat": -7.970179,
     "lon": -14.392744,
@@ -1892,7 +1892,7 @@
   {
     "iata": "ATA",
     "airport_name": "Comandante FAP German Arias Graziani Airport",
-    "city": "Anta",
+    "city": "Huaraz",
     "country": "Peru",
     "lat": -9.347439765930176,
     "lon": -77.59839630126953,
@@ -2054,7 +2054,7 @@
   {
     "iata": "AUQ",
     "airport_name": "Hiva Oa-Atuona Airport",
-    "city": "Hiva Oa Island",
+    "city": "Atuona",
     "country": "French Polynesia",
     "lat": -9.76879024506,
     "lon": -139.011001587,
@@ -2117,7 +2117,7 @@
   {
     "iata": "AVI",
     "airport_name": "Máximo Gómez Airport",
-    "city": "Ciro Redondo",
+    "city": "Ciego de Ávila",
     "country": "Cuba",
     "lat": 22.0271,
     "lon": -78.789597,
@@ -2153,7 +2153,7 @@
   {
     "iata": "AVP",
     "airport_name": "Wilkes-Barre/Scranton International Airport",
-    "city": "Wilkes-Barre/Scranton",
+    "city": "Wilkes-Barre",
     "country": "United States",
     "lat": 41.337064,
     "lon": -75.724232,
@@ -2171,7 +2171,7 @@
   {
     "iata": "AVV",
     "airport_name": "Melbourne Avalon International Airport",
-    "city": "Geelong/Melbourne",
+    "city": "Geelong",
     "country": "Australia",
     "lat": -38.040269,
     "lon": 144.467196,
@@ -2180,7 +2180,7 @@
   {
     "iata": "AWA",
     "airport_name": "Hawassa International Airport",
-    "city": "Hawassa",
+    "city": "Hawaasa",
     "country": "Ethiopia",
     "lat": 7.100611,
     "lon": 38.396455,
@@ -2306,7 +2306,7 @@
   {
     "iata": "AYJ",
     "airport_name": "Maharshi Valmiki International Airport",
-    "city": "Faizabad",
+    "city": "Ayodhya",
     "country": "India",
     "lat": 26.747736,
     "lon": 82.163664,
@@ -2423,7 +2423,7 @@
   {
     "iata": "BAB",
     "airport_name": "Beale Air Force Base",
-    "city": "Beale Air Force Base",
+    "city": "Marysville",
     "country": "United States",
     "lat": 39.136101,
     "lon": -121.436996,
@@ -2531,7 +2531,7 @@
   {
     "iata": "BAY",
     "airport_name": "Maramureș International Airport",
-    "city": "Tăuții-Măgherăuș",
+    "city": "Baia Mare",
     "country": "Romania",
     "lat": 47.658444,
     "lon": 23.464445,
@@ -2540,7 +2540,7 @@
   {
     "iata": "BBA",
     "airport_name": "Balmaceda Airport",
-    "city": "Balmaceda",
+    "city": "Coyhaique",
     "country": "Chile",
     "lat": -45.915968,
     "lon": -71.689499,
@@ -2729,7 +2729,7 @@
   {
     "iata": "BCT",
     "airport_name": "Boca Raton Airport",
-    "city": "Boca Raton",
+    "city": "Miami metropolitan area",
     "country": "United States",
     "lat": 26.3785,
     "lon": -80.107697,
@@ -2792,7 +2792,7 @@
   {
     "iata": "BDJ",
     "airport_name": "Syamsudin Noor International Airport",
-    "city": "Banjarmasin",
+    "city": "Banjarbaru",
     "country": "Indonesia",
     "lat": -3.440112,
     "lon": 114.761209,
@@ -2909,7 +2909,7 @@
   {
     "iata": "BEJ",
     "airport_name": "Kalimarau Airport",
-    "city": "Tanjung Redeb - Borneo Island",
+    "city": "Tanjung Redeb",
     "country": "Indonesia",
     "lat": 2.14776,
     "lon": 117.430705,
@@ -2936,7 +2936,7 @@
   {
     "iata": "BEM",
     "airport_name": "Beni Mellal Airport",
-    "city": "Oulad Yaich",
+    "city": "Beni Mellal",
     "country": "Morocco",
     "lat": 32.401895,
     "lon": -6.315905,
@@ -2945,7 +2945,7 @@
   {
     "iata": "BEN",
     "airport_name": "Benina International Airport",
-    "city": "Benghazi",
+    "city": "Benina",
     "country": "Libya",
     "lat": 32.096802,
     "lon": 20.269501,
@@ -2954,7 +2954,7 @@
   {
     "iata": "BEP",
     "airport_name": "Bellary Airport",
-    "city": "Bellary",
+    "city": "Ballari",
     "country": "India",
     "lat": 15.162799835205078,
     "lon": 76.88279724121094,
@@ -3134,7 +3134,7 @@
   {
     "iata": "BFP",
     "airport_name": "Beaver County Airport",
-    "city": "Beaver Falls",
+    "city": "Beaver",
     "country": "United States",
     "lat": 40.772499,
     "lon": -80.391403,
@@ -3161,7 +3161,7 @@
   {
     "iata": "BFV",
     "airport_name": "Buri Ram Airport",
-    "city": "Buriram",
+    "city": "Buri Ram",
     "country": "Thailand",
     "lat": 15.2295,
     "lon": 103.252998,
@@ -3242,7 +3242,7 @@
   {
     "iata": "BGN",
     "airport_name": "Belaya Gora Airport",
-    "city": "Belaya Gora",
+    "city": "Belaja Gora",
     "country": "Russia",
     "lat": 68.556227,
     "lon": 146.22784,
@@ -3449,7 +3449,7 @@
   {
     "iata": "BIG",
     "airport_name": "Allen Army Airfield",
-    "city": "Delta Junction Ft Greely",
+    "city": "Fort Greely",
     "country": "United States",
     "lat": 63.994499,
     "lon": -145.722,
@@ -3530,7 +3530,7 @@
   {
     "iata": "BIU",
     "airport_name": "Bildudalur Airport",
-    "city": "Bildudalur",
+    "city": "Bíldudalur",
     "country": "Iceland",
     "lat": 65.641296,
     "lon": -23.5462,
@@ -3647,7 +3647,7 @@
   {
     "iata": "BJX",
     "airport_name": "Guanajuato International Airport",
-    "city": "Silao",
+    "city": "León de Los Aldama",
     "country": "Mexico",
     "lat": 20.992695,
     "lon": -101.480284,
@@ -3656,7 +3656,7 @@
   {
     "iata": "BJY",
     "airport_name": "Batajnica Air Base",
-    "city": "Zemun",
+    "city": "Belgrade",
     "country": "Serbia",
     "lat": 44.935299,
     "lon": 20.2575,
@@ -3782,7 +3782,7 @@
   {
     "iata": "BKW",
     "airport_name": "Raleigh County Memorial Airport",
-    "city": "Beaver",
+    "city": "Beckley",
     "country": "United States",
     "lat": 37.7873,
     "lon": -81.124199,
@@ -3791,7 +3791,7 @@
   {
     "iata": "BKY",
     "airport_name": "Bukavu Kavumu Airport",
-    "city": "Kamakombe",
+    "city": "Bukavu",
     "country": "Democratic Republic of the Congo",
     "lat": -2.30898,
     "lon": 28.8088,
@@ -3809,7 +3809,7 @@
   {
     "iata": "BLB",
     "airport_name": "Panamá Pacífico International Airport",
-    "city": "Panamá City",
+    "city": "Panama Pacifico",
     "country": "Panama",
     "lat": 8.91479,
     "lon": -79.599602,
@@ -3971,7 +3971,7 @@
   {
     "iata": "BMI",
     "airport_name": "Central Illinois Regional Airport at Bloomington-Normal",
-    "city": "Bloomington/Normal",
+    "city": "Bloomington",
     "country": "United States",
     "lat": 40.4771,
     "lon": -88.915901,
@@ -3998,7 +3998,7 @@
   {
     "iata": "BMV",
     "airport_name": "Buon Ma Thuot Airport",
-    "city": "Buon Ma Thuot",
+    "city": "Buôn Ma Thuột",
     "country": "Vietnam",
     "lat": 12.668299675,
     "lon": 108.120002747,
@@ -4043,7 +4043,7 @@
   {
     "iata": "BNI",
     "airport_name": "Benin Airport",
-    "city": "Benin",
+    "city": "Benin City",
     "country": "Nigeria",
     "lat": 6.316979885101318,
     "lon": 5.5995001792907715,
@@ -4061,7 +4061,7 @@
   {
     "iata": "BNN",
     "airport_name": "Brønnøysund Airport, Brønnøy",
-    "city": "Brønnøy",
+    "city": "Brønnøysund",
     "country": "Norway",
     "lat": 65.461098,
     "lon": 12.2175,
@@ -4097,7 +4097,7 @@
   {
     "iata": "BOB",
     "airport_name": "Bora Bora Airport",
-    "city": "Motu Mute",
+    "city": "Bora Bora",
     "country": "French Polynesia",
     "lat": -16.444400787353516,
     "lon": -151.75100708007812,
@@ -4106,7 +4106,7 @@
   {
     "iata": "BOC",
     "airport_name": "Bocas del Toro \"Isla Colón\" International Airport",
-    "city": "Isla Colón",
+    "city": "Bocas del Toro",
     "country": "Panama",
     "lat": 9.34085,
     "lon": -82.250801,
@@ -4124,7 +4124,7 @@
   {
     "iata": "BOG",
     "airport_name": "El Dorado International Airport",
-    "city": "Bogota",
+    "city": "Bogotá",
     "country": "Colombia",
     "lat": 4.70159,
     "lon": -74.1469,
@@ -4214,7 +4214,7 @@
   {
     "iata": "BOY",
     "airport_name": "Bobo Dioulasso Airport",
-    "city": "Bobo Dioulasso",
+    "city": "Bobo-Dioulasso",
     "country": "Burkina Faso",
     "lat": 11.1601,
     "lon": -4.33097,
@@ -4304,7 +4304,7 @@
   {
     "iata": "BPT",
     "airport_name": "Jack Brooks Regional Airport",
-    "city": "Beaumont/Port Arthur",
+    "city": "Beaumont",
     "country": "United States",
     "lat": 29.9508,
     "lon": -94.020699,
@@ -4313,7 +4313,7 @@
   {
     "iata": "BPX",
     "airport_name": "Qamdo Bangda Airport",
-    "city": "Bangda",
+    "city": "Chamdo",
     "country": "China",
     "lat": 30.553600311279297,
     "lon": 97.1082992553711,
@@ -4376,7 +4376,7 @@
   {
     "iata": "BQS",
     "airport_name": "Ignatyevo Airport",
-    "city": "Blagoveschensk",
+    "city": "Blagoveshchensk",
     "country": "Russia",
     "lat": 50.426723,
     "lon": 127.415502,
@@ -4403,7 +4403,7 @@
   {
     "iata": "BRC",
     "airport_name": "Teniente Luis Candelaria International Airport",
-    "city": "San Carlos de Bariloche",
+    "city": "Bariloche",
     "country": "Argentina",
     "lat": -41.151199,
     "lon": -71.157501,
@@ -4439,7 +4439,7 @@
   {
     "iata": "BRK",
     "airport_name": "Bourke Airport",
-    "city": "",
+    "city": "Bourke",
     "country": "Australia",
     "lat": -30.039199829101562,
     "lon": 145.95199584960938,
@@ -4511,7 +4511,7 @@
   {
     "iata": "BRT",
     "airport_name": "Bathurst Island Airport",
-    "city": "Wurrumiyanga",
+    "city": "Bathurst",
     "country": "Australia",
     "lat": -11.764966,
     "lon": 130.615774,
@@ -4538,7 +4538,7 @@
   {
     "iata": "BRX",
     "airport_name": "Maria Montez International Airport",
-    "city": "Barahona",
+    "city": "Santa Cruz de Barahona",
     "country": "Dominican Republic",
     "lat": 18.25149917602539,
     "lon": -71.12039947509766,
@@ -4610,7 +4610,7 @@
   {
     "iata": "BSL",
     "airport_name": "EuroAirport Basel–Mulhouse–Freiburg",
-    "city": "Bâle / Mulhouse",
+    "city": "Basel",
     "country": "France",
     "lat": 47.60068,
     "lon": 7.521117,
@@ -4808,7 +4808,7 @@
   {
     "iata": "BUP",
     "airport_name": "Bhatinda Air Force Station",
-    "city": "",
+    "city": "Bathinda",
     "country": "India",
     "lat": 30.2701,
     "lon": 74.755798,
@@ -4880,7 +4880,7 @@
   {
     "iata": "BVC",
     "airport_name": "Aristides Pereira International Airport",
-    "city": "Boa Vista",
+    "city": "Sal Rei",
     "country": "Cape Verde",
     "lat": 16.136499,
     "lon": -22.888901,
@@ -4916,7 +4916,7 @@
   {
     "iata": "BVI",
     "airport_name": "Birdsville Airport",
-    "city": "",
+    "city": "Birdsville",
     "country": "Australia",
     "lat": -25.897499084472656,
     "lon": 139.34800720214844,
@@ -4934,7 +4934,7 @@
   {
     "iata": "BVY",
     "airport_name": "Beverly Regional Airport",
-    "city": "Beverly / Danvers",
+    "city": "Beverly",
     "country": "United States",
     "lat": 42.584202,
     "lon": -70.916496,
@@ -4952,7 +4952,7 @@
   {
     "iata": "BWE",
     "airport_name": "Braunschweig-Wolfsburg Airport",
-    "city": "Braunschweig",
+    "city": "Brunswick",
     "country": "Germany",
     "lat": 52.319199,
     "lon": 10.5561,
@@ -5105,7 +5105,7 @@
   {
     "iata": "BYC",
     "airport_name": "Yacuiba Airport",
-    "city": "Yacuíba",
+    "city": "Yacuiba",
     "country": "Bolivia",
     "lat": -21.960899353027344,
     "lon": -63.65169906616211,
@@ -5177,7 +5177,7 @@
   {
     "iata": "BYU",
     "airport_name": "Bayreuth Airport",
-    "city": "Bindlach",
+    "city": "Bayreuth",
     "country": "Germany",
     "lat": 49.985001,
     "lon": 11.64,
@@ -5249,7 +5249,7 @@
   {
     "iata": "BZL",
     "airport_name": "Barisal Airport",
-    "city": "Barisal",
+    "city": "Barishal",
     "country": "Bangladesh",
     "lat": 22.801001,
     "lon": 90.301201,
@@ -5366,7 +5366,7 @@
   {
     "iata": "CAH",
     "airport_name": "Cà Mau Airport",
-    "city": "Ca Mau City",
+    "city": "Cà Mau",
     "country": "Vietnam",
     "lat": 9.177667,
     "lon": 105.177778,
@@ -5420,7 +5420,7 @@
   {
     "iata": "CAP",
     "airport_name": "Cap Haitien International Airport",
-    "city": "Cap Haitien",
+    "city": "Cap-Haïtien",
     "country": "Haiti",
     "lat": 19.725547,
     "lon": -72.20071,
@@ -5483,7 +5483,7 @@
   {
     "iata": "CAZ",
     "airport_name": "Cobar Airport",
-    "city": "",
+    "city": "Cobar",
     "country": "Australia",
     "lat": -31.538299560546875,
     "lon": 145.79400634765625,
@@ -5528,7 +5528,7 @@
   {
     "iata": "CBJ",
     "airport_name": "Cabo Rojo Airport",
-    "city": "Cabo Rojo",
+    "city": "Pedernales",
     "country": "Dominican Republic",
     "lat": 17.929000854492188,
     "lon": -71.6447982788086,
@@ -5537,7 +5537,7 @@
   {
     "iata": "CBL",
     "airport_name": "General Tomas de Heres Airport",
-    "city": "Ciudad Bolivar",
+    "city": "Ciudad Bolívar",
     "country": "Venezuela",
     "lat": 8.122161,
     "lon": -63.536957,
@@ -5555,7 +5555,7 @@
   {
     "iata": "CBO",
     "airport_name": "Cotabato (Awang) Airport",
-    "city": "Datu Odin Sinsuat",
+    "city": "Cotabato City",
     "country": "Philippines",
     "lat": 7.164753,
     "lon": 124.209938,
@@ -5609,7 +5609,7 @@
   {
     "iata": "CCE",
     "airport_name": "Capital International Airport",
-    "city": "New Cairo",
+    "city": "The New Capital",
     "country": "Egypt",
     "lat": 30.06465,
     "lon": 31.839974,
@@ -5618,7 +5618,7 @@
   {
     "iata": "CCF",
     "airport_name": "Carcassonne Salvaza Airport",
-    "city": "Carcassonne",
+    "city": "Cité de Carcassonne",
     "country": "France",
     "lat": 43.216,
     "lon": 2.30632,
@@ -5636,7 +5636,7 @@
   {
     "iata": "CCJ",
     "airport_name": "Calicut International Airport",
-    "city": "Calicut",
+    "city": "Kozhikode",
     "country": "India",
     "lat": 11.135996,
     "lon": 75.955152,
@@ -5672,7 +5672,7 @@
   {
     "iata": "CCP",
     "airport_name": "Carriel Sur International Airport",
-    "city": "Concepcion",
+    "city": "Talcahuano",
     "country": "Chile",
     "lat": -36.77235,
     "lon": -73.062828,
@@ -5825,7 +5825,7 @@
   {
     "iata": "CEB",
     "airport_name": "Mactan Cebu International Airport",
-    "city": "Cebu",
+    "city": "Lapu-Lapu",
     "country": "Philippines",
     "lat": 10.309261,
     "lon": 123.97974,
@@ -5843,7 +5843,7 @@
   {
     "iata": "CED",
     "airport_name": "Ceduna Airport",
-    "city": "",
+    "city": "Ceduna",
     "country": "Australia",
     "lat": -32.13059997558594,
     "lon": 133.7100067138672,
@@ -5870,7 +5870,7 @@
   {
     "iata": "CEG",
     "airport_name": "Hawarden Airport",
-    "city": "Broughton",
+    "city": "Chester",
     "country": "United Kingdom",
     "lat": 53.178101,
     "lon": -2.97778,
@@ -5996,7 +5996,7 @@
   {
     "iata": "CFU",
     "airport_name": "Corfu Ioannis Kapodistrias International Airport",
-    "city": "Kerkyra",
+    "city": "Corfu",
     "country": "Greece",
     "lat": 39.60145,
     "lon": 19.912179,
@@ -6077,7 +6077,7 @@
   {
     "iata": "CGN",
     "airport_name": "Cologne Bonn Airport",
-    "city": "Köln",
+    "city": "Cologne",
     "country": "Germany",
     "lat": 50.865898,
     "lon": 7.14274,
@@ -6095,7 +6095,7 @@
   {
     "iata": "CGP",
     "airport_name": "Shah Amanat International Airport",
-    "city": "Chattogram",
+    "city": "Chittagong",
     "country": "Bangladesh",
     "lat": 22.249599,
     "lon": 91.813301,
@@ -6149,7 +6149,7 @@
   {
     "iata": "CHG",
     "airport_name": "Chaoyang Airport",
-    "city": "Shuangta, Chaoyang",
+    "city": "Chaoyang",
     "country": "China",
     "lat": 41.538101,
     "lon": 120.434998,
@@ -6293,7 +6293,7 @@
   {
     "iata": "CIU",
     "airport_name": "Chippewa County International Airport",
-    "city": "Kincheloe",
+    "city": "Sault Ste. Marie",
     "country": "United States",
     "lat": 46.242038,
     "lon": -84.462082,
@@ -6392,7 +6392,7 @@
   {
     "iata": "CJU",
     "airport_name": "Jeju International Airport",
-    "city": "Jeju City",
+    "city": "Jeju",
     "country": "South Korea",
     "lat": 33.512058,
     "lon": 126.492548,
@@ -6401,7 +6401,7 @@
   {
     "iata": "CKB",
     "airport_name": "North Central West Virginia Airport",
-    "city": "Bridgeport",
+    "city": "Clarksburg",
     "country": "United States",
     "lat": 39.2966,
     "lon": -80.228104,
@@ -6428,7 +6428,7 @@
   {
     "iata": "CKH",
     "airport_name": "Chokurdakh Airport",
-    "city": "Chokurdah",
+    "city": "Chokurdakh",
     "country": "Russia",
     "lat": 70.6231,
     "lon": 147.901993,
@@ -6581,7 +6581,7 @@
   {
     "iata": "CLZ",
     "airport_name": "Calabozo Airport",
-    "city": "Guarico",
+    "city": "Calabozo",
     "country": "Venezuela",
     "lat": 8.924656,
     "lon": -67.417091,
@@ -6653,7 +6653,7 @@
   {
     "iata": "CMI",
     "airport_name": "University of Illinois Willard Airport",
-    "city": "Savoy",
+    "city": "Champaign–Urbana metropolitan area",
     "country": "United States",
     "lat": 40.039819,
     "lon": -88.276249,
@@ -6671,7 +6671,7 @@
   {
     "iata": "CMQ",
     "airport_name": "Clermont Airport",
-    "city": "",
+    "city": "Clermont",
     "country": "Australia",
     "lat": -22.7731,
     "lon": 147.621002,
@@ -6698,7 +6698,7 @@
   {
     "iata": "CMW",
     "airport_name": "Ignacio Agramonte International Airport",
-    "city": "Camaguey",
+    "city": "Camagüey",
     "country": "Cuba",
     "lat": 21.419909,
     "lon": -77.848039,
@@ -6788,7 +6788,7 @@
   {
     "iata": "CNP",
     "airport_name": "Neerlerit Inaat Airport",
-    "city": "Neerlerit Inaat",
+    "city": "Ittoqqortoormiit",
     "country": "Greenland",
     "lat": 70.743103,
     "lon": -22.650499,
@@ -6923,7 +6923,7 @@
   {
     "iata": "COQ",
     "airport_name": "Choibalsan Airport",
-    "city": "",
+    "city": "Choibalsan",
     "country": "Mongolia",
     "lat": 48.135381,
     "lon": 114.647231,
@@ -6932,7 +6932,7 @@
   {
     "iata": "COR",
     "airport_name": "Ingeniero Aeronáutico Ambrosio L.V. Taravella International Airport",
-    "city": "Cordoba",
+    "city": "Córdoba",
     "country": "Argentina",
     "lat": -31.312346,
     "lon": -64.208329,
@@ -6968,7 +6968,7 @@
   {
     "iata": "CPC",
     "airport_name": "Aviador C. Campos Airport",
-    "city": "Chapelco/San Martin de los Andes",
+    "city": "San Martín de los Andes",
     "country": "Argentina",
     "lat": -40.075401,
     "lon": -71.137299,
@@ -6986,7 +6986,7 @@
   {
     "iata": "CPE",
     "airport_name": "Ingeniero Alberto Acuña Ongay International Airport",
-    "city": "Campeche",
+    "city": "San Francisco de Campeche",
     "country": "Mexico",
     "lat": 19.815969,
     "lon": -90.500125,
@@ -7004,7 +7004,7 @@
   {
     "iata": "CPO",
     "airport_name": "Desierto de Atacama Airport",
-    "city": "Copiapo",
+    "city": "Copiapó",
     "country": "Chile",
     "lat": -27.2612,
     "lon": -70.779198,
@@ -7049,7 +7049,7 @@
   {
     "iata": "CQD",
     "airport_name": "Shahrekord Airport",
-    "city": "Shahrekord",
+    "city": "Shahr-e Kord",
     "country": "Iran",
     "lat": 32.2971992493,
     "lon": 50.842201232899995,
@@ -7184,7 +7184,7 @@
   {
     "iata": "CRV",
     "airport_name": "Crotone Sant'Anna Pythagoras Airport",
-    "city": "Isola di Capo Rizzuto",
+    "city": "Crotone",
     "country": "Italy",
     "lat": 38.9972,
     "lon": 17.0802,
@@ -7310,7 +7310,7 @@
   {
     "iata": "CTC",
     "airport_name": "Coronel Felipe Varela International Airport",
-    "city": "Catamarca",
+    "city": "San Fernando del Valle de Catamarca",
     "country": "Argentina",
     "lat": -28.593117,
     "lon": -65.7512,
@@ -7355,7 +7355,7 @@
   {
     "iata": "CTN",
     "airport_name": "Cooktown Airport",
-    "city": "",
+    "city": "Cooktown",
     "country": "Australia",
     "lat": -15.443649,
     "lon": 145.183221,
@@ -7418,7 +7418,7 @@
   {
     "iata": "CUF",
     "airport_name": "Cuneo International Airport",
-    "city": "Levaldigi",
+    "city": "Cuneo",
     "country": "Italy",
     "lat": 44.547458,
     "lon": 7.623045,
@@ -7454,7 +7454,7 @@
   {
     "iata": "CUN",
     "airport_name": "Cancún International Airport",
-    "city": "Cancún",
+    "city": "Cancun",
     "country": "Mexico",
     "lat": 21.040817,
     "lon": -86.87347,
@@ -7490,7 +7490,7 @@
   {
     "iata": "CUT",
     "airport_name": "Cutral-Co Airport",
-    "city": "Cutral-Co",
+    "city": "Cutral Có",
     "country": "Argentina",
     "lat": -38.939701,
     "lon": -69.264603,
@@ -7499,7 +7499,7 @@
   {
     "iata": "CUU",
     "airport_name": "General Roberto Fierro Villalobos International Airport",
-    "city": "Chihuahua",
+    "city": "Chihuahua City",
     "country": "Mexico",
     "lat": 28.702649,
     "lon": -105.963764,
@@ -7535,7 +7535,7 @@
   {
     "iata": "CVG",
     "airport_name": "Cincinnati Northern Kentucky International Airport",
-    "city": "Cincinnati / Covington",
+    "city": "Cincinnati",
     "country": "United States",
     "lat": 39.048801,
     "lon": -84.667801,
@@ -7544,7 +7544,7 @@
   {
     "iata": "CVJ",
     "airport_name": "General Mariano Matamoros International Airport",
-    "city": "Temixco",
+    "city": "Cuernavaca",
     "country": "Mexico",
     "lat": 18.833922,
     "lon": -99.261818,
@@ -7607,7 +7607,7 @@
   {
     "iata": "CWA",
     "airport_name": "Central Wisconsin Airport",
-    "city": "Mosinee",
+    "city": "Wausau",
     "country": "United States",
     "lat": 44.777448,
     "lon": -89.670238,
@@ -7616,7 +7616,7 @@
   {
     "iata": "CWB",
     "airport_name": "Curitiba-Afonso Pena International Airport",
-    "city": "Curitiba",
+    "city": "São José dos Pinhais",
     "country": "Brazil",
     "lat": -25.5285,
     "lon": -49.1758,
@@ -7670,7 +7670,7 @@
   {
     "iata": "CXA",
     "airport_name": "Caicara del Orinoco Airport",
-    "city": "",
+    "city": "Caicara del Orinoco",
     "country": "Venezuela",
     "lat": 7.62551,
     "lon": -66.162804,
@@ -7697,7 +7697,7 @@
   {
     "iata": "CXJ",
     "airport_name": "Hugo Cantergiani Regional Airport",
-    "city": "Caxias Do Sul",
+    "city": "Caxias do Sul",
     "country": "Brazil",
     "lat": -29.197183,
     "lon": -51.187647,
@@ -7760,7 +7760,7 @@
   {
     "iata": "CYG",
     "airport_name": "Corryong Airport",
-    "city": "",
+    "city": "Corryong",
     "country": "Australia",
     "lat": -36.18280029296875,
     "lon": 147.88800048828125,
@@ -7787,7 +7787,7 @@
   {
     "iata": "CYP",
     "airport_name": "Calbayog Airport",
-    "city": "Calbayog City",
+    "city": "Calbayog",
     "country": "Philippines",
     "lat": 12.072574,
     "lon": 124.54508,
@@ -7814,7 +7814,7 @@
   {
     "iata": "CYX",
     "airport_name": "Cherskiy Airport",
-    "city": "Cherskiy",
+    "city": "Chersky",
     "country": "Russia",
     "lat": 68.740601,
     "lon": 161.337997,
@@ -7823,7 +7823,7 @@
   {
     "iata": "CYZ",
     "airport_name": "Cauayan Airport",
-    "city": "Cauayan City",
+    "city": "Cauayan",
     "country": "Philippines",
     "lat": 16.9298992157,
     "lon": 121.752998352,
@@ -7868,7 +7868,7 @@
   {
     "iata": "CZM",
     "airport_name": "Cozumel International Airport",
-    "city": "Cozumel",
+    "city": "San Miguel de Cozumel",
     "country": "Mexico",
     "lat": 20.514922,
     "lon": -86.928538,
@@ -7877,7 +7877,7 @@
   {
     "iata": "CZS",
     "airport_name": "Cruzeiro do Sul Airport",
-    "city": "Cruzeiro Do Sul",
+    "city": "Cruzeiro do Sul",
     "country": "Brazil",
     "lat": -7.59991,
     "lon": -72.769501,
@@ -7940,7 +7940,7 @@
   {
     "iata": "DAG",
     "airport_name": "Barstow Daggett Airport",
-    "city": "Daggett",
+    "city": "Barstow",
     "country": "United States",
     "lat": 34.85369873,
     "lon": -116.7870026,
@@ -8039,7 +8039,7 @@
   {
     "iata": "DBD",
     "airport_name": "Dhanbad Airport",
-    "city": "",
+    "city": "Dhanbad",
     "country": "India",
     "lat": 23.834,
     "lon": 86.425301,
@@ -8084,7 +8084,7 @@
   {
     "iata": "DCA",
     "airport_name": "Ronald Reagan Washington National Airport",
-    "city": "Washington",
+    "city": "Washington, D.C.",
     "country": "United States",
     "lat": 38.8521,
     "lon": -77.037697,
@@ -8093,7 +8093,7 @@
   {
     "iata": "DCF",
     "airport_name": "Canefield Airport",
-    "city": "Canefield",
+    "city": "Roseau",
     "country": "Dominica",
     "lat": 15.336693,
     "lon": -61.392108,
@@ -8291,7 +8291,7 @@
   {
     "iata": "DGO",
     "airport_name": "General Guadalupe Victoria International Airport",
-    "city": "Durango",
+    "city": "Victoria de Durango",
     "country": "Mexico",
     "lat": 24.125468,
     "lon": -104.527938,
@@ -8318,7 +8318,7 @@
   {
     "iata": "DHF",
     "airport_name": "Al Dhafra Air Base",
-    "city": "",
+    "city": "Abu Dhabi",
     "country": "United Arab Emirates",
     "lat": 24.248199462900004,
     "lon": 54.547698974599996,
@@ -8399,7 +8399,7 @@
   {
     "iata": "DIE",
     "airport_name": "Arrachart Airport",
-    "city": "Antisiranana",
+    "city": "Antsiranana",
     "country": "Madagascar",
     "lat": -12.3494,
     "lon": 49.291698,
@@ -8444,7 +8444,7 @@
   {
     "iata": "DIN",
     "airport_name": "Dien Bien Phu Airport",
-    "city": "Dien Bien Phu",
+    "city": "Điện Biên Phủ",
     "country": "Vietnam",
     "lat": 21.3974990845,
     "lon": 103.008003235,
@@ -8507,7 +8507,7 @@
   {
     "iata": "DJO",
     "airport_name": "Daloa Airport",
-    "city": "",
+    "city": "Daloa",
     "country": "Côte d'Ivoire",
     "lat": 6.79281,
     "lon": -6.47319,
@@ -8606,7 +8606,7 @@
   {
     "iata": "DLI",
     "airport_name": "Lien Khuong Airport",
-    "city": "Da Lat",
+    "city": "Đà Lạt",
     "country": "Vietnam",
     "lat": 11.750556,
     "lon": 108.366997,
@@ -8624,7 +8624,7 @@
   {
     "iata": "DLS",
     "airport_name": "Columbia Gorge Regional Airport",
-    "city": "Dallesport / The Dalles",
+    "city": "The Dalles",
     "country": "United States",
     "lat": 45.620979,
     "lon": -121.170777,
@@ -8687,7 +8687,7 @@
   {
     "iata": "DMM",
     "airport_name": "King Fahd International Airport",
-    "city": "Ad Dammam",
+    "city": "Dammam",
     "country": "Saudi Arabia",
     "lat": 26.4691,
     "lon": 49.798209,
@@ -8714,7 +8714,7 @@
   {
     "iata": "DNA",
     "airport_name": "Kadena Air Base",
-    "city": "Okinawa",
+    "city": "Kadena",
     "country": "Japan",
     "lat": 26.351667,
     "lon": 127.769444,
@@ -8777,7 +8777,7 @@
   {
     "iata": "DNZ",
     "airport_name": "Çardak Airport",
-    "city": "Denizli",
+    "city": "Çardak district",
     "country": "Turkey",
     "lat": 37.7855987549,
     "lon": 29.7012996674,
@@ -8822,7 +8822,7 @@
   {
     "iata": "DOM",
     "airport_name": "Douglas-Charles Airport",
-    "city": "Marigot",
+    "city": "Roseau",
     "country": "Dominica",
     "lat": 15.546673,
     "lon": -61.301082,
@@ -8930,7 +8930,7 @@
   {
     "iata": "DRN",
     "airport_name": "Dirranbandi Airport",
-    "city": "",
+    "city": "Dirranbandi",
     "country": "Australia",
     "lat": -28.587912,
     "lon": 148.217161,
@@ -8993,7 +8993,7 @@
   {
     "iata": "DSK",
     "airport_name": "Dera Ismael Khan Airport [IN-ACTIVE]",
-    "city": "Dera Ismael Khan",
+    "city": "Dera Ismail Khan",
     "country": "Pakistan",
     "lat": 31.909401,
     "lon": 70.896599,
@@ -9011,7 +9011,7 @@
   {
     "iata": "DSN",
     "airport_name": "Ordos Ejin Horo International Airport",
-    "city": "Ordos",
+    "city": "Ordos City",
     "country": "China",
     "lat": 39.493514,
     "lon": 109.8599,
@@ -9110,7 +9110,7 @@
   {
     "iata": "DUE",
     "airport_name": "Dundo Airport",
-    "city": "Chitato",
+    "city": "Dundo",
     "country": "Angola",
     "lat": -7.400889873504639,
     "lon": 20.818500518798828,
@@ -9119,7 +9119,7 @@
   {
     "iata": "DUG",
     "airport_name": "Bisbee Douglas International Airport",
-    "city": "Douglas Bisbee",
+    "city": "Douglas",
     "country": "United States",
     "lat": 31.464139,
     "lon": -109.60456,
@@ -9128,7 +9128,7 @@
   {
     "iata": "DUJ",
     "airport_name": "DuBois Regional Airport",
-    "city": "Dubois",
+    "city": "DuBois",
     "country": "United States",
     "lat": 41.17829895,
     "lon": -78.8986969,
@@ -9182,7 +9182,7 @@
   {
     "iata": "DVO",
     "airport_name": "Francisco Bangoy International Airport",
-    "city": "Davao",
+    "city": "Davao City",
     "country": "Philippines",
     "lat": 7.12552,
     "lon": 125.646004,
@@ -9227,7 +9227,7 @@
   {
     "iata": "DXN",
     "airport_name": "Noida International Airport",
-    "city": "Gautam Buddha Nagar",
+    "city": "Delhi",
     "country": "India",
     "lat": 28.179868,
     "lon": 77.611843,
@@ -9308,7 +9308,7 @@
   {
     "iata": "DZN",
     "airport_name": "Zhezkazgan National Airport",
-    "city": "Zhezkazgan",
+    "city": "Jezkazgan",
     "country": "Kazakhstan",
     "lat": 47.708953,
     "lon": 67.738094,
@@ -9416,7 +9416,7 @@
   {
     "iata": "EBL",
     "airport_name": "Erbil International Airport",
-    "city": "Arbil",
+    "city": "Erbil",
     "country": "Iraq",
     "lat": 36.236047,
     "lon": 43.946615,
@@ -9434,7 +9434,7 @@
   {
     "iata": "EBU",
     "airport_name": "Saint-Étienne-Bouthéon Airport",
-    "city": "Andrézieux-Bouthéon",
+    "city": "Saint-Étienne",
     "country": "France",
     "lat": 45.5406,
     "lon": 4.29639,
@@ -9461,7 +9461,7 @@
   {
     "iata": "ECN",
     "airport_name": "Ercan International Airport",
-    "city": "Tymbou",
+    "city": "Nicosia",
     "country": "Cyprus",
     "lat": 35.153064,
     "lon": 33.507352,
@@ -9470,7 +9470,7 @@
   {
     "iata": "ECP",
     "airport_name": "Northwest Florida Beaches International Airport",
-    "city": "Panama City Beach",
+    "city": "Panama City",
     "country": "United States",
     "lat": 30.357106,
     "lon": -85.795414,
@@ -9596,7 +9596,7 @@
   {
     "iata": "EGE",
     "airport_name": "Eagle County Regional Airport",
-    "city": "Eagle",
+    "city": "Eagle-Vail",
     "country": "United States",
     "lat": 39.64260101,
     "lon": -106.9179993,
@@ -9821,7 +9821,7 @@
   {
     "iata": "ELF",
     "airport_name": "El Fasher Airport",
-    "city": "El Fasher",
+    "city": "Al-Fashir",
     "country": "Sudan",
     "lat": 13.614899635314941,
     "lon": 25.324600219726562,
@@ -9848,7 +9848,7 @@
   {
     "iata": "ELM",
     "airport_name": "Elmira Corning Regional Airport",
-    "city": "Elmira/Corning",
+    "city": "Elmira",
     "country": "United States",
     "lat": 42.1599006652832,
     "lon": -76.8916015625,
@@ -9884,7 +9884,7 @@
   {
     "iata": "ELU",
     "airport_name": "Guemar Airport - مطار قمار بالوادي",
-    "city": "Guemar",
+    "city": "El Oued",
     "country": "Algeria",
     "lat": 33.511398,
     "lon": 6.77679,
@@ -9947,7 +9947,7 @@
   {
     "iata": "ENC",
     "airport_name": "Nancy-Essey Airport",
-    "city": "Tomblaine",
+    "city": "Nancy",
     "country": "France",
     "lat": 48.692101,
     "lon": 6.23046,
@@ -10073,7 +10073,7 @@
   {
     "iata": "EOR",
     "airport_name": "El Dorado Airport",
-    "city": "Bolivar",
+    "city": "El Dorado",
     "country": "Venezuela",
     "lat": 6.71573,
     "lon": -61.638786,
@@ -10082,7 +10082,7 @@
   {
     "iata": "EOZ",
     "airport_name": "Elorza Airport",
-    "city": "",
+    "city": "Elorza",
     "country": "Venezuela",
     "lat": 7.059677,
     "lon": -69.4967,
@@ -10091,7 +10091,7 @@
   {
     "iata": "EPA",
     "airport_name": "El Palomar Airport",
-    "city": "El Palomar",
+    "city": "Greater Buenos Aires",
     "country": "Argentina",
     "lat": -34.6099,
     "lon": -58.6126,
@@ -10262,7 +10262,7 @@
   {
     "iata": "ESH",
     "airport_name": "Brighton City Airport",
-    "city": "Brighton",
+    "city": "Brighton and Hove",
     "country": "United Kingdom",
     "lat": 50.835602,
     "lon": -0.297222,
@@ -10289,7 +10289,7 @@
   {
     "iata": "ESM",
     "airport_name": "Carlos Concha Torres International Airport",
-    "city": "Tachina",
+    "city": "Esmeraldas",
     "country": "Ecuador",
     "lat": 0.978519,
     "lon": -79.626602,
@@ -10325,7 +10325,7 @@
   {
     "iata": "ETR",
     "airport_name": "Santa Rosa - Artillery Colonel Victor Larrea International Airport",
-    "city": "Santa Rosa",
+    "city": "Machala",
     "country": "Ecuador",
     "lat": -3.441986,
     "lon": -79.996957,
@@ -10334,7 +10334,7 @@
   {
     "iata": "ETZ",
     "airport_name": "Metz-Nancy-Lorraine Airport",
-    "city": "Goin",
+    "city": "Metz",
     "country": "France",
     "lat": 48.982101,
     "lon": 6.25132,
@@ -10352,7 +10352,7 @@
   {
     "iata": "EUN",
     "airport_name": "Laayoune Hassan I International Airport",
-    "city": "El Aaiún",
+    "city": "Laayoune",
     "country": "Western Sahara (disputed territory)",
     "lat": 27.142467,
     "lon": -13.224947,
@@ -10361,7 +10361,7 @@
   {
     "iata": "EUQ",
     "airport_name": "Evelio Javier Airport",
-    "city": "San Jose",
+    "city": "San Jose de Buenavista",
     "country": "Philippines",
     "lat": 10.766644,
     "lon": 121.932506,
@@ -10379,7 +10379,7 @@
   {
     "iata": "EVE",
     "airport_name": "Harstad/Narvik Airport",
-    "city": "Evenes",
+    "city": "Harstad",
     "country": "Norway",
     "lat": 68.491302,
     "lon": 16.678101,
@@ -10460,7 +10460,7 @@
   {
     "iata": "EYK",
     "airport_name": "Beloyarskiy Airport",
-    "city": "",
+    "city": "Beloyarsky",
     "country": "Russia",
     "lat": 63.686901,
     "lon": 66.698601,
@@ -10649,7 +10649,7 @@
   {
     "iata": "FCN",
     "airport_name": "Sea-Airport Cuxhaven/Nordholz / Nordholz Naval Airbase",
-    "city": "Wurster Nordseeküste",
+    "city": "Cuxhaven",
     "country": "Germany",
     "lat": 53.767689,
     "lon": 8.659201,
@@ -10739,7 +10739,7 @@
   {
     "iata": "FEZ",
     "airport_name": "Fes Saïss International Airport",
-    "city": "Fes",
+    "city": "Fez",
     "country": "Morocco",
     "lat": 33.927299,
     "lon": -4.97796,
@@ -10775,7 +10775,7 @@
   {
     "iata": "FHU",
     "airport_name": "Sierra Vista Municipal Airport / Libby Army Air Field",
-    "city": "Fort Huachuca / Sierra Vista",
+    "city": "Sierra Vista",
     "country": "United States",
     "lat": 31.587383,
     "lon": -110.348225,
@@ -10811,7 +10811,7 @@
   {
     "iata": "FKB",
     "airport_name": "Karlsruhe Baden-Baden Airport",
-    "city": "Karlsruhe/Baden-Baden",
+    "city": "Karlsruhe",
     "country": "Germany",
     "lat": 48.7794,
     "lon": 8.0805,
@@ -10910,7 +10910,7 @@
   {
     "iata": "FLR",
     "airport_name": "Florence Airport, Peretola",
-    "city": "Firenze",
+    "city": "Florence",
     "country": "Italy",
     "lat": 43.808558,
     "lon": 11.202822,
@@ -11009,7 +11009,7 @@
   {
     "iata": "FNB",
     "airport_name": "Neubrandenburg Trollenhagen Airport",
-    "city": "Trollenhagen",
+    "city": "Neubrandenburg",
     "country": "Germany",
     "lat": 53.6022,
     "lon": 13.306,
@@ -11027,7 +11027,7 @@
   {
     "iata": "FNI",
     "airport_name": "Nîmes-Arles-Camargue Airport",
-    "city": "Nîmes/Garons",
+    "city": "Nîmes",
     "country": "France",
     "lat": 43.757401,
     "lon": 4.41635,
@@ -11045,7 +11045,7 @@
   {
     "iata": "FNL",
     "airport_name": "Northern Colorado Regional Airport",
-    "city": "Loveland",
+    "city": "Fort Collins",
     "country": "United States",
     "lat": 40.44969,
     "lon": -105.011272,
@@ -11153,7 +11153,7 @@
   {
     "iata": "FRA",
     "airport_name": "Frankfurt Main Airport",
-    "city": "Frankfurt am Main",
+    "city": "Frankfurt",
     "country": "Germany",
     "lat": 50.026706,
     "lon": 8.55835,
@@ -11297,7 +11297,7 @@
   {
     "iata": "FSZ",
     "airport_name": "Mount Fuji Shizuoka Airport",
-    "city": "Makinohara / Shimada",
+    "city": "Shizuoka",
     "country": "Japan",
     "lat": 34.795022,
     "lon": 138.190976,
@@ -11369,7 +11369,7 @@
   {
     "iata": "FUG",
     "airport_name": "Fuyang Xiguan Airport",
-    "city": "Yingzhou, Fuyang",
+    "city": "Fuyang",
     "country": "China",
     "lat": 32.882157,
     "lon": 115.734364,
@@ -11504,7 +11504,7 @@
   {
     "iata": "GAJ",
     "airport_name": "Yamagata Airport",
-    "city": "Higashine",
+    "city": "Yamagata",
     "country": "Japan",
     "lat": 38.4119,
     "lon": 140.371002,
@@ -11531,7 +11531,7 @@
   {
     "iata": "GAN",
     "airport_name": "Gan International Airport",
-    "city": "Gan",
+    "city": "Addu City",
     "country": "Maldives",
     "lat": -0.692975,
     "lon": 73.152627,
@@ -11621,7 +11621,7 @@
   {
     "iata": "GCH",
     "airport_name": "Gachsaran Airport",
-    "city": "Gachsaran",
+    "city": "Dogonbadan",
     "country": "Iran",
     "lat": 30.333869,
     "lon": 50.833796,
@@ -11639,7 +11639,7 @@
   {
     "iata": "GCJ",
     "airport_name": "Grand Central Airport",
-    "city": "Midrand",
+    "city": "Johannesburg",
     "country": "South Africa",
     "lat": -25.986299514799995,
     "lon": 28.1401004791,
@@ -11720,7 +11720,7 @@
   {
     "iata": "GDQ",
     "airport_name": "Gondar Airport",
-    "city": "Azezo",
+    "city": "Gondar",
     "country": "Ethiopia",
     "lat": 12.5199,
     "lon": 37.433998,
@@ -11801,7 +11801,7 @@
   {
     "iata": "GEM",
     "airport_name": "President Obiang Nguema International Airport",
-    "city": "Mengomeyén",
+    "city": "Mongomo",
     "country": "Equatorial Guinea",
     "lat": 1.676437,
     "lon": 11.024904,
@@ -11837,7 +11837,7 @@
   {
     "iata": "GET",
     "airport_name": "Geraldton Airport",
-    "city": "Moonyoonooka",
+    "city": "Geraldton",
     "country": "Australia",
     "lat": -28.796101,
     "lon": 114.707001,
@@ -11909,7 +11909,7 @@
   {
     "iata": "GGG",
     "airport_name": "East Texas Regional Airport",
-    "city": "Longview",
+    "city": "Kilgore",
     "country": "United States",
     "lat": 32.38399887084961,
     "lon": -94.71150207519531,
@@ -11936,7 +11936,7 @@
   {
     "iata": "GHA",
     "airport_name": "Noumérat - Moufdi Zakaria Airport",
-    "city": "El Atteuf",
+    "city": "Ghardaia",
     "country": "Algeria",
     "lat": 32.384102,
     "lon": 3.79411,
@@ -12017,7 +12017,7 @@
   {
     "iata": "GIG",
     "airport_name": "Rio de Janeiro Galeão – Tom Jobim International Airport",
-    "city": "Rio De Janeiro",
+    "city": "Rio de Janeiro",
     "country": "Brazil",
     "lat": -22.809999,
     "lon": -43.250557,
@@ -12089,7 +12089,7 @@
   {
     "iata": "GJT",
     "airport_name": "Grand Junction Regional Airport",
-    "city": "Grand Junction",
+    "city": "Grand Junction Metropolitan Statistical Area",
     "country": "United States",
     "lat": 39.126663,
     "lon": -108.529387,
@@ -12170,7 +12170,7 @@
   {
     "iata": "GLO",
     "airport_name": "Gloucestershire Airport",
-    "city": "Staverton",
+    "city": "Gloucester",
     "country": "United Kingdom",
     "lat": 51.894199,
     "lon": -2.16722,
@@ -12305,7 +12305,7 @@
   {
     "iata": "GND",
     "airport_name": "Maurice Bishop International Airport",
-    "city": "Saint George's",
+    "city": "St. George's",
     "country": "Grenada",
     "lat": 12.003996,
     "lon": -61.785302,
@@ -12350,7 +12350,7 @@
   {
     "iata": "GOA",
     "airport_name": "Genoa Cristoforo Colombo Airport",
-    "city": "Genova",
+    "city": "Genoa",
     "country": "Italy",
     "lat": 44.412039,
     "lon": 8.840732,
@@ -12422,7 +12422,7 @@
   {
     "iata": "GOT",
     "airport_name": "Göteborg Landvetter Airport",
-    "city": "Göteborg",
+    "city": "Gothenburg",
     "country": "Sweden",
     "lat": 57.6628,
     "lon": 12.2798,
@@ -12647,7 +12647,7 @@
   {
     "iata": "GRY",
     "airport_name": "Grímsey Airport",
-    "city": "Grímsey/Sandvík",
+    "city": "Grímsey",
     "country": "Iceland",
     "lat": 66.5458,
     "lon": -18.0173,
@@ -12674,7 +12674,7 @@
   {
     "iata": "GSE",
     "airport_name": "Säve Airport",
-    "city": "Göteborg",
+    "city": "Gothenburg",
     "country": "Sweden",
     "lat": 57.7747,
     "lon": 11.8704,
@@ -12683,7 +12683,7 @@
   {
     "iata": "GSJ",
     "airport_name": "San José Airport",
-    "city": "Puerto San José",
+    "city": "San José",
     "country": "Guatemala",
     "lat": 13.9362,
     "lon": -90.8358,
@@ -12710,7 +12710,7 @@
   {
     "iata": "GSP",
     "airport_name": "Greenville-Spartanburg International Airport",
-    "city": "Greenville/Greer/Spartanburg",
+    "city": "Greer",
     "country": "United States",
     "lat": 34.895699,
     "lon": -82.218903,
@@ -12764,7 +12764,7 @@
   {
     "iata": "GTR",
     "airport_name": "Golden Triangle Regional Airport",
-    "city": "Columbus/W Point/Starkville",
+    "city": "Columbus",
     "country": "United States",
     "lat": 33.450298,
     "lon": -88.5914,
@@ -12800,7 +12800,7 @@
   {
     "iata": "GUI",
     "airport_name": "Guiria Airport",
-    "city": "",
+    "city": "Güiria",
     "country": "Venezuela",
     "lat": 10.574077606200001,
     "lon": -62.3126678467,
@@ -12854,7 +12854,7 @@
   {
     "iata": "GUR",
     "airport_name": "Gurney Airport",
-    "city": "Gurney",
+    "city": "Alotau",
     "country": "Papua New Guinea",
     "lat": -10.3114995956,
     "lon": 150.333999634,
@@ -12926,7 +12926,7 @@
   {
     "iata": "GWD",
     "airport_name": "New Gwadar International Airport",
-    "city": "Gurandani",
+    "city": "Gwadar",
     "country": "Pakistan",
     "lat": 25.296733,
     "lon": 62.498822,
@@ -13052,7 +13052,7 @@
   {
     "iata": "GYM",
     "airport_name": "General José María Yáñez International Airport",
-    "city": "Guaymas",
+    "city": "Heroica Guaymas",
     "country": "Mexico",
     "lat": 27.9689998626709,
     "lon": -110.92500305175781,
@@ -13124,7 +13124,7 @@
   {
     "iata": "HAC",
     "airport_name": "Hachijojima Airport",
-    "city": "Hachijojima",
+    "city": "Hachijō-machi",
     "country": "Japan",
     "lat": 33.114843,
     "lon": 139.785645,
@@ -13151,7 +13151,7 @@
   {
     "iata": "HAJ",
     "airport_name": "Hannover Airport",
-    "city": "Hannover",
+    "city": "Hanover",
     "country": "Germany",
     "lat": 52.461102,
     "lon": 9.68508,
@@ -13196,7 +13196,7 @@
   {
     "iata": "HAS",
     "airport_name": "Hail International Airport",
-    "city": "Hail",
+    "city": "Ha'il",
     "country": "Saudi Arabia",
     "lat": 27.437901,
     "lon": 41.686298,
@@ -13205,7 +13205,7 @@
   {
     "iata": "HAU",
     "airport_name": "Haugesund Airport, Karmøy",
-    "city": "Karmøy",
+    "city": "Haugesund",
     "country": "Norway",
     "lat": 59.345299,
     "lon": 5.20836,
@@ -13286,7 +13286,7 @@
   {
     "iata": "HCN",
     "airport_name": "Hengchun Airport",
-    "city": "Hengchun",
+    "city": "Hengchun Township",
     "country": "Taiwan",
     "lat": 22.0411,
     "lon": 120.730003,
@@ -13493,7 +13493,7 @@
   {
     "iata": "HGI",
     "airport_name": "Itanagar Donyi Polo Hollongi Airport",
-    "city": "Hollongi",
+    "city": "Itanagar",
     "country": "India",
     "lat": 26.96683,
     "lon": 93.638792,
@@ -13556,7 +13556,7 @@
   {
     "iata": "HHN",
     "airport_name": "Frankfurt-Hahn Airport",
-    "city": "Frankfurt am Main",
+    "city": "Hahn",
     "country": "Germany",
     "lat": 49.946353,
     "lon": 7.261734,
@@ -13637,7 +13637,7 @@
   {
     "iata": "HIM",
     "airport_name": "Hingurakgoda Air Force Base",
-    "city": "Polonnaruwa Town",
+    "city": "Minneriya",
     "country": "Sri Lanka",
     "lat": 8.04981,
     "lon": 80.9814,
@@ -13709,7 +13709,7 @@
   {
     "iata": "HKK",
     "airport_name": "Hokitika Airfield",
-    "city": "",
+    "city": "Hokitika",
     "country": "New Zealand",
     "lat": -42.713600158691406,
     "lon": 170.98500061035156,
@@ -13799,7 +13799,7 @@
   {
     "iata": "HLT",
     "airport_name": "Hamilton Airport",
-    "city": "",
+    "city": "Hamilton",
     "country": "Australia",
     "lat": -37.64889907836914,
     "lon": 142.06500244140625,
@@ -13826,7 +13826,7 @@
   {
     "iata": "HMB",
     "airport_name": "Suhaj International Airport",
-    "city": "Suhaj",
+    "city": "Sohag",
     "country": "Egypt",
     "lat": 26.342515,
     "lon": 31.743017,
@@ -14132,7 +14132,7 @@
   {
     "iata": "HRI",
     "airport_name": "Mattala Rajapaksa International Airport",
-    "city": "Mattala",
+    "city": "Hambantota",
     "country": "Sri Lanka",
     "lat": 6.283878,
     "lon": 81.124163,
@@ -14186,7 +14186,7 @@
   {
     "iata": "HSA",
     "airport_name": "Hazrat Sultan International Airport",
-    "city": "Turkıstan",
+    "city": "Turkistan",
     "country": "Kazakhstan",
     "lat": 43.311087,
     "lon": 68.550352,
@@ -14366,7 +14366,7 @@
   {
     "iata": "HUA",
     "airport_name": "Redstone Army Air Field",
-    "city": "Redstone Arsnl Huntsville",
+    "city": "Redstone Arsenal",
     "country": "United States",
     "lat": 34.67869949,
     "lon": -86.68479919,
@@ -14447,7 +14447,7 @@
   {
     "iata": "HUX",
     "airport_name": "Bahías de Huatulco International Airport",
-    "city": "Huatulco",
+    "city": "Santa María Huatulco",
     "country": "Mexico",
     "lat": 15.775437,
     "lon": -96.260456,
@@ -14510,7 +14510,7 @@
   {
     "iata": "HVN",
     "airport_name": "Tweed New Haven Airport",
-    "city": "New Haven",
+    "city": "Houston",
     "country": "United States",
     "lat": 41.262869,
     "lon": -72.887694,
@@ -14564,7 +14564,7 @@
   {
     "iata": "HXX",
     "airport_name": "Hay Airport",
-    "city": "",
+    "city": "Hay",
     "country": "Australia",
     "lat": -34.531399,
     "lon": 144.830002,
@@ -14690,7 +14690,7 @@
   {
     "iata": "IAD",
     "airport_name": "Washington Dulles International Airport",
-    "city": "Washington",
+    "city": "Washington, D.C.",
     "country": "United States",
     "lat": 38.9445,
     "lon": -77.455803,
@@ -14744,7 +14744,7 @@
   {
     "iata": "IAS",
     "airport_name": "Iaşi International Airport",
-    "city": "Iaşi",
+    "city": "Iași",
     "country": "Romania",
     "lat": 47.179633,
     "lon": 27.621431,
@@ -14789,7 +14789,7 @@
   {
     "iata": "IBR",
     "airport_name": "Ibaraki Airport",
-    "city": "Omitama",
+    "city": "Tokyo",
     "country": "Japan",
     "lat": 36.181456,
     "lon": 140.414434,
@@ -14843,7 +14843,7 @@
   {
     "iata": "IEG",
     "airport_name": "Zielona Góra-Babimost Airport",
-    "city": "Nowe Kramsko",
+    "city": "Zielona Góra",
     "country": "Poland",
     "lat": 52.1385,
     "lon": 15.7986,
@@ -14942,7 +14942,7 @@
   {
     "iata": "IGR",
     "airport_name": "Cataratas Del Iguazú International Airport",
-    "city": "Puerto Iguazu",
+    "city": "Puerto Iguazú",
     "country": "Argentina",
     "lat": -25.737301,
     "lon": -54.4734,
@@ -14951,7 +14951,7 @@
   {
     "iata": "IGS",
     "airport_name": "Ingolstadt Manching Airport",
-    "city": "Manching",
+    "city": "Ingolstadt",
     "country": "Germany",
     "lat": 48.7156982421875,
     "lon": 11.534000396728516,
@@ -14960,7 +14960,7 @@
   {
     "iata": "IGT",
     "airport_name": "Magas Airport",
-    "city": "Sunzha",
+    "city": "Magas",
     "country": "Russia",
     "lat": 43.323268,
     "lon": 45.012568,
@@ -15113,7 +15113,7 @@
   {
     "iata": "ILO",
     "airport_name": "Iloilo International Airport",
-    "city": "Iloilo",
+    "city": "Iloilo City",
     "country": "Philippines",
     "lat": 10.833017,
     "lon": 122.493358,
@@ -15122,7 +15122,7 @@
   {
     "iata": "ILP",
     "airport_name": "Île des Pins Airport",
-    "city": "Île des Pins",
+    "city": "Vao",
     "country": "New Caledonia",
     "lat": -22.5889,
     "lon": 167.455994,
@@ -15140,7 +15140,7 @@
   {
     "iata": "ILR",
     "airport_name": "General Tunde Idiagbon International Airport",
-    "city": "Ilorin/Ogbomosho",
+    "city": "Ilorin",
     "country": "Nigeria",
     "lat": 8.44021,
     "lon": 4.49392,
@@ -15167,7 +15167,7 @@
   {
     "iata": "ILZ",
     "airport_name": "Žilina-Dolný Hričov Airport",
-    "city": "Dolný Hričov",
+    "city": "Žilina",
     "country": "Slovakia",
     "lat": 49.233292,
     "lon": 18.613386,
@@ -15194,7 +15194,7 @@
   {
     "iata": "IMQ",
     "airport_name": "Maku National Airport",
-    "city": "Showt",
+    "city": "Maku",
     "country": "Iran",
     "lat": 39.191293,
     "lon": 44.928505,
@@ -15203,7 +15203,7 @@
   {
     "iata": "IMT",
     "airport_name": "Ford Airport",
-    "city": "Kingsford",
+    "city": "Iron Mountain",
     "country": "United States",
     "lat": 45.81911,
     "lon": -88.114557,
@@ -15293,7 +15293,7 @@
   {
     "iata": "INU",
     "airport_name": "Nauru International Airport",
-    "city": "Yaren",
+    "city": "Yaren District",
     "country": "Nauru",
     "lat": -0.547893,
     "lon": 166.919525,
@@ -15356,7 +15356,7 @@
   {
     "iata": "IPC",
     "airport_name": "Mataveri International Airport",
-    "city": "Isla De Pascua",
+    "city": "Hanga Roa",
     "country": "Chile",
     "lat": -27.165411,
     "lon": -109.421027,
@@ -15419,7 +15419,7 @@
   {
     "iata": "IQM",
     "airport_name": "Qiemo Yudu Airport",
-    "city": "Qiemo",
+    "city": "Qiemo Town",
     "country": "China",
     "lat": 38.234516,
     "lon": 85.465462,
@@ -15473,7 +15473,7 @@
   {
     "iata": "IRI",
     "airport_name": "Iringa Airport",
-    "city": "Nduli",
+    "city": "Iringa",
     "country": "Tanzania",
     "lat": -7.66863,
     "lon": 35.752102,
@@ -15563,7 +15563,7 @@
   {
     "iata": "ISM",
     "airport_name": "Kissimmee Gateway Airport",
-    "city": "Orlando",
+    "city": "Greater Orlando",
     "country": "United States",
     "lat": 28.2898006439,
     "lon": -81.4371032715,
@@ -15707,7 +15707,7 @@
   {
     "iata": "IWJ",
     "airport_name": "Iwami Airport",
-    "city": "Masuda",
+    "city": "Hagi",
     "country": "Japan",
     "lat": 34.676399231,
     "lon": 131.789993286,
@@ -15797,7 +15797,7 @@
   {
     "iata": "IXI",
     "airport_name": "Lilabari North Lakhimpur Airport",
-    "city": "Lilabari",
+    "city": "North Lakhimpur",
     "country": "India",
     "lat": 27.295682,
     "lon": 94.097266,
@@ -15815,7 +15815,7 @@
   {
     "iata": "IXK",
     "airport_name": "Keshod Airport",
-    "city": "Keshod",
+    "city": "Junagadh",
     "country": "India",
     "lat": 21.317101,
     "lon": 70.270401,
@@ -15914,7 +15914,7 @@
   {
     "iata": "IXZ",
     "airport_name": "Veer Savarkar International Airport / INS Utkrosh",
-    "city": "Port Blair",
+    "city": "Srivijayapuram",
     "country": "India",
     "lat": 11.640194,
     "lon": 92.72902,
@@ -16022,7 +16022,7 @@
   {
     "iata": "JAL",
     "airport_name": "El Lencero Airport",
-    "city": "Emiliano Zapata",
+    "city": "Xalapa",
     "country": "Mexico",
     "lat": 19.475107,
     "lon": -96.797008,
@@ -16076,7 +16076,7 @@
   {
     "iata": "JBQ",
     "airport_name": "La Isabela International Airport",
-    "city": "La Isabela",
+    "city": "Santo Domingo",
     "country": "Dominican Republic",
     "lat": 18.572500228881836,
     "lon": -69.98560333251953,
@@ -16175,7 +16175,7 @@
   {
     "iata": "JEE",
     "airport_name": "Jérémie Airport",
-    "city": "Carrefour Sanon",
+    "city": "Jérémie",
     "country": "Haiti",
     "lat": 18.663099,
     "lon": -74.170303,
@@ -16202,7 +16202,7 @@
   {
     "iata": "JFK",
     "airport_name": "John F. Kennedy International Airport",
-    "city": "New York",
+    "city": "New York City",
     "country": "United States",
     "lat": 40.639447,
     "lon": -73.779317,
@@ -16238,7 +16238,7 @@
   {
     "iata": "JGN",
     "airport_name": "Jiayuguan International Airport",
-    "city": "Jiayuguan",
+    "city": "Jiayuguan City",
     "country": "China",
     "lat": 39.859052,
     "lon": 98.339344,
@@ -16310,7 +16310,7 @@
   {
     "iata": "JIB",
     "airport_name": "Djibouti-Ambouli Airport",
-    "city": "Djibouti City",
+    "city": "Djibouti",
     "country": "Djibouti",
     "lat": 11.5473,
     "lon": 43.1595,
@@ -16400,7 +16400,7 @@
   {
     "iata": "JKH",
     "airport_name": "Chios Island National Airport",
-    "city": "Chios Island",
+    "city": "Chios",
     "country": "Greece",
     "lat": 38.34320068359375,
     "lon": 26.140600204467773,
@@ -16409,7 +16409,7 @@
   {
     "iata": "JKR",
     "airport_name": "Janakpur Airport",
-    "city": "Janakpur",
+    "city": "Kathmandu",
     "country": "Nepal",
     "lat": 26.708799,
     "lon": 85.922401,
@@ -16490,7 +16490,7 @@
   {
     "iata": "JNH",
     "airport_name": "Jiaxing Nanhu Airport",
-    "city": "Xiuzhou, Hangzhou",
+    "city": "Jiaxing",
     "country": "China",
     "lat": 30.698056,
     "lon": 120.663056,
@@ -16616,7 +16616,7 @@
   {
     "iata": "JSA",
     "airport_name": "Jaisalmer Airport",
-    "city": "",
+    "city": "Jaisalmer",
     "country": "India",
     "lat": 26.8887,
     "lon": 70.864998,
@@ -16625,7 +16625,7 @@
   {
     "iata": "JSH",
     "airport_name": "Sitia Airport",
-    "city": "Crete Island",
+    "city": "Sitia",
     "country": "Greece",
     "lat": 35.21609878540039,
     "lon": 26.101299285888672,
@@ -16787,7 +16787,7 @@
   {
     "iata": "JYV",
     "airport_name": "Jyväskylä Airport",
-    "city": "Jyväskylän Maalaiskunta",
+    "city": "Jyväskylä",
     "country": "Finland",
     "lat": 62.399502,
     "lon": 25.678301,
@@ -16796,7 +16796,7 @@
   {
     "iata": "JZH",
     "airport_name": "Jiuzhai Huanglong Airport",
-    "city": "Ngawa",
+    "city": "Jiuzhai",
     "country": "China",
     "lat": 32.853333,
     "lon": 103.682222,
@@ -16895,7 +16895,7 @@
   {
     "iata": "KAW",
     "airport_name": "Kawthoung Airport",
-    "city": "Kawthoung",
+    "city": "Kawthaung",
     "country": "Myanmar",
     "lat": 10.049300193786621,
     "lon": 98.53800201416016,
@@ -16931,7 +16931,7 @@
   {
     "iata": "KBR",
     "airport_name": "Sultan Ismail Petra Airport",
-    "city": "Kota Baharu",
+    "city": "Kota Bharu",
     "country": "Malaysia",
     "lat": 6.1668500900268555,
     "lon": 102.29299926757812,
@@ -16976,7 +16976,7 @@
   {
     "iata": "KCO",
     "airport_name": "Cengiz Topel Airport",
-    "city": "Kartepe",
+    "city": "Kocaeli Province",
     "country": "Turkey",
     "lat": 40.735001,
     "lon": 30.0833,
@@ -16985,7 +16985,7 @@
   {
     "iata": "KCT",
     "airport_name": "Koggala Airport",
-    "city": "Galle",
+    "city": "Koggala",
     "country": "Sri Lanka",
     "lat": 5.993680000305176,
     "lon": 80.32029724121094,
@@ -17003,7 +17003,7 @@
   {
     "iata": "KCZ",
     "airport_name": "Kochi Ryoma Airport",
-    "city": "Kochi",
+    "city": "Kōchi",
     "country": "Japan",
     "lat": 33.545217,
     "lon": 133.670166,
@@ -17066,7 +17066,7 @@
   {
     "iata": "KEF",
     "airport_name": "Keflavik International Airport",
-    "city": "Reykjavík",
+    "city": "Keflavík",
     "country": "Iceland",
     "lat": 63.985001,
     "lon": -22.6056,
@@ -17093,7 +17093,7 @@
   {
     "iata": "KEM",
     "airport_name": "Kemi-Tornio Airport",
-    "city": "Kemi / Tornio",
+    "city": "Kemi",
     "country": "Finland",
     "lat": 65.778701782227,
     "lon": 24.582099914551,
@@ -17183,7 +17183,7 @@
   {
     "iata": "KGC",
     "airport_name": "Kingscote Airport",
-    "city": "",
+    "city": "Kingscote",
     "country": "Australia",
     "lat": -35.71390151977539,
     "lon": 137.52099609375,
@@ -17219,7 +17219,7 @@
   {
     "iata": "KGI",
     "airport_name": "Kalgoorlie Boulder Airport",
-    "city": "Broadwood",
+    "city": "Kalgoorlie",
     "country": "Australia",
     "lat": -30.791543,
     "lon": 121.464586,
@@ -17282,7 +17282,7 @@
   {
     "iata": "KHD",
     "airport_name": "Khoram Abad Airport",
-    "city": "",
+    "city": "Khorramabad",
     "country": "Iran",
     "lat": 33.43539810180664,
     "lon": 48.282901763916016,
@@ -17336,7 +17336,7 @@
   {
     "iata": "KHK",
     "airport_name": "Khark Airport",
-    "city": "Khark",
+    "city": "Kharg",
     "country": "Iran",
     "lat": 29.260503,
     "lon": 50.322193,
@@ -17444,7 +17444,7 @@
   {
     "iata": "KIR",
     "airport_name": "Kerry Airport",
-    "city": "Farranfore",
+    "city": "Tralee",
     "country": "Ireland",
     "lat": 52.180901,
     "lon": -9.52378,
@@ -17489,7 +17489,7 @@
   {
     "iata": "KJB",
     "airport_name": "Kurnool Airport",
-    "city": "Orvakal",
+    "city": "Kurnool",
     "country": "India",
     "lat": 15.716288,
     "lon": 78.16923,
@@ -17516,7 +17516,7 @@
   {
     "iata": "KJK",
     "airport_name": "Kortrijk-Wevelgem International Airport",
-    "city": "Wevelgem",
+    "city": "Kortrijk",
     "country": "Belgium",
     "lat": 50.818878,
     "lon": 3.209551,
@@ -17552,7 +17552,7 @@
   {
     "iata": "KKJ",
     "airport_name": "Kitakyushu Airport",
-    "city": "Kitakyushu",
+    "city": "Kitakyūshū",
     "country": "Japan",
     "lat": 33.845901,
     "lon": 131.035004,
@@ -17732,7 +17732,7 @@
   {
     "iata": "KMC",
     "airport_name": "King Khaled Military City Airport",
-    "city": "King Khaled Military City",
+    "city": "Hafar Al-Batin",
     "country": "Saudi Arabia",
     "lat": 27.9009,
     "lon": 45.528198,
@@ -17741,7 +17741,7 @@
   {
     "iata": "KME",
     "airport_name": "Kamembe Airport",
-    "city": "Kamembe",
+    "city": "Cyangugu",
     "country": "Rwanda",
     "lat": -2.462239980697632,
     "lon": 28.907899856567383,
@@ -17795,7 +17795,7 @@
   {
     "iata": "KMQ",
     "airport_name": "Komatsu Airport / JASDF Komatsu Air Base",
-    "city": "Kanazawa",
+    "city": "Komatsu",
     "country": "Japan",
     "lat": 36.393407,
     "lon": 136.406895,
@@ -17840,7 +17840,7 @@
   {
     "iata": "KNA",
     "airport_name": "Viña del Mar Airport",
-    "city": "Viña del Mar",
+    "city": "Concón",
     "country": "Chile",
     "lat": -32.9496,
     "lon": -71.4786,
@@ -17912,7 +17912,7 @@
   {
     "iata": "KNS",
     "airport_name": "King Island Airport",
-    "city": "",
+    "city": "Currie",
     "country": "Australia",
     "lat": -39.877498626708984,
     "lon": 143.8780059814453,
@@ -17975,7 +17975,7 @@
   {
     "iata": "KOK",
     "airport_name": "Kokkola-Pietarsaari Airport",
-    "city": "Kokkola / Kruunupyy",
+    "city": "Kokkola",
     "country": "Finland",
     "lat": 63.721199,
     "lon": 23.143101,
@@ -17993,7 +17993,7 @@
   {
     "iata": "KOS",
     "airport_name": "Sihanouk International Airport",
-    "city": "Preah Sihanouk",
+    "city": "Sihanoukville",
     "country": "Cambodia",
     "lat": 10.570557,
     "lon": 103.632067,
@@ -18047,7 +18047,7 @@
   {
     "iata": "KPW",
     "airport_name": "Keperveem Airport",
-    "city": "Keperveem",
+    "city": "Bilibino",
     "country": "Russia",
     "lat": 67.845001,
     "lon": 166.139999,
@@ -18083,7 +18083,7 @@
   {
     "iata": "KRF",
     "airport_name": "Kramfors-Sollefteå Höga Kusten Airport",
-    "city": "Nyland",
+    "city": "Kramfors",
     "country": "Sweden",
     "lat": 63.048599,
     "lon": 17.7689,
@@ -18164,7 +18164,7 @@
   {
     "iata": "KRW",
     "airport_name": "Turkmenbaşy International Airport",
-    "city": "Turkmenbaşy",
+    "city": "Türkmenbaşy",
     "country": "Turkmenistan",
     "lat": 40.062833,
     "lon": 53.005085,
@@ -18344,7 +18344,7 @@
   {
     "iata": "KTP",
     "airport_name": "Tinson Pen Airport",
-    "city": "Tinson Pen",
+    "city": "Kingston",
     "country": "Jamaica",
     "lat": 17.98859977722168,
     "lon": -76.82379913330078,
@@ -18452,7 +18452,7 @@
   {
     "iata": "KUO",
     "airport_name": "Kuopio Airport",
-    "city": "Kuopio / Siilinjärvi",
+    "city": "Kuopio",
     "country": "Finland",
     "lat": 63.007099,
     "lon": 27.7978,
@@ -18479,7 +18479,7 @@
   {
     "iata": "KUU",
     "airport_name": "Kullu Manali Airport",
-    "city": "Bhuntar",
+    "city": "Kullu",
     "country": "India",
     "lat": 31.876699,
     "lon": 77.154404,
@@ -18731,7 +18731,7 @@
   {
     "iata": "KZR",
     "airport_name": "Zafer Airport",
-    "city": "Altıntaş",
+    "city": "Kütahya",
     "country": "Turkey",
     "lat": 39.111107,
     "lon": 30.130405,
@@ -18767,7 +18767,7 @@
   {
     "iata": "LAF",
     "airport_name": "Purdue University Airport",
-    "city": "West Lafayette",
+    "city": "Lafayette",
     "country": "United States",
     "lat": 40.412875,
     "lon": -86.939363,
@@ -18812,7 +18812,7 @@
   {
     "iata": "LAO",
     "airport_name": "Laoag International Airport",
-    "city": "Laoag City",
+    "city": "Laoag",
     "country": "Philippines",
     "lat": 18.175089,
     "lon": 120.531006,
@@ -18830,7 +18830,7 @@
   {
     "iata": "LAQ",
     "airport_name": "Al Abraq International Airport",
-    "city": "Al Albraq",
+    "city": "Al Bayda",
     "country": "Libya",
     "lat": 32.789036,
     "lon": 21.954864,
@@ -18983,7 +18983,7 @@
   {
     "iata": "LBQ",
     "airport_name": "Lambarene Airport",
-    "city": "Lambarene",
+    "city": "Lambaréné",
     "country": "Gabon",
     "lat": -0.704389,
     "lon": 10.2457,
@@ -19055,7 +19055,7 @@
   {
     "iata": "LCC",
     "airport_name": "Lecce Galatina Air Base / Galatina Fortunato Cesari Airport",
-    "city": "Galatina",
+    "city": "Lecce",
     "country": "Italy",
     "lat": 40.239201,
     "lon": 18.133301,
@@ -19208,7 +19208,7 @@
   {
     "iata": "LED",
     "airport_name": "Pulkovo Airport",
-    "city": "St. Petersburg",
+    "city": "Saint Petersburg",
     "country": "Russia",
     "lat": 59.800301,
     "lon": 30.262501,
@@ -19343,7 +19343,7 @@
   {
     "iata": "LFR",
     "airport_name": "La Fria Airport",
-    "city": "",
+    "city": "La Fría",
     "country": "Venezuela",
     "lat": 8.239167,
     "lon": -72.271027,
@@ -19370,7 +19370,7 @@
   {
     "iata": "LGA",
     "airport_name": "LaGuardia Airport",
-    "city": "New York",
+    "city": "New York City",
     "country": "United States",
     "lat": 40.777199,
     "lon": -73.872597,
@@ -19388,7 +19388,7 @@
   {
     "iata": "LGG",
     "airport_name": "Liège Airport",
-    "city": "Grâce-Hollogne",
+    "city": "Liège",
     "country": "Belgium",
     "lat": 50.638574,
     "lon": 5.443897,
@@ -19433,7 +19433,7 @@
   {
     "iata": "LGS",
     "airport_name": "Comodoro D.R. Salomón Airport",
-    "city": "Malargue",
+    "city": "Malargüe",
     "country": "Argentina",
     "lat": -35.493599,
     "lon": -69.574303,
@@ -19550,7 +19550,7 @@
   {
     "iata": "LIG",
     "airport_name": "Limoges Airport",
-    "city": "Limoges/Bellegarde",
+    "city": "Limoges",
     "country": "France",
     "lat": 45.862801,
     "lon": 1.17944,
@@ -19559,7 +19559,7 @@
   {
     "iata": "LIH",
     "airport_name": "Lihue Airport",
-    "city": "Lihue, Kauai",
+    "city": "Līhuʻe",
     "country": "United States",
     "lat": 21.974393,
     "lon": -159.337146,
@@ -19721,7 +19721,7 @@
   {
     "iata": "LKY",
     "airport_name": "Lake Manyara Airport",
-    "city": "Lake Manyara National Park",
+    "city": "Haydom",
     "country": "Tanzania",
     "lat": -3.37631,
     "lon": 35.818298,
@@ -19829,7 +19829,7 @@
   {
     "iata": "LMQ",
     "airport_name": "Marsa al Brega Airport",
-    "city": "Marsa al Brega",
+    "city": "Brega",
     "country": "Libya",
     "lat": 30.378099,
     "lon": 19.576401,
@@ -20027,7 +20027,7 @@
   {
     "iata": "LPB",
     "airport_name": "El Alto International Airport",
-    "city": "La Paz / El Alto",
+    "city": "La Paz",
     "country": "Bolivia",
     "lat": -16.510272,
     "lon": -68.189416,
@@ -20090,7 +20090,7 @@
   {
     "iata": "LPQ",
     "airport_name": "Luang Phabang International Airport",
-    "city": "Luang Phabang",
+    "city": "Luang Prabang",
     "country": "Laos",
     "lat": 19.904273,
     "lon": 102.167191,
@@ -20198,7 +20198,7 @@
   {
     "iata": "LSC",
     "airport_name": "La Florida Airport",
-    "city": "La Serena-Coquimbo",
+    "city": "La Serena",
     "country": "Chile",
     "lat": -29.916201,
     "lon": -71.199501,
@@ -20261,7 +20261,7 @@
   {
     "iata": "LSP",
     "airport_name": "Josefa Camejo International Airport",
-    "city": "Paraguaná",
+    "city": "Punto Fijo",
     "country": "Venezuela",
     "lat": 11.780775,
     "lon": -70.151497,
@@ -20369,7 +20369,7 @@
   {
     "iata": "LTN",
     "airport_name": "London Luton Airport",
-    "city": "Luton",
+    "city": "London",
     "country": "United Kingdom",
     "lat": 51.874699,
     "lon": -0.368333,
@@ -20432,7 +20432,7 @@
   {
     "iata": "LUD",
     "airport_name": "Luderitz Airport",
-    "city": "Luderitz",
+    "city": "Lüderitz",
     "country": "Namibia",
     "lat": -26.687400817871094,
     "lon": 15.242899894714355,
@@ -20450,7 +20450,7 @@
   {
     "iata": "LUG",
     "airport_name": "Lugano Airport",
-    "city": "Agno",
+    "city": "Lugano",
     "country": "Switzerland",
     "lat": 46.004299,
     "lon": 8.91058,
@@ -20459,7 +20459,7 @@
   {
     "iata": "LUH",
     "airport_name": "Ludhiana Airport",
-    "city": "",
+    "city": "Ludhiana",
     "country": "India",
     "lat": 30.854700088500977,
     "lon": 75.95259857177734,
@@ -20783,7 +20783,7 @@
   {
     "iata": "LYX",
     "airport_name": "Lydd London Ashford Airport",
-    "city": "Romney Marsh",
+    "city": "Lydd",
     "country": "United Kingdom",
     "lat": 50.956246,
     "lon": 0.939074,
@@ -20819,7 +20819,7 @@
   {
     "iata": "LZN",
     "airport_name": "Matsu Nangan Airport",
-    "city": "Matsu",
+    "city": "Nangan Township",
     "country": "Taiwan",
     "lat": 26.159656,
     "lon": 119.958376,
@@ -20900,7 +20900,7 @@
   {
     "iata": "MAJ",
     "airport_name": "Marshall Islands International Airport",
-    "city": "Majuro Atoll",
+    "city": "Majuro",
     "country": "Marshall Islands",
     "lat": 7.06511,
     "lon": 171.271656,
@@ -20918,7 +20918,7 @@
   {
     "iata": "MAM",
     "airport_name": "General Servando Canales International Airport",
-    "city": "Matamoros",
+    "city": "Heroica Matamoros",
     "country": "Mexico",
     "lat": 25.7698993683,
     "lon": -97.5252990723,
@@ -20981,7 +20981,7 @@
   {
     "iata": "MAX",
     "airport_name": "Ouro Sogui Airport",
-    "city": "Ouro Sogui",
+    "city": "Matam",
     "country": "Senegal",
     "lat": 15.5936,
     "lon": -13.3228,
@@ -20999,7 +20999,7 @@
   {
     "iata": "MAZ",
     "airport_name": "Eugenio Maria De Hostos Airport",
-    "city": "Mayaguez",
+    "city": "Mayagüez barrio-pueblo",
     "country": "Puerto Rico",
     "lat": 18.255699,
     "lon": -67.148499,
@@ -21017,7 +21017,7 @@
   {
     "iata": "MBD",
     "airport_name": "George Dick Montshioa Airport",
-    "city": "Mafeking",
+    "city": "Mahikeng",
     "country": "South Africa",
     "lat": -25.798401,
     "lon": 25.548,
@@ -21071,7 +21071,7 @@
   {
     "iata": "MBS",
     "airport_name": "MBS International Airport",
-    "city": "Freeland",
+    "city": "Saginaw",
     "country": "United States",
     "lat": 43.533181,
     "lon": -84.083104,
@@ -21080,7 +21080,7 @@
   {
     "iata": "MBT",
     "airport_name": "Moises R. Espinosa Airport",
-    "city": "Masbate",
+    "city": "Masbate City",
     "country": "Philippines",
     "lat": 12.369682,
     "lon": 123.630095,
@@ -21100,8 +21100,8 @@
     "airport_name": "Maribor Edvard Rusjan Airport",
     "city": "Maribor",
     "country": "Slovenia",
-    "lat": 46.4799,
-    "lon": 15.6861,
+    "lat": 46.479861,
+    "lon": 15.686131,
     "iso_country": "SI"
   },
   {
@@ -21251,7 +21251,7 @@
   {
     "iata": "MCY",
     "airport_name": "Sunshine Coast Airport",
-    "city": "Maroochydore",
+    "city": "Sunshine Coast",
     "country": "Australia",
     "lat": -26.593324,
     "lon": 153.08319,
@@ -21296,7 +21296,7 @@
   {
     "iata": "MDH",
     "airport_name": "Southern Illinois Airport",
-    "city": "Murphysboro",
+    "city": "Carbondale",
     "country": "United States",
     "lat": 37.778099,
     "lon": -89.251999,
@@ -21395,7 +21395,7 @@
   {
     "iata": "MEB",
     "airport_name": "Melbourne Essendon Airport",
-    "city": "Essendon Fields",
+    "city": "Melbourne",
     "country": "Australia",
     "lat": -37.7281,
     "lon": 144.901993,
@@ -21575,7 +21575,7 @@
   {
     "iata": "MFK",
     "airport_name": "Matsu Beigan Airport",
-    "city": "Matsu",
+    "city": "Beigan Township",
     "country": "Taiwan",
     "lat": 26.22414,
     "lon": 120.002679,
@@ -21719,7 +21719,7 @@
   {
     "iata": "MGZ",
     "airport_name": "Myeik Airport",
-    "city": "Mkeik",
+    "city": "Myeik",
     "country": "Myanmar",
     "lat": 12.439800262451172,
     "lon": 98.62149810791016,
@@ -21917,7 +21917,7 @@
   {
     "iata": "MJC",
     "airport_name": "Man Airport",
-    "city": "",
+    "city": "Man",
     "country": "Côte d'Ivoire",
     "lat": 7.27207,
     "lon": -7.58736,
@@ -21971,7 +21971,7 @@
   {
     "iata": "MJM",
     "airport_name": "Mbuji Mayi Airport",
-    "city": "Mbuji Mayi",
+    "city": "Mbuji-Mayi",
     "country": "Democratic Republic of the Congo",
     "lat": -6.121240139010001,
     "lon": 23.569000244099996,
@@ -22142,7 +22142,7 @@
   {
     "iata": "MLC",
     "airport_name": "Mc Alester Regional Airport",
-    "city": "Mc Alester",
+    "city": "McAlester",
     "country": "United States",
     "lat": 34.882401,
     "lon": -95.783501,
@@ -22232,7 +22232,7 @@
   {
     "iata": "MMB",
     "airport_name": "Memanbetsu Airport",
-    "city": "Ōzora",
+    "city": "Ozora",
     "country": "Japan",
     "lat": 43.8805999756,
     "lon": 144.164001465,
@@ -22295,7 +22295,7 @@
   {
     "iata": "MMO",
     "airport_name": "Maio Airport",
-    "city": "Vila do Maio",
+    "city": "Porto Inglês",
     "country": "Cape Verde",
     "lat": 15.155900001525879,
     "lon": -23.213699340820312,
@@ -22538,7 +22538,7 @@
   {
     "iata": "MPA",
     "airport_name": "Katima Mulilo Airport",
-    "city": "Mpacha",
+    "city": "Katima Mulilo",
     "country": "Namibia",
     "lat": -17.634258,
     "lon": 24.176688,
@@ -22583,7 +22583,7 @@
   {
     "iata": "MPV",
     "airport_name": "Edward F Knapp State Airport",
-    "city": "Barre/Montpelier",
+    "city": "Barre",
     "country": "United States",
     "lat": 44.20349884,
     "lon": -72.56230164,
@@ -22691,7 +22691,7 @@
   {
     "iata": "MQT",
     "airport_name": "Marquette Sawyer Regional Airport",
-    "city": "Gwinn",
+    "city": "Marquette",
     "country": "United States",
     "lat": 46.351498,
     "lon": -87.395884,
@@ -22817,7 +22817,7 @@
   {
     "iata": "MRV",
     "airport_name": "Mineralnye Vody Airport",
-    "city": "Mineralnyye Vody",
+    "city": "Mineralnye Vody",
     "country": "Russia",
     "lat": 44.225101,
     "lon": 43.081902,
@@ -23042,7 +23042,7 @@
   {
     "iata": "MTT",
     "airport_name": "Minatitlán/Coatzacoalcos International Airport",
-    "city": "Cosoleacaque",
+    "city": "Minatitlán",
     "country": "Mexico",
     "lat": 18.103399,
     "lon": -94.580704,
@@ -23159,7 +23159,7 @@
   {
     "iata": "MUW",
     "airport_name": "Ghriss Airport",
-    "city": "Ghriss",
+    "city": "Mascara",
     "country": "Algeria",
     "lat": 35.207699,
     "lon": 0.147142,
@@ -23177,7 +23177,7 @@
   {
     "iata": "MVA",
     "airport_name": "Mývatn Airport",
-    "city": "Myvatn",
+    "city": "Reykjahlíð",
     "country": "Iceland",
     "lat": 65.6558,
     "lon": -16.9181,
@@ -23222,7 +23222,7 @@
   {
     "iata": "MVQ",
     "airport_name": "Mogilev Airport",
-    "city": "Mogilev",
+    "city": "Mahilyow",
     "country": "Belarus",
     "lat": 53.954898834228516,
     "lon": 30.09510040283203,
@@ -23303,7 +23303,7 @@
   {
     "iata": "MWX",
     "airport_name": "Muan International Airport",
-    "city": "Muan",
+    "city": "Gwangju",
     "country": "South Korea",
     "lat": 34.991406,
     "lon": 126.382814,
@@ -23546,7 +23546,7 @@
   {
     "iata": "MZG",
     "airport_name": "Penghu Magong Airport",
-    "city": "Huxi",
+    "city": "Magong",
     "country": "Taiwan",
     "lat": 23.568701,
     "lon": 119.627998,
@@ -23564,7 +23564,7 @@
   {
     "iata": "MZI",
     "airport_name": "Mopti Airport",
-    "city": "Sévaré",
+    "city": "Mopti",
     "country": "Mali",
     "lat": 14.5128,
     "lon": -4.07956,
@@ -23618,7 +23618,7 @@
   {
     "iata": "MZT",
     "airport_name": "General Rafael Buelna International Airport",
-    "city": "Mazatlàn",
+    "city": "Mazatlán",
     "country": "Mexico",
     "lat": 23.162823,
     "lon": -106.264517,
@@ -23690,7 +23690,7 @@
   {
     "iata": "NAK",
     "airport_name": "Nakhon Ratchasima Airport",
-    "city": "Chaloem Phra Kiat",
+    "city": "Nakhon Ratchasima",
     "country": "Thailand",
     "lat": 14.9495,
     "lon": 102.313004,
@@ -23726,7 +23726,7 @@
   {
     "iata": "NAP",
     "airport_name": "Naples International Airport",
-    "city": "Napoli",
+    "city": "Naples",
     "country": "Italy",
     "lat": 40.886002,
     "lon": 14.2908,
@@ -24005,7 +24005,7 @@
   {
     "iata": "NER",
     "airport_name": "Chulman Airport",
-    "city": "Neryungri",
+    "city": "Chulman",
     "country": "Russia",
     "lat": 56.913898468018,
     "lon": 124.91400146484,
@@ -24059,7 +24059,7 @@
   {
     "iata": "NGA",
     "airport_name": "Young Airport",
-    "city": "",
+    "city": "Young",
     "country": "Australia",
     "lat": -34.255576,
     "lon": 148.247118,
@@ -24077,7 +24077,7 @@
   {
     "iata": "NGE",
     "airport_name": "N'Gaoundéré Airport",
-    "city": "N'Gaoundéré",
+    "city": "Ngaoundéré",
     "country": "Cameroon",
     "lat": 7.3570098876953125,
     "lon": 13.559200286865234,
@@ -24086,7 +24086,7 @@
   {
     "iata": "NGF",
     "airport_name": "Kaneohe Bay MCAS (Marion E. Carl Field) Airport",
-    "city": "Kaneohe",
+    "city": "Marine Corps Base Hawaii",
     "country": "United States",
     "lat": 21.4505,
     "lon": -157.768005,
@@ -24167,7 +24167,7 @@
   {
     "iata": "NHV",
     "airport_name": "Nuku Hiva Airport",
-    "city": "Nuku Hiva",
+    "city": "Taiohae",
     "country": "French Polynesia",
     "lat": -8.7956,
     "lon": -140.229004,
@@ -24338,7 +24338,7 @@
   {
     "iata": "NLI",
     "airport_name": "Nikolayevsk-na-Amure Airport",
-    "city": "Nikolayevsk-na-Amure Airport",
+    "city": "Nikolayevsk-on-Amur",
     "country": "Russia",
     "lat": 53.154999,
     "lon": 140.649994,
@@ -24347,7 +24347,7 @@
   {
     "iata": "NLK",
     "airport_name": "Norfolk Island International Airport",
-    "city": "Burnt Pine",
+    "city": "Kingston",
     "country": "Norfolk Island",
     "lat": -29.041759,
     "lon": 167.939474,
@@ -24356,7 +24356,7 @@
   {
     "iata": "NLO",
     "airport_name": "Ndolo Airport",
-    "city": "N'dolo",
+    "city": "Kinshasa",
     "country": "Democratic Republic of the Congo",
     "lat": -4.32666015625,
     "lon": 15.327500343323,
@@ -24365,7 +24365,7 @@
   {
     "iata": "NLT",
     "airport_name": "Xinyuan Nalati Airport",
-    "city": "Xinyuan",
+    "city": "Narat Town",
     "country": "China",
     "lat": 43.4318,
     "lon": 83.3786,
@@ -24464,7 +24464,7 @@
   {
     "iata": "NNM",
     "airport_name": "Naryan Mar Airport",
-    "city": "Naryan Mar",
+    "city": "Naryan-Mar",
     "country": "Russia",
     "lat": 67.639999,
     "lon": 53.121899,
@@ -24509,7 +24509,7 @@
   {
     "iata": "NOG",
     "airport_name": "Nogales International Airport",
-    "city": "Nogales",
+    "city": "Heroica Nogales",
     "country": "Mexico",
     "lat": 31.225756,
     "lon": -110.976934,
@@ -25031,7 +25031,7 @@
   {
     "iata": "NYG",
     "airport_name": "Quantico Marine Corps Airfield / Turner Field",
-    "city": "Quantico",
+    "city": "Marine Corps Base Quantico",
     "country": "United States",
     "lat": 38.501701,
     "lon": -77.305298,
@@ -25067,7 +25067,7 @@
   {
     "iata": "NYO",
     "airport_name": "Stockholm Skavsta Airport",
-    "city": "Nyköping",
+    "city": "Stockholm",
     "country": "Sweden",
     "lat": 58.789656,
     "lon": 16.911479,
@@ -25076,7 +25076,7 @@
   {
     "iata": "NYT",
     "airport_name": "Nay Pyi Taw International Airport",
-    "city": "Naypyitaw",
+    "city": "Naypyidaw",
     "country": "Myanmar",
     "lat": 19.623501,
     "lon": 96.200996,
@@ -25139,7 +25139,7 @@
   {
     "iata": "OAJ",
     "airport_name": "Albert J Ellis Airport",
-    "city": "Richlands",
+    "city": "Jacksonville",
     "country": "United States",
     "lat": 34.829201,
     "lon": -77.612099,
@@ -25166,7 +25166,7 @@
   {
     "iata": "OAX",
     "airport_name": "Xoxocotlán International Airport",
-    "city": "Oaxaca",
+    "city": "Oaxaca de Juárez",
     "country": "Mexico",
     "lat": 16.998773,
     "lon": -96.726092,
@@ -25229,7 +25229,7 @@
   {
     "iata": "OCJ",
     "airport_name": "Ian Fleming International Airport",
-    "city": "Boscobel",
+    "city": "Ocho Rios",
     "country": "Jamaica",
     "lat": 18.404079,
     "lon": -76.969754,
@@ -25283,7 +25283,7 @@
   {
     "iata": "ODH",
     "airport_name": "RAF Odiham",
-    "city": "Hook",
+    "city": "Odiham",
     "country": "United Kingdom",
     "lat": 51.2341,
     "lon": -0.942825,
@@ -25346,7 +25346,7 @@
   {
     "iata": "OGD",
     "airport_name": "Ogden Hinckley Airport",
-    "city": "Ogden",
+    "city": "Ogden–Clearfield metropolitan area",
     "country": "United States",
     "lat": 41.195899963379,
     "lon": -112.0120010376,
@@ -25409,7 +25409,7 @@
   {
     "iata": "OGZ",
     "airport_name": "Vladikavkaz Beslan International Airport",
-    "city": "Beslan",
+    "city": "Vladikavkaz",
     "country": "Russia",
     "lat": 43.205101,
     "lon": 44.606602,
@@ -25418,7 +25418,7 @@
   {
     "iata": "OHA",
     "airport_name": "RNZAF Base Ohakea",
-    "city": "",
+    "city": "Palmerston North",
     "country": "New Zealand",
     "lat": -40.20600128173828,
     "lon": 175.38800048828125,
@@ -25454,7 +25454,7 @@
   {
     "iata": "OHS",
     "airport_name": "Suhar International Airport",
-    "city": "Suhar",
+    "city": "Sohar",
     "country": "Oman",
     "lat": 24.38604,
     "lon": 56.62541,
@@ -25481,7 +25481,7 @@
   {
     "iata": "OIT",
     "airport_name": "Oita Airport",
-    "city": "Oita",
+    "city": "Ōita-shi",
     "country": "Japan",
     "lat": 33.479400634799994,
     "lon": 131.736999512,
@@ -25670,7 +25670,7 @@
   {
     "iata": "OMB",
     "airport_name": "Omboue Hospital Airport",
-    "city": "Omboue",
+    "city": "Omboué",
     "country": "Gabon",
     "lat": -1.57473,
     "lon": 9.26269,
@@ -25679,7 +25679,7 @@
   {
     "iata": "OMC",
     "airport_name": "Ormoc Airport",
-    "city": "Ormoc City",
+    "city": "Ormoc",
     "country": "Philippines",
     "lat": 11.057715,
     "lon": 124.565622,
@@ -25787,7 +25787,7 @@
   {
     "iata": "ONQ",
     "airport_name": "Zonguldak Çaycuma Airport",
-    "city": "Zonguldak",
+    "city": "Karadeniz Ereğli",
     "country": "Turkey",
     "lat": 41.506401,
     "lon": 32.0886,
@@ -25796,7 +25796,7 @@
   {
     "iata": "ONT",
     "airport_name": "Ontario International Airport",
-    "city": "Ontario",
+    "city": "Ontario, California",
     "country": "United States",
     "lat": 34.056,
     "lon": -117.600998,
@@ -25859,7 +25859,7 @@
   {
     "iata": "ORA",
     "airport_name": "Orán Airport",
-    "city": "Orán",
+    "city": "San Ramón de la Nueva Orán",
     "country": "Argentina",
     "lat": -23.1528,
     "lon": -64.329201,
@@ -26030,7 +26030,7 @@
   {
     "iata": "OST",
     "airport_name": "Ostend-Bruges International Airport",
-    "city": "Oostende",
+    "city": "Ostend",
     "country": "Belgium",
     "lat": 51.1998,
     "lon": 2.874673,
@@ -26129,7 +26129,7 @@
   {
     "iata": "OUE",
     "airport_name": "Ouesso Airport",
-    "city": "",
+    "city": "Ouésso",
     "country": "Republic of the Congo",
     "lat": 1.61599,
     "lon": 16.037901,
@@ -26147,7 +26147,7 @@
   {
     "iata": "OUL",
     "airport_name": "Oulu Airport",
-    "city": "Oulu / Oulunsalo",
+    "city": "Oulu",
     "country": "Finland",
     "lat": 64.930099,
     "lon": 25.354601,
@@ -26156,7 +26156,7 @@
   {
     "iata": "OUZ",
     "airport_name": "Tazadit Airport",
-    "city": "Zouérate",
+    "city": "Zouérat",
     "country": "Mauritania",
     "lat": 22.757345,
     "lon": -12.482228,
@@ -26174,7 +26174,7 @@
   {
     "iata": "OVD",
     "airport_name": "Asturias Airport",
-    "city": "Asturias",
+    "city": "Oviedo",
     "country": "Spain",
     "lat": 43.563599,
     "lon": -6.03462,
@@ -26183,7 +26183,7 @@
   {
     "iata": "OVS",
     "airport_name": "Sovetskiy Airport",
-    "city": "Sovetskiy",
+    "city": "Sovetsky",
     "country": "Russia",
     "lat": 61.326622009277344,
     "lon": 63.60191345214844,
@@ -26219,7 +26219,7 @@
   {
     "iata": "OXF",
     "airport_name": "London Oxford Airport",
-    "city": "Kidlington",
+    "city": "Oxford",
     "country": "United Kingdom",
     "lat": 51.836899,
     "lon": -1.32,
@@ -26273,7 +26273,7 @@
   {
     "iata": "OYP",
     "airport_name": "Saint-Georges-de-l'Oyapock Airport",
-    "city": "Saint-Georges-de-l'Oyapock",
+    "city": "Saint-Georges",
     "country": "French Guiana",
     "lat": 3.8976,
     "lon": -51.8041,
@@ -26300,7 +26300,7 @@
   {
     "iata": "OZH",
     "airport_name": "Zaporizhzhia International Airport",
-    "city": "Zaporizhia",
+    "city": "Zaporizhzhia",
     "country": "Ukraine",
     "lat": 47.866962,
     "lon": 35.314723,
@@ -26345,7 +26345,7 @@
   {
     "iata": "PAC",
     "airport_name": "Marcos A. Gelabert International Airport",
-    "city": "Albrook",
+    "city": "Panama City",
     "country": "Panama",
     "lat": 8.97334,
     "lon": -79.555603,
@@ -26408,7 +26408,7 @@
   {
     "iata": "PAN",
     "airport_name": "Pattani Airport",
-    "city": "",
+    "city": "Pattani",
     "country": "Thailand",
     "lat": 6.78546,
     "lon": 101.153999,
@@ -26471,7 +26471,7 @@
   {
     "iata": "PAZ",
     "airport_name": "El Tajín National Airport",
-    "city": "Poza Rica",
+    "city": "Poza Rica de Hidalgo",
     "country": "Mexico",
     "lat": 20.6026992798,
     "lon": -97.46080017090001,
@@ -26480,7 +26480,7 @@
   {
     "iata": "PBC",
     "airport_name": "Hermanos Serdán International Airport",
-    "city": "Puebla",
+    "city": "Heroica Puebla de Zaragoza",
     "country": "Mexico",
     "lat": 19.158465,
     "lon": -98.371582,
@@ -26516,7 +26516,7 @@
   {
     "iata": "PBH",
     "airport_name": "Paro International Airport",
-    "city": "Paro",
+    "city": "Thimphu",
     "country": "Bhutan",
     "lat": 27.4032,
     "lon": 89.424599,
@@ -26795,7 +26795,7 @@
   {
     "iata": "PEN",
     "airport_name": "Penang International Airport",
-    "city": "Penang",
+    "city": "George Town",
     "country": "Malaysia",
     "lat": 5.296303,
     "lon": 100.276185,
@@ -26903,7 +26903,7 @@
   {
     "iata": "PGF",
     "airport_name": "Perpignan-Rivesaltes (Llabanère) Airport",
-    "city": "Perpignan/Rivesaltes",
+    "city": "Perpignan",
     "country": "France",
     "lat": 42.740398,
     "lon": 2.87067,
@@ -26930,7 +26930,7 @@
   {
     "iata": "PGU",
     "airport_name": "Persian Gulf International Airport",
-    "city": "Khiyaroo",
+    "city": "Asaluyeh",
     "country": "Iran",
     "lat": 27.379601,
     "lon": 52.737701,
@@ -27056,7 +27056,7 @@
   {
     "iata": "PHY",
     "airport_name": "Phetchabun Airport",
-    "city": "",
+    "city": "Phetchabun",
     "country": "Thailand",
     "lat": 16.6760005951,
     "lon": 101.194999695,
@@ -27074,7 +27074,7 @@
   {
     "iata": "PIB",
     "airport_name": "Hattiesburg Laurel Regional Airport",
-    "city": "Moselle",
+    "city": "Hattiesburg",
     "country": "United States",
     "lat": 31.4671,
     "lon": -89.337097,
@@ -27083,7 +27083,7 @@
   {
     "iata": "PIE",
     "airport_name": "St. Petersburg Clearwater International Airport",
-    "city": "Pinellas Park",
+    "city": "St. Petersburg",
     "country": "United States",
     "lat": 27.9102,
     "lon": -82.687401,
@@ -27110,7 +27110,7 @@
   {
     "iata": "PIK",
     "airport_name": "Glasgow Prestwick Airport",
-    "city": "Prestwick",
+    "city": "Glasgow",
     "country": "United Kingdom",
     "lat": 55.501499,
     "lon": -4.577182,
@@ -27146,7 +27146,7 @@
   {
     "iata": "PIS",
     "airport_name": "Poitiers-Biard Airport",
-    "city": "Poitiers/Biard",
+    "city": "Poitiers",
     "country": "France",
     "lat": 46.5877,
     "lon": 0.306666,
@@ -27290,7 +27290,7 @@
   {
     "iata": "PKW",
     "airport_name": "Selebi Phikwe Airport",
-    "city": "Selebi Phikwe",
+    "city": "Selebi-Phikwe",
     "country": "Botswana",
     "lat": -22.0583,
     "lon": 27.8288,
@@ -27308,7 +27308,7 @@
   {
     "iata": "PKY",
     "airport_name": "Tjilik Riwut Airport",
-    "city": "Palangkaraya",
+    "city": "Palangka Raya",
     "country": "Indonesia",
     "lat": -2.227146,
     "lon": 113.943388,
@@ -27317,7 +27317,7 @@
   {
     "iata": "PKZ",
     "airport_name": "Pakse International Airport",
-    "city": "Pakse",
+    "city": "Pāksē",
     "country": "Laos",
     "lat": 15.133973,
     "lon": 105.779871,
@@ -27434,7 +27434,7 @@
   {
     "iata": "PMA",
     "airport_name": "Pemba Airport",
-    "city": "Chake Chake",
+    "city": "Chake-Chake",
     "country": "Tanzania",
     "lat": -5.25726,
     "lon": 39.811401,
@@ -27479,7 +27479,7 @@
   {
     "iata": "PMI",
     "airport_name": "Palma de Mallorca Airport",
-    "city": "Palma de Mallorca",
+    "city": "Palma",
     "country": "Spain",
     "lat": 39.551701,
     "lon": 2.73881,
@@ -27515,7 +27515,7 @@
   {
     "iata": "PMS",
     "airport_name": "Palmyra Airport",
-    "city": "Tadmur",
+    "city": "Palmyra",
     "country": "Syria",
     "lat": 34.5574,
     "lon": 38.316898,
@@ -27524,7 +27524,7 @@
   {
     "iata": "PMV",
     "airport_name": "Del Caribe Santiago Mariño International Airport",
-    "city": "Isla Margarita",
+    "city": "Porlamar",
     "country": "Venezuela",
     "lat": 10.912603,
     "lon": -63.966599,
@@ -27650,7 +27650,7 @@
   {
     "iata": "PNR",
     "airport_name": "Antonio Agostinho-Neto International Airport",
-    "city": "Pointe Noire",
+    "city": "Pointe-Noire",
     "country": "Republic of the Congo",
     "lat": -4.81603,
     "lon": 11.8866,
@@ -27686,7 +27686,7 @@
   {
     "iata": "PNX",
     "airport_name": "North Texas Regional Airport Perrin Field",
-    "city": "Denison",
+    "city": "Sherman",
     "country": "United States",
     "lat": 33.7141,
     "lon": -96.673698,
@@ -27695,7 +27695,7 @@
   {
     "iata": "PNY",
     "airport_name": "Pondicherry Airport",
-    "city": "Puducherry",
+    "city": "Pondicherry",
     "country": "India",
     "lat": 11.968,
     "lon": 79.812,
@@ -27740,7 +27740,7 @@
   {
     "iata": "POG",
     "airport_name": "Port Gentil International Airport",
-    "city": "Port Gentil",
+    "city": "Port-Gentil",
     "country": "Gabon",
     "lat": -0.711739,
     "lon": 8.75438,
@@ -27776,7 +27776,7 @@
   {
     "iata": "POO",
     "airport_name": "Poços de Caldas - Embaixador Walther Moreira Salles Airport",
-    "city": "Poços De Caldas",
+    "city": "Poços de Caldas",
     "country": "Brazil",
     "lat": -21.842529,
     "lon": -46.569768,
@@ -27812,7 +27812,7 @@
   {
     "iata": "POT",
     "airport_name": "Ken Jones Airport",
-    "city": "Ken Jones",
+    "city": "Port Antonio",
     "country": "Jamaica",
     "lat": 18.1987991333,
     "lon": -76.53450012210001,
@@ -27830,7 +27830,7 @@
   {
     "iata": "POW",
     "airport_name": "Portorož Airport",
-    "city": "Sečovlje",
+    "city": "Portorož",
     "country": "Slovenia",
     "lat": 45.47201,
     "lon": 13.615951,
@@ -27911,7 +27911,7 @@
   {
     "iata": "PPQ",
     "airport_name": "Paraparaumu Airport",
-    "city": "",
+    "city": "Paraparaumu",
     "country": "New Zealand",
     "lat": -40.904701232910156,
     "lon": 174.98899841308594,
@@ -27965,7 +27965,7 @@
   {
     "iata": "PRA",
     "airport_name": "General Urquiza Airport",
-    "city": "Parana",
+    "city": "Paraná",
     "country": "Argentina",
     "lat": -31.7948,
     "lon": -60.4804,
@@ -28028,7 +28028,7 @@
   {
     "iata": "PRN",
     "airport_name": "Priština Adem Jashari International Airport",
-    "city": "Prishtina",
+    "city": "Pristina",
     "country": "Kosovo",
     "lat": 42.5728,
     "lon": 21.035801,
@@ -28136,7 +28136,7 @@
   {
     "iata": "PSO",
     "airport_name": "Antonio Nariño Airport",
-    "city": "Chachagüí",
+    "city": "Pasto",
     "country": "Colombia",
     "lat": 1.396722,
     "lon": -77.29093,
@@ -28208,7 +28208,7 @@
   {
     "iata": "PTJ",
     "airport_name": "Portland Airport",
-    "city": "",
+    "city": "Victoria",
     "country": "Australia",
     "lat": -38.31809997558594,
     "lon": 141.4709930419922,
@@ -28289,7 +28289,7 @@
   {
     "iata": "PUF",
     "airport_name": "Pau Pyrénées Airport",
-    "city": "Pau/Pyrénées",
+    "city": "Pau",
     "country": "France",
     "lat": 43.380001,
     "lon": -0.418611,
@@ -28298,7 +28298,7 @@
   {
     "iata": "PUG",
     "airport_name": "Port Augusta Airport",
-    "city": "",
+    "city": "Port Augusta",
     "country": "Australia",
     "lat": -32.506900787353516,
     "lon": 137.7169952392578,
@@ -28388,7 +28388,7 @@
   {
     "iata": "PVD",
     "airport_name": "Rhode Island T. F. Green International Airport",
-    "city": "Providence/Warwick",
+    "city": "Providence",
     "country": "United States",
     "lat": 41.725038,
     "lon": -71.425668,
@@ -28442,7 +28442,7 @@
   {
     "iata": "PVS",
     "airport_name": "Provideniya Bay Airport",
-    "city": "Chukotka",
+    "city": "Provideniya",
     "country": "Russia",
     "lat": 64.378098,
     "lon": -173.242996,
@@ -28460,7 +28460,7 @@
   {
     "iata": "PWE",
     "airport_name": "Pevek Airport",
-    "city": "Apapelgino",
+    "city": "Pevek",
     "country": "Russia",
     "lat": 69.783302,
     "lon": 170.597,
@@ -28559,7 +28559,7 @@
   {
     "iata": "PYJ",
     "airport_name": "Polyarny Airport",
-    "city": "Yakutia",
+    "city": "Udachny",
     "country": "Russia",
     "lat": 66.400398,
     "lon": 112.029999,
@@ -28622,7 +28622,7 @@
   {
     "iata": "PZO",
     "airport_name": "General Manuel Carlos Piar International Airport",
-    "city": "Guyana City",
+    "city": "Ciudad Guayana",
     "country": "Venezuela",
     "lat": 8.28853,
     "lon": -62.760399,
@@ -28811,7 +28811,7 @@
   {
     "iata": "RAB",
     "airport_name": "Tokua Airport",
-    "city": "Kokopo",
+    "city": "Rabaul",
     "country": "Papua New Guinea",
     "lat": -4.34046,
     "lon": 152.380005,
@@ -28856,7 +28856,7 @@
   {
     "iata": "RAK",
     "airport_name": "Marrakesh Menara Airport",
-    "city": "Marrakesh",
+    "city": "Marrakech",
     "country": "Morocco",
     "lat": 31.604807,
     "lon": -8.035788,
@@ -29009,7 +29009,7 @@
   {
     "iata": "RCU",
     "airport_name": "Area De Material Airport",
-    "city": "Rio Cuarto",
+    "city": "Río Cuarto",
     "country": "Argentina",
     "lat": -33.085098,
     "lon": -64.261299,
@@ -29090,7 +29090,7 @@
   {
     "iata": "RDU",
     "airport_name": "Raleigh-Durham International Airport",
-    "city": "Raleigh/Durham",
+    "city": "Raleigh",
     "country": "United States",
     "lat": 35.878659,
     "lon": -78.7873,
@@ -29135,7 +29135,7 @@
   {
     "iata": "REL",
     "airport_name": "Almirante Marco Andres Zar Airport",
-    "city": "Rawson",
+    "city": "Trelew",
     "country": "Argentina",
     "lat": -43.2105,
     "lon": -65.2703,
@@ -29198,7 +29198,7 @@
   {
     "iata": "RFD",
     "airport_name": "Chicago Rockford International Airport",
-    "city": "Chicago/Rockford",
+    "city": "Rockford",
     "country": "United States",
     "lat": 42.1954,
     "lon": -89.097198,
@@ -29207,7 +29207,7 @@
   {
     "iata": "RFP",
     "airport_name": "Raiatea Airport",
-    "city": "Uturoa",
+    "city": "Avera",
     "country": "French Polynesia",
     "lat": -16.7229,
     "lon": -151.466003,
@@ -29216,7 +29216,7 @@
   {
     "iata": "RGA",
     "airport_name": "Gobernador Ramón Trejo Noel International Airport",
-    "city": "Rio Grande",
+    "city": "Río Grande",
     "country": "Argentina",
     "lat": -53.7777,
     "lon": -67.7494,
@@ -29243,7 +29243,7 @@
   {
     "iata": "RGL",
     "airport_name": "Piloto Civil Norberto Fernández International Airport",
-    "city": "Rio Gallegos",
+    "city": "Río Gallegos",
     "country": "Argentina",
     "lat": -51.608791,
     "lon": -69.308948,
@@ -29261,7 +29261,7 @@
   {
     "iata": "RGO",
     "airport_name": "Orang (Chongjin) Airport",
-    "city": "Hoemun-ri",
+    "city": "Chongjin",
     "country": "North Korea",
     "lat": 41.428538,
     "lon": 129.647555,
@@ -29414,7 +29414,7 @@
   {
     "iata": "RJA",
     "airport_name": "Rajahmundry Airport",
-    "city": "Madhurapudi",
+    "city": "Rajahmundry",
     "country": "India",
     "lat": 17.105799,
     "lon": 81.813204,
@@ -29504,7 +29504,7 @@
   {
     "iata": "RKZ",
     "airport_name": "Xigaze Peace Airport / Shigatse Air Base",
-    "city": "Xigazê",
+    "city": "Shigatse",
     "country": "China",
     "lat": 29.350876,
     "lon": 89.299157,
@@ -29513,7 +29513,7 @@
   {
     "iata": "RLG",
     "airport_name": "Rostock-Laage Airport",
-    "city": "Laage",
+    "city": "Rostock",
     "country": "Germany",
     "lat": 53.918201,
     "lon": 12.2783,
@@ -29576,7 +29576,7 @@
   {
     "iata": "RMK",
     "airport_name": "Renmark Airport",
-    "city": "",
+    "city": "Renmark",
     "country": "Australia",
     "lat": -34.1964,
     "lon": 140.673996,
@@ -29594,7 +29594,7 @@
   {
     "iata": "RMO",
     "airport_name": "Chişinău International Airport",
-    "city": "Chişinău",
+    "city": "Chișinău",
     "country": "Moldova",
     "lat": 46.92774,
     "lon": 28.931704,
@@ -29783,7 +29783,7 @@
   {
     "iata": "ROR",
     "airport_name": "Roman Tmetuchl International Airport",
-    "city": "Babelthuap Island",
+    "city": "Airai",
     "country": "Palau",
     "lat": 7.366965,
     "lon": 134.544085,
@@ -29891,7 +29891,7 @@
   {
     "iata": "RRE",
     "airport_name": "Marree Airport",
-    "city": "",
+    "city": "Marree",
     "country": "Australia",
     "lat": -29.6633,
     "lon": 138.065002,
@@ -29999,7 +29999,7 @@
   {
     "iata": "RTB",
     "airport_name": "Juan Manuel Gálvez International Airport",
-    "city": "Coxen Hole",
+    "city": "Roatán",
     "country": "Honduras",
     "lat": 16.316799,
     "lon": -86.523003,
@@ -30008,7 +30008,7 @@
   {
     "iata": "RTC",
     "airport_name": "Ratnagiri Airport",
-    "city": "",
+    "city": "Ratnagiri",
     "country": "India",
     "lat": 17.013599,
     "lon": 73.327797,
@@ -30062,7 +30062,7 @@
   {
     "iata": "RUI",
     "airport_name": "Sierra Blanca Regional Airport",
-    "city": "Alto",
+    "city": "Ruidoso",
     "country": "United States",
     "lat": 33.462799,
     "lon": -105.535004,
@@ -30071,7 +30071,7 @@
   {
     "iata": "RUN",
     "airport_name": "Roland Garros Airport",
-    "city": "Sainte-Marie",
+    "city": "Saint-Denis",
     "country": "Réunion",
     "lat": -20.890087,
     "lon": 55.518894,
@@ -30080,7 +30080,7 @@
   {
     "iata": "RUR",
     "airport_name": "Rurutu Airport",
-    "city": "",
+    "city": "Avera",
     "country": "French Polynesia",
     "lat": -22.434099197387695,
     "lon": -151.36099243164062,
@@ -30134,7 +30134,7 @@
   {
     "iata": "RVY",
     "airport_name": "Pres. Gral. Óscar D. Gestido Binational Airport",
-    "city": "Rivera/Santana do Livramento",
+    "city": "Rivera",
     "country": "Uruguay",
     "lat": -30.9746,
     "lon": -55.4762,
@@ -30251,7 +30251,7 @@
   {
     "iata": "SAB",
     "airport_name": "Juancho E. Yrausquin Airport",
-    "city": "Zion's Hill",
+    "city": "The Bottom",
     "country": "Caribbean Netherlands",
     "lat": 17.64533,
     "lon": -63.220514,
@@ -30278,7 +30278,7 @@
   {
     "iata": "SAG",
     "airport_name": "Shirdi International Airport",
-    "city": "Kakadi",
+    "city": "Shirdi",
     "country": "India",
     "lat": 19.689211,
     "lon": 74.373655,
@@ -30332,7 +30332,7 @@
   {
     "iata": "SAQ",
     "airport_name": "San Andros Airport",
-    "city": "Andros Island",
+    "city": "Nicholls Town",
     "country": "Bahamas",
     "lat": 25.053800582885742,
     "lon": -78.04900360107422,
@@ -30449,7 +30449,7 @@
   {
     "iata": "SBW",
     "airport_name": "Sibu Airport",
-    "city": "Sibu",
+    "city": "Bintangor",
     "country": "Malaysia",
     "lat": 2.2616,
     "lon": 111.985001,
@@ -30523,8 +30523,8 @@
     "airport_name": "Comodoro Arturo Merino Benítez International Airport",
     "city": "Santiago",
     "country": "Chile",
-    "lat": -33.393001556396484,
-    "lon": -70.78579711914062,
+    "lat": -33.390252,
+    "lon": -70.794697,
     "iso_country": "CL"
   },
   {
@@ -30557,7 +30557,7 @@
   {
     "iata": "SCR",
     "airport_name": "Scandinavian Mountains Airport",
-    "city": "Malung-Sälen",
+    "city": "Sälen",
     "country": "Sweden",
     "lat": 61.16508,
     "lon": 12.83352,
@@ -30575,7 +30575,7 @@
   {
     "iata": "SCU",
     "airport_name": "Antonio Maceo International Airport",
-    "city": "Santiago",
+    "city": "Santiago de Cuba",
     "country": "Cuba",
     "lat": 19.97474,
     "lon": -75.835504,
@@ -30638,7 +30638,7 @@
   {
     "iata": "SDG",
     "airport_name": "Sanandaj Airport",
-    "city": "",
+    "city": "Sanandaj",
     "country": "Iran",
     "lat": 35.24589920043945,
     "lon": 47.00920104980469,
@@ -30962,7 +30962,7 @@
   {
     "iata": "SGL",
     "airport_name": "Danilo Atienza Air Base",
-    "city": "Cavite",
+    "city": "Cavite City",
     "country": "Philippines",
     "lat": 14.4954,
     "lon": 120.903999,
@@ -30980,7 +30980,7 @@
   {
     "iata": "SGR",
     "airport_name": "Sugar Land Regional Airport",
-    "city": "Houston",
+    "city": "Greater Houston",
     "country": "United States",
     "lat": 29.622299194336,
     "lon": -95.65650177002,
@@ -30989,7 +30989,7 @@
   {
     "iata": "SGU",
     "airport_name": "St George Regional Airport",
-    "city": "St George",
+    "city": "St. George",
     "country": "United States",
     "lat": 37.036389,
     "lon": -113.510306,
@@ -31025,7 +31025,7 @@
   {
     "iata": "SHD",
     "airport_name": "Shenandoah Valley Regional Airport",
-    "city": "Weyers Cave",
+    "city": "Staunton",
     "country": "United States",
     "lat": 38.263802,
     "lon": -78.8964,
@@ -31079,7 +31079,7 @@
   {
     "iata": "SHO",
     "airport_name": "King Mswati III International Airport",
-    "city": "Mpaka",
+    "city": "Manzini",
     "country": "Eswatini",
     "lat": -26.358611,
     "lon": 31.716944,
@@ -31241,7 +31241,7 @@
   {
     "iata": "SJE",
     "airport_name": "Jorge E. Gonzalez Torres Airport",
-    "city": "San José Del Guaviare",
+    "city": "San José del Guaviare",
     "country": "Colombia",
     "lat": 2.57969,
     "lon": -72.6394,
@@ -31268,7 +31268,7 @@
   {
     "iata": "SJK",
     "airport_name": "Professor Urbano Ernesto Stumpf Airport",
-    "city": "São José Dos Campos",
+    "city": "São José dos Campos",
     "country": "Brazil",
     "lat": -23.2292,
     "lon": -45.8615,
@@ -31340,7 +31340,7 @@
   {
     "iata": "SJY",
     "airport_name": "Seinäjoki Airport",
-    "city": "Seinäjoki / Ilmajoki",
+    "city": "Seinäjoki",
     "country": "Finland",
     "lat": 62.692101,
     "lon": 22.8323,
@@ -31403,7 +31403,7 @@
   {
     "iata": "SKN",
     "airport_name": "Stokmarknes Airport, Skagen",
-    "city": "Hadsel",
+    "city": "Stokmarknes",
     "country": "Norway",
     "lat": 68.578827,
     "lon": 15.033417,
@@ -31619,7 +31619,7 @@
   {
     "iata": "SMI",
     "airport_name": "Samos Airport",
-    "city": "Samos Island",
+    "city": "Vathy",
     "country": "Greece",
     "lat": 37.689999,
     "lon": 26.911699,
@@ -31673,7 +31673,7 @@
   {
     "iata": "SMV",
     "airport_name": "Engadin Airport",
-    "city": "Samedan",
+    "city": "St. Moritz",
     "country": "Switzerland",
     "lat": 46.5341,
     "lon": 9.88411,
@@ -31718,7 +31718,7 @@
   {
     "iata": "SNC",
     "airport_name": "General Ulpiano Paez International Airport",
-    "city": "Salinas/La Libertad",
+    "city": "Salinas",
     "country": "Ecuador",
     "lat": -2.210057,
     "lon": -80.985067,
@@ -31727,7 +31727,7 @@
   {
     "iata": "SNE",
     "airport_name": "Preguiça Airport",
-    "city": "Preguiça",
+    "city": "Ribeira Brava",
     "country": "Cape Verde",
     "lat": 16.588852,
     "lon": -24.284132,
@@ -31763,7 +31763,7 @@
   {
     "iata": "SNN",
     "airport_name": "Shannon Airport",
-    "city": "Shannon",
+    "city": "Limerick",
     "country": "Ireland",
     "lat": 52.702,
     "lon": -8.92482,
@@ -31790,7 +31790,7 @@
   {
     "iata": "SNR",
     "airport_name": "Saint-Nazaire-Montoir Airport",
-    "city": "Saint-Nazaire/Montoir",
+    "city": "Saint-Nazaire",
     "country": "France",
     "lat": 47.31142,
     "lon": -2.152634,
@@ -31970,7 +31970,7 @@
   {
     "iata": "SPD",
     "airport_name": "Saidpur Airport",
-    "city": "Saidpur",
+    "city": "Saidpur Upazila",
     "country": "Bangladesh",
     "lat": 25.759199,
     "lon": 88.908897,
@@ -31997,7 +31997,7 @@
   {
     "iata": "SPN",
     "airport_name": "Saipan International Airport",
-    "city": "I Fadang, Saipan",
+    "city": "Saipan",
     "country": "Northern Mariana Islands",
     "lat": 15.119384,
     "lon": 145.728848,
@@ -32015,7 +32015,7 @@
   {
     "iata": "SPR",
     "airport_name": "John Greif II Airport",
-    "city": "San Pedro",
+    "city": "San Pedro Town",
     "country": "Belize",
     "lat": 17.9139,
     "lon": -87.9711,
@@ -32042,7 +32042,7 @@
   {
     "iata": "SPX",
     "airport_name": "Sphinx International Airport",
-    "city": "Al Jiza",
+    "city": "Giza",
     "country": "Egypt",
     "lat": 30.108179,
     "lon": 30.895728,
@@ -32051,7 +32051,7 @@
   {
     "iata": "SPY",
     "airport_name": "San Pedro Airport",
-    "city": "",
+    "city": "San-Pédro",
     "country": "Côte d'Ivoire",
     "lat": 4.74672,
     "lon": -6.66082,
@@ -32150,7 +32150,7 @@
   {
     "iata": "SRQ",
     "airport_name": "Sarasota Bradenton International Airport",
-    "city": "Sarasota/Bradenton",
+    "city": "Sarasota",
     "country": "United States",
     "lat": 27.394631,
     "lon": -82.554359,
@@ -32168,7 +32168,7 @@
   {
     "iata": "SRX",
     "airport_name": "Sirt International Airport / Ghardabiya Airbase",
-    "city": "Sirt",
+    "city": "Sirte",
     "country": "Libya",
     "lat": 31.058578,
     "lon": 16.597095,
@@ -32186,7 +32186,7 @@
   {
     "iata": "SRZ",
     "airport_name": "El Trompillo Airport",
-    "city": "Santa Cruz",
+    "city": "Santa Cruz de la Sierra",
     "country": "Bolivia",
     "lat": -17.8115997314,
     "lon": -63.1715011597,
@@ -32240,7 +32240,7 @@
   {
     "iata": "SSH",
     "airport_name": "Sharm El Sheikh International Airport",
-    "city": "Sharm El Sheikh",
+    "city": "Sharm el-Sheikh",
     "country": "Egypt",
     "lat": 27.977272,
     "lon": 34.394717,
@@ -32249,7 +32249,7 @@
   {
     "iata": "SSI",
     "airport_name": "St Simons Island Airport",
-    "city": "St Simons Island",
+    "city": "Brunswick",
     "country": "United States",
     "lat": 31.1518,
     "lon": -81.391296,
@@ -32258,7 +32258,7 @@
   {
     "iata": "SSJ",
     "airport_name": "Sandnessjøen Airport, Stokka",
-    "city": "Alstahaug",
+    "city": "Sandnessjøen",
     "country": "Norway",
     "lat": 65.956802,
     "lon": 12.4689,
@@ -32312,7 +32312,7 @@
   {
     "iata": "STB",
     "airport_name": "Miguel Urdaneta Fernández Airport",
-    "city": "San Carlos del Zulia",
+    "city": "Santa Bárbara del Zulia",
     "country": "Venezuela",
     "lat": 8.97455,
     "lon": -71.943253,
@@ -32321,7 +32321,7 @@
   {
     "iata": "STC",
     "airport_name": "Saint Cloud Regional Airport",
-    "city": "Saint Cloud",
+    "city": "St. Cloud",
     "country": "United States",
     "lat": 45.5466,
     "lon": -94.059898,
@@ -32330,7 +32330,7 @@
   {
     "iata": "STD",
     "airport_name": "Mayor Buenaventura Vivas International Airport",
-    "city": "Santo Domingo",
+    "city": "San Cristóbal",
     "country": "Venezuela",
     "lat": 7.56538,
     "lon": -72.035103,
@@ -32339,7 +32339,7 @@
   {
     "iata": "STG",
     "airport_name": "St George Airport",
-    "city": "St George",
+    "city": "St. George",
     "country": "United States",
     "lat": 56.577345,
     "lon": -169.663823,
@@ -32366,7 +32366,7 @@
   {
     "iata": "STL",
     "airport_name": "St. Louis Lambert International Airport",
-    "city": "St Louis",
+    "city": "St. Louis",
     "country": "United States",
     "lat": 38.748697,
     "lon": -90.370003,
@@ -32492,7 +32492,7 @@
   {
     "iata": "SUI",
     "airport_name": "Vladislav Ardzinba Sukhum International Airport",
-    "city": "Sukhumi",
+    "city": "Sokhumi",
     "country": "Georgia",
     "lat": 42.8582,
     "lon": 41.128101,
@@ -32519,7 +32519,7 @@
   {
     "iata": "SUN",
     "airport_name": "Friedman Memorial Airport",
-    "city": "Hailey",
+    "city": "Ketchum",
     "country": "United States",
     "lat": 43.50439835,
     "lon": -114.2959976,
@@ -32546,7 +32546,7 @@
   {
     "iata": "SUV",
     "airport_name": "Nausori International Airport",
-    "city": "Nausori",
+    "city": "Suva",
     "country": "Fiji",
     "lat": -18.044226,
     "lon": 178.561486,
@@ -32636,7 +32636,7 @@
   {
     "iata": "SVN",
     "airport_name": "Hunter Army Air Field",
-    "city": "Savannah",
+    "city": "Fort Stewart",
     "country": "United States",
     "lat": 32.00999832,
     "lon": -81.14569855,
@@ -32690,7 +32690,7 @@
   {
     "iata": "SVZ",
     "airport_name": "Juan Vicente Gómez International Airport",
-    "city": "San Antonio del Tachira",
+    "city": "Greater San Cristóbal",
     "country": "Venezuela",
     "lat": 7.840809,
     "lon": -72.439878,
@@ -32834,7 +32834,7 @@
   {
     "iata": "SXM",
     "airport_name": "Princess Juliana International Airport",
-    "city": "Sint Maarten",
+    "city": "Philipsburg",
     "country": "Sint Maarten",
     "lat": 18.041,
     "lon": -63.108898,
@@ -32915,7 +32915,7 @@
   {
     "iata": "SYO",
     "airport_name": "Shonai Airport",
-    "city": "Shonai",
+    "city": "Sakata",
     "country": "Japan",
     "lat": 38.812199,
     "lon": 139.787003,
@@ -32933,7 +32933,7 @@
   {
     "iata": "SYQ",
     "airport_name": "Tobías Bolaños International Airport",
-    "city": "San Jose",
+    "city": "San José",
     "country": "Costa Rica",
     "lat": 9.95705,
     "lon": -84.139801,
@@ -33095,7 +33095,7 @@
   {
     "iata": "SZY",
     "airport_name": "Olsztyn-Mazury Airport",
-    "city": "Szymany",
+    "city": "Szczytno",
     "country": "Poland",
     "lat": 53.481899,
     "lon": 20.9377,
@@ -33122,7 +33122,7 @@
   {
     "iata": "TAC",
     "airport_name": "Daniel Z. Romualdez Airport",
-    "city": "Tacloban City",
+    "city": "Tacloban",
     "country": "Philippines",
     "lat": 11.227761,
     "lon": 125.027783,
@@ -33140,7 +33140,7 @@
   {
     "iata": "TAF",
     "airport_name": "Oran Tafraoui Airport",
-    "city": "Tafraoui",
+    "city": "Oran",
     "country": "Algeria",
     "lat": 35.5424,
     "lon": -0.532278,
@@ -33167,7 +33167,7 @@
   {
     "iata": "TAI",
     "airport_name": "Taiz International Airport",
-    "city": "Taiz",
+    "city": "Ta'izz",
     "country": "Yemen",
     "lat": 13.686,
     "lon": 44.139099,
@@ -33185,7 +33185,7 @@
   {
     "iata": "TAM",
     "airport_name": "General Francisco Javier Mina International Airport",
-    "city": "Ciudad Madero",
+    "city": "Tampico",
     "country": "Mexico",
     "lat": 22.292622,
     "lon": -97.867058,
@@ -33203,7 +33203,7 @@
   {
     "iata": "TAP",
     "airport_name": "Tapachula International Airport",
-    "city": "Tapachula",
+    "city": "Tapachula de Córdova y Ordóñez",
     "country": "Mexico",
     "lat": 14.794549,
     "lon": -92.369871,
@@ -33212,7 +33212,7 @@
   {
     "iata": "TAR",
     "airport_name": "Taranto-Grottaglie Marcello Arlotta Airport",
-    "city": "Grottaglie",
+    "city": "Taranto",
     "country": "Italy",
     "lat": 40.517502,
     "lon": 17.4032,
@@ -33257,7 +33257,7 @@
   {
     "iata": "TBB",
     "airport_name": "Dong Tac Airport",
-    "city": "Tuy Hoa",
+    "city": "Tuy Hòa",
     "country": "Vietnam",
     "lat": 13.0496,
     "lon": 109.334,
@@ -33275,7 +33275,7 @@
   {
     "iata": "TBH",
     "airport_name": "Tugdan Airport",
-    "city": "Tablas Island",
+    "city": "Alcantara",
     "country": "Philippines",
     "lat": 12.3109998703,
     "lon": 122.084999084,
@@ -33302,7 +33302,7 @@
   {
     "iata": "TBN",
     "airport_name": "Waynesville-St. Robert Regional Airport-Forney Field",
-    "city": "Fort Leonard Wood",
+    "city": "Waynesville",
     "country": "United States",
     "lat": 37.7416,
     "lon": -92.140701,
@@ -33338,7 +33338,7 @@
   {
     "iata": "TBU",
     "airport_name": "Fua'amotu International Airport",
-    "city": "Nuku'alofa",
+    "city": "Nukuʻalofa",
     "country": "Tonga",
     "lat": -21.241438,
     "lon": -175.149164,
@@ -33347,7 +33347,7 @@
   {
     "iata": "TBW",
     "airport_name": "Donskoye Airport",
-    "city": "Tambov",
+    "city": "Donskoye, Tambov Oblast",
     "country": "Russia",
     "lat": 52.806099,
     "lon": 41.4828,
@@ -33392,7 +33392,7 @@
   {
     "iata": "TCE",
     "airport_name": "Tulcea Danube Delta Airport",
-    "city": "Mihail Kogălniceanu",
+    "city": "Tulcea",
     "country": "Romania",
     "lat": 45.0625,
     "lon": 28.7143,
@@ -33491,7 +33491,7 @@
   {
     "iata": "TDK",
     "airport_name": "Taldykorgan Airport",
-    "city": "Taldykorgan",
+    "city": "Taldyqorğan",
     "country": "Kazakhstan",
     "lat": 45.12255,
     "lon": 78.442758,
@@ -33554,7 +33554,7 @@
   {
     "iata": "TEE",
     "airport_name": "Cheikh Larbi Tébessi Airport",
-    "city": "Tébessi",
+    "city": "Tébessa",
     "country": "Algeria",
     "lat": 35.4315986633,
     "lon": 8.12071990967,
@@ -33734,7 +33734,7 @@
   {
     "iata": "TGM",
     "airport_name": "Târgu Mureş Transilvania International Airport",
-    "city": "Recea",
+    "city": "Târgu Mureș",
     "country": "Romania",
     "lat": 46.467701,
     "lon": 24.4125,
@@ -33905,7 +33905,7 @@
   {
     "iata": "TIF",
     "airport_name": "Taif International Airport",
-    "city": "Taif",
+    "city": "Ta'if",
     "country": "Saudi Arabia",
     "lat": 21.484739,
     "lon": 40.544074,
@@ -33977,7 +33977,7 @@
   {
     "iata": "TIU",
     "airport_name": "Timaru Airport",
-    "city": "",
+    "city": "Timaru",
     "country": "New Zealand",
     "lat": -44.302799224853516,
     "lon": 171.22500610351562,
@@ -34130,7 +34130,7 @@
   {
     "iata": "TKK",
     "airport_name": "Chuuk International Airport",
-    "city": "Weno Island",
+    "city": "Weno",
     "country": "Micronesia",
     "lat": 7.46187,
     "lon": 151.843002,
@@ -34193,7 +34193,7 @@
   {
     "iata": "TLC",
     "airport_name": "Adolfo López Mateos International Airport",
-    "city": "Toluca",
+    "city": "Toluca de Lerdo",
     "country": "Mexico",
     "lat": 19.3369,
     "lon": -99.56583,
@@ -34355,7 +34355,7 @@
   {
     "iata": "TMP",
     "airport_name": "Tampere-Pirkkala Airport",
-    "city": "Tampere / Pirkkala",
+    "city": "Tampere",
     "country": "Finland",
     "lat": 61.414101,
     "lon": 23.604401,
@@ -34463,7 +34463,7 @@
   {
     "iata": "TNJ",
     "airport_name": "Raja Haji Fisabilillah International Airport",
-    "city": "Tanjung Pinang-Bintan Island",
+    "city": "Tanjungpinang",
     "country": "Indonesia",
     "lat": 0.92397,
     "lon": 104.53341,
@@ -34490,7 +34490,7 @@
   {
     "iata": "TNW",
     "airport_name": "Jumandy Airport",
-    "city": "Ahuano",
+    "city": "Tena",
     "country": "Ecuador",
     "lat": -1.060185,
     "lon": -77.580525,
@@ -34625,7 +34625,7 @@
   {
     "iata": "TPE",
     "airport_name": "Taiwan Taoyuan International Airport",
-    "city": "Taipei",
+    "city": "Taoyuan",
     "country": "Taiwan",
     "lat": 25.0777,
     "lon": 121.233002,
@@ -34643,7 +34643,7 @@
   {
     "iata": "TPJ",
     "airport_name": "Taplejung Airport",
-    "city": "Taplejung",
+    "city": "Phungling",
     "country": "Nepal",
     "lat": 27.3509,
     "lon": 87.69525,
@@ -34688,7 +34688,7 @@
   {
     "iata": "TQD",
     "airport_name": "Al Taqaddum Air Base",
-    "city": "Al Habbaniyah",
+    "city": "Fallujah",
     "country": "Iraq",
     "lat": 33.33810043335,
     "lon": 43.597099304199,
@@ -34787,7 +34787,7 @@
   {
     "iata": "TRM",
     "airport_name": "Jacqueline Cochran Regional Airport",
-    "city": "Palm Springs",
+    "city": "Coachella",
     "country": "United States",
     "lat": 33.62670135498,
     "lon": -116.16000366211,
@@ -34967,7 +34967,7 @@
   {
     "iata": "TTA",
     "airport_name": "Tan Tan Airport",
-    "city": "Tan Tan",
+    "city": "Tan-Tan",
     "country": "Morocco",
     "lat": 28.447563,
     "lon": -11.161749,
@@ -35030,7 +35030,7 @@
   {
     "iata": "TTN",
     "airport_name": "Trenton Mercer Airport",
-    "city": "Ewing Township",
+    "city": "Trenton",
     "country": "United States",
     "lat": 40.276699,
     "lon": -74.813499,
@@ -35102,7 +35102,7 @@
   {
     "iata": "TUG",
     "airport_name": "Tuguegarao Airport",
-    "city": "Tuguegarao City",
+    "city": "Tuguegarao",
     "country": "Philippines",
     "lat": 17.6433676823,
     "lon": 121.733150482,
@@ -35156,7 +35156,7 @@
   {
     "iata": "TUO",
     "airport_name": "Taupo Airport",
-    "city": "Taupo",
+    "city": "Taupō",
     "country": "New Zealand",
     "lat": -38.73970031738281,
     "lon": 176.08399963378906,
@@ -35381,7 +35381,7 @@
   {
     "iata": "TYS",
     "airport_name": "McGhee Tyson Airport",
-    "city": "Knoxville/Maryville",
+    "city": "Knoxville",
     "country": "United States",
     "lat": 35.811001,
     "lon": -83.994003,
@@ -35408,7 +35408,7 @@
   {
     "iata": "TZN",
     "airport_name": "Congo Town Airport",
-    "city": "Andros",
+    "city": "Congo Town",
     "country": "Bahamas",
     "lat": 24.158701,
     "lon": -77.589798,
@@ -35426,7 +35426,7 @@
   {
     "iata": "UAB",
     "airport_name": "İncirlik Air Base",
-    "city": "Sarıçam",
+    "city": "Adana",
     "country": "Turkey",
     "lat": 37.002102,
     "lon": 35.4259,
@@ -35660,7 +35660,7 @@
   {
     "iata": "UIH",
     "airport_name": "Phu Cat Airport",
-    "city": "Quy Nohn",
+    "city": "Quy Nhon",
     "country": "Vietnam",
     "lat": 13.955,
     "lon": 109.042,
@@ -35723,7 +35723,7 @@
   {
     "iata": "UKK",
     "airport_name": "Oskemen International Airport",
-    "city": "Ust-Kamenogorsk",
+    "city": "Oskemen",
     "country": "Kazakhstan",
     "lat": 50.035033,
     "lon": 82.496057,
@@ -35750,7 +35750,7 @@
   {
     "iata": "ULA",
     "airport_name": "Capitan D Daniel Vazquez Airport",
-    "city": "San Julian",
+    "city": "Puerto San Julián",
     "country": "Argentina",
     "lat": -49.306816,
     "lon": -67.802596,
@@ -35813,7 +35813,7 @@
   {
     "iata": "ULP",
     "airport_name": "Quilpie Airport",
-    "city": "",
+    "city": "Quilpie",
     "country": "Australia",
     "lat": -26.609176,
     "lon": 144.253746,
@@ -35831,7 +35831,7 @@
   {
     "iata": "ULU",
     "airport_name": "Gulu Airport",
-    "city": "Gulu",
+    "city": "Gulu City",
     "country": "Uganda",
     "lat": 2.8055601119995117,
     "lon": 32.27180099487305,
@@ -35849,7 +35849,7 @@
   {
     "iata": "ULY",
     "airport_name": "Ulyanovsk Vostochny Airport",
-    "city": "Cherdakly",
+    "city": "Ulyanovsk",
     "country": "Russia",
     "lat": 54.401001,
     "lon": 48.8027,
@@ -35948,7 +35948,7 @@
   {
     "iata": "UPN",
     "airport_name": "Uruapan - Licenciado y General Ignacio Lopez Rayon International Airport",
-    "city": "Uruapan",
+    "city": "Uruapan del Progreso",
     "country": "Mexico",
     "lat": 19.3967,
     "lon": -102.039001,
@@ -35957,7 +35957,7 @@
   {
     "iata": "URA",
     "airport_name": "Manshuk Mametova International Airport",
-    "city": "Uralsk",
+    "city": "Oral",
     "country": "Kazakhstan",
     "lat": 51.151976,
     "lon": 51.543652,
@@ -36002,7 +36002,7 @@
   {
     "iata": "URO",
     "airport_name": "Rouen Vallée de Seine Airport",
-    "city": "Boos",
+    "city": "Rouen",
     "country": "France",
     "lat": 49.384887,
     "lon": 1.179142,
@@ -36128,7 +36128,7 @@
   {
     "iata": "UTI",
     "airport_name": "Utti Air Base",
-    "city": "Utti / Valkeala",
+    "city": "Utti",
     "country": "Finland",
     "lat": 60.8964,
     "lon": 26.9384,
@@ -36155,7 +36155,7 @@
   {
     "iata": "UTP",
     "airport_name": "U-Tapao–Rayong–Pattaya International Airport",
-    "city": "Pattaya",
+    "city": "Rayong",
     "country": "Thailand",
     "lat": 12.6799,
     "lon": 101.004997,
@@ -36164,7 +36164,7 @@
   {
     "iata": "UTS",
     "airport_name": "Ust-Tsylma Airport",
-    "city": "Ust-Tsylma",
+    "city": "Ust-Tsilma",
     "country": "Russia",
     "lat": 65.437294,
     "lon": 52.200336,
@@ -36200,7 +36200,7 @@
   {
     "iata": "UUD",
     "airport_name": "Baikal International Airport",
-    "city": "Ulan Ude",
+    "city": "Ulan-Ude",
     "country": "Russia",
     "lat": 51.808614,
     "lon": 107.439652,
@@ -36263,7 +36263,7 @@
   {
     "iata": "UYU",
     "airport_name": "Joya Andina International Airport",
-    "city": "Quijarro",
+    "city": "Uyuni",
     "country": "Bolivia",
     "lat": -20.441304,
     "lon": -66.857553,
@@ -36272,7 +36272,7 @@
   {
     "iata": "UZC",
     "airport_name": "Ponikve Airport",
-    "city": "Stapari",
+    "city": "Užice",
     "country": "Serbia",
     "lat": 43.898899,
     "lon": 19.697701,
@@ -36281,7 +36281,7 @@
   {
     "iata": "UZU",
     "airport_name": "Curuzu Cuatia Airport",
-    "city": "Curuzu Cuatia",
+    "city": "Goya",
     "country": "Argentina",
     "lat": -29.7706,
     "lon": -57.9789,
@@ -36425,7 +36425,7 @@
   {
     "iata": "VCA",
     "airport_name": "Can Tho International Airport",
-    "city": "Can Tho",
+    "city": "Cần Thơ",
     "country": "Vietnam",
     "lat": 10.083397,
     "lon": 105.709371,
@@ -36434,7 +36434,7 @@
   {
     "iata": "VCE",
     "airport_name": "Venice Marco Polo Airport",
-    "city": "Venezia",
+    "city": "Venice",
     "country": "Italy",
     "lat": 45.505299,
     "lon": 12.3519,
@@ -36488,7 +36488,7 @@
   {
     "iata": "VDH",
     "airport_name": "Dong Hoi Airport",
-    "city": "Dong Hoi",
+    "city": "Đồng Hới",
     "country": "Vietnam",
     "lat": 17.515,
     "lon": 106.590556,
@@ -36497,7 +36497,7 @@
   {
     "iata": "VDM",
     "airport_name": "Gobernador Castello Airport",
-    "city": "Viedma / Carmen de Patagones",
+    "city": "Viedma",
     "country": "Argentina",
     "lat": -40.8692,
     "lon": -63.0004,
@@ -36515,7 +36515,7 @@
   {
     "iata": "VDP",
     "airport_name": "Valle de La Pascua Airport",
-    "city": "",
+    "city": "Valle de la Pascua",
     "country": "Venezuela",
     "lat": 9.22202777863,
     "lon": -65.9935836792,
@@ -36704,7 +36704,7 @@
   {
     "iata": "VIN",
     "airport_name": "Vinnytsia/Gavyryshivka International Airport",
-    "city": "Vinnitsa",
+    "city": "Vinnytsia",
     "country": "Ukraine",
     "lat": 49.242531,
     "lon": 28.613778,
@@ -36767,7 +36767,7 @@
   {
     "iata": "VKG",
     "airport_name": "Rach Gia Airport",
-    "city": "Rach Gia",
+    "city": "Rạch Giá",
     "country": "Vietnam",
     "lat": 9.95802997234,
     "lon": 105.132379532,
@@ -36956,7 +36956,7 @@
   {
     "iata": "VNX",
     "airport_name": "Vilankulo Airport",
-    "city": "Vilanculo",
+    "city": "Vilankulo",
     "country": "Mozambique",
     "lat": -22.018400192260742,
     "lon": 35.31330108642578,
@@ -36965,7 +36965,7 @@
   {
     "iata": "VNY",
     "airport_name": "Van Nuys Airport",
-    "city": "Van Nuys",
+    "city": "Los Angeles",
     "country": "United States",
     "lat": 34.209801,
     "lon": -118.489998,
@@ -36974,7 +36974,7 @@
   {
     "iata": "VOD",
     "airport_name": "Vodochody Airport",
-    "city": "Vodochody",
+    "city": "Prague",
     "country": "Czech Republic",
     "lat": 50.216599,
     "lon": 14.3958,
@@ -37010,7 +37010,7 @@
   {
     "iata": "VOL",
     "airport_name": "Nea Anchialos National Airport",
-    "city": "Nea Anchialos",
+    "city": "Volos",
     "country": "Greece",
     "lat": 39.219601,
     "lon": 22.7943,
@@ -37028,7 +37028,7 @@
   {
     "iata": "VPE",
     "airport_name": "Ngjiva Pereira Airport",
-    "city": "Ngiva",
+    "city": "Ondjiva",
     "country": "Angola",
     "lat": -17.0435009003,
     "lon": 15.683799743700002,
@@ -37046,7 +37046,7 @@
   {
     "iata": "VPS",
     "airport_name": "Destin-Fort Walton Beach Airport",
-    "city": "Valparaiso",
+    "city": "Fort Walton Beach",
     "country": "United States",
     "lat": 30.481315,
     "lon": -86.515839,
@@ -37091,7 +37091,7 @@
   {
     "iata": "VRA",
     "airport_name": "Juan Gualberto Gomez International Airport",
-    "city": "Matanzas",
+    "city": "Varadero",
     "country": "Cuba",
     "lat": 23.034401,
     "lon": -81.435303,
@@ -37127,7 +37127,7 @@
   {
     "iata": "VRK",
     "airport_name": "Varkaus Airport",
-    "city": "Varkaus / Joroinen",
+    "city": "Varkaus",
     "country": "Finland",
     "lat": 62.171101,
     "lon": 27.868601,
@@ -37154,7 +37154,7 @@
   {
     "iata": "VRO",
     "airport_name": "Kawama Airport",
-    "city": "Santa Marta",
+    "city": "Varadero",
     "country": "Cuba",
     "lat": 23.124001,
     "lon": -81.301598,
@@ -37190,7 +37190,7 @@
   {
     "iata": "VST",
     "airport_name": "Stockholm Västerås Airport",
-    "city": "Stockholm / Västerås",
+    "city": "Stockholm",
     "country": "Sweden",
     "lat": 59.589401,
     "lon": 16.6336,
@@ -37262,7 +37262,7 @@
   {
     "iata": "VUS",
     "airport_name": "Velikiy Ustyug Airport",
-    "city": "Velikiy Ustyug",
+    "city": "Veliky Ustyug",
     "country": "Russia",
     "lat": 60.7883,
     "lon": 46.259998,
@@ -37280,7 +37280,7 @@
   {
     "iata": "VVI",
     "airport_name": "Viru Viru International Airport",
-    "city": "Santa Cruz",
+    "city": "Santa Cruz de la Sierra",
     "country": "Bolivia",
     "lat": -17.6448,
     "lon": -63.135399,
@@ -37316,7 +37316,7 @@
   {
     "iata": "VXE",
     "airport_name": "Cesaria Evora International Airport",
-    "city": "São Pedro",
+    "city": "Mindelo",
     "country": "Cape Verde",
     "lat": 16.833363,
     "lon": -25.055308,
@@ -37334,7 +37334,7 @@
   {
     "iata": "VYI",
     "airport_name": "Vilyuisk Airport",
-    "city": "Vilyuisk",
+    "city": "Vilyuysk",
     "country": "Russia",
     "lat": 63.756668,
     "lon": 121.693336,
@@ -37352,7 +37352,7 @@
   {
     "iata": "WAG",
     "airport_name": "Wanganui Airport",
-    "city": "Wanganui",
+    "city": "Whanganui",
     "country": "New Zealand",
     "lat": -39.963467,
     "lon": 175.02444,
@@ -37388,7 +37388,7 @@
   {
     "iata": "WBG",
     "airport_name": "Schleswig Air Base",
-    "city": "Jagel",
+    "city": "Schleswig",
     "country": "Germany",
     "lat": 54.459301,
     "lon": 9.51633,
@@ -37478,7 +37478,7 @@
   {
     "iata": "WGA",
     "airport_name": "Wagga Wagga Airport",
-    "city": "Forest Hill",
+    "city": "Wagga Wagga",
     "country": "Australia",
     "lat": -35.163484,
     "lon": 147.46832,
@@ -37577,7 +37577,7 @@
   {
     "iata": "WIN",
     "airport_name": "Winton Airport",
-    "city": "",
+    "city": "Winton",
     "country": "Australia",
     "lat": -22.36359977722168,
     "lon": 143.08599853515625,
@@ -37676,7 +37676,7 @@
   {
     "iata": "WLS",
     "airport_name": "Hihifo Airport",
-    "city": "Wallis Island",
+    "city": "Mala'e",
     "country": "Wallis and Futuna",
     "lat": -13.239445,
     "lon": -176.19865,
@@ -37766,7 +37766,7 @@
   {
     "iata": "WNP",
     "airport_name": "Naga Airport",
-    "city": "Naga",
+    "city": "Metro Naga",
     "country": "Philippines",
     "lat": 13.58489990234375,
     "lon": 123.2699966430664,
@@ -37784,7 +37784,7 @@
   {
     "iata": "WNS",
     "airport_name": "Shaheed Benazirabad Airport",
-    "city": "Nawabashah",
+    "city": "Nawabshah",
     "country": "Pakistan",
     "lat": 26.2194,
     "lon": 68.390099,
@@ -37802,7 +37802,7 @@
   {
     "iata": "WOE",
     "airport_name": "Woensdrecht Air Base",
-    "city": "Hoogerheide",
+    "city": "Bergen op Zoom",
     "country": "Netherlands",
     "lat": 51.4491,
     "lon": 4.34203,
@@ -37865,7 +37865,7 @@
   {
     "iata": "WRE",
     "airport_name": "Whangarei Airport",
-    "city": "Whangarei",
+    "city": "Whangārei",
     "country": "New Zealand",
     "lat": -35.769253,
     "lon": 174.363713,
@@ -38018,7 +38018,7 @@
   {
     "iata": "WUZ",
     "airport_name": "Wuzhou Xijiang Airport",
-    "city": "Tangbu",
+    "city": "Wuzhou",
     "country": "China",
     "lat": 23.40316,
     "lon": 111.09331,
@@ -38153,7 +38153,7 @@
   {
     "iata": "XCR",
     "airport_name": "Chalons Vatry airport",
-    "city": "Chalons en Champagne",
+    "city": "Paris",
     "country": "France",
     "lat": 48.77333,
     "lon": 4.20611,
@@ -38261,7 +38261,7 @@
   {
     "iata": "XLS",
     "airport_name": "Saint Louis Airport",
-    "city": "Saint Louis",
+    "city": "Saint-Louis",
     "country": "Senegal",
     "lat": 16.049814,
     "lon": -16.461039,
@@ -38297,7 +38297,7 @@
   {
     "iata": "XNA",
     "airport_name": "Northwest Arkansas National Airport",
-    "city": "Fayetteville/Springdale/Rogers",
+    "city": "Fayetteville",
     "country": "United States",
     "lat": 36.281898,
     "lon": -94.306801,
@@ -38396,7 +38396,7 @@
   {
     "iata": "XSP",
     "airport_name": "Seletar Airport",
-    "city": "Seletar",
+    "city": "Singapore",
     "country": "Singapore",
     "lat": 1.41555,
     "lon": 103.86673,
@@ -38459,7 +38459,7 @@
   {
     "iata": "YAI",
     "airport_name": "Gral. Bernardo O´Higgins Airport",
-    "city": "Chillan",
+    "city": "Chillán",
     "country": "Chile",
     "lat": -36.5825,
     "lon": -72.031403,
@@ -38477,7 +38477,7 @@
   {
     "iata": "YAM",
     "airport_name": "Sault Ste Marie Airport",
-    "city": "Sault Ste Marie",
+    "city": "Sault Ste. Marie",
     "country": "Canada",
     "lat": 46.483216,
     "lon": -84.508467,
@@ -38486,7 +38486,7 @@
   {
     "iata": "YAO",
     "airport_name": "Yaoundé Ville Airport",
-    "city": "Yaoundé",
+    "city": "Bamenda",
     "country": "Cameroon",
     "lat": 3.83604,
     "lon": 11.5235,
@@ -38495,7 +38495,7 @@
   {
     "iata": "YAP",
     "airport_name": "Yap International Airport",
-    "city": "Yap Island",
+    "city": "Colonia",
     "country": "Micronesia",
     "lat": 9.49891,
     "lon": 138.082993,
@@ -38522,7 +38522,7 @@
   {
     "iata": "YBC",
     "airport_name": "Baie-Comeau Airport",
-    "city": "Baie-Comeau",
+    "city": "Pointe-Lebel",
     "country": "Canada",
     "lat": 49.1325,
     "lon": -68.204399,
@@ -38927,7 +38927,7 @@
   {
     "iata": "YGL",
     "airport_name": "La Grande Rivière Airport",
-    "city": "La Grande Rivière",
+    "city": "Radisson",
     "country": "Canada",
     "lat": 53.625301361083984,
     "lon": -77.7042007446289,
@@ -39035,7 +39035,7 @@
   {
     "iata": "YHU",
     "airport_name": "Montréal / Saint-Hubert Metropolitan Airport",
-    "city": "Montréal",
+    "city": "Longueuil",
     "country": "Canada",
     "lat": 45.517502,
     "lon": -73.416901,
@@ -39197,7 +39197,7 @@
   {
     "iata": "YKF",
     "airport_name": "Region of Waterloo International Airport",
-    "city": "Breslau",
+    "city": "Tri-Cities",
     "country": "Canada",
     "lat": 43.4608,
     "lon": -80.378601,
@@ -39251,7 +39251,7 @@
   {
     "iata": "YKO",
     "airport_name": "Hakkari Yüksekova Airport",
-    "city": "Hakkari",
+    "city": "Hakkâri",
     "country": "Turkey",
     "lat": 37.5497,
     "lon": 44.2381,
@@ -39413,7 +39413,7 @@
   {
     "iata": "YML",
     "airport_name": "Charlevoix Airport",
-    "city": "Charlevoix",
+    "city": "Saint-Irénée",
     "country": "Canada",
     "lat": 47.59749984741211,
     "lon": -70.2238998413086,
@@ -39458,7 +39458,7 @@
   {
     "iata": "YMX",
     "airport_name": "Montreal Mirabel International Airport",
-    "city": "Montréal",
+    "city": "Montreal",
     "country": "Canada",
     "lat": 45.679501,
     "lon": -74.038696,
@@ -39494,7 +39494,7 @@
   {
     "iata": "YNG",
     "airport_name": "Youngstown Warren Regional Airport",
-    "city": "Youngstown/Warren",
+    "city": "Youngstown",
     "country": "United States",
     "lat": 41.26070023,
     "lon": -80.67910004,
@@ -39746,7 +39746,7 @@
   {
     "iata": "YQB",
     "airport_name": "Quebec Jean Lesage International Airport",
-    "city": "Quebec",
+    "city": "Quebec City",
     "country": "Canada",
     "lat": 46.7911,
     "lon": -71.393303,
@@ -39926,7 +39926,7 @@
   {
     "iata": "YRB",
     "airport_name": "Resolute Bay Airport",
-    "city": "Resolute Bay",
+    "city": "Resolute",
     "country": "Canada",
     "lat": 74.7169036865,
     "lon": -94.9693984985,
@@ -39998,7 +39998,7 @@
   {
     "iata": "YSB",
     "airport_name": "Sudbury Airport",
-    "city": "Sudbury",
+    "city": "Greater Sudbury",
     "country": "Canada",
     "lat": 46.625,
     "lon": -80.79889678955078,
@@ -40007,7 +40007,7 @@
   {
     "iata": "YSC",
     "airport_name": "Sherbrooke Airport",
-    "city": "Sherbrooke",
+    "city": "Cookshire-Eaton",
     "country": "Canada",
     "lat": 45.438599,
     "lon": -71.691399,
@@ -40079,7 +40079,7 @@
   {
     "iata": "YSQ",
     "airport_name": "Songyuan Chaganhu Airport",
-    "city": "Qian Gorlos Mongol Autonomous County",
+    "city": "Songyuan",
     "country": "China",
     "lat": 44.931143,
     "lon": 124.552121,
@@ -40088,7 +40088,7 @@
   {
     "iata": "YSU",
     "airport_name": "Summerside Airport",
-    "city": "Slemon Park",
+    "city": "Summerside",
     "country": "Canada",
     "lat": 46.440601,
     "lon": -63.833599,
@@ -40133,7 +40133,7 @@
   {
     "iata": "YTM",
     "airport_name": "Mont-Tremblant International Airport",
-    "city": "La Macaza",
+    "city": "Mont-Tremblant",
     "country": "Canada",
     "lat": 46.409401,
     "lon": -74.779999,
@@ -40187,7 +40187,7 @@
   {
     "iata": "YUL",
     "airport_name": "Montreal / Pierre Elliott Trudeau International Airport",
-    "city": "Montréal",
+    "city": "Montreal",
     "country": "Canada",
     "lat": 45.467837,
     "lon": -73.742294,
@@ -40196,7 +40196,7 @@
   {
     "iata": "YUM",
     "airport_name": "Yuma International Airport / Marine Corps Air Station Yuma",
-    "city": "Yuma",
+    "city": "San Luis",
     "country": "United States",
     "lat": 32.650938,
     "lon": -114.609375,
@@ -40367,7 +40367,7 @@
   {
     "iata": "YXJ",
     "airport_name": "Fort St John / North Peace Regional Airport",
-    "city": "Fort Saint John",
+    "city": "Fort St. John",
     "country": "Canada",
     "lat": 56.238098,
     "lon": -120.739998,
@@ -40510,11 +40510,11 @@
   },
   {
     "iata": "YYF",
-    "airport_name": "Penticton Airport",
+    "airport_name": "Penticton Regional Airport",
     "city": "Penticton",
     "country": "Canada",
-    "lat": 49.46310043334961,
-    "lon": -119.60199737548828,
+    "lat": 49.4631,
+    "lon": -119.601997,
     "iso_country": "CA"
   },
   {
@@ -40565,7 +40565,7 @@
   {
     "iata": "YYR",
     "airport_name": "Goose Bay Airport",
-    "city": "Goose Bay",
+    "city": "Happy Valley-Goose Bay",
     "country": "Canada",
     "lat": 53.3191986084,
     "lon": -60.4258003235,
@@ -40691,7 +40691,7 @@
   {
     "iata": "YZU",
     "airport_name": "Whitecourt Airport",
-    "city": "Whitecourt",
+    "city": "Woodlands County",
     "country": "Canada",
     "lat": 54.143902,
     "lon": -115.787003,
@@ -40817,7 +40817,7 @@
   {
     "iata": "ZBF",
     "airport_name": "Bathurst Airport",
-    "city": "South Tetagouche",
+    "city": "Bathurst",
     "country": "Canada",
     "lat": 47.6297,
     "lon": -65.738899,
@@ -40835,7 +40835,7 @@
   {
     "iata": "ZBR",
     "airport_name": "Chabahar Konarak International Airport",
-    "city": "Konarak",
+    "city": "Chabahar",
     "country": "Iran",
     "lat": 25.44319,
     "lon": 60.382167,
@@ -40961,7 +40961,7 @@
   {
     "iata": "ZIH",
     "airport_name": "Ixtapa-Zihuatanejo International Airport",
-    "city": "Ixtapa",
+    "city": "Zihuatanejo",
     "country": "Mexico",
     "lat": 17.601771,
     "lon": -101.460629,
@@ -41042,7 +41042,7 @@
   {
     "iata": "ZNZ",
     "airport_name": "Abeid Amani Karume International Airport",
-    "city": "Zanzibar",
+    "city": "Zanzibar City",
     "country": "Tanzania",
     "lat": -6.22202,
     "lon": 39.224899,
@@ -41150,7 +41150,7 @@
   {
     "iata": "ZTU",
     "airport_name": "Zaqatala International Airport",
-    "city": "Zaqatala",
+    "city": "Zagatala",
     "country": "Azerbaijan",
     "lat": 41.557823,
     "lon": 46.669464,
@@ -41186,7 +41186,7 @@
   {
     "iata": "ZVK",
     "airport_name": "Savannakhet Airport",
-    "city": "",
+    "city": "Kaysone Phomvihane",
     "country": "Laos",
     "lat": 16.55660057067871,
     "lon": 104.76000213623047,
@@ -41195,7 +41195,7 @@
   {
     "iata": "ZWA",
     "airport_name": "Andapa Airport",
-    "city": "",
+    "city": "Andapa",
     "country": "Madagascar",
     "lat": -14.651700019836426,
     "lon": 49.620601654052734,
@@ -41204,7 +41204,7 @@
   {
     "iata": "ZXT",
     "airport_name": "Zabrat Airport",
-    "city": "Zabrat",
+    "city": "Baku",
     "country": "Azerbaijan",
     "lat": 40.494884,
     "lon": 49.977065,
