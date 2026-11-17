@@ -121,10 +121,11 @@ node scripts/build-stamp-inks.mjs
 This writes `src/assets/stampInks.json`, a light and a dark ink per country code. It needs
 `rsvg-convert` and `magick` (Homebrew `librsvg` and `imagemagick`). The colours come from the
 4:3 flag SVGs of flag-icons 7.6.0 (MIT licence), which the script downloads from npm. Each
-stamp takes the colour that covers the most of its flag. We chose two extra rules: near-white
-is skipped, and when colours are within 2 percentage points of the largest share, the most
-saturated wins. Lightness then moves away from `--fl-surface` until the ink reaches 4.5:1 in
-both schemes. The script header has the details.
+stamp takes the flag colour whose hue family (red, orange, yellow, green, blue, purple,
+black/grey, brown) appears in the fewest flags, so most stamps are not red. Near-white and
+colours under 5 % of the flag are skipped, and on a tie the larger area wins. Lightness then
+moves away from `--fl-surface` until the ink reaches 4.5:1 in both schemes. The script header
+has the family ranges and the other details.
 
 ## Testing
 

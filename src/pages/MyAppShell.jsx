@@ -18,7 +18,6 @@ import {
   IconAward,
   IconCalendar,
   IconChartBar,
-  IconEPassport,
   IconList,
   IconPlus,
   IconWorld,
@@ -46,8 +45,12 @@ const PAGES = [
   { to: PATHS.TOUR, key: "tour", icon: IconWorld },
   { to: PATHS.TIMELINE, key: "timeline", icon: IconCalendar },
   { to: PATHS.BADGES, key: "badges", icon: IconAward },
-  { to: PATHS.PASSPORT, key: "passport", icon: IconEPassport },
 ];
+
+// Passport is a view of the Badges page (see BadgesLayout), so on /passport
+// the Badges link points there too, which keeps it marked as the current page.
+const linkTo = (to, pathname) =>
+  to === PATHS.BADGES && pathname === PATHS.PASSPORT ? PATHS.PASSPORT : to;
 
 // Pages whose flights the header's filter button narrows down.
 const FILTER_PAGES = [PATHS.STATS, PATHS.ALL_STATS, PATHS.FLIGHTS, PATHS.TOUR];
@@ -68,11 +71,11 @@ function MyAppShell() {
   const setAddFlightOpened = useFlightStore((s) => s.setAddFlightOpened);
 
   const pinned = useHeadroom({ fixedAt: 120 });
-  // One switch at 1024 px: below it the tab bar, from it the page links. With
-  // the filter button, the header needs about 990 px in Italian, so tablets in
-  // portrait and unfolded phones get the tab bar too. Read synchronously, so
-  // the first paint already has the right layout.
-  const isPhone = useMediaQuery("(max-width: 63.99em)", false, {
+  // One switch at 860 px: below it the tab bar, from it the page links. The
+  // links need about 790 px in Italian, so tablets in portrait and unfolded
+  // phones get the tab bar too. Read synchronously, so the first paint
+  // already has the right layout.
+  const isPhone = useMediaQuery("(max-width: 53.74em)", false, {
     getInitialValueInEffect: false,
   });
   const showTabs = Boolean(user) && isPhone;
@@ -120,7 +123,11 @@ function MyAppShell() {
                 wrap="nowrap"
               >
                 {PAGES.map(({ to, key }) => (
-                  <NavLink key={key} to={to} className={classes.link}>
+                  <NavLink
+                    key={key}
+                    to={linkTo(to, location.pathname)}
+                    className={classes.link}
+                  >
                     {t(`nav.${key}`)}
                   </NavLink>
                 ))}
@@ -161,7 +168,11 @@ function MyAppShell() {
           <AppShell.Footer>
             <nav aria-label={t("nav.main")} className={classes.tabs}>
               {PAGES.map(({ to, key, icon }) => (
-                <NavLink key={key} to={to} className={classes.tab}>
+                <NavLink
+                  key={key}
+                  to={linkTo(to, location.pathname)}
+                  className={classes.tab}
+                >
                   {createElement(icon, {
                     size: 24,
                     stroke: 1.8,

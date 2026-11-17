@@ -55,6 +55,14 @@ describe("MyAppShell on a phone", () => {
     expect([...current].map((a) => a.textContent)).toEqual(["Flights"]);
   });
 
+  it("has five tabs, with Badges current on the passport view", () => {
+    renderAt("/passport");
+    const tabs = screen.getByRole("navigation", { name: "Main" });
+    expect(tabs.querySelectorAll("a")).toHaveLength(5);
+    const current = tabs.querySelectorAll('[aria-current="page"]');
+    expect([...current].map((a) => a.textContent)).toEqual(["Badges"]);
+  });
+
   it("starts with a skip link to a focusable main area", () => {
     renderAt("/stats");
     const link = screen.getByRole("link", { name: "Skip to content" });
