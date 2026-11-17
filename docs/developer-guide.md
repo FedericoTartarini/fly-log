@@ -123,6 +123,20 @@ python python/create_airlines_json.py
 
 The output overwrites `src/assets/airports.json` and `src/assets/airlines.json`.
 
+3. Passport stamp inks
+
+```
+node scripts/build-stamp-inks.mjs
+```
+
+This writes `src/assets/stampInks.json`, a light and a dark ink per country code. It needs
+`rsvg-convert` and `magick` (Homebrew `librsvg` and `imagemagick`). The colours come from the
+4:3 flag SVGs of flag-icons 7.6.0 (MIT licence), which the script downloads from npm. Each
+stamp takes the colour that covers the most of its flag. We chose two extra rules: near-white
+is skipped, and when colours are within 2 percentage points of the largest share, the most
+saturated wins. Lightness then moves away from `--fl-surface` until the ink reaches 4.5:1 in
+both schemes. The script header has the details.
+
 ## Testing
 
 ```

@@ -15,7 +15,15 @@ import { passportStamps, flagEmoji } from "../utils/passport.ts";
 import { getCountryName } from "../utils/countryUtils.ts";
 import { formatCalendarDate } from "../utils/dateUtils";
 import PassportSkeleton from "../components/PassportSkeleton.jsx";
+import stampInks from "../assets/stampInks.json";
 import classes from "./Passport.module.css";
+
+// The stamp's ink, light and dark, from scripts/build-stamp-inks.mjs. A code
+// with no flag keeps the accent set in the CSS.
+const stampInkStyle = (country) => {
+  const ink = stampInks[country];
+  return ink && { "--stamp-ink-light": ink[0], "--stamp-ink-dark": ink[1] };
+};
 
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 
@@ -88,6 +96,7 @@ function Passport() {
             <li
               key={stamp.country}
               className={classes.stamp}
+              style={stampInkStyle(stamp.country)}
               data-cy={`stamp-${stamp.country}`}
             >
               <span className={classes.code}>
