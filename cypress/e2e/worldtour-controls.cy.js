@@ -1,31 +1,23 @@
-/* global describe, it, before, cy, Cypress */
+/* global describe, it, before, cy */
 
 describe("Route tour playback", () => {
-  before(function () {
-    // Pull requests from forks don't get the repo's secrets, so there is no
-    // account to log in with. The full suite runs again after merging.
-    if (!Cypress.expose("HAS_TEST_ACCOUNT")) {
-      this.skip();
-      return;
-    }
-
+  before(() => {
     cy.visit("/login");
     cy.wait(500); // Allow React/Mantine hydration to fully complete
     cy.get('[data-cy="login-email"]')
       .should("exist")
       .should("be.visible")
       .should("not.be.disabled");
-    cy.env(["CY_TEST_EMAIL", "CY_TEST_PASSWORD"]).then(
-      ({ CY_TEST_EMAIL: email, CY_TEST_PASSWORD: password }) => {
-        cy.get('[data-cy="login-email"]').type(email, { log: false });
+    // The user scripts/seed-emulator.mjs creates.
+    cy.fixture("test-user").then(({ email, password }) => {
+      cy.get('[data-cy="login-email"]').type(email);
 
-        cy.get('[data-cy="login-password"]')
-          .should("exist")
-          .should("be.visible")
-          .should("not.be.disabled");
-        cy.get('[data-cy="login-password"]').type(password, { log: false });
-      },
-    );
+      cy.get('[data-cy="login-password"]')
+        .should("exist")
+        .should("be.visible")
+        .should("not.be.disabled");
+      cy.get('[data-cy="login-password"]').type(password);
+    });
 
     cy.get('[data-cy="login-submit"]').click();
     cy.location("pathname").should("eq", "/stats");
