@@ -104,4 +104,18 @@ describe("getFlightStatusCooldown", () => {
     const result = getFlightStatusCooldown(flight, new Date("2027-01-01T00:00:00Z"));
     expect(result).toEqual({ allowed: false, nextCheckAt: null });
   });
+
+  // The spellings AeroDataBox actually sends; production flights hold "Arrived".
+  it.each(["Arrived", "Canceled", "CanceledUncertain", "Diverted"])(
+    "locks out further checks after %s",
+    (status) => {
+      const flight: enhancedFlight = {
+        ...baseFlight,
+        flight_status: { status },
+        flight_status_checked_at: "2026-09-01T00:00:00.000Z",
+      };
+      const result = getFlightStatusCooldown(flight, new Date("2027-01-01T00:00:00Z"));
+      expect(result).toEqual({ allowed: false, nextCheckAt: null });
+    },
+  );
 });
