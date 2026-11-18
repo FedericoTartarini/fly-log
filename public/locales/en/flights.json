@@ -137,6 +137,7 @@
     "remove": "Remove filter: {{name}}",
     "tag_from": "From {{value}}",
     "tag_to": "To {{value}}",
+    "tag_country": "Country: {{value}}",
     "tag_years_from": "From {{value}}",
     "tag_years_to": "Until {{value}}"
   },

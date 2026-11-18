@@ -85,5 +85,13 @@ export const filterFlightsForFacetOptions = (
     );
   }
 
+  // Normalised as passportStamps does, so the list matches the stamp's count.
+  if (filters.arrivalCountry) {
+    filtered = filtered.filter(
+      (flight) =>
+        flight.arrival_country?.trim().toUpperCase() === filters.arrivalCountry,
+    );
+  }
+
   return filtered;
 };

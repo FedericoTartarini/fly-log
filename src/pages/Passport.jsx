@@ -9,8 +9,11 @@ import {
   VisuallyHidden,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store.ts";
+import { PATHS } from "../constants/MyClasses.ts";
+import { YEAR_FILTER } from "../constants/filters.ts";
 import { passportStamps, flagEmoji } from "../utils/passport.ts";
 import { getCountryName } from "../utils/countryUtils.ts";
 import { formatCalendarDate } from "../utils/dateUtils";
@@ -30,15 +33,26 @@ const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
 // One stamp per country the user has landed in. Like Badges and Timeline, it
 // reads the full history and ignores the shared year filter.
 function Passport() {
-  const { allFlights, isLoading, error } = useFlightStore(
-    useShallow((s) => ({
-      allFlights: s.allFlights,
-      isLoading: s.isLoading,
-      error: s.error,
-    })),
-  );
+  const { allFlights, isLoading, error, setFilters, clearFilters } =
+    useFlightStore(
+      useShallow((s) => ({
+        allFlights: s.allFlights,
+        isLoading: s.isLoading,
+        error: s.error,
+        setFilters: s.setFilters,
+        clearFilters: s.clearFilters,
+      })),
+    );
   const { t, i18n } = useTranslation("flights");
+  const navigate = useNavigate();
   const stamps = useMemo(() => passportStamps(allFlights), [allFlights]);
+
+  // A stamp counts past flights only, so the list it opens does too.
+  const openStamp = (country) => {
+    clearFilters();
+    setFilters({ when: YEAR_FILTER.PAST, arrivalCountry: country });
+    navigate(PATHS.FLIGHTS);
+  };
 
   if (isLoading) return <PassportSkeleton />;
 
@@ -95,28 +109,35 @@ function Passport() {
           {stamps.map((stamp) => (
             <li
               key={stamp.country}
-              className={classes.stamp}
               style={stampInkStyle(stamp.country)}
               data-cy={`stamp-${stamp.country}`}
             >
-              <span className={classes.code}>
-                <span aria-hidden="true">{flagEmoji(stamp.country)}</span>{" "}
-                {stamp.country}
-              </span>
-              <span className={classes.name}>
-                {getCountryName(stamp.country)}
-              </span>
-              <span className={classes.date}>
-                <VisuallyHidden>{t("passport.first_arrival")} </VisuallyHidden>
-                {formatCalendarDate(
-                  stamp.firstArrival,
-                  "DD MMM YYYY",
-                  i18n.language,
-                )}
-              </span>
-              <span className={classes.visits}>
-                {t("passport.visits", { count: stamp.visits })}
-              </span>
+              <button
+                type="button"
+                className={classes.stamp}
+                onClick={() => openStamp(stamp.country)}
+              >
+                <span className={classes.code}>
+                  <span aria-hidden="true">{flagEmoji(stamp.country)}</span>{" "}
+                  {stamp.country}
+                </span>
+                <span className={classes.name}>
+                  {getCountryName(stamp.country)}
+                </span>
+                <span className={classes.date}>
+                  <VisuallyHidden>
+                    {t("passport.first_arrival")}{" "}
+                  </VisuallyHidden>
+                  {formatCalendarDate(
+                    stamp.firstArrival,
+                    "DD MMM YYYY",
+                    i18n.language,
+                  )}
+                </span>
+                <span className={classes.visits}>
+                  {t("passport.visits", { count: stamp.visits })}
+                </span>
+              </button>
             </li>
           ))}
         </ol>
