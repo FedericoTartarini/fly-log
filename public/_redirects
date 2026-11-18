@@ -1,2 +1,6 @@
 /landing  /  301!
+# A missing build file is a 404, not the app shell: an old page asking for a
+# previous build's chunk must fail cleanly, and the service worker only caches
+# ok responses. The body is any small existing file; the status is what counts.
+/assets/* /offline.html 404
 /*        /index.html  200
