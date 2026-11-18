@@ -1,4 +1,5 @@
 import {
+  Avatar,
   createTheme,
   Popover,
   Modal,
@@ -141,6 +142,15 @@ export const theme = createTheme({
     // The fixed AppShell header sits at 400, so a modal at Mantine's default
     // (200) opened under it, hiding its title and close button on phones.
     Modal: Modal.extend({ defaultProps: { zIndex: 500 } }),
+    // Only airline logos load images into an Avatar. The logos are square,
+    // so the round crop cut off their corners (the Qantas tail). A 15% inset
+    // fits the whole square inside the circle, on white, the background the
+    // logos are drawn for.
+    Avatar: Avatar.extend({
+      styles: {
+        image: { objectFit: "contain", padding: "15%", background: "#fff" },
+      },
+    }),
     // A grey track with a border, so the options not picked still read as
     // buttons. Mantine's dark track matched the page and vanished.
     SegmentedControl: SegmentedControl.extend({
