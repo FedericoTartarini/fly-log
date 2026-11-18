@@ -6,9 +6,9 @@ const NEAR_DEPARTURE_WINDOW_MS = 2 * HOUR_MS;
 const NEAR_DEPARTURE_COOLDOWN_MS = HOUR_MS;
 const DEFAULT_COOLDOWN_MS = 24 * HOUR_MS;
 
-// AeroDataBox's full status enum isn't publicly documented; match loosely
-// against the terminal-state families rather than an exhaustive list.
-const TERMINAL_STATUS_PATTERN = /landed|cancelled|diverted/i;
+// AeroDataBox sends "Arrived" (never "Landed") and spells cancelled with one
+// l ("Canceled", "CanceledUncertain"), so match the families loosely.
+const TERMINAL_STATUS_PATTERN = /arrived|landed|cancel|diverted/i;
 
 export interface FlightStatusCooldown {
   allowed: boolean;
@@ -39,7 +39,7 @@ const isTerminalStatus = (flight: enhancedFlight): boolean => {
 
 /**
  * Decides whether the "check status" button should be enabled for a flight.
- * Once a terminal status (landed/cancelled/diverted) has been observed,
+ * Once a terminal status (arrived, cancelled or diverted) has been observed,
  * checking again teaches us nothing new, so it locks out for good.
  * Otherwise the cooldown tightens to hourly within 2 hours of departure,
  * daily otherwise.
