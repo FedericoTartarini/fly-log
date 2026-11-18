@@ -18,10 +18,13 @@ function BadgesLayout() {
     <>
       {/* The routes below redirect a signed-out visitor, so no switch for them. */}
       {user && (
-        <Container size="lg" mt="md">
+        // No top margin: the shell already pads below the header, and the
+        // page below adds the same gap, so the switch sits evenly between.
+        <Container size="lg">
           <SegmentedControl
             fullWidth
-            maw={360}
+            // Full width on phones, so it lines up with the cards below.
+            maw={{ base: "100%", sm: 360 }}
             size="md"
             // 36 px options on a 4 px track make the 44 px touch target.
             styles={{ label: { minHeight: 36, alignContent: "center" } }}
