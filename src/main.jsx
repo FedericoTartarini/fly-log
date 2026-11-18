@@ -44,6 +44,23 @@ if (root.hasChildNodes()) {
   ReactDOM.createRoot(root).render(app);
 }
 
+// A page chunk failed to load. After a deploy, an open tab or a cached app
+// shell still asks for the previous build's chunks, which Netlify no longer
+// has. Reloading picks up the new build. A second failure within a minute
+// falls through to the error screen, so a real outage cannot loop reloads.
+window.addEventListener("vite:preloadError", (event) => {
+  const KEY = "chunk-reload-at";
+  try {
+    if (Date.now() - Number(sessionStorage.getItem(KEY)) < 60_000) return;
+    sessionStorage.setItem(KEY, String(Date.now()));
+  } catch {
+    // Without storage there is no loop guard, so leave it to the error screen.
+    return;
+  }
+  event.preventDefault();
+  window.location.reload();
+});
+
 // Register service worker in production to enable offline caching.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
