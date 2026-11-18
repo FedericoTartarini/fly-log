@@ -92,7 +92,11 @@
   transform: scale(1.12);
 }
 
+/* Lifted above its neighbours, which come later in the DOM and would
+ * otherwise paint over the right and lower sides of the ring. */
 .cell[aria-pressed="true"] {
+  position: relative;
+  z-index: 1;
   box-shadow:
     0 0 0 2px var(--fl-surface),
     0 0 0 4px var(--fl-ink);
