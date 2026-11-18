@@ -5,6 +5,12 @@ const OFFLINE_URL = "/offline.html";
 const LOCALES_PREFIX = "/locales/";
 const DATA_PREFIX = "/data/";
 const ASSETS_PREFIX = "/assets/";
+// Map tiles live in their own cache that survives deploys. There is no expiry:
+// the light-mode URL carries v=TILE_CACHE_BUST, so a restyle means new URLs.
+const TILE_CACHE_NAME = "fly-log-tiles-v1";
+const TILE_HOSTS = ["basemaps.cartocdn.com", "services.arcgisonline.com"];
+// A @2x CARTO tile is about 10-40 KB, so 1500 tiles stay well under 60 MB.
+const MAX_TILES = 1500;
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
@@ -36,7 +42,7 @@ self.addEventListener("activate", (event) => {
         // matched "fly-log-" names, which left 4.7 MB of precache behind from
         // an old vite-plugin-pwa setup sitting on every existing device.
         const cachesToDelete = cacheNames.filter(
-          (cache) => cache !== CACHE_NAME,
+          (cache) => cache !== CACHE_NAME && cache !== TILE_CACHE_NAME,
         );
         return Promise.all(cachesToDelete.map((cache) => caches.delete(cache)));
       })
@@ -112,6 +118,40 @@ self.addEventListener("fetch", (event) => {
         if (response.ok) {
           const cache = await caches.open(CACHE_NAME);
           await cache.put(event.request, response.clone());
+        }
+        return response;
+      })(),
+    );
+    return;
+  }
+
+  // Map tiles: cache-first. Only `ok` responses are stored, so an opaque
+  // (no-CORS) tile, which counts as several MB of quota, is never kept.
+  if (TILE_HOSTS.includes(requestUrl.hostname)) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(TILE_CACHE_NAME);
+        const cached = await cache.match(event.request);
+        if (cached) return cached;
+
+        const response = await fetch(event.request).catch(() =>
+          Response.error(),
+        );
+        if (response.ok) {
+          event.waitUntil(
+            (async () => {
+              await cache.put(event.request, response.clone());
+              // ponytail: lists every key on each new tile, which is cheap at
+              // 1500 entries; trim every Nth put if it ever shows up in traces.
+              // keys() is in insertion order, so the oldest tiles go first.
+              const keys = await cache.keys();
+              await Promise.all(
+                keys
+                  .slice(0, Math.max(0, keys.length - MAX_TILES))
+                  .map((key) => cache.delete(key)),
+              );
+            })(),
+          );
         }
         return response;
       })(),

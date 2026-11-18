@@ -335,15 +335,18 @@ const WorldMap = ({ height = "60vh" }) => {
       <AttributionControl position="topright" />
       <FitMapToBounds bounds={bounds} />
       {/* keepBuffer keeps loaded tiles around the view (Leaflet's default is
-          2 rings), so panning back over an area shows it at once. */}
+          2 rings), so panning back over an area shows it at once.
+          crossOrigin makes tiles CORS requests, so the service worker gets a
+          readable response it can cache instead of an opaque one. */}
       <TileLayer
         key={computedColorScheme}
         url={tileUrl}
         attribution={attribution}
         detectRetina
         keepBuffer={4}
+        crossOrigin
       />
-      {isDark && <TileLayer url={labelsUrl} keepBuffer={4} />}
+      {isDark && <TileLayer url={labelsUrl} keepBuffer={4} crossOrigin />}
 
       {/* With a filter on, the other routes sit underneath in their own pane.
           The pane is faded as a whole, so routes flown many times don't stack
