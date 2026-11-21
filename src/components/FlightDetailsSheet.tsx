@@ -34,6 +34,44 @@ const FlightDetailsSheet: React.FC<{
     if (opened && flightId !== null && flight === null) onClose();
   }, [opened, flightId, flight, onClose]);
 
+  // On phones, dragging the header down closes the sheet, as native bottom
+  // sheets do. The handlers sit on the modal root and act only on a drag that
+  // starts on the header (not its × button), so the content still scrolls.
+  // The sheet's wrapper moves, not the sheet, whose transform Mantine's
+  // slide-up transition owns.
+  const drag = React.useRef<{ id: number; y: number; inner: HTMLElement }>(
+    null,
+  );
+  const moveSheet = (e: React.PointerEvent) => {
+    const d = drag.current;
+    if (d?.id === e.pointerId)
+      d.inner.style.transform = `translateY(${Math.max(0, e.clientY - d.y)}px)`;
+  };
+  const dropSheet = (e: React.PointerEvent) => {
+    const d = drag.current;
+    if (d?.id !== e.pointerId) return;
+    drag.current = null;
+    delete d.inner.dataset.dragging;
+    if (e.type === "pointerup" && e.clientY - d.y > 100) onClose();
+    else d.inner.style.transform = "";
+  };
+  const dragProps = isPhone && {
+    onPointerDown: (e: React.PointerEvent) => {
+      const target = e.target as HTMLElement;
+      const inner =
+        !drag.current &&
+        !target.closest("button") &&
+        target.closest(`.${classes.sheetDrag}`) &&
+        target.closest<HTMLElement>(`.${classes.sheetInner}`);
+      if (!inner) return;
+      inner.dataset.dragging = "";
+      drag.current = { id: e.pointerId, y: e.clientY, inner };
+    },
+    onPointerMove: moveSheet,
+    onPointerUp: dropSheet,
+    onPointerCancel: dropSheet,
+  };
+
   return (
     <>
       <Modal
@@ -80,11 +118,12 @@ const FlightDetailsSheet: React.FC<{
         zIndex={600}
         // A sheet from the bottom on phones, a centred modal on wider screens.
         {...(isPhone && { transitionProps: { transition: "slide-up" } })}
+        {...dragProps}
         closeButtonProps={{ size: "lg" }}
         classNames={{
           inner: classes.sheetInner,
           content: classes.sheet,
-          header: classes.sheetHeader,
+          header: `${classes.sheetHeader} ${classes.sheetDrag}`,
           title: classes.sheetTitle,
         }}
       >
