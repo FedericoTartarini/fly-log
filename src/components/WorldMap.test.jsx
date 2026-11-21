@@ -50,6 +50,8 @@ describe("WorldMap tiles", () => {
     expect(base.attribution).toBe("Esri | &copy; OpenStreetMap");
     expect(labels.url).toContain("World_Dark_Gray_Reference");
     expect(labels.keepBuffer).toBe(4);
+    expect(base.crossOrigin).toBe(true);
+    expect(labels.crossOrigin).toBe(true);
   });
 
   it("uses CARTO light tiles and no place-name layer in light mode", () => {
@@ -60,6 +62,7 @@ describe("WorldMap tiles", () => {
     expect(tileLayers[0].url).toContain("basemaps.cartocdn.com");
     expect(tileLayers[0].url).toContain("light_all");
     expect(tileLayers[0].keepBuffer).toBe(4);
+    expect(tileLayers[0].crossOrigin).toBe(true);
   });
 
   it("draws faded routes in their own pane only while a filter is on", () => {
