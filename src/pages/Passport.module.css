@@ -21,39 +21,54 @@
 /* A rubber stamp: a double ring in one ink colour, slightly askew. The ink is
  * the country's rarest flag colour (--stamp-ink-light and --stamp-ink-dark, set
  * per stamp from src/assets/stampInks.json), else the accent. The angles cycle,
- * so neighbouring stamps never look identical. */
+ * so neighbouring stamps never look identical. Each stamp is a button that
+ * opens the flights that landed in its country. */
+.page > li {
+  display: flex;
+  transform: rotate(-3deg);
+}
+
+.page > li:nth-child(4n + 2) {
+  transform: rotate(2deg);
+}
+
+.page > li:nth-child(4n + 3) {
+  transform: rotate(-1deg);
+}
+
+.page > li:nth-child(4n + 4) {
+  transform: rotate(3deg);
+}
+
 .stamp {
   --ink: var(--stamp-ink-light, var(--fl-accent-text));
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
+  min-width: 0;
   min-height: 132px;
+  margin: 0;
   padding: 12px 8px;
   border: 3px double var(--ink);
   border-radius: 16px;
   color: var(--ink);
   background: var(--fl-surface);
   text-align: center;
+  font: inherit;
   font-family: var(--mantine-font-family-monospace);
-  transform: rotate(-3deg);
+  cursor: pointer;
 
   @mixin dark {
     --ink: var(--stamp-ink-dark, var(--fl-accent-text));
   }
 }
 
-.stamp:nth-child(4n + 2) {
-  transform: rotate(2deg);
-}
-
-.stamp:nth-child(4n + 3) {
-  transform: rotate(-1deg);
-}
-
-.stamp:nth-child(4n + 4) {
-  transform: rotate(3deg);
+.stamp:focus-visible {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: 2px;
 }
 
 .code {

@@ -7,6 +7,7 @@ export type ActiveFilter =
   | "airline"
   | "departureAirport"
   | "arrivalAirport"
+  | "arrivalCountry"
   | "duration";
 
 // What each filter tag's × resets. A filter is on while any of its fields
@@ -20,6 +21,7 @@ export const FILTER_RESETS: Record<
   airline: { airline: null },
   departureAirport: { departureAirport: null },
   arrivalAirport: { arrivalAirport: null },
+  arrivalCountry: { arrivalCountry: null },
   duration: { minDuration: null, maxDuration: null },
 };
 

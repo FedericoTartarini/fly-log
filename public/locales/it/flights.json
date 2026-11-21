@@ -109,6 +109,7 @@
     "remove": "Rimuovi filtro: {{name}}",
     "tag_from": "Da {{value}}",
     "tag_to": "A {{value}}",
+    "tag_country": "Paese: {{value}}",
     "tag_years_from": "Dal {{value}}",
     "tag_years_to": "Fino al {{value}}"
   },
