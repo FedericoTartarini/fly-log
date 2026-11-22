@@ -124,6 +124,12 @@ function About() {
             rel="noopener noreferrer"
             variant="light"
             leftSection={<IconExternalLink size={16} />}
+            // Mantine fixes the button height and keeps the label on one
+            // line, so this long source name ran off the screen on a phone.
+            styles={{
+              root: { height: "auto", minHeight: 36, paddingBlock: 8 },
+              label: { whiteSpace: "normal", height: "auto", lineHeight: 1.3 },
+            }}
           >
             {EMISSION_FACTOR_SOURCE.name}
           </Button>
