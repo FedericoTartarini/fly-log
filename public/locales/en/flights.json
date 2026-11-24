@@ -346,7 +346,7 @@
   },
   "badges": {
     "title": "Badges",
-    "view_all": "All badges",
+    "latest": "Latest",
     "collected": "{{count}} of {{total}} collected",
     "not_yet": "Not yet",
     "to_go_one": "{{value}} to go",
