@@ -54,6 +54,17 @@ describe("FilterTags", () => {
     expect(filteredFlights.map((f) => f.id)).toEqual(["1"]);
   });
 
+  it("names the country and clears it with its ×", async () => {
+    setFilters({ arrivalCountry: "JP" });
+    render(<FilterTags />);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Remove filter: Country: Japan" }),
+    );
+
+    expect(useFlightStore.getState().filters.arrivalCountry).toBeNull();
+  });
+
   it("clears every filter with Clear all", async () => {
     setFilters({ when: "past", minDuration: 2 });
     render(<FilterTags />);

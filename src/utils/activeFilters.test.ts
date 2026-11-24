@@ -11,7 +11,14 @@ describe("getActiveFilters", () => {
         toYear: 2026,
         maxDuration: 5,
         arrivalAirport: "SIN",
+        arrivalCountry: "SG",
       }),
-    ).toEqual(["when", "years", "arrivalAirport", "duration"]);
+    ).toEqual([
+      "when",
+      "years",
+      "arrivalAirport",
+      "arrivalCountry",
+      "duration",
+    ]);
   });
 });

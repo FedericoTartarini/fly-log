@@ -69,6 +69,25 @@ describe("filterFlightsForFacetOptions year presets", () => {
     expect(out[0]?.id).toBe("2");
   });
 
+  it("keeps past flights that landed in the chosen country", () => {
+    // A copy of each flight with a messy code: only the past ones count.
+    const visited = [
+      ...flights,
+      ...flights.map((f) => ({
+        ...f,
+        id: `${f.id}b`,
+        arrival_country: " jp ",
+      })),
+    ];
+    const out = filterFlightsForFacetOptions(visited, {
+      ...DEFAULT_FILTERS,
+      when: YEAR_FILTER.PAST,
+      arrivalCountry: "JP",
+    });
+
+    expect(out.map((f) => f.id)).toEqual(["2", "2b"]);
+  });
+
   it("keeps flights inside the year range", () => {
     const year = new Date().getFullYear();
     const all = filterFlightsForFacetOptions(flights, DEFAULT_FILTERS);

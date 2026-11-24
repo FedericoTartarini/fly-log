@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store.ts";
 import { FILTER_RESETS, getActiveFilters } from "../utils/activeFilters.ts";
+import { getCountryName } from "../utils/countryUtils.ts";
 import classes from "./BoardingPass.module.css";
 
 // One dark tag per filter that is on, each with its own ×, and "Clear all"
@@ -41,6 +42,9 @@ function FilterTags() {
       value: filters.departureAirport,
     }),
     arrivalAirport: t("filters.tag_to", { value: filters.arrivalAirport }),
+    arrivalCountry: t("filters.tag_country", {
+      value: filters.arrivalCountry && getCountryName(filters.arrivalCountry),
+    }),
     duration: t("filters.length_range", {
       min: filters.minDuration ?? 0,
       max: filters.maxDuration ?? 24,

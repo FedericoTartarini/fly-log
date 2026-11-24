@@ -47,6 +47,8 @@ export interface StoreFlightFilters {
   airline: string | null;
   departureAirport: string | null;
   arrivalAirport: string | null;
+  // ISO 3166-1 alpha-2 code, set by tapping a passport stamp.
+  arrivalCountry: string | null;
   minDuration: number | null;
   maxDuration: number | null;
 }
