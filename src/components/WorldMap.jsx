@@ -327,7 +327,15 @@ const WorldMap = ({ height = "60vh" }) => {
             ? "var(--mantine-color-dark-6)"
             : undefined,
       }}
-      worldCopyJump={true} // Keep this for smooth navigation
+      // No worldCopyJump. Crossing the Pacific, it shifts the map by a whole
+      // world width, so Leaflet sees new tile positions and rebuilds every
+      // visible tile, even ones it has cached. These bounds instead keep the
+      // view on the three copies of the world that the routes are drawn on.
+      maxBounds={[
+        [-90, -540],
+        [90, 540],
+      ]}
+      maxBoundsViscosity={1}
       attributionControl={false}
     >
       {/* Top right, because at the bottom the Stats sheet slides over the
