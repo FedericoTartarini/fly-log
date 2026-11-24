@@ -143,7 +143,7 @@
     transition: transform 200ms ease;
   }
 
-  /* Follows the finger while the header is dragged, snaps back after. */
+  /* Follows the finger during a swipe down, snaps back after. */
   .sheetInner[data-dragging] {
     transition: none;
   }
@@ -154,7 +154,7 @@
     border-radius: 16px 16px 0 0;
   }
 
-  /* The header is the drag handle that closes the sheet. */
+  /* The header can always be swiped, even with the content scrolled. */
   .sheetDrag {
     touch-action: none;
   }

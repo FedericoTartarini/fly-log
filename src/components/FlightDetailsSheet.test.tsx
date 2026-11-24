@@ -4,7 +4,7 @@ vi.mock("../utils/airportUtils", () => ({
     ({ SYD: "Sydney", LHR: "London" })[iata] ?? iata,
 }));
 
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { describe, it, vi, expect, beforeEach } from "vitest";
 import FlightDetailsSheet from "./FlightDetailsSheet";
 import { render } from "../../test-utils";
@@ -16,14 +16,18 @@ const flight = {
   arrival_airport_iata: "LHR",
 } as enhancedFlight;
 
-// jsdom has no PointerEvent, and without one fireEvent drops clientY.
-window.PointerEvent ??= class extends MouseEvent {
-  pointerId: number;
-  constructor(type: string, init: PointerEventInit = {}) {
-    super(type, init);
-    this.pointerId = init.pointerId ?? 0;
-  }
-} as typeof PointerEvent;
+// jsdom's TouchEvent needs real Touch objects, which jsdom cannot make, so
+// build a plain event and attach the one touch the sheet reads.
+const touch = (el: Element, type: string, clientY: number) => {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  const touches = [{ clientX: 0, clientY }];
+  Object.assign(event, {
+    touches: type === "touchend" ? [] : touches,
+    changedTouches: touches,
+  });
+  el.dispatchEvent(event);
+  return event;
+};
 
 describe("FlightDetailsSheet on a phone", () => {
   beforeEach(() => {
@@ -39,7 +43,11 @@ describe("FlightDetailsSheet on a phone", () => {
     );
   });
 
-  const dragTitle = async (to: number) => {
+  const swipe = async (
+    pick: (title: HTMLElement) => Element,
+    to: number,
+    scrollTop = 0,
+  ) => {
     const onClose = vi.fn();
     render(
       <FlightDetailsSheet
@@ -50,21 +58,51 @@ describe("FlightDetailsSheet on a phone", () => {
       />,
     );
     const title = await screen.findByText("Sydney to London");
-    // useMediaQuery reports the phone only after its first effect.
+    // Mantine's scroll lock also cancels touchmoves in jsdom, so a cancelled
+    // event proves nothing. The sheet marks itself while it follows a finger.
+    const dragging = () => title.closest("[data-dragging]") !== null;
+    // useMediaQuery reports the phone only after its first effect, so wait
+    // until a short header swipe takes hold, then let it snap back.
     await waitFor(() => {
-      fireEvent.pointerDown(title, { pointerId: 1, clientY: 0 });
-      expect(title.closest("[data-dragging]")).not.toBeNull();
+      touch(title, "touchstart", 0);
+      touch(title, "touchmove", 20);
+      expect(dragging()).toBe(true);
     });
-    fireEvent.pointerMove(title, { pointerId: 1, clientY: to });
-    fireEvent.pointerUp(title, { pointerId: 1, clientY: to });
-    return onClose;
+    touch(title, "touchend", 20);
+
+    const el = pick(title);
+    // jsdom has no layout, so scrollTop has to be stubbed.
+    Object.defineProperty(el.closest("section")!, "scrollTop", {
+      value: scrollTop,
+    });
+    touch(el, "touchstart", 0);
+    touch(el, "touchmove", to);
+    const draggedAlong = dragging();
+    touch(el, "touchend", to);
+    return { onClose, draggedAlong };
   };
 
-  it("closes when the header is dragged down far enough", async () => {
-    expect(await dragTitle(150)).toHaveBeenCalledTimes(1);
+  const header = (title: HTMLElement) => title;
+  const body = (title: HTMLElement) =>
+    title.closest("section")!.querySelector(".mantine-Modal-body")!;
+
+  it("closes when the header is swiped down far enough", async () => {
+    expect((await swipe(header, 150)).onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("snaps back after a short drag", async () => {
-    expect(await dragTitle(40)).not.toHaveBeenCalled();
+  it("snaps back after a short swipe", async () => {
+    const { onClose, draggedAlong } = await swipe(header, 40);
+    expect(draggedAlong).toBe(true);
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("closes when the content is swiped down at the top", async () => {
+    expect((await swipe(body, 150)).onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("lets scrolled content scroll instead of closing", async () => {
+    const { onClose, draggedAlong } = await swipe(body, 150, 200);
+    expect(draggedAlong).toBe(false);
+    expect(onClose).not.toHaveBeenCalled();
   });
 });
