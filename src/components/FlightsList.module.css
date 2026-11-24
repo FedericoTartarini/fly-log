@@ -140,11 +140,40 @@
   .sheetInner {
     padding: 48px 0 0;
     align-items: flex-end;
+    transition: transform 200ms ease;
+  }
+
+  /* Follows the finger while the header is dragged, snaps back after. */
+  .sheetInner[data-dragging] {
+    transition: none;
   }
 
   .sheet {
     flex: 1 1 100%;
     max-height: 100%;
     border-radius: 16px 16px 0 0;
+  }
+
+  /* The header is the drag handle that closes the sheet. */
+  .sheetDrag {
+    touch-action: none;
+  }
+
+  .sheetDrag::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--fl-border);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheetInner {
+    transition: none;
   }
 }
