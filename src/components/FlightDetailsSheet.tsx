@@ -34,43 +34,81 @@ const FlightDetailsSheet: React.FC<{
     if (opened && flightId !== null && flight === null) onClose();
   }, [opened, flightId, flight, onClose]);
 
-  // On phones, dragging the header down closes the sheet, as native bottom
-  // sheets do. The handlers sit on the modal root and act only on a drag that
-  // starts on the header (not its × button), so the content still scrolls.
-  // The sheet's wrapper moves, not the sheet, whose transform Mantine's
-  // slide-up transition owns.
-  const drag = React.useRef<{ id: number; y: number; inner: HTMLElement }>(
-    null,
-  );
-  const moveSheet = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (d?.id === e.pointerId)
-      d.inner.style.transform = `translateY(${Math.max(0, e.clientY - d.y)}px)`;
-  };
-  const dropSheet = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (d?.id !== e.pointerId) return;
-    drag.current = null;
-    delete d.inner.dataset.dragging;
-    if (e.type === "pointerup" && e.clientY - d.y > 100) onClose();
-    else d.inner.style.transform = "";
-  };
-  const dragProps = isPhone && {
-    onPointerDown: (e: React.PointerEvent) => {
+  // On phones, swiping down closes the sheet, as native bottom sheets do. A
+  // swipe on the header always counts. A swipe on the content counts only when
+  // the content is scrolled to the top, so scrolling back up still works.
+  // Touch events, not pointer events, because the browser cancels a pointer
+  // once it starts scrolling, and only a touchmove that is not passive can stop
+  // that scroll. The sheet's wrapper moves, not the sheet, whose transform
+  // Mantine's slide-up transition owns.
+  React.useEffect(() => {
+    if (!isPhone || !opened) return;
+    let drag: {
+      x: number;
+      y: number;
+      inner: HTMLElement;
+      sheet: HTMLElement;
+      onHeader: boolean;
+      active: boolean;
+    } | null = null;
+
+    const start = (e: TouchEvent) => {
       const target = e.target as HTMLElement;
-      const inner =
-        !drag.current &&
-        !target.closest("button") &&
-        target.closest(`.${classes.sheetDrag}`) &&
-        target.closest<HTMLElement>(`.${classes.sheetInner}`);
-      if (!inner) return;
-      inner.dataset.dragging = "";
-      drag.current = { id: e.pointerId, y: e.clientY, inner };
-    },
-    onPointerMove: moveSheet,
-    onPointerUp: dropSheet,
-    onPointerCancel: dropSheet,
-  };
+      const inner = target.closest<HTMLElement>(`.${classes.sheetInner}`);
+      const sheet = target.closest<HTMLElement>(`.${classes.sheet}`);
+      const t = e.touches[0];
+      drag =
+        inner && sheet && t && e.touches.length === 1
+          ? {
+              x: t.clientX,
+              y: t.clientY,
+              inner,
+              sheet,
+              onHeader: !!target.closest(`.${classes.sheetDrag}`),
+              active: false,
+            }
+          : null;
+    };
+    const move = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!drag || !t) return;
+      const dx = t.clientX - drag.x;
+      const dy = t.clientY - drag.y;
+      if (!drag.active) {
+        // Wait for a few pixels of movement, so a tap stays a tap.
+        if (Math.abs(dy) < 8) return;
+        const down = dy > 0 && Math.abs(dy) > Math.abs(dx);
+        if (!down || (!drag.onHeader && drag.sheet.scrollTop > 0)) {
+          drag = null; // A scroll, not a swipe.
+          return;
+        }
+        drag.active = true;
+        drag.inner.dataset.dragging = "";
+      }
+      e.preventDefault();
+      drag.inner.style.transform = `translateY(${Math.max(0, dy)}px)`;
+    };
+    const end = (e: TouchEvent) => {
+      const d = drag;
+      drag = null;
+      if (!d?.active) return;
+      delete d.inner.dataset.dragging;
+      const dy = (e.changedTouches[0]?.clientY ?? d.y) - d.y;
+      if (e.type === "touchend" && dy > 100) onClose();
+      else d.inner.style.transform = "";
+    };
+
+    document.addEventListener("touchstart", start, { passive: true });
+    document.addEventListener("touchmove", move, { passive: false });
+    document.addEventListener("touchend", end);
+    document.addEventListener("touchcancel", end);
+    return () => {
+      document.removeEventListener("touchstart", start);
+      document.removeEventListener("touchmove", move);
+      document.removeEventListener("touchend", end);
+      document.removeEventListener("touchcancel", end);
+    };
+  }, [isPhone, opened, onClose]);
 
   return (
     <>
@@ -118,7 +156,6 @@ const FlightDetailsSheet: React.FC<{
         zIndex={600}
         // A sheet from the bottom on phones, a centred modal on wider screens.
         {...(isPhone && { transitionProps: { transition: "slide-up" } })}
-        {...dragProps}
         closeButtonProps={{ size: "lg" }}
         classNames={{
           inner: classes.sheetInner,
