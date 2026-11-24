@@ -346,7 +346,7 @@
   },
   "badges": {
     "title": "Traguardi",
-    "view_all": "Tutti i traguardi",
+    "latest": "Ultimi",
     "collected": "{{count}} di {{total}} conquistati",
     "not_yet": "Non ancora",
     "to_go_one": "ne manca {{value}}",

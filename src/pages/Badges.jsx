@@ -8,7 +8,6 @@ import {
   Loader,
   SimpleGrid,
 } from "@mantine/core";
-import { IconMedal } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import useFlightStore from "../store.ts";
@@ -16,65 +15,14 @@ import {
   evaluateBadges,
   sortForShelf,
   pickClosestNext,
-  formatBadgeProgress,
-  amountLeft,
   BADGE_CATEGORIES,
-  DISTANCE_BADGES,
 } from "../utils/badges.ts";
-import { BADGE_ICONS } from "../constants/badgeIcons.ts";
 import BadgeTile from "../components/BadgeTile.jsx";
+import BadgeClosestNext from "../components/BadgeClosestNext.jsx";
 import BadgesSkeleton from "../components/BadgesSkeleton.jsx";
 import classes from "./Badges.module.css";
 
 const NoFlightsCard = lazy(() => import("../components/NoFlightsCard.jsx"));
-
-// The locked badge nearest to done, with how far there is still to go.
-const ClosestNext = ({ badge }) => {
-  const { t, i18n } = useTranslation("flights");
-  const Icon = BADGE_ICONS[badge.id] ?? IconMedal;
-  const name = t(`badges.items.${badge.id}.name`);
-  const remaining = amountLeft(badge);
-
-  return (
-    <section className={classes.next} aria-labelledby="badges-next">
-      <span className={classes.nextIcon} aria-hidden="true">
-        <Icon size={22} stroke={1.8} />
-      </span>
-      <h2 id="badges-next" className={classes.label}>
-        {t("badges.closest_next")}
-      </h2>
-      <p className={classes.nextName} data-cy="badges-next">
-        {name}{" "}
-        <span className={classes.muted}>
-          ·{" "}
-          {t(
-            DISTANCE_BADGES.has(badge.id) ? "badges.to_go_km" : "badges.to_go",
-            {
-              value: remaining.toLocaleString(i18n.language),
-              count: remaining,
-            },
-          )}
-        </span>
-      </p>
-      <div className={classes.nextProgress}>
-        <div
-          role="progressbar"
-          aria-label={t("badges.progress_label", { name })}
-          aria-valuemin={0}
-          aria-valuemax={badge.target}
-          aria-valuenow={badge.current}
-          className={classes.track}
-        >
-          <div
-            className={classes.fill}
-            style={{ width: `${(badge.current / badge.target) * 100}%` }}
-          />
-        </div>
-        {formatBadgeProgress(badge, i18n.language)}
-      </div>
-    </section>
-  );
-};
 
 // Badges are lifetime facts, so this page reads the full history and ignores
 // the shared year filter. Timeline does the same, for the same reason.
@@ -168,7 +116,7 @@ function Badges() {
           </div>
         </Stack>
 
-        {next && <ClosestNext badge={next} />}
+        {next && <BadgeClosestNext badge={next} className={classes.nextCard} />}
 
         {sections.map(({ category, badges: items }) => {
           const title = t(`badges.categories.${category}`);
